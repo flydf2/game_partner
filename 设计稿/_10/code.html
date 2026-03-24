@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-variant": "#dbdddd",
+                        "on-secondary": "#fff0e7",
+                        "on-error": "#ffefec",
+                        "primary-fixed-dim": "#efc900",
+                        "background": "#f6f6f6",
+                        "secondary-fixed-dim": "#ffb375",
+                        "on-error-container": "#520c00",
+                        "on-background": "#2d2f2f",
+                        "secondary-container": "#ffc69a",
+                        "surface-container": "#e7e8e8",
+                        "outline": "#767777",
+                        "error-container": "#f95630",
+                        "inverse-primary": "#ffd709",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-primary": "#fff2cd",
+                        "surface-container-high": "#e1e3e3",
+                        "error": "#b02500",
+                        "surface": "#f6f6f6",
+                        "surface-dim": "#d3d5d5",
+                        "secondary": "#8c4a00",
+                        "on-primary-container": "#5b4b00",
+                        "secondary-fixed": "#ffc69a",
+                        "primary-dim": "#5e4e00",
+                        "on-tertiary-container": "#563500",
+                        "error-dim": "#b92902",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "surface-bright": "#f6f6f6",
+                        "primary-container": "#ffd709",
+                        "primary-fixed": "#ffd709",
+                        "inverse-on-surface": "#9c9d9d",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "tertiary-fixed": "#feb246",
+                        "tertiary-dim": "#704700",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-surface": "#2d2f2f",
+                        "surface-container-highest": "#dbdddd",
+                        "primary": "#6c5a00",
+                        "on-primary-fixed": "#453900",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#5a5c5c",
+                        "secondary-dim": "#7b4000",
+                        "on-tertiary": "#fff0e3",
+                        "on-primary-fixed-variant": "#665500",
+                        "on-secondary-fixed": "#532a00",
+                        "tertiary": "#805100",
+                        "on-secondary-container": "#6f3a00",
+                        "surface-container-low": "#f0f1f1",
+                        "tertiary-container": "#feb246",
+                        "surface-tint": "#6c5a00",
+                        "outline-variant": "#acadad",
+                        "inverse-surface": "#0c0f0f"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+            -webkit-font-smoothing: antialiased;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#f6f6f6] dark:bg-stone-900 docked full-width top-0 sticky z-50 bg-surface-container-highest/10 flat no shadows flex justify-between items-center px-5 h-16 w-full">
+<div class="flex items-center gap-3">
+<button class="transition-all duration-300 ease-out active:scale-95 text-[#6c5a00] dark:text-yellow-400 p-2 hover:bg-yellow-50/50 dark:hover:bg-stone-800 rounded-full">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-plus-jakarta-sans Headline-MD: text-[1.25rem] md:text-[1.75rem] font-bold text-[#6c5a00] dark:text-yellow-400">社区动态</h1>
+</div>
+<div class="flex items-center">
+<button class="transition-all duration-300 ease-out active:scale-95 text-[#6c5a00] dark:text-yellow-400 p-2 hover:bg-yellow-50/50 dark:hover:bg-stone-800 rounded-full">
+<span class="material-symbols-outlined">search</span>
+</button>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-5 pt-4 pb-32 space-y-6">
+<!-- Search Section -->
+<section class="w-full">
+<div class="bg-surface-container-high rounded-3xl flex items-center px-4 py-3 gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container/30 transition-all">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-outline p-0" placeholder="搜索你感兴趣的动态..." type="text"/>
+</div>
+</section>
+<!-- Category Selector -->
+<section class="flex gap-3 overflow-x-auto hide-scrollbar -mx-5 px-5 py-1">
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-primary-container text-on-primary-container font-bold transition-all active:scale-95 shadow-sm">热门</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all active:scale-95">游戏</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all active:scale-95">心情</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all active:scale-95">交友</button>
+<button class="flex-shrink-0 px-6 py-2.5 rounded-full bg-surface-container-low text-on-surface hover:bg-surface-container-high transition-all active:scale-95">攻略</button>
+</section>
+<!-- Feed List -->
+<div class="space-y-4">
+<!-- Post Card 1 -->
+<article class="bg-surface-container-lowest rounded-3xl p-5 border-none">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-auto" data-alt="User avatar of a young gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlkyk2DWoqAMqSUflUl265Ii7S--sjgKUnoHp_qkIK9uW4YWK4t57peM5UOx0i92fhird_hlkuwYjce1i1Ix_HS2QYkENbRjQQUHaf9k7KsxK7U_719an0BAAZY6q7T-oJ9O17vsi77mdMlksC6JbwPkj3JziYokPVUER-nDsZBSTTiMXrmSdKxN7ApaCB6R7rc1YLFHhTbIZVtrVpTZudIk6w8vA4jVA3Zusi4DRCceevuB13RK2Z6n3VYD-yhN22EmkUCuLdXxE"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">林间风</h3>
+<p class="text-[0.6875rem] text-outline">2小时前 · 英雄联盟</p>
+</div>
+</div>
+<button class="text-primary font-bold px-4 py-1.5 bg-primary-container/10 rounded-full text-sm">关注</button>
+</div>
+<p class="text-on-surface mb-4 leading-relaxed">
+                    今天在峡谷遇到一个超级温柔的辅助，操作意识拉满！有人想一起组队排位吗？坐标艾欧尼亚，主玩AD。 ✨
+                </p>
+<div class="rounded-2xl overflow-hidden mb-4 grid grid-cols-2 gap-2">
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Gaming setup with neon lighting and multiple monitors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU8XrMhk3VFwj3Ceer0yCVb-HelGKX5ryLoHAYthnekinYCfvHoJ83xSPEZdrL2tht2CTf_d1atj0kQiKVMY41s8kFOBgY2l5a9dPvoP6yXh3HyA9pdom7W1PkI1l7drYVsVSEeg-BnjsOK2tD_lvHVqzF3VZCAhg6pbcyZj11rhzX6V52RT4jlbNYqEKBRxP818vVewrnT3E6phVAdGXO9zQIWGaIvWWk6pXEzjpNwOh3xDn8FNjv-sGQOhsOt1srbfvB0MFCo-A"/>
+</div>
+<div class="aspect-video bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Abstract colorful gaming background with glowing particles" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq4AH6Y7D9L3js3AeN_vpUSza4-PdEYsZbo6sLRP3jUY5UwegYPx3xB9NLMbxzijv13O-siVI5RljmMLqN_Gr5WevHBvslpJbeCO97PCdtgKwNIXBrfQfGanIkq-uktmkkEyoBN9MXdNEwYcjzTObAUzdyii37QkpNmj9bZP7Bcl5uaq012JA-ku0hKny8SxUd9oCA63jFafkb_YzLfo3nDoPbHw27pT7fpKdYQd2sZiXMQL7sMljpCn5eqqS3c5aJtgaLu6pHQpU"/>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-surface-container-low/50 mt-2">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[1.25rem]">favorite</span>
+<span class="text-xs font-medium">1.2k</span>
+</button>
+<button class="flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[1.25rem]">chat_bubble</span>
+<span class="text-xs font-medium">348</span>
+</button>
+</div>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[1.25rem]">share</span>
+</button>
+</div>
+</article>
+<!-- Post Card 2 -->
+<article class="bg-surface-container-lowest rounded-3xl p-5 border-none">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-auto" data-alt="User avatar of a female anime fan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo3hiZMbuWCmrkmqDp0MNg-nzMlqn4AgGNgFofJ-IJJ59AeEGJZox-r1xg8drTN14GtBID78Yfm0NN6Wl-MX_ZHWaF8-LdFumF5to5bPc46yM5zIaucC3a4KP-Y2-i2tCwQd-duGHsg9F8AzLemDvG9s_6W3hw-pjjJN-PKkQI7oILcDHGkalxMkbZWOmaqIaik3owuV2Ghbrqr3MraHwibw8jkhxJWFQhPSpHM7em0RfJhdOUnqGVa3qBY2EA9DWUXnYNrTFFiM4"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">小禾悠悠</h3>
+<p class="text-[0.6875rem] text-outline">5小时前 · 原神</p>
+</div>
+</div>
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary text-[0.6875rem] font-bold rounded-lg">新动态</span>
+</div>
+<p class="text-on-surface mb-4 leading-relaxed">
+                    终于抽到雷电将军了！大家快来吸吸欧气，顺便问下配队方案，目前有行秋和班尼特。🌸
+                </p>
+<div class="rounded-2xl overflow-hidden mb-4 relative">
+<div class="aspect-video bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up of a professional gaming controller" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDpMESPnsbi4t03wXNISsduDaneNSUQYy8CFJQ6WGwywyqmkUeGY562sFOkLCu6pFjjqqs0sbxMrg9JwqOHdCcO-aFFA3Uh2XcpKXedBl_JMAAdIZ19iCVx6GQyYCwO0zuk9xRpZOHHqzfIgD7XyQBa6MYkyr_AyukGeEUUYDV7giFJThyUVuogxAZZYyU6SgGNT62RNNxPFRg1-urZjonnT0y8Zh-OZyb_7b7dlBnbONQqjw2jCO-qEHaONKJ-0zPtkTmZXZzvCrc"/>
+</div>
+<div class="absolute inset-0 flex items-center justify-center bg-black/20 group cursor-pointer">
+<div class="w-14 h-14 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-white transition-transform group-hover:scale-110">
+<span class="material-symbols-outlined text-[2rem]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">favorite</span>
+<span class="text-xs font-medium">856</span>
+</button>
+<button class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">chat_bubble</span>
+<span class="text-xs font-medium">120</span>
+</button>
+</div>
+<button class="text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">share</span>
+</button>
+</div>
+</article>
+<!-- Post Card 3 -->
+<article class="bg-surface-container-lowest rounded-3xl p-5 border-none">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-auto" data-alt="User avatar of a friendly guy" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDwJXWYv1t2M1S8jlZ3nJwEK4xXnZfwXDgO_ryYTFAAPD3NJ6pmTUhpeJsra6qrl4sekbm3zZ7874XLIqf6W__ReW-xU87woTXwpcGzN5Q3b-1FAHT-7Q9ZJvEhBpGxJwr8JPIoII8MLGmKtsx2rIr1BNvzlerT6UrU1DTTnRE1vevhiuXzR1drRXXUNZdGjDRSQmxQUYJwpOCdchivrmLpaAcpR5c8eCBholl_o0fI_vrf4Lu_oTTxHGoqzJuNdhfVVbxvwguDqZQ"/>
+</div>
+<div>
+<h3 class="font-bold text-on-surface">Ace玩家</h3>
+<p class="text-[0.6875rem] text-outline">昨天 · 绝地求生</p>
+</div>
+</div>
+</div>
+<p class="text-on-surface mb-2 leading-relaxed font-medium">
+                    "今晚吃鸡，大吉大利！" 🍗
+                </p>
+<p class="text-on-surface-variant text-sm mb-4 leading-relaxed">
+                    好久没这么酣畅淋漓地打过药包了，感谢各位队友的灵性拉枪。
+                </p>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">favorite</span>
+<span class="text-xs font-medium">233</span>
+</button>
+<button class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">chat_bubble</span>
+<span class="text-xs font-medium">42</span>
+</button>
+</div>
+<button class="text-on-surface-variant">
+<span class="material-symbols-outlined text-[1.25rem]">share</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- FAB -->
+<button class="fixed right-6 bottom-28 w-14 h-14 bg-primary-container text-on-primary-container rounded-3xl shadow-xl shadow-primary-container/20 flex items-center justify-center transition-all duration-300 active:scale-90 z-[60] group">
+<span class="material-symbols-outlined text-[1.75rem] font-bold group-hover:rotate-90 transition-transform">add</span>
+</button>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] no-border tonal-shift bg-surface-container-low">
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-[#6c5a00] dark:hover:text-yellow-200 transition-all duration-300 cubic-bezier(0.34, 1.56, 0.64, 1) active:scale-90" href="#">
+<span class="material-symbols-outlined text-[1.5rem]">home</span>
+<span class="font-plus-jakarta-sans text-[0.6875rem] font-medium mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-6 py-1.5 transition-all duration-300 cubic-bezier(0.34, 1.56, 0.64, 1) active:scale-90" href="#">
+<span class="material-symbols-outlined text-[1.5rem]" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-plus-jakarta-sans text-[0.6875rem] font-bold mt-1">动态</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-[#6c5a00] dark:hover:text-yellow-200 transition-all duration-300 cubic-bezier(0.34, 1.56, 0.64, 1) active:scale-90" href="#">
+<span class="material-symbols-outlined text-[1.5rem]">chat</span>
+<span class="font-plus-jakarta-sans text-[0.6875rem] font-medium mt-1">消息</span>
+</a>
+<a class="flex flex-col items-center justify-center text-stone-400 dark:text-stone-500 hover:text-[#6c5a00] dark:hover:text-yellow-200 transition-all duration-300 cubic-bezier(0.34, 1.56, 0.64, 1) active:scale-90" href="#">
+<span class="material-symbols-outlined text-[1.5rem]">person</span>
+<span class="font-plus-jakarta-sans text-[0.6875rem] font-medium mt-1">我的</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container": "#e7e8e8",
+                        "tertiary": "#805100",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-secondary": "#fff0e7",
+                        "inverse-primary": "#ffd709",
+                        "background": "#f6f6f6",
+                        "surface-dim": "#d3d5d5",
+                        "primary-fixed": "#ffd709",
+                        "tertiary-fixed": "#feb246",
+                        "outline-variant": "#acadad",
+                        "error-dim": "#b92902",
+                        "tertiary-dim": "#704700",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-surface": "#2d2f2f",
+                        "on-primary-fixed": "#453900",
+                        "on-error-container": "#520c00",
+                        "primary-container": "#ffd709",
+                        "on-primary-fixed-variant": "#665500",
+                        "surface-variant": "#dbdddd",
+                        "secondary-dim": "#7b4000",
+                        "primary": "#6c5a00",
+                        "inverse-surface": "#0c0f0f",
+                        "secondary": "#8c4a00",
+                        "outline": "#767777",
+                        "surface-tint": "#6c5a00",
+                        "tertiary-container": "#feb246",
+                        "on-tertiary": "#fff0e3",
+                        "tertiary-fixed-dim": "#eea439",
+                        "secondary-container": "#ffc69a",
+                        "error-container": "#f95630",
+                        "error": "#b02500",
+                        "on-primary": "#fff2cd",
+                        "surface-container-high": "#e1e3e3",
+                        "surface": "#f6f6f6",
+                        "primary-fixed-dim": "#efc900",
+                        "on-secondary-container": "#6f3a00",
+                        "on-tertiary-container": "#563500",
+                        "surface-container-low": "#f0f1f1",
+                        "on-error": "#ffefec",
+                        "primary-dim": "#5e4e00",
+                        "on-surface-variant": "#5a5c5c",
+                        "on-primary-container": "#5b4b00",
+                        "surface-container-highest": "#dbdddd",
+                        "inverse-on-surface": "#9c9d9d",
+                        "on-secondary-fixed": "#532a00",
+                        "secondary-fixed": "#ffc69a",
+                        "secondary-fixed-dim": "#ffb375",
+                        "surface-bright": "#f6f6f6",
+                        "on-background": "#2d2f2f"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+        h1, h2, h3, .font-jakarta {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="text-on-surface min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full">
+<button class="active:scale-95 transition-transform text-[#6c5a00] dark:text-[#FFD700] hover:bg-neutral-200/50 dark:hover:bg-neutral-800/50 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">支付成功</h1>
+<div class="w-10"></div> <!-- Spacer for centering -->
+</div>
+<div class="bg-neutral-100 dark:bg-neutral-800 h-[1px] w-full"></div>
+</header>
+<main class="flex-grow flex flex-col items-center px-6 pt-10 pb-32">
+<!-- Success Visual Area -->
+<div class="flex flex-col items-center mb-12">
+<div class="w-24 h-24 bg-primary-container rounded-full flex items-center justify-center mb-6 shadow-xl shadow-primary-container/20">
+<span class="material-symbols-outlined text-primary text-5xl" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<h2 class="font-headline font-extrabold text-3xl text-on-surface mb-2 tracking-tight">支付成功</h2>
+<span class="text-on-surface-variant text-xs font-medium mb-1 block text-center">实付金额</span><div class="flex items-baseline gap-1">
+<span class="text-secondary font-headline font-bold text-lg">¥</span>
+<span class="text-on-surface font-headline font-black text-5xl">153</span>
+</div>
+</div>
+<!-- Order Brief Card -->
+<div class="w-full bg-surface-container-lowest rounded-[1.5rem] p-6 mb-10 shadow-[0_4px_20px_rgba(0,0,0,0.02)] relative overflow-hidden">
+<!-- Asymmetric Accent -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-primary-container/10 rounded-full blur-3xl"></div>
+<div class="flex items-center gap-4 mb-6">
+<div class="w-16 h-16 rounded-2xl overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="星野Kyo个人头像" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo7On0Xy7EUcpBrGAr31ASCQAF8auJANuLZW0cYSWLN7sDxkAy2-D4MAkGiGu8563uWVQ0DNxNYJCW8N5bZNrKyZt9C_XZTTRhyFRDvoaS5zGg6P3VUK1xUEq87J1r3A5RSj2m-ss779-ac37r_nExi4waTdAdDMnVppajzhc15vD7lJZjXpOUmytrURGMM1JSm-scQ7rKvIfcEiKXM7EixyFRu1w_4FEhJhlDyE200_X40XTmpzkUsl4Z2WOdUh63obr2iRUUltw"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-xl text-on-surface">星野Kyo</h3>
+<div class="flex items-center gap-2 mt-1">
+<span class="bg-tertiary-container/20 text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-medium">大神陪练</span>
+<span class="text-primary font-bold text-xs">★ 5.0</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-sm font-medium">预约服务</span>
+<span class="text-on-surface font-bold text-sm">绝地求生陪练</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant text-sm font-medium">预约时间</span>
+<span class="text-on-surface font-bold text-sm">2026年3月15日 20:00</span>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="w-full flex flex-col gap-4">
+<button class="w-full bg-primary-container text-on-primary-container font-headline font-extrabold py-4 rounded-full flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+                发消息
+            </button>
+<button class="w-full bg-surface-container-low text-on-surface font-headline font-bold py-4 rounded-full flex items-center justify-center gap-2 active:scale-[0.98] transition-all border border-outline-variant/10">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+                查看订单
+            </button>
+</div>
+<!-- Social Proof/Tips -->
+<p class="mt-8 text-on-surface-variant text-xs text-center px-10 leading-relaxed">
+            支付成功！您的订单已通知星野Kyo，请保持通讯顺畅。
+        </p>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-2 hover:opacity-80 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-2 hover:opacity-80 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">发现</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-2 hover:opacity-80 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">消息</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-5 py-2 scale-105 active:scale-90 transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">我的</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#8c4a00",
+                        "surface-variant": "#dbdddd",
+                        "surface-tint": "#6c5a00",
+                        "on-secondary": "#fff0e7",
+                        "on-error-container": "#520c00",
+                        "on-surface": "#2d2f2f",
+                        "error": "#b02500",
+                        "surface-dim": "#d3d5d5",
+                        "on-primary-fixed-variant": "#665500",
+                        "background": "#f6f6f6",
+                        "primary-container": "#ffd709",
+                        "surface-bright": "#f6f6f6",
+                        "inverse-surface": "#0c0f0f",
+                        "surface": "#f6f6f6",
+                        "tertiary-dim": "#704700",
+                        "secondary-container": "#ffc69a",
+                        "on-surface-variant": "#5a5c5c",
+                        "on-secondary-fixed": "#532a00",
+                        "tertiary-fixed": "#feb246",
+                        "surface-container-low": "#f0f1f1",
+                        "primary-dim": "#5e4e00",
+                        "error-dim": "#b92902",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-high": "#e1e3e3",
+                        "primary-fixed-dim": "#efc900",
+                        "on-tertiary": "#fff0e3",
+                        "on-primary-fixed": "#453900",
+                        "outline": "#767777",
+                        "tertiary-container": "#feb246",
+                        "on-secondary-container": "#6f3a00",
+                        "surface-container-highest": "#dbdddd",
+                        "outline-variant": "#acadad",
+                        "inverse-primary": "#ffd709",
+                        "secondary-dim": "#7b4000",
+                        "on-background": "#2d2f2f",
+                        "inverse-on-surface": "#9c9d9d",
+                        "on-error": "#ffefec",
+                        "tertiary-fixed-dim": "#eea439",
+                        "surface-container": "#e7e8e8",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "tertiary": "#805100",
+                        "on-primary": "#fff2cd",
+                        "error-container": "#f95630",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "primary-fixed": "#ffd709",
+                        "secondary-fixed-dim": "#ffb375",
+                        "secondary-fixed": "#ffc69a",
+                        "on-primary-container": "#5b4b00",
+                        "primary": "#6c5a00",
+                        "on-tertiary-container": "#563500"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full">
+<div class="flex items-center active:opacity-70 transition-opacity scale-95 duration-200">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">arrow_back</span>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-[#6c5a00] dark:text-[#FFD700]">我的申诉</h1>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</div>
+<div class="bg-neutral-100 dark:bg-neutral-800 h-[1px] w-full self-end"></div>
+</header>
+<!-- Content Canvas -->
+<main class="flex-1 pt-16 pb-28 px-5">
+<!-- Tabs Section -->
+<div class="flex items-center justify-between py-6 overflow-x-auto no-scrollbar gap-2">
+<button class="flex-none px-6 py-2.5 rounded-full bg-primary-container text-on-primary-container font-bold text-sm whitespace-nowrap shadow-sm">
+                全部
+            </button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">
+                待处理
+            </button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">
+                处理中
+            </button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm whitespace-nowrap hover:bg-surface-container-high transition-colors">
+                已完成
+            </button>
+</div>
+<!-- Appeals List -->
+<div class="space-y-4">
+<!-- Appeal Item 1: Processing -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<div class="text-[10px] text-on-surface-variant font-headline tracking-wider uppercase">单号: SP202310240092</div>
+<div class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">warning</span>
+                            违规言论/引战
+                        </div>
+</div>
+<span class="px-3 py-1 bg-primary-container/20 text-primary text-[11px] font-bold rounded-full">处理中</span>
+</div>
+<div class="flex items-center gap-4 py-3 bg-surface-container-low/50 rounded-xl px-4">
+<img alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-white" data-alt="Gaming male avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbFFFTOLXk3uh3QYfT5K_O_xwli3756CWmaRPqDURn9hQdMMVr69OFKFYEukdPgpij-8M4aF0yOB8_9gnq9msePksq2gNyksu7Hkg7P-D35FvPBA2Twqv76_3GXssW6kh69xJayXRj3FCsOiIYAaPAlkp5YLofI2Wslskx-FnkMhpF6MMJlsszgOF44PrEgT5KnzAF1JGKBQvsLyc-BpgyvqRjkfkJTD6-ugewCJITW4SZdjMZ_eNFAL71PG_4uVmFZoTbVoilpW0"/>
+<div>
+<div class="text-xs text-on-surface-variant">申诉对象</div>
+<div class="text-sm font-semibold text-on-surface">夜火狂潮</div>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<div class="text-[11px] text-on-surface-variant">提交时间: 2023.10.24 14:20</div>
+<button class="text-sm font-bold text-primary flex items-center gap-1 active:opacity-60 transition-opacity">
+                        查看详情
+                        <span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Appeal Item 2: Completed -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<div class="text-[10px] text-on-surface-variant font-headline tracking-wider uppercase">单号: SP202310220145</div>
+<div class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+                            消极比赛/挂机
+                        </div>
+</div>
+<span class="px-3 py-1 bg-emerald-100 text-emerald-700 text-[11px] font-bold rounded-full">已完成</span>
+</div>
+<div class="flex items-center gap-4 py-3 bg-surface-container-low/50 rounded-xl px-4">
+<img alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-white" data-alt="Female pro gamer avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBh9xMrg68oicE9e-VAIhkrdgB1TkNcEtOcvR3FySiy-94rXsb84VQ4BrXjM2LNCCZbLlFep70TkMaAG8UPDOhjF2rolCEzNfjo2qxKZ5OVTvk9p0VjQooN9hnjHyviPZDE_C8I1mwk0p_3a7zwtRplZx3bi-LaJ5iSDXBeasRWzS7qap6X_QquQkk4wj3lYqsRWzKW_AMARsM0VMQxUylN0AGwq_3Bx5yVh7htFKk6AKYjs7hUVfnCLnXsj4Ftbf4HEdzH7_bHfCE"/>
+<div>
+<div class="text-xs text-on-surface-variant">申诉对象</div>
+<div class="text-sm font-semibold text-on-surface">小甜心软软</div>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<div class="text-[11px] text-on-surface-variant">提交时间: 2023.10.22 09:15</div>
+<button class="text-sm font-bold text-primary flex items-center gap-1 active:opacity-60 transition-opacity">
+                        查看详情
+                        <span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Appeal Item 3: Pending -->
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] transition-all hover:scale-[1.01]">
+<div class="flex justify-between items-start mb-4">
+<div class="space-y-1">
+<div class="text-[10px] text-on-surface-variant font-headline tracking-wider uppercase">单号: SP202310210887</div>
+<div class="text-sm font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">person_off</span>
+                            代练嫌疑
+                        </div>
+</div>
+<span class="px-3 py-1 bg-neutral-200 text-neutral-500 text-[11px] font-bold rounded-full">待处理</span>
+</div>
+<div class="flex items-center gap-4 py-3 bg-surface-container-low/50 rounded-xl px-4">
+<img alt="Avatar" class="w-10 h-10 rounded-full object-cover border-2 border-white" data-alt="Male gamer profile photo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBgCfdtE87j_277mqHdGOrVB5ODdk3PB9qPrI4KHjwEwSoOCXY0PeDGmnjvQOV4amb7ApX9KpPnJdC_O441R5hJqPFtRFp53BwPBmmq_OdGBWQlxjL4KuGZcflFM3yGX98CoBIX2NP7o698CcpxL-c5ojRrLjgGZu-Nu3phfR801amAJqexlBDP66TlaB2FgQdLiURLe3N5rsHVf4WI86UXNKfO-rHzaRM2REmbRbUiHP737OFWo18X-rfw-c0iVZCVRILangWQY0A"/>
+<div>
+<div class="text-xs text-on-surface-variant">申诉对象</div>
+<div class="text-sm font-semibold text-on-surface">野王带你飞</div>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<div class="text-[11px] text-on-surface-variant">提交时间: 2023.10.21 21:00</div>
+<button class="text-sm font-bold text-primary flex items-center gap-1 active:opacity-60 transition-opacity">
+                        查看详情
+                        <span class="material-symbols-outlined text-base">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State (Hidden by default, used when no records) -->
+<div class="hidden flex flex-col items-center justify-center py-20 text-center">
+<div class="w-24 h-24 bg-surface-container-high rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-4xl text-neutral-400" style="font-variation-settings: 'FILL' 0;">history_edu</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-2">暂无申诉记录</h3>
+<p class="text-sm text-on-surface-variant max-w-[200px]">你还没有提交过任何申诉。如有需要请联系客服。</p>
+<button class="mt-8 px-8 py-3 bg-primary-container text-on-primary-container font-bold rounded-full shadow-lg active:scale-95 transition-transform">
+                去申诉
+            </button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)]">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">grid_view</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">首页</span>
+</a>
+<!-- Play -->
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">sports_esports</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">约玩</span>
+</a>
+<!-- Chat -->
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="text-[10px] font-medium font-['Plus_Jakarta_Sans']">消息</span>
+</a>
+<!-- Profile (Active) -->
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-5 py-1.5 transition-all scale-90 duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-0.5" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-bold font-['Plus_Jakarta_Sans']">我的</span>
+</a>
+</nav>
+</body></html>

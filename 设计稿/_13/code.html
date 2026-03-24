@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>我的钱包 - SunnyPlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#ffb375",
+                        "surface-bright": "#f6f6f6",
+                        "surface-tint": "#6c5a00",
+                        "background": "#f6f6f6",
+                        "on-primary-fixed": "#453900",
+                        "secondary-dim": "#7b4000",
+                        "primary-container": "#ffd709",
+                        "primary-dim": "#5e4e00",
+                        "secondary-fixed": "#ffc69a",
+                        "tertiary-fixed": "#feb246",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "error-container": "#f95630",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#767777",
+                        "error-dim": "#b92902",
+                        "surface-container-high": "#e1e3e3",
+                        "primary-fixed": "#ffd709",
+                        "tertiary-container": "#feb246",
+                        "on-background": "#2d2f2f",
+                        "on-surface": "#2d2f2f",
+                        "outline-variant": "#acadad",
+                        "on-tertiary": "#fff0e3",
+                        "on-secondary-fixed": "#532a00",
+                        "error": "#b02500",
+                        "tertiary-dim": "#704700",
+                        "on-surface-variant": "#5a5c5c",
+                        "inverse-on-surface": "#9c9d9d",
+                        "primary": "#6c5a00",
+                        "surface-variant": "#dbdddd",
+                        "on-primary-container": "#5b4b00",
+                        "on-tertiary-container": "#563500",
+                        "surface-container": "#e7e8e8",
+                        "secondary": "#8c4a00",
+                        "on-secondary-container": "#6f3a00",
+                        "on-primary": "#fff2cd",
+                        "on-error-container": "#520c00",
+                        "on-error": "#ffefec",
+                        "on-tertiary-fixed": "#3a2300",
+                        "tertiary": "#805100",
+                        "primary-fixed-dim": "#efc900",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "surface": "#f6f6f6",
+                        "inverse-primary": "#ffd709",
+                        "on-primary-fixed-variant": "#665500",
+                        "secondary-container": "#ffc69a",
+                        "surface-container-low": "#f0f1f1",
+                        "surface-container-highest": "#dbdddd",
+                        "tertiary-fixed-dim": "#eea439",
+                        "inverse-surface": "#0c0f0f",
+                        "surface-dim": "#d3d5d5",
+                        "on-secondary": "#fff0e7"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface select-none">
+<!-- Top Navigation Bar -->
+<header class="bg-[#f6f6f6] dark:bg-neutral-900 docked full-width top-0 z-50 flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#6c5a00] active:scale-95 transition-transform cursor-pointer">arrow_back_ios</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">我的钱包</h1>
+</div>
+<div class="text-neutral-500 font-medium text-sm hover:opacity-80 transition-opacity cursor-pointer">
+            明细
+        </div>
+</header>
+<main class="px-6 pt-4 pb-32 max-w-2xl mx-auto">
+<!-- Balance Card -->
+<section class="mb-8 relative overflow-hidden bg-primary-container rounded-[2rem] p-8 shadow-sm">
+<!-- Decorative circle -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-white/20 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<p class="text-on-primary-container/80 text-sm font-medium mb-1">阳光币余额</p>
+<div class="flex items-baseline gap-2">
+<span class="font-headline font-extrabold text-5xl text-on-primary-container">1,280</span>
+<span class="material-symbols-outlined text-on-primary-container text-2xl" style="font-variation-settings: 'FILL' 1;">wb_sunny</span>
+</div>
+<div class="mt-6 inline-flex items-center gap-2 bg-white/30 px-3 py-1.5 rounded-full backdrop-blur-md">
+<span class="material-symbols-outlined text-xs text-on-primary-container" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-xs font-semibold text-on-primary-container">首充赠送 20%</span>
+</div>
+</div>
+</section>
+<!-- Recharge Options Grid -->
+<section class="mb-8">
+<div class="flex items-center justify-between mb-5">
+<h2 class="text-lg font-bold text-on-surface">充值档位</h2>
+<span class="text-xs text-on-surface-variant">1元 = 1阳光币</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Option 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95 group">
+<span class="font-headline font-bold text-2xl mb-1 group-hover:text-primary">6</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥6.00</div>
+</div>
+<!-- Option 2: Active State -->
+<div class="bg-primary-container/10 p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-primary-container relative transition-all cursor-pointer active:scale-95">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-tr-[1.3rem] rounded-bl-[1rem] text-[10px] font-bold">送1.2元</div>
+<span class="font-headline font-bold text-2xl mb-1 text-primary">30</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥30.00</div>
+</div>
+<!-- Option 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95 group">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-tr-[1.3rem] rounded-bl-[1rem] text-[10px] font-bold">送6元</div>
+<span class="font-headline font-bold text-2xl mb-1 group-hover:text-primary">60</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥60.00</div>
+</div>
+<!-- Option 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95 group">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-tr-[1.3rem] rounded-bl-[1rem] text-[10px] font-bold">送12元</div>
+<span class="font-headline font-bold text-2xl mb-1 group-hover:text-primary">128</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥128.00</div>
+</div>
+<!-- Option 5 -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95 group">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-tr-[1.3rem] rounded-bl-[1rem] text-[10px] font-bold">送35元</div>
+<span class="font-headline font-bold text-2xl mb-1 group-hover:text-primary">328</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥328.00</div>
+</div>
+<!-- Option 6 -->
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col items-center justify-center border-2 border-transparent hover:border-primary-container transition-all cursor-pointer active:scale-95 group">
+<div class="absolute top-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-tr-[1.3rem] rounded-bl-[1rem] text-[10px] font-bold">送100元</div>
+<span class="font-headline font-bold text-2xl mb-1 group-hover:text-primary">648</span>
+<p class="text-xs text-on-surface-variant">阳光币</p>
+<div class="mt-4 text-sm font-bold text-on-surface">¥648.00</div>
+</div>
+</div>
+</section>
+<!-- Important Notes -->
+<section class="bg-surface-container-low p-5 rounded-2xl mb-8">
+<h3 class="text-sm font-bold mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">info</span>
+                充值说明
+            </h3>
+<ul class="text-xs text-on-surface-variant space-y-2 leading-relaxed">
+<li>• 阳光币仅限在本平台内用于消费，不可提现。</li>
+<li>• 充值成功后通常实时到账，如遇延迟请咨询客服。</li>
+<li>• 支付成功即视为同意相关充值服务条款。</li>
+</ul>
+</section>
+</main>
+<!-- Bottom Action Bar (Fixed) -->
+<div class="fixed bottom-0 left-0 w-full bg-surface/80 glass-effect p-6 pb-10 z-50">
+<div class="max-w-2xl mx-auto">
+<!-- Agreement -->
+<div class="flex items-center justify-center gap-2 mb-4">
+<div class="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center bg-primary">
+<span class="material-symbols-outlined text-[10px] text-on-primary font-bold">check</span>
+</div>
+<p class="text-[11px] text-on-surface-variant">
+                    充值即代表同意<span class="text-primary font-semibold">《用户协议》</span>与<span class="text-primary font-semibold">《充值服务条款》</span>
+</p>
+</div>
+<!-- CTA Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-all text-lg tracking-wide">
+                立即充值
+            </button>
+</div>
+</div>
+<!-- Bottom Nav Bar (JSON Source Alignment) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl z-[60] rounded-t-[1.5rem] shadow-[0_-4px_20px_rgba(0,0,0,0.05)] md:hidden pointer-events-none opacity-0">
+<!-- Suppressed for transactional focus as per rule: suppressed on sub-pages -->
+</nav>
+</body></html>

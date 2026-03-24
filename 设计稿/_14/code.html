@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,700;0,800;1,800&amp;family=Be+Vietnam+Pro:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#ffb375",
+              "surface-bright": "#f6f6f6",
+              "surface-tint": "#6c5a00",
+              "background": "#f6f6f6",
+              "on-primary-fixed": "#453900",
+              "secondary-dim": "#7b4000",
+              "primary-container": "#ffd709",
+              "primary-dim": "#5e4e00",
+              "secondary-fixed": "#ffc69a",
+              "tertiary-fixed": "#feb246",
+              "on-secondary-fixed-variant": "#7c4100",
+              "error-container": "#f95630",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#767777",
+              "error-dim": "#b92902",
+              "surface-container-high": "#e1e3e3",
+              "primary-fixed": "#ffd709",
+              "tertiary-container": "#feb246",
+              "on-background": "#2d2f2f",
+              "on-surface": "#2d2f2f",
+              "outline-variant": "#acadad",
+              "on-tertiary": "#fff0e3",
+              "on-secondary-fixed": "#532a00",
+              "error": "#b02500",
+              "tertiary-dim": "#704700",
+              "on-surface-variant": "#5a5c5c",
+              "inverse-on-surface": "#9c9d9d",
+              "primary": "#6c5a00",
+              "surface-variant": "#dbdddd",
+              "on-primary-container": "#5b4b00",
+              "on-tertiary-container": "#563500",
+              "surface-container": "#e7e8e8",
+              "secondary": "#8c4a00",
+              "on-secondary-container": "#6f3a00",
+              "on-primary": "#fff2cd",
+              "on-error-container": "#520c00",
+              "on-error": "#ffefec",
+              "on-tertiary-fixed": "#3a2300",
+              "tertiary": "#805100",
+              "primary-fixed-dim": "#efc900",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface": "#f6f6f6",
+              "inverse-primary": "#ffd709",
+              "on-primary-fixed-variant": "#665500",
+              "secondary-container": "#ffc69a",
+              "surface-container-low": "#f0f1f1",
+              "surface-container-highest": "#dbdddd",
+              "tertiary-fixed-dim": "#eea439",
+              "inverse-surface": "#0c0f0f",
+              "surface-dim": "#d3d5d5",
+              "on-secondary": "#fff0e7"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+        .step-active {
+            color: #6c5a00;
+            font-weight: 700;
+        }
+        .step-line {
+            height: 2px;
+            flex-grow: 1;
+            background-color: #e1e3e3;
+            margin: 0 8px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-[#f6f6f6] dark:bg-neutral-900 docked full-width top-0 z-50 flex justify-between items-center px-6 py-4 w-full sticky">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[#6c5a00] cursor-pointer" data-icon="arrow_back">arrow_back</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00]">大神认证</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-neutral-500" data-icon="help_outline">help_outline</span>
+</div>
+</header>
+<main class="px-5 pt-6 space-y-8 max-w-2xl mx-auto">
+<!-- Step Indicator -->
+<div class="flex items-center justify-between px-2">
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-primary font-bold text-sm">1</div>
+<span class="text-[11px] font-bold text-primary">选择游戏</span>
+</div>
+<div class="step-line bg-primary-container/40"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-sm">2</div>
+<span class="text-[11px] font-medium text-on-surface-variant">上传截图</span>
+</div>
+<div class="step-line"></div>
+<div class="flex flex-col items-center gap-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface-variant font-bold text-sm">3</div>
+<span class="text-[11px] font-medium text-on-surface-variant">录制语音</span>
+</div>
+</div>
+<!-- Form Section -->
+<div class="space-y-6">
+<!-- Game Selection -->
+<div class="space-y-3">
+<label class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    申请游戏
+                    <span class="text-error text-xs">*</span>
+</label>
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="League of Legends game icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3aRMW0SKYz9bJRCZHdeySAm3YNW6BkLha-t04SCoPtPGNaiKk5pI_RLZm-Xx3xeTb8jaXE5utdU1Iw-C3HTzuGEZ-OT6Vd6YdJS1nJPuLjPIsuQf33z_SaWN2pKdsYlGwJ7_f4BAph1IowakAlgW1S7P5TdxVgMV6NhX54Sd9VbxJ_pqRaUbNPEfxExFQlz3aDU3vw00yIi2VB_2rwANtR8LSjZfOzoDtnnn_IYo9B4DtzOt6TVzzj6jRiMNlSyXIOBJUglCuuJk"/>
+</div>
+<span class="font-bold text-on-surface">英雄联盟 (LOL)</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+<!-- Rank Input -->
+<div class="space-y-3">
+<label class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    当前段位
+                    <span class="text-error text-xs">*</span>
+</label>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary-container transition-all" placeholder="例如：至尊星耀 I" type="text"/>
+</div>
+<!-- Position Selection -->
+<div class="space-y-3">
+<label class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    擅长位置
+                    <span class="text-on-surface-variant text-xs font-normal">（可多选）</span>
+</label>
+<div class="flex flex-wrap gap-3">
+<button class="px-5 py-2.5 rounded-full bg-primary-container text-primary font-bold text-sm border-none transition-all active:scale-95">上单</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">中单</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">打野</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">ADC</button>
+<button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">辅助</button>
+</div>
+</div>
+<!-- Screenshot Upload -->
+<div class="space-y-3">
+<label class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    段位截图认证
+                    <span class="text-error text-xs">*</span>
+</label>
+<div class="grid grid-cols-2 gap-4">
+<div class="aspect-video rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined text-outline text-3xl" data-icon="add_a_photo">add_a_photo</span>
+<span class="text-[10px] text-outline-variant font-medium">点击上传截图</span>
+</div>
+<div class="aspect-video rounded-xl overflow-hidden relative group">
+<img class="w-full h-full object-cover opacity-60 grayscale" data-alt="Gaming rank dashboard example" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-ShCe8WK-qMVPRbujcRQq43lUbbBNa0JJd4P8dB3ic8wkLkYsQN1A7xEJucccO9GJEr4-LK6aHPG2b4fwEViMkpw1-MIsoeTcS3p5r6cah9ryKmMV7sqZdIzEy14bYrtTow01e7MzyFoKUURQyaU3TDeWS_7bCxOLFfZuXiPvwih9Q17ZfSeuENZloxLoEHbsilZddlhCm_mj_eKo5y91GtOhY4hM1m6wUJph2vWdcD9MWj6RZPQnkKwP3mk4ZqI58gjh9w7CtFw"/>
+<div class="absolute inset-0 flex items-center justify-center bg-black/20">
+<span class="bg-black/60 text-white text-[10px] px-2 py-1 rounded-md">示例图片</span>
+</div>
+</div>
+</div>
+<p class="text-[11px] text-on-surface-variant leading-relaxed px-1">请上传包含角色ID及当前段位的游戏主页截图，确保信息清晰可见。</p>
+</div>
+<!-- Voice Introduction -->
+<div class="space-y-3">
+<label class="text-sm font-bold text-on-surface flex items-center gap-2">
+                    语音介绍
+                    <span class="text-error text-xs">*</span>
+</label>
+<div class="bg-surface-container-low rounded-2xl p-6 flex flex-col items-center gap-4">
+<button class="w-16 h-16 rounded-full bg-primary-container flex items-center justify-center shadow-lg shadow-primary-container/20 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="mic" data-weight="fill" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+<div class="text-center">
+<p class="text-sm font-bold text-on-surface">点击开始录制</p>
+<p class="text-[11px] text-on-surface-variant mt-1">清晰甜美的语音会大大增加接单率哦 (10-60s)</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Action Button -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-xl z-40">
+<button class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-['Plus_Jakarta_Sans'] font-bold py-4 rounded-full text-base shadow-lg shadow-primary-container/25 transition-all active:scale-[0.98]">
+            提交申请
+        </button>
+</div>
+</body></html>

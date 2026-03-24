@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#f6f6f6",
+                        "secondary": "#8c4a00",
+                        "tertiary": "#805100",
+                        "outline-variant": "#acadad",
+                        "on-primary-fixed": "#453900",
+                        "on-tertiary-fixed": "#3a2300",
+                        "secondary-fixed": "#ffc69a",
+                        "inverse-surface": "#0c0f0f",
+                        "on-tertiary": "#fff0e3",
+                        "on-secondary-fixed": "#532a00",
+                        "secondary-container": "#ffc69a",
+                        "primary-container": "#ffd709",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface": "#2d2f2f",
+                        "tertiary-dim": "#704700",
+                        "secondary-dim": "#7b4000",
+                        "primary": "#6c5a00",
+                        "surface-bright": "#f6f6f6",
+                        "on-error": "#ffefec",
+                        "surface": "#f6f6f6",
+                        "on-tertiary-container": "#563500",
+                        "on-background": "#2d2f2f",
+                        "on-surface-variant": "#5a5c5c",
+                        "inverse-on-surface": "#9c9d9d",
+                        "on-primary-container": "#5b4b00",
+                        "on-primary-fixed-variant": "#665500",
+                        "error-container": "#f95630",
+                        "surface-container": "#e7e8e8",
+                        "error-dim": "#b92902",
+                        "tertiary-container": "#feb246",
+                        "outline": "#767777",
+                        "tertiary-fixed-dim": "#eea439",
+                        "surface-dim": "#d3d5d5",
+                        "inverse-primary": "#ffd709",
+                        "primary-fixed-dim": "#efc900",
+                        "surface-tint": "#6c5a00",
+                        "surface-variant": "#dbdddd",
+                        "secondary-fixed-dim": "#ffb375",
+                        "primary-fixed": "#ffd709",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "surface-container-high": "#e1e3e3",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-secondary-container": "#6f3a00",
+                        "on-primary": "#fff2cd",
+                        "error": "#b02500",
+                        "tertiary-fixed": "#feb246",
+                        "primary-dim": "#5e4e00",
+                        "on-secondary": "#fff0e7",
+                        "surface-container-highest": "#dbdddd",
+                        "on-error-container": "#520c00",
+                        "surface-container-low": "#f0f1f1"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .hero-gradient {
+            background: linear-gradient(135deg, #ffd709 0%, #feb246 100%);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-surface-container-highest/50 backdrop-blur-xl bg-[#f6f6f6] dark:bg-neutral-900 flex items-center justify-between px-5 h-16 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-200 cursor-pointer">arrow_back</span>
+<h1 class="font-plus-jakarta-sans font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">历史战绩</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-neutral-500 hover:opacity-80 transition-opacity cursor-pointer">filter_list</span>
+<span class="material-symbols-outlined text-neutral-500 hover:opacity-80 transition-opacity cursor-pointer">search</span>
+</div>
+</header>
+<main class="px-5 pt-4 space-y-6">
+<!-- Season Summary Bento Grid -->
+<section class="grid grid-cols-12 gap-3">
+<div class="col-span-12 hero-gradient rounded-xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[160px] shadow-sm">
+<div class="relative z-10">
+<p class="text-on-primary-container font-medium opacity-80 mb-1">当前赛季</p>
+<h2 class="text-on-primary-container font-headline font-extrabold text-3xl tracking-tight">S24 巅峰对决</h2>
+</div>
+<div class="flex justify-between items-end relative z-10">
+<div class="flex gap-6">
+<div>
+<p class="text-[10px] text-on-primary-container font-bold uppercase tracking-wider opacity-60">总场次</p>
+<p class="font-headline font-black text-2xl text-on-primary-container">1,248</p>
+</div>
+<div>
+<p class="text-[10px] text-on-primary-container font-bold uppercase tracking-wider opacity-60">胜率</p>
+<p class="font-headline font-black text-2xl text-on-primary-container">64.2%</p>
+</div>
+</div>
+<div class="bg-white/30 backdrop-blur-md rounded-full px-4 py-1.5 flex items-center gap-2 border border-white/20">
+<span class="material-symbols-outlined text-on-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span class="text-on-primary-container font-bold text-sm">MVP 86次</span>
+</div>
+</div>
+<!-- Abstract Decorative Elements -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+<div class="absolute -left-10 -bottom-10 w-32 h-32 bg-primary/20 rounded-full blur-2xl"></div>
+</div>
+</section>
+<!-- Match List -->
+<div class="space-y-4">
+<div class="flex items-center justify-between px-1">
+<h3 class="font-headline font-bold text-on-surface">近期对局</h3>
+<span class="text-xs text-outline font-medium">查看全部报告</span>
+</div>
+<!-- Match Card 1 (Victory/MVP) -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm">
+<div class="relative">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container border-2 border-primary-container">
+<img alt="" class="w-full h-full object-cover" data-alt="Hero avatar of a gaming character" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPD_5CyNJmopxDSER0ZPl9vdGjLuYb8Cly-R-vYRPhXXlys1A1Csa19Q8VVHrnISAEQUrKgmU-z0XgVY0dK_KosES5CkMhjUBuTSuIkdIe0EBs8n_svF7PrmZy-mvXSpf0XJ3kq0plHniYIt4bYkkZzJ_UDXxUTQelMGhm48oawAx-YNtzOGyNBQ4Ulw4p_akue4sKmXgai32l_lGib0bYWtUXavWblDzJKLPKpLJLZDxFhZV8X9TiQz62wse9QIfbmSjrL-FXuRA"/>
+</div>
+<div class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[10px] font-black px-1.5 py-0.5 rounded-full border-2 border-surface-container-lowest">MVP</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-primary font-black text-lg">VICTORY</span>
+<span class="text-[10px] text-outline font-medium">10-24 14:30</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline font-bold text-on-surface">12</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-error">2</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-tertiary">8</span>
+</div>
+<div class="h-3 w-[1px] bg-surface-container"></div>
+<span class="text-xs text-on-surface-variant font-medium">18:42</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Match Card 2 (Defeat) -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm opacity-90">
+<div class="relative">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container grayscale">
+<img alt="" class="w-full h-full object-cover" data-alt="Hero avatar of a gaming character grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEHaIRAqBM2kwZtns2GUAEBz_FQTmXXVZ_JbpACk1KW5dNxu5_U3yNQbQWW_qJcfaATr_ep3f5XgNgbK35BuQL6Mrnf0V6IyyzUsM4jguPSy7HMxGons2Ak4zZc4FeOIaARvPE2CDINhxnoWhoHSJWueJUNiy4rymvhPqLurV7JTbrXcXXA2HvJhi4XXs8NmFi0qDH5OWtwr9K2ncqBDXspYB6VgwO3LvUDY6ouHPLchZdrUDKKb3f8YYWVitg8ZaNsiiTiyXs3PM"/>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-outline font-black text-lg uppercase">Defeat</span>
+<span class="text-[10px] text-outline font-medium">10-24 12:15</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline font-bold text-on-surface">4</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-error">8</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-tertiary">11</span>
+</div>
+<div class="h-3 w-[1px] bg-surface-container"></div>
+<span class="text-xs text-on-surface-variant font-medium">32:10</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Match Card 3 (Victory) -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm">
+<div class="relative">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container">
+<img alt="" class="w-full h-full object-cover" data-alt="Hero avatar of a fantasy gaming character" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLCX9UFOVfgOJJRfU5glnA8DCtLreMcJKaMpyHD7oBZVsqNDsTCpTGcatLgHsQZ_8NEMDa9j-rqUTCFPwERZcxhCe3tai4xW-U2DVTk0nLZ9ZKJXa6G2LeWTaJoL0OGhacZUC__J0XHiZjGmP6kcc0B423IjB4yKz7V0K7fZSDHWpdSwMia4RQg8cNc_y2MbLMei0BT4dvXPfu36mv8xJD-pLLRyfQcCa88kp4oACcD3p5XuhIYXRZcu1RhTUMYAFtUWYtsG3PXDg"/>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-primary font-black text-lg">VICTORY</span>
+<span class="text-[10px] text-outline font-medium">10-23 21:50</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline font-bold text-on-surface">15</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-error">5</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-tertiary">3</span>
+</div>
+<div class="h-3 w-[1px] bg-surface-container"></div>
+<span class="text-xs text-on-surface-variant font-medium">24:15</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+<!-- Match Card 4 (Victory) -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 active:scale-[0.98] transition-all duration-200 cursor-pointer group shadow-sm">
+<div class="relative">
+<div class="w-16 h-16 rounded-full overflow-hidden bg-surface-container border-2 border-primary-container">
+<img alt="" class="w-full h-full object-cover" data-alt="Hero avatar of a futuristic gaming character" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBA7QkKdEtr2dxDrazaxzvAf9EpGlRr696hlFA5yyHTR1mbMwzRG1pyJImGIHYLjQUm08HDRsI484UMDvWtMLzfCtdJIZ19M2D1XeOPxZEZiHLs37HO3eAPrZBRl-XzKuTDqmZXqm-K6jSO7L0qm958jzEzTQN8Q8JnuHjG7KIRc-5KrRy93ma_tbD-TQ1LmPYNKfG1ynqJ_CTaOaViZPtdSIuaft7kgTlQkuLQ1g7W9Ot2PDzykK1-tvGeGTSiLvuIll7rQLyVQJU"/>
+</div>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between mb-1">
+<span class="text-primary font-black text-lg">VICTORY</span>
+<span class="text-[10px] text-outline font-medium">10-23 19:05</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-baseline gap-0.5">
+<span class="font-headline font-bold text-on-surface">8</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-error">1</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline font-bold text-tertiary">14</span>
+</div>
+<div class="h-3 w-[1px] bg-surface-container"></div>
+<span class="text-xs text-on-surface-variant font-medium">15:58</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-6 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl rounded-t-[1.5rem] z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+<div class="flex flex-col items-center justify-center text-neutral-400 p-2 hover:text-[#6c5a00] active:scale-90 transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-plus-jakarta-sans text-[10px] font-semibold mt-1">首页</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-4 py-1.5 active:scale-90 transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="sports_esports" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-plus-jakarta-sans text-[10px] font-semibold mt-1">对局</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 p-2 hover:text-[#6c5a00] active:scale-90 transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-plus-jakarta-sans text-[10px] font-semibold mt-1">消息</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 p-2 hover:text-[#6c5a00] active:scale-90 transition-all duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-plus-jakarta-sans text-[10px] font-semibold mt-1">我的</span>
+</div>
+</nav>
+</body></html>

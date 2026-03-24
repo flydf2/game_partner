@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>登录 SunnyPlay - 开启你的阳光游戏之旅</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-container": "#feb246",
+                        "inverse-primary": "#ffd709",
+                        "surface-variant": "#dbdddd",
+                        "on-tertiary-container": "#563500",
+                        "inverse-on-surface": "#9c9d9d",
+                        "primary": "#6c5a00",
+                        "surface-container-highest": "#dbdddd",
+                        "on-secondary-fixed": "#532a00",
+                        "outline": "#767777",
+                        "surface-tint": "#6c5a00",
+                        "surface-container-high": "#e1e3e3",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "surface": "#f6f6f6",
+                        "tertiary-dim": "#704700",
+                        "tertiary-fixed": "#feb246",
+                        "secondary-fixed-dim": "#ffb375",
+                        "on-surface": "#2d2f2f",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "secondary": "#8c4a00",
+                        "surface-bright": "#f6f6f6",
+                        "on-primary-fixed": "#453900",
+                        "inverse-surface": "#0c0f0f",
+                        "on-primary": "#fff2cd",
+                        "on-error": "#ffefec",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-background": "#2d2f2f",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f0f1f1",
+                        "on-primary-container": "#5b4b00",
+                        "surface-container": "#e7e8e8",
+                        "outline-variant": "#acadad",
+                        "error-container": "#f95630",
+                        "on-primary-fixed-variant": "#665500",
+                        "on-tertiary": "#fff0e3",
+                        "on-surface-variant": "#5a5c5c",
+                        "background": "#f6f6f6",
+                        "error": "#b02500",
+                        "secondary-dim": "#7b4000",
+                        "on-tertiary-fixed": "#3a2300",
+                        "secondary-container": "#ffc69a",
+                        "primary-container": "#ffd709",
+                        "primary-fixed-dim": "#efc900",
+                        "primary-dim": "#5e4e00",
+                        "primary-fixed": "#ffd709",
+                        "secondary-fixed": "#ffc69a",
+                        "on-secondary": "#fff0e7",
+                        "on-secondary-container": "#6f3a00",
+                        "error-dim": "#b92902",
+                        "on-error-container": "#520c00",
+                        "tertiary": "#805100",
+                        "surface-dim": "#d3d5d5"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+        .editorial-shadow {
+            box-shadow: 0 20px 40px -10px rgba(108, 90, 0, 0.08);
+        }
+        .glass-warm {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col items-center justify-center p-6">
+<!-- Brand Header -->
+<header class="w-full max-w-md mb-12 text-center">
+<div class="inline-flex items-center justify-center w-20 h-20 bg-primary-container rounded-2xl mb-6 editorial-shadow">
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="wb_sunny">wb_sunny</span>
+</div>
+<h1 class="font-headline font-extrabold text-4xl text-on-surface tracking-tight mb-2">SunnyPlay</h1>
+<p class="text-on-surface-variant font-medium">遇见你的专属阳光陪玩师</p>
+</header>
+<!-- Main Auth Card -->
+<main class="w-full max-w-md">
+<div class="bg-surface-container-lowest rounded-2xl p-8 editorial-shadow">
+<!-- Login Switch Tabs -->
+<div class="flex items-center space-x-8 mb-8">
+<button class="relative pb-2 font-headline font-bold text-lg text-primary">
+                    手机登录
+                    <span class="absolute bottom-0 left-0 w-8 h-1 bg-primary-container rounded-full"></span>
+</button>
+<button class="pb-2 font-headline font-bold text-lg text-on-surface-variant/40 hover:text-on-surface-variant transition-colors">
+                    验证码登录
+                </button>
+</div>
+<!-- Form Fields -->
+<div class="space-y-4 mb-8">
+<div class="group">
+<div class="flex items-center bg-surface-container-low rounded-xl px-4 py-4 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container transition-all">
+<span class="text-on-surface-variant mr-3 font-bold">+86</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-outline-variant font-medium" placeholder="请输入手机号" type="tel"/>
+</div>
+</div>
+<div class="group">
+<div class="flex items-center bg-surface-container-low rounded-xl px-4 py-4 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container transition-all">
+<input class="bg-transparent border-none focus:ring-0 w-full text-on-surface placeholder:text-outline-variant font-medium" placeholder="请输入登录密码" type="password"/>
+<span class="material-symbols-outlined text-outline-variant cursor-pointer" data-icon="visibility_off">visibility_off</span>
+</div>
+</div>
+</div>
+<!-- Login Button -->
+<button class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-all mb-4">
+                立即登录
+            </button>
+<!-- WeChat Login -->
+<div class="relative flex py-6 items-center">
+<div class="flex-grow border-t border-surface-container-high"></div>
+<span class="flex-shrink mx-4 text-outline-variant text-xs font-medium">其他登录方式</span>
+<div class="flex-grow border-t border-surface-container-high"></div>
+</div>
+<button class="w-full flex items-center justify-center bg-surface-container-high hover:bg-surface-container-highest text-on-surface-variant font-bold py-4 rounded-full transition-all active:scale-95">
+<div class="w-6 h-6 mr-3">
+<svg class="w-full h-full text-[#07C160]" fill="currentColor" viewbox="0 0 24 24">
+<path d="M8.502 10.498c-.414 0-.75-.336-.75-.75s.336-.75.75-.75.75.336.75.75-.336.75-.75.75zm6.996 0c-.414 0-.75-.336-.75-.75s.336-.75.75-.75.75.336.75.75-.336.75-.75.75zm-6.996-2.5c-.414 0-.75-.336-.75-.75s.336-.75.75-.75.75.336.75.75-.336.75-.75.75zm6.996 0c-.414 0-.75-.336-.75-.75s.336-.75.75-.75.75.336.75.75-.336.75-.75.75zM12 2C6.477 2 2 5.806 2 10.5c0 2.583 1.341 4.881 3.468 6.42-.14.475-.558 1.884-.638 2.15-.116.386.126.37.266.305.111-.05 1.764-.863 2.454-1.22.8.21 1.637.33 2.51.33 1.053 0 2.05-.17 2.964-.477.172.585.836 2.628.93 2.875.14.363.45.313.56.23.085-.064 1.258-.89 2.174-1.57C20.472 17.915 22 15.652 22 13.064c0-4.694-4.477-8.5-10-8.5zm0-2c6.627 0 12 4.477 12 10 0 2.813-1.39 5.344-3.628 7.15.54 1.132 1.543 3.033 1.543 3.033.456.91-.416.945-1.11.454-1.077-.76-2.603-1.87-2.603-1.87-.73.228-1.5.348-2.302.348-.316 0-.627-.018-.934-.055.244-.543.384-1.144.384-1.78 0-4.142-4.03-7.5-9-7.5-.115 0-.228.005-.342.01.185-.5.447-.978.775-1.42 1.403-1.895 4.38-3.134 7.717-3.134.305 0 .605.01.9.03z"></path>
+</svg>
+</div>
+                WeChat 一键登录
+            </button>
+</div>
+<!-- Privacy Policy Agreement -->
+<div class="mt-8 flex items-start space-x-3 px-2">
+<div class="relative flex items-center mt-0.5">
+<input class="peer h-5 w-5 cursor-pointer appearance-none rounded-md border-2 border-surface-container-high bg-surface-container-lowest checked:border-primary-container checked:bg-primary-container transition-all" id="privacy" type="checkbox"/>
+<span class="material-symbols-outlined absolute text-on-primary-container text-sm opacity-0 peer-checked:opacity-100 pointer-events-none left-1" data-icon="check">check</span>
+</div>
+<label class="text-xs leading-relaxed text-on-surface-variant font-medium select-none" for="privacy">
+                我已阅读并同意 <a class="text-secondary font-bold" href="#">《SunnyPlay服务协议》</a> 和 <a class="text-secondary font-bold" href="#">《个人信息处理规则及隐私政策》</a>，未成年人禁止进入。
+            </label>
+</div>
+</main>
+<!-- Footer Decoration -->
+<div class="fixed bottom-0 left-0 w-full h-32 overflow-hidden -z-10 pointer-events-none opacity-40">
+<div class="absolute -bottom-16 -left-16 w-64 h-64 bg-primary-container rounded-full blur-3xl"></div>
+<div class="absolute -bottom-8 -right-8 w-48 h-48 bg-tertiary-container rounded-full blur-3xl"></div>
+</div>
+</body></html>

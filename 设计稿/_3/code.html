@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SunnyPlay - 寻找队友</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface": "#f6f6f6",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-primary-fixed-variant": "#665500",
+                        "error-dim": "#b92902",
+                        "tertiary-fixed": "#feb246",
+                        "error": "#b02500",
+                        "on-secondary-container": "#6f3a00",
+                        "on-tertiary": "#fff0e3",
+                        "surface-container-highest": "#dbdddd",
+                        "secondary": "#8c4a00",
+                        "on-surface-variant": "#5a5c5c",
+                        "secondary-dim": "#7b4000",
+                        "on-error-container": "#520c00",
+                        "primary-dim": "#5e4e00",
+                        "on-tertiary-container": "#563500",
+                        "surface-container-low": "#f0f1f1",
+                        "tertiary-dim": "#704700",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "surface-dim": "#d3d5d5",
+                        "primary-fixed-dim": "#efc900",
+                        "tertiary-fixed-dim": "#eea439",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-tint": "#6c5a00",
+                        "on-background": "#2d2f2f",
+                        "inverse-primary": "#ffd709",
+                        "tertiary-container": "#feb246",
+                        "surface-container-high": "#e1e3e3",
+                        "tertiary": "#805100",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#ffc69a",
+                        "inverse-surface": "#0c0f0f",
+                        "on-primary": "#fff2cd",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-primary-fixed": "#453900",
+                        "secondary-container": "#ffc69a",
+                        "surface-variant": "#dbdddd",
+                        "outline-variant": "#acadad",
+                        "on-error": "#ffefec",
+                        "on-primary-container": "#5b4b00",
+                        "on-secondary": "#fff0e7",
+                        "background": "#f6f6f6",
+                        "on-surface": "#2d2f2f",
+                        "secondary-fixed-dim": "#ffb375",
+                        "primary-fixed": "#ffd709",
+                        "error-container": "#f95630",
+                        "surface-bright": "#f6f6f6",
+                        "on-secondary-fixed": "#532a00",
+                        "primary-container": "#ffd709",
+                        "primary": "#6c5a00",
+                        "surface-container": "#e7e8e8",
+                        "outline": "#767777"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+        .header-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface select-none">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out" data-icon="menu">menu</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-500 font-black tracking-tighter">SunnyPlay 日光陪玩</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary-container">
+<img class="w-full h-full object-cover" data-alt="User profile avatar of a young gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNN7pNKogoJYe4wsv3o-FDAyvSBuhTul48i-mZ8WsuTaiMYduHla1_zSjL2SVhNTYWcl8KXkzkFWu37CDNXR17T-IqRbkRE3YSkz9RDnoBDmP-PV4kccs__KEv3e8g6ZgTTBbhrzVg7gEB1CRLgL8Gw62MMBPFzUD9Iqe68g2fv4HYlswHzjHItNgFjyODx_dufgH7IzM8JT7PIHeVxMyHtCYvaRKAjhGPpwmk79mWP-Se0BHWL9iJ2xgSD4kBoikIe8dxtqe1tRc"/>
+</div>
+</nav>
+<main class="pt-24 pb-32 px-5 max-w-md mx-auto">
+<!-- Search and Title Section -->
+<header class="mb-8">
+<h2 class="text-3xl font-extrabold header-font text-on-surface tracking-tight mb-6">寻找队友</h2>
+<div class="relative group">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-4 bg-surface-container-high border-none rounded-2xl focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all text-body-md placeholder:text-outline" placeholder="搜索大神或游戏" type="text"/>
+</div>
+</header>
+<!-- Filter Chips -->
+<section class="flex gap-3 overflow-x-auto pb-6 scrollbar-hide no-scrollbar">
+<button class="flex-none px-6 py-2.5 rounded-full bg-primary-container text-on-primary-container font-bold text-sm shadow-sm active:scale-95 transition-transform">在线</button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">价格</button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">段位</button>
+<button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">性别</button>
+</section>
+<!-- Playmate List (Bento-inspired asymmetric layout) -->
+<div class="grid grid-cols-1 gap-5">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex items-center gap-5 group active:scale-[0.98] transition-all duration-300">
+<div class="relative flex-none">
+<div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Playmate avatar of a smiling young woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6M6oX2l5RhwmML3zT_Y6wkfqHoM30zwzoIuimEerj_NkBX5MvxH7Tc_NKDKuLPVirS8qctK9r0Z0hWfGIZbZOOLPqypXRn-nhsiRgS2cCYlmGDzTw2YNDth9hMDZNrcjSvJCQrEs_inKsGjV-Mw-cZFW77SX7fI0bFXvj2TYMLw9n6nZCiollpwasLs1-5Ukq0iqSaW0vFUkbWPA2XI-bPpxUyH_DLaTIicire6j9O-g7jdeGB3gQaubcZA9-tbHxQGqjuT4ietE"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-lg font-bold text-on-surface truncate">小月亮</h3>
+<span class="text-primary font-bold header-font">¥50/h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="videogame_asset">videogame_asset</span>
+                        王者荣耀 · 最强王者
+                    </p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">国服中路</span>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-container text-[10px] font-bold">超温柔</span>
+</div>
+</div>
+<button class="ml-2 px-4 py-2 bg-primary-container text-on-primary-container font-black rounded-full text-xs active:scale-90 transition-transform">约TA</button>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex items-center gap-5 group active:scale-[0.98] transition-all duration-300">
+<div class="relative flex-none">
+<div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Playmate avatar of a young man with headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8P6EVG_pp67oajPYEwsRk00lYrO3115ezOXmDo0Xc2jSNGyoHnaRR0ZJ5STdk7D2IWcFahxyB-qzw905toLeu8YgyOslWKc0kZjHb_u2GwUUHyWzDo8DrAqVYpxH-R6t22kdhls-0bSRzirRljaTDkj_6AongsMrDehMPNOBA8f5Sj1UIlLhnEtehF6ZE_fKTM5TPf5hwj0KfhvlpO1Hj-lkPkP3zAYaEPNMXCLZv1lFY8UuX9N0PonUelVEXkospGDfRneK_yjE"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-zinc-400 border-2 border-white rounded-full"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-lg font-bold text-on-surface truncate">阿泽</h3>
+<span class="text-primary font-bold header-font">¥80/h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="videogame_asset">videogame_asset</span>
+                        英雄联盟 · 璀璨钻石
+                    </p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">全能王</span>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-container text-[10px] font-bold">高效上分</span>
+</div>
+</div>
+<button class="ml-2 px-4 py-2 bg-primary-container text-on-primary-container font-black rounded-full text-xs active:scale-90 transition-transform">约TA</button>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex items-center gap-5 group active:scale-[0.98] transition-all duration-300">
+<div class="relative flex-none">
+<div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Playmate avatar of a young woman with neon lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCHh97QSeXE6i0f-m-17VhWUhO6raiXgwvIvqFypCjF0J2ZoXTrYeDvLplGoW8RtjzzLXr39r9Y_0ausuRaPJ3L3lkOVxLwFrppvOJ84mFPUDvPV4EpEcZmyxxUaaB4FdqD3gx2t5c6rgJgRMA2EUrWj1bM4JrOBVM3wqy5r5WPjk1Tg8ZSVaFlvYPLrsKqvqWX0BJ9nROMBrQrNx-HFutbtIaAr8X4SLhOzhD0VBVuCqZX3mUL-B04S2dzDSf3WTYae257CelsXAc"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-lg font-bold text-on-surface truncate">甜甜酱</h3>
+<span class="text-primary font-bold header-font">¥45/h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="videogame_asset">videogame_asset</span>
+                        和平精英 · 超级王牌
+                    </p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">声优主播</span>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-container text-[10px] font-bold">落地成盒包赔</span>
+</div>
+</div>
+<button class="ml-2 px-4 py-2 bg-primary-container text-on-primary-container font-black rounded-full text-xs active:scale-90 transition-transform">约TA</button>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex items-center gap-5 group active:scale-[0.98] transition-all duration-300">
+<div class="relative flex-none">
+<div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md">
+<img class="w-full h-full object-cover" data-alt="Playmate avatar of a friendly looking young man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_DW3qWMsxyCF7k9aOjhtV3LKFm0hdw8TjrFWlJbSmyErE3F7-fN5zgWvQULl7i_m00L_fn7jMqSJ047u7QuO11gyDTS-ipmDMRdA1zIFOCCKO3P1aY18UYhlIpZMlwpjPQb8wHCnA6491iQ9Xv1FkdvpoHZ5rdmp7ZctNTTSNGUKNbTjU-4Qv2epndSUcqVZll15xrOmCO7zOMMQ3O6kOXt4VQBkoDPx52rv4PU0RV2xO3Lh0rn3Im35BHLYYe3ZSdVp1PKgLFj8"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h3 class="text-lg font-bold text-on-surface truncate">云端牧者</h3>
+<span class="text-primary font-bold header-font">¥60/h</span>
+</div>
+<p class="text-sm text-on-surface-variant mb-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="videogame_asset">videogame_asset</span>
+                        金铲铲之战 · 傲世宗师
+                    </p>
+<div class="flex gap-2">
+<span class="px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">教学局</span>
+<span class="px-2 py-0.5 rounded-md bg-secondary-container text-on-secondary-container text-[10px] font-bold">骚套路王</span>
+</div>
+</div>
+<button class="ml-2 px-4 py-2 bg-primary-container text-on-primary-container font-black rounded-full text-xs active:scale-90 transition-transform">约TA</button>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[24px] z-50">
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="home_filled">home_filled</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">首页</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-yellow-400 dark:bg-yellow-500 text-zinc-900 rounded-2xl px-5 py-2 scale-105 transform transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="explore" style="font-variation-settings: 'FILL' 1;">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">发现</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">聊天</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">订单</span>
+</div>
+<div class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">我的</span>
+</div>
+</nav>
+</body></html>

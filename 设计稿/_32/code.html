@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#fff0e7",
+                        "on-surface-variant": "#5a5c5c",
+                        "tertiary-dim": "#704700",
+                        "primary": "#6c5a00",
+                        "primary-container": "#ffd709",
+                        "background": "#f6f6f6",
+                        "surface-tint": "#6c5a00",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "secondary": "#8c4a00",
+                        "surface-container-low": "#f0f1f1",
+                        "surface-dim": "#d3d5d5",
+                        "on-error-container": "#520c00",
+                        "surface": "#f6f6f6",
+                        "surface-variant": "#dbdddd",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-container-highest": "#dbdddd",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "on-primary-fixed-variant": "#665500",
+                        "secondary-fixed": "#ffc69a",
+                        "secondary-container": "#ffc69a",
+                        "on-primary-fixed": "#453900",
+                        "secondary-dim": "#7b4000",
+                        "on-primary-container": "#5b4b00",
+                        "surface-bright": "#f6f6f6",
+                        "primary-fixed-dim": "#efc900",
+                        "primary-fixed": "#ffd709",
+                        "tertiary": "#805100",
+                        "error": "#b02500",
+                        "on-tertiary": "#fff0e3",
+                        "surface-container": "#e7e8e8",
+                        "error-container": "#f95630",
+                        "inverse-primary": "#ffd709",
+                        "on-tertiary-container": "#563500",
+                        "outline": "#767777",
+                        "on-tertiary-fixed": "#3a2300",
+                        "outline-variant": "#acadad",
+                        "on-secondary-container": "#6f3a00",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-background": "#2d2f2f",
+                        "tertiary-fixed": "#feb246",
+                        "surface-container-high": "#e1e3e3",
+                        "on-primary": "#fff2cd",
+                        "primary-dim": "#5e4e00",
+                        "on-surface": "#2d2f2f",
+                        "error-dim": "#b92902",
+                        "tertiary-container": "#feb246",
+                        "secondary-fixed-dim": "#ffb375",
+                        "on-error": "#ffefec",
+                        "inverse-surface": "#0c0f0f",
+                        "on-secondary-fixed": "#532a00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; background-color: #f6f6f6; color: #2d2f2f; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="User profile avatar with level badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdQMgHqcda7stVFsDzmAMsOknIpHRpzSNCL51g-W8W-Rb1f3PYqgLDA00rrh0Sn-Xb3rXPWpWSBNmPDjh4mJp7-46rT8DY_lUANDXIU-twu37zC60yeqTnzf4j6JChdbQOMb8N-g0nmFgQwr7UyvrS0fiR0x3bLPTu4VLBM3_u386eudM9W6SFsJd7EEdXO_P4iBFrtRfnkMeXyIU_UMKcLzRMjTie4gy1DZQcipQZoVZJXA3_RIlyQrWNvjMZ_hdr9OkdCFI83cg"/>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">交易明细</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">notifications</span>
+</button>
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+</header>
+<main class="pb-24 px-5 pt-4 max-w-2xl mx-auto">
+<!-- Balance Card: Editorial Bento Style -->
+<section class="mb-8 relative overflow-hidden bg-primary-container rounded-3xl p-6 shadow-sm">
+<div class="relative z-10">
+<p class="text-on-primary-container/70 text-sm font-medium mb-1">当前余额 (元)</p>
+<h2 class="font-headline text-4xl font-extrabold text-on-primary-container tracking-tight">2,840.50</h2>
+<div class="flex gap-4 mt-6">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">add_circle</span>
+                        快速充值
+                    </button>
+<button class="bg-surface-container-lowest/30 backdrop-blur-md text-on-primary-container px-6 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-transform">
+                        提现申请
+                    </button>
+</div>
+</div>
+<!-- Decorative Elements -->
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-on-primary-container/10 rounded-full blur-2xl"></div>
+<div class="absolute -left-8 -bottom-8 w-40 h-40 bg-secondary-container/20 rounded-full blur-3xl"></div>
+</section>
+<!-- Filters Section -->
+<section class="mb-6 space-y-4">
+<div class="flex items-center justify-between">
+<button class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-2xl shadow-sm hover:bg-surface-container-low transition-colors group">
+<span class="material-symbols-outlined text-primary text-xl">calendar_today</span>
+<span class="text-sm font-bold text-on-surface">2023年10月</span>
+<span class="material-symbols-outlined text-outline text-sm group-hover:rotate-180 transition-transform">expand_more</span>
+</button>
+<div class="h-10 w-10 flex items-center justify-center bg-surface-container-lowest rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary">filter_list</span>
+</div>
+</div>
+<div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+<button class="whitespace-nowrap px-5 py-2 rounded-full bg-primary text-on-primary font-bold text-sm">全部类型</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-low">充值记录</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-low">订单消费</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-low">提现记录</button>
+<button class="whitespace-nowrap px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-medium text-sm hover:bg-surface-container-low">系统奖励</button>
+</div>
+</section>
+<!-- Transaction List -->
+<div class="space-y-3">
+<!-- Entry: System Reward -->
+<div class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">系统奖励 - 活跃之星</h4>
+<p class="text-xs text-on-surface-variant mt-0.5">今天 14:20</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-lg text-primary">+88.00</p>
+<span class="inline-block px-2 py-0.5 rounded-lg bg-tertiary-container/30 text-[10px] font-bold text-on-tertiary-container">成功</span>
+</div>
+</div>
+<!-- Entry: Order Payment -->
+<div class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">订单消费 - 英雄联盟陪玩</h4>
+<p class="text-xs text-on-surface-variant mt-0.5">昨天 22:15</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-lg text-on-surface">-120.00</p>
+<span class="inline-block px-2 py-0.5 rounded-lg bg-surface-container/50 text-[10px] font-bold text-on-surface-variant">成功</span>
+</div>
+</div>
+<!-- Entry: Recharge (Failed) -->
+<div class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">微信充值</h4>
+<p class="text-xs text-on-surface-variant mt-0.5">10-24 10:05</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-lg text-primary-dim">+500.00</p>
+<span class="inline-block px-2 py-0.5 rounded-lg bg-error-container/20 text-[10px] font-bold text-error">失败</span>
+</div>
+</div>
+<!-- Entry: Withdrawal -->
+<div class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-on-surface-variant/10 flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">payments</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">余额提现</h4>
+<p class="text-xs text-on-surface-variant mt-0.5">10-23 18:30</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-lg text-on-surface">-1,000.00</p>
+<span class="inline-block px-2 py-0.5 rounded-lg bg-surface-container/50 text-[10px] font-bold text-on-surface-variant">处理中</span>
+</div>
+</div>
+<!-- Entry: Order Payment 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">订单消费 - 王者荣耀组队</h4>
+<p class="text-xs text-on-surface-variant mt-0.5">10-22 20:00</p>
+</div>
+</div>
+<div class="text-right">
+<p class="font-headline font-bold text-lg text-on-surface">-60.00</p>
+<span class="inline-block px-2 py-0.5 rounded-lg bg-surface-container/50 text-[10px] font-bold text-on-surface-variant">成功</span>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More -->
+<div class="mt-8 text-center">
+<button class="text-on-surface-variant text-sm font-bold flex items-center gap-1 mx-auto hover:text-primary transition-colors">
+                加载更多历史明细
+                <span class="material-symbols-outlined text-sm">keyboard_double_arrow_down</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">社区</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">订单</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">military_tech</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">成就</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-4 py-1.5 animate-spring" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">我的</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#feb246",
+              "on-tertiary-fixed": "#3a2300",
+              "on-error-container": "#520c00",
+              "tertiary": "#805100",
+              "inverse-primary": "#ffd709",
+              "on-tertiary": "#fff0e3",
+              "secondary-container": "#ffc69a",
+              "primary-dim": "#5e4e00",
+              "surface-container-high": "#e1e3e3",
+              "error": "#b02500",
+              "on-background": "#2d2f2f",
+              "outline": "#767777",
+              "on-primary-container": "#5b4b00",
+              "surface-container-low": "#f0f1f1",
+              "on-primary": "#fff2cd",
+              "secondary-fixed": "#ffc69a",
+              "tertiary-fixed": "#feb246",
+              "primary": "#6c5a00",
+              "on-secondary-fixed-variant": "#7c4100",
+              "primary-container": "#ffd709",
+              "surface-container-lowest": "#ffffff",
+              "on-surface-variant": "#5a5c5c",
+              "on-error": "#ffefec",
+              "on-tertiary-container": "#563500",
+              "surface": "#f6f6f6",
+              "on-secondary-container": "#6f3a00",
+              "inverse-surface": "#0c0f0f",
+              "on-tertiary-fixed-variant": "#623d00",
+              "on-primary-fixed-variant": "#665500",
+              "surface-container-highest": "#dbdddd",
+              "error-container": "#f95630",
+              "tertiary-fixed-dim": "#eea439",
+              "surface-container": "#e7e8e8",
+              "on-secondary-fixed": "#532a00",
+              "surface-tint": "#6c5a00",
+              "outline-variant": "#acadad",
+              "surface-dim": "#d3d5d5",
+              "error-dim": "#b92902",
+              "on-primary-fixed": "#453900",
+              "surface-bright": "#f6f6f6",
+              "primary-fixed-dim": "#efc900",
+              "surface-variant": "#dbdddd",
+              "secondary": "#8c4a00",
+              "primary-fixed": "#ffd709",
+              "on-surface": "#2d2f2f",
+              "secondary-fixed-dim": "#ffb375",
+              "inverse-on-surface": "#9c9d9d",
+              "secondary-dim": "#7b4000",
+              "background": "#f6f6f6",
+              "tertiary-dim": "#704700",
+              "on-secondary": "#fff0e7"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+        }
+        .headline-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-white dark:bg-neutral-900 shadow-none">
+<div class="flex items-center px-4 h-14 w-full justify-between">
+<div class="flex items-center gap-4">
+<button class="transition-transform duration-200 active:scale-95 text-yellow-600 dark:text-yellow-400 hover:bg-yellow-50 dark:hover:bg-yellow-900/20 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] text-lg font-bold text-on-surface">申诉进度</h1>
+</div>
+<div class="flex items-center">
+<button class="transition-transform duration-200 active:scale-95 text-neutral-500 hover:bg-yellow-50 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+</div>
+<div class="bg-neutral-100 dark:bg-neutral-800 h-[1px]"></div>
+</header>
+<main class="max-w-md mx-auto px-5 pt-6 pb-32 space-y-6">
+<!-- Status Banner -->
+<section class="bg-primary-container rounded-3xl p-6 flex items-center justify-between shadow-sm">
+<div class="space-y-1">
+<p class="text-xs font-bold text-on-primary-container/60 tracking-wider">当前状态</p>
+<h2 class="headline-font text-2xl font-extrabold text-on-primary-container">正在核实调查</h2>
+</div>
+<div class="bg-white/40 backdrop-blur-md p-3 rounded-2xl">
+<span class="material-symbols-outlined text-on-primary-container text-3xl" data-icon="manage_search">manage_search</span>
+</div>
+</section>
+<!-- Appeal Overview Card -->
+<section class="bg-surface-container-lowest rounded-3xl p-6 space-y-5 shadow-[0_4px_20px_0_rgba(0,0,0,0.03)]">
+<div class="flex items-center justify-between">
+<h3 class="headline-font text-lg font-bold text-on-surface">申诉概览</h3>
+<span class="bg-tertiary-container/20 text-on-tertiary-container text-[10px] font-bold px-3 py-1 rounded-full">进行中</span>
+</div>
+<div class="grid grid-cols-2 gap-y-4">
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant font-medium">申诉单号</p>
+<p class="headline-font text-sm font-bold">SP202310240092</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant font-medium">提交时间</p>
+<p class="headline-font text-sm font-bold">2023.10.24 14:20</p>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant font-medium">申诉对象</p>
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="User avatar of the reported player" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0GaACVV1RXChABcndEHgSa5cK_eVlyRFWQdFPjBdgc67I6HugvcKenb0Ss0rqg9HcheTaSOOKo7hLPbKtPinNC3aeCc0tt_gHB-vUGKVIojY6Rn2FKrNJSbAPAsrqFmcFbX05Mhf2Pvn_cSHw8yp1gETJCa-26UH4Xu0t_zM4VheN5UmS1wl3n0Hkgdf--UnnNP4C5Ng3WisIl60t98I6Nf14680RmYXtTk8tBbdGm8AuR-zr3ywLR11ORoUhjb4uO3wj8OrmX7s"/>
+<p class="headline-font text-sm font-bold">暗影猎手K</p>
+</div>
+</div>
+<div class="space-y-1">
+<p class="text-[10px] text-on-surface-variant font-medium">申诉类型</p>
+<p class="headline-font text-sm font-bold">违规言论/引战</p>
+</div>
+</div>
+</section>
+<!-- Progress Timeline -->
+<section class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0_4px_20px_0_rgba(0,0,0,0.03)]">
+<h3 class="headline-font text-lg font-bold text-on-surface mb-6">处理进度</h3>
+<div class="relative space-y-8">
+<!-- Vertical Line -->
+<div class="absolute left-[11px] top-2 bottom-2 w-[2px] bg-surface-container-high"></div>
+<!-- Step 1: Completed -->
+<div class="relative flex items-start gap-4">
+<div class="z-10 w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="check">check</span>
+</div>
+<div class="space-y-1">
+<p class="headline-font text-sm font-bold text-on-surface">提交成功</p>
+<p class="text-xs text-on-surface-variant">您的申诉申请已提交成功，请耐心等待</p>
+<p class="text-[10px] text-outline">10-24 14:20</p>
+</div>
+</div>
+<!-- Step 2: Completed -->
+<div class="relative flex items-start gap-4">
+<div class="z-10 w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-sm font-bold" data-icon="check">check</span>
+</div>
+<div class="space-y-1">
+<p class="headline-font text-sm font-bold text-on-surface">平台已受理</p>
+<p class="text-xs text-on-surface-variant">专员已接手处理您的诉求</p>
+<p class="text-[10px] text-outline">10-24 15:45</p>
+</div>
+</div>
+<!-- Step 3: Current -->
+<div class="relative flex items-start gap-4">
+<div class="z-10 w-6 h-6 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-sm animate-pulse" data-icon="priority_high">priority_high</span>
+</div>
+<div class="space-y-1">
+<p class="headline-font text-sm font-bold text-primary">正在核实调查</p>
+<p class="text-xs text-on-surface font-medium">正在调取对局记录及聊天存证</p>
+<p class="text-[10px] text-outline">预计 24小时 内完成</p>
+</div>
+<div class="absolute left-[11px] top-0 h-4 w-[2px] bg-primary-container"></div>
+</div>
+<!-- Step 4: Future -->
+<div class="relative flex items-start gap-4">
+<div class="z-10 w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-outline">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+</div>
+<div class="space-y-1 opacity-50">
+<p class="headline-font text-sm font-bold text-on-surface">处理完成</p>
+<p class="text-xs text-on-surface-variant">处理结果将通过系统消息通知您</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Detail Section -->
+<section class="bg-surface-container-lowest rounded-3xl p-6 space-y-4 shadow-[0_4px_20px_0_rgba(0,0,0,0.03)]">
+<h3 class="headline-font text-lg font-bold text-on-surface">申诉理由</h3>
+<p class="text-sm leading-relaxed text-on-surface-variant bg-surface rounded-2xl p-4">
+                在对局过程中，该用户多次使用攻击性词汇进行人身攻击，并消极比赛，干扰了正常的游戏体验。请核实并给予处罚。
+            </p>
+<div class="space-y-3">
+<p class="text-xs font-bold text-on-surface/60">证据截图 (3)</p>
+<div class="flex gap-3 overflow-x-auto no-scrollbar">
+<div class="flex-shrink-0 w-24 h-24 rounded-2xl bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="In-game chat screenshot evidence 1" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGki05W6SP2ub2uCUSBuOA7GXGjFL9DpHxJ0a6Yz96RjaWl5O8LAy2-L-2oufC6CtWYypTYnebkauqQaTc-2xVzZDTrevCm5hhMEhTiC1jScXDM-HEI3tD_fo4PE2vSKpS_lqYsDtaYslrQIjz4q81zRS0l1gewdpxqELVJGKpxNBtutTL_baxbhNpDvN9PtEhUIuMn_0iCPM1ODagVkyXsRBsQ1xzu1vamad4MmG3KwIim00VGi-Z_ObfUd60Q72b7Z5xBfctRcw"/>
+</div>
+<div class="flex-shrink-0 w-24 h-24 rounded-2xl bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="In-game chat screenshot evidence 2" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBu5pCMeVZjvUdE6fCK4Tq9eY4VtEc65tb6BRhqDDN16bsFieb0X8U1s0JHIBcZgep6A2bwT2pBpfNPF4Zl5RNlwMXx0tSOBW3zK_2Uln7wGDXdjPUv0zK3qMZzmNRO_9pfp6YnTSUBTXKVtTloVf9cwuSfkOY85TIGH6LddU7lmJulpBxyGxC56o6X2j-Uf10MNGyIYSC19E8858wINM8_p991scfiJQG4P9wc61GH39Ivjf7HaYeWS4otbVWqpAs1srbE6-Hrz7M"/>
+</div>
+<div class="flex-shrink-0 w-24 h-24 rounded-2xl bg-surface-container overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="In-game performance scoreboard screenshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0t3z860R2gwV5cZudusA0UjAbSvveRt_BPFIuCDODigheuhq55uWNNNjmjwPexoXlDHHBHJKTnJbYg_4kGLEYbi66Eq_kasKtP3Hzem7zDbLF8XwHg4fjC7svxuw8EyBr0xQeHI90NPCyFYw2eY9_GuqKhSTbYa0VUypgQ52jTgK35r4xojwsYGMYIZo0R09OS3ealM_rnhG2jKHFQNGsBPtlerP3AGPVNLC45SVl7ncUvXdA_cOJVXmGcCBaF1mRs7H4qY3Q91w"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Help Entry -->
+<section class="flex items-center justify-between p-5 bg-secondary-container/10 border-2 border-dashed border-secondary-container/30 rounded-3xl">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="support_agent">support_agent</span>
+</div>
+<div>
+<p class="headline-font text-sm font-bold">需要更多帮助？</p>
+<p class="text-xs text-on-surface-variant">直接联系我们的 24h 在线客服</p>
+</div>
+</div>
+<button class="bg-white px-4 py-2 rounded-full headline-font text-xs font-bold text-secondary shadow-sm hover:bg-secondary-container/20 transition-colors">
+                咨询客服
+            </button>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] rounded-t-[1.5rem]">
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:opacity-80 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:opacity-80 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="explore">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">发现</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-1.5 hover:opacity-80 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">消息</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-5 py-1.5 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">我的</span>
+</a>
+</nav>
+</body></html>

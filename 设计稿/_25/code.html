@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>举报/投诉 - SunnyPlay Gaming</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-dim": "#5e4e00",
+                        "tertiary-fixed": "#feb246",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-primary-container": "#5b4b00",
+                        "on-primary-fixed": "#453900",
+                        "tertiary-fixed-dim": "#eea439",
+                        "outline-variant": "#acadad",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "secondary-dim": "#7b4000",
+                        "on-secondary-fixed": "#532a00",
+                        "on-error": "#ffefec",
+                        "error-dim": "#b92902",
+                        "inverse-on-surface": "#9c9d9d",
+                        "on-tertiary-fixed": "#3a2300",
+                        "outline": "#767777",
+                        "surface-dim": "#d3d5d5",
+                        "surface-container-low": "#f0f1f1",
+                        "primary-fixed-dim": "#efc900",
+                        "on-primary-fixed-variant": "#665500",
+                        "tertiary-container": "#feb246",
+                        "on-secondary": "#fff0e7",
+                        "surface-container-highest": "#dbdddd",
+                        "on-surface": "#2d2f2f",
+                        "surface-container-high": "#e1e3e3",
+                        "on-primary": "#fff2cd",
+                        "error": "#b02500",
+                        "surface-variant": "#dbdddd",
+                        "on-background": "#2d2f2f",
+                        "tertiary": "#805100",
+                        "secondary-fixed-dim": "#ffb375",
+                        "surface-tint": "#6c5a00",
+                        "surface-bright": "#f6f6f6",
+                        "inverse-surface": "#0c0f0f",
+                        "on-secondary-container": "#6f3a00",
+                        "secondary-container": "#ffc69a",
+                        "secondary": "#8c4a00",
+                        "on-tertiary": "#fff0e3",
+                        "secondary-fixed": "#ffc69a",
+                        "on-surface-variant": "#5a5c5c",
+                        "primary": "#6c5a00",
+                        "tertiary-dim": "#704700",
+                        "surface": "#f6f6f6",
+                        "primary-fixed": "#ffd709",
+                        "surface-container": "#e7e8e8",
+                        "background": "#f6f6f6",
+                        "on-tertiary-container": "#563500",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#f95630",
+                        "inverse-primary": "#ffd709",
+                        "primary-container": "#ffd709",
+                        "on-error-container": "#520c00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dbdddd;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-6 py-4 w-full max-w-md mx-auto">
+<div class="flex items-center gap-4">
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors active:scale-95 duration-200 ease-out">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-[#6c5a00] dark:text-[#FFD700]">举报/投诉大神</h1>
+</div>
+<button class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors active:scale-95 duration-200 ease-out">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">help</span>
+</button>
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+</header>
+<main class="max-w-md mx-auto px-6 pt-6 pb-32">
+<!-- Report Subject Card -->
+<section class="mb-8">
+<div class="bg-surface-container-lowest rounded-xl p-4 flex items-center gap-4 shadow-sm border border-transparent">
+<div class="relative">
+<img alt="Avatar" class="w-16 h-16 rounded-full object-cover" data-alt="Young male gaming companion portrait avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuByZBs3R04qd8HvhNeN1X_YaUVcq5MeZV0dcW5bYzWeWj6lmU3TGkfhE-0eckxcoUJVcpbrX-4P1OHqRqloCY9tMbzocQCb6Zmh6MERV2DOAp3LQVDEOxMqXWlAOADZ3m6CRkX13cg99MXhjQR8ObijRexPU5TWUukKhtvjhHc1BvrDChXoAoFucAGHPtVcQaDQ9U-FOKeVELoRY8yLvaOn6hPjnyCdTc2FYfJ4lw-hleFvmTwssq1sCoHfFTjTBh20gIwZribo_kI"/>
+<div class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+</div>
+<div>
+<h2 class="font-headline font-bold text-lg text-on-surface">星野Kyo</h2>
+<p class="text-on-surface-variant text-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-xs">videogame_asset</span>
+                        王者荣耀 · 荣耀之巅
+                    </p>
+</div>
+<div class="ml-auto">
+<span class="bg-secondary-container text-on-secondary-container text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">被举报对象</span>
+</div>
+</div>
+</section>
+<!-- Report Reason -->
+<section class="mb-8">
+<h3 class="font-headline font-bold text-lg mb-4 text-on-surface flex items-center gap-2">
+                举报原因 <span class="text-error text-sm font-normal">*必选</span>
+</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-primary-container text-on-primary-container shadow-sm flex items-center justify-center gap-2">
+                    言语辱骂
+                    <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</button>
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest flex items-center justify-center">
+                    技术造假
+                </button>
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest flex items-center justify-center">
+                    虚假接单
+                </button>
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest flex items-center justify-center">
+                    骚扰骚扰
+                </button>
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest flex items-center justify-center">
+                    广告骚扰
+                </button>
+<button class="py-3 px-4 rounded-xl text-sm font-medium transition-all duration-200 bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest flex items-center justify-center">
+                    其他
+                </button>
+</div>
+</section>
+<!-- Evidence Upload -->
+<section class="mb-8">
+<h3 class="font-headline font-bold text-lg mb-2 text-on-surface">上传证据</h3>
+<p class="text-on-surface-variant text-xs mb-4">请提供聊天记录、结算截图等（最多3张）</p>
+<div class="flex gap-4">
+<button class="w-24 h-24 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-1 hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">add_a_photo</span>
+<span class="text-[10px] text-on-surface-variant font-medium">聊天记录</span>
+</button>
+<button class="w-24 h-24 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-1 hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface-variant">screenshot</span>
+<span class="text-[10px] text-on-surface-variant font-medium">结算截图</span>
+</button>
+<div class="w-24 h-24 rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex items-center justify-center opacity-40">
+<span class="material-symbols-outlined text-on-surface-variant">add</span>
+</div>
+</div>
+</section>
+<!-- Detailed Description -->
+<section class="mb-10">
+<h3 class="font-headline font-bold text-lg mb-4 text-on-surface">详细描述</h3>
+<div class="relative">
+<textarea class="w-full h-32 p-4 bg-surface-container-high rounded-xl border-none focus:ring-2 focus:ring-primary-container text-on-surface placeholder:text-on-surface-variant/50 text-sm resize-none" placeholder="请详细描述事情经过，以便我们更快为您处理..."></textarea>
+<span class="absolute bottom-3 right-4 text-[10px] text-on-surface-variant font-medium">0/200</span>
+</div>
+</section>
+<!-- Success Toast / Notification -->
+<div class="bg-on-surface/5 backdrop-blur-md rounded-2xl p-4 flex items-start gap-4 mb-8">
+<div class="bg-primary-container p-2 rounded-full">
+<span class="material-symbols-outlined text-on-primary-container text-lg" style="font-variation-settings: 'FILL' 1;">info</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface">处理说明</h4>
+<p class="text-xs text-on-surface-variant mt-1 leading-relaxed">提交后平台将在 24 小时内完成核实处理。若情况属实，将扣除对方信用分或进行封禁处理。</p>
+</div>
+</div>
+</main>
+<!-- Fixed Bottom Button -->
+<div class="fixed bottom-0 left-0 w-full p-6 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl z-40 rounded-t-[24px] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<div class="max-w-md mx-auto">
+<button class="w-full bg-[#FFD700] text-[#6c5a00] font-headline font-extrabold py-4 rounded-full shadow-lg shadow-primary-container/20 active:scale-95 transition-transform duration-200">
+                提交投诉
+            </button>
+</div>
+</div>
+<!-- Hidden Success Modal (Concept) -->
+<div class="hidden fixed inset-0 bg-on-surface/40 backdrop-blur-sm z-[100] flex items-center justify-center p-6">
+<div class="bg-surface-container-lowest rounded-[32px] p-8 w-full max-w-xs text-center shadow-2xl">
+<div class="w-20 h-20 bg-primary-container rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-4xl text-on-primary-container" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-2">提交成功</h3>
+<p class="text-on-surface-variant text-sm mb-6">我们已收到您的反馈，将在24小时内为您同步处理结果。</p>
+<button class="w-full bg-on-surface text-surface-container-lowest py-3 rounded-full font-bold">我知道了</button>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "error": "#b02500",
+              "surface-container-high": "#e1e3e3",
+              "on-primary": "#fff2cd",
+              "surface-container-highest": "#dbdddd",
+              "on-surface": "#2d2f2f",
+              "tertiary-container": "#feb246",
+              "on-secondary": "#fff0e7",
+              "surface-container-low": "#f0f1f1",
+              "primary-fixed-dim": "#efc900",
+              "on-primary-fixed-variant": "#665500",
+              "inverse-surface": "#0c0f0f",
+              "surface-bright": "#f6f6f6",
+              "surface-tint": "#6c5a00",
+              "tertiary": "#805100",
+              "secondary-fixed-dim": "#ffb375",
+              "surface-variant": "#dbdddd",
+              "on-background": "#2d2f2f",
+              "primary": "#6c5a00",
+              "on-surface-variant": "#5a5c5c",
+              "secondary-container": "#ffc69a",
+              "secondary": "#8c4a00",
+              "on-tertiary": "#fff0e3",
+              "secondary-fixed": "#ffc69a",
+              "on-secondary-container": "#6f3a00",
+              "inverse-primary": "#ffd709",
+              "primary-container": "#ffd709",
+              "on-error-container": "#520c00",
+              "surface-container-lowest": "#ffffff",
+              "error-container": "#f95630",
+              "on-tertiary-container": "#563500",
+              "surface-container": "#e7e8e8",
+              "background": "#f6f6f6",
+              "tertiary-dim": "#704700",
+              "surface": "#f6f6f6",
+              "primary-fixed": "#ffd709",
+              "tertiary-fixed": "#feb246",
+              "primary-dim": "#5e4e00",
+              "on-primary-fixed": "#453900",
+              "on-primary-container": "#5b4b00",
+              "on-secondary-fixed-variant": "#7c4100",
+              "error-dim": "#b92902",
+              "on-error": "#ffefec",
+              "secondary-dim": "#7b4000",
+              "on-secondary-fixed": "#532a00",
+              "tertiary-fixed-dim": "#eea439",
+              "outline-variant": "#acadad",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface-dim": "#d3d5d5",
+              "outline": "#767777",
+              "on-tertiary-fixed": "#3a2300",
+              "inverse-on-surface": "#9c9d9d"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f6f6f6;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            color: #2d2f2f;
+        }
+        .tap-highlight-none {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#f6f6f6] dark:bg-neutral-900 w-full top-0 sticky z-50">
+<div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-4">
+<button class="active:scale-95 duration-200 text-[#6c5a00] dark:text-[#FFD700]">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">消息通知</h1>
+</div>
+<button class="text-neutral-500 hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full max-w-md mx-auto"></div>
+</header>
+<main class="max-w-md mx-auto px-5 py-6 pb-32">
+<!-- Notification Categories / Filters -->
+<div class="flex gap-3 mb-8 overflow-x-auto no-scrollbar">
+<button class="bg-primary-container text-on-primary-container px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap active:scale-95 transition-transform">全部通知</button>
+<button class="bg-surface-container-low text-on-surface-variant px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap active:scale-95 transition-transform">订单物流</button>
+<button class="bg-surface-container-low text-on-surface-variant px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap active:scale-95 transition-transform">系统奖励</button>
+</div>
+<!-- Notification List -->
+<div class="space-y-4">
+<!-- Notification Card: Unread -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all active:scale-[0.98] group relative">
+<div class="absolute right-5 top-5 h-2 w-2 bg-primary rounded-full"></div>
+<div class="flex items-start gap-4">
+<div class="bg-primary-container/20 p-3 rounded-full flex-shrink-0">
+<span class="material-symbols-outlined text-primary" data-icon="military_tech">military_tech</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">系统奖励</h3>
+<span class="text-[10px] font-medium text-on-surface-variant opacity-60">10:24</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">恭喜！由于您在本周的“暖阳行动”中表现优异，系统已向您的账户发放 50 阳光值。请前往钱包查收。</p>
+<div class="mt-3 flex items-center text-primary font-bold text-xs gap-1 group-hover:gap-2 transition-all">
+                            立即查看 <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Card: Read -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all active:scale-[0.98] group">
+<div class="flex items-start gap-4">
+<div class="bg-secondary-container/20 p-3 rounded-full flex-shrink-0">
+<span class="material-symbols-outlined text-secondary" data-icon="verified_user">verified_user</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">认证成功</h3>
+<span class="text-[10px] font-medium text-on-surface-variant opacity-60">昨天</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">您的“金牌陪玩师”身份认证已通过审核。现在您可以解锁更多专属特权，并获得优先推荐位。</p>
+</div>
+</div>
+</div>
+<!-- Notification Card: Order Change -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all active:scale-[0.98] group">
+<div class="flex items-start gap-4">
+<div class="bg-surface-container-high p-3 rounded-full flex-shrink-0">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="receipt_long">receipt_long</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">订单变动</h3>
+<span class="text-[10px] font-medium text-on-surface-variant opacity-60">2023-11-20</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">订单编号 #SP992834 已完成支付。请及时联系用户开始您的 SunnyPlay 游戏之旅。</p>
+<div class="mt-3 inline-flex items-center bg-surface-container-low px-3 py-1 rounded-lg">
+<span class="text-[11px] font-bold text-on-surface-variant">订单号: SP992834</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Notification Card: Unread -->
+<div class="bg-surface-container-lowest p-5 rounded-xl transition-all active:scale-[0.98] group relative">
+<div class="absolute right-5 top-5 h-2 w-2 bg-primary rounded-full"></div>
+<div class="flex items-start gap-4">
+<div class="bg-tertiary-container/20 p-3 rounded-full flex-shrink-0">
+<span class="material-symbols-outlined text-tertiary" data-icon="campaign">campaign</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">维护公告</h3>
+<span class="text-[10px] font-medium text-on-surface-variant opacity-60">11-18</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">我们将于本周四凌晨 2:00 进行系统版本升级，预计时长 2 小时。期间可能会影响部分功能的使用。</p>
+</div>
+</div>
+</div>
+<!-- Empty State Spacer -->
+<div class="py-10 text-center opacity-40">
+<p class="text-xs font-medium">没有更多消息了</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 right-0 w-full px-6 py-3 flex justify-between items-center pb-safe max-w-md mx-auto bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-[1.5rem] z-50">
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1 tap-highlight-none transition-all duration-300 hover:text-[#6c5a00] dark:hover:text-[#FFD700]">
+<span class="material-symbols-outlined" data-icon="grid_view">grid_view</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold mt-1">首页</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1 tap-highlight-none transition-all duration-300 hover:text-[#6c5a00] dark:hover:text-[#FFD700]">
+<span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold mt-1">订单</span>
+</div>
+<!-- Active Tab: Message (Closest to system notifications) -->
+<div class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-4 py-1 animate-pulse-subtle tap-highlight-none transition-all duration-300">
+<span class="material-symbols-outlined" data-icon="notifications" style="font-variation-settings: 'FILL' 1;">notifications</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold mt-1">消息</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1 tap-highlight-none transition-all duration-300 hover:text-[#6c5a00] dark:hover:text-[#FFD700]">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold mt-1">我的</span>
+</div>
+</nav>
+</body></html>

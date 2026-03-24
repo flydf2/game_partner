@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed": "#ffd709",
+                        "surface-container": "#e7e8e8",
+                        "on-tertiary-container": "#563500",
+                        "error-dim": "#b92902",
+                        "tertiary-fixed": "#feb246",
+                        "tertiary": "#805100",
+                        "surface-container-high": "#e1e3e3",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-container": "#feb246",
+                        "inverse-surface": "#0c0f0f",
+                        "on-surface": "#2d2f2f",
+                        "primary": "#6c5a00",
+                        "on-secondary": "#fff0e7",
+                        "surface-bright": "#f6f6f6",
+                        "surface": "#f6f6f6",
+                        "inverse-primary": "#ffd709",
+                        "secondary-container": "#ffc69a",
+                        "on-error": "#ffefec",
+                        "on-primary": "#fff2cd",
+                        "outline-variant": "#acadad",
+                        "secondary": "#8c4a00",
+                        "secondary-dim": "#7b4000",
+                        "on-secondary-container": "#6f3a00",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "on-surface-variant": "#5a5c5c",
+                        "primary-dim": "#5e4e00",
+                        "surface-tint": "#6c5a00",
+                        "surface-variant": "#dbdddd",
+                        "tertiary-dim": "#704700",
+                        "primary-fixed-dim": "#efc900",
+                        "surface-dim": "#d3d5d5",
+                        "secondary-fixed": "#ffc69a",
+                        "on-primary-container": "#5b4b00",
+                        "tertiary-fixed-dim": "#eea439",
+                        "secondary-fixed-dim": "#ffb375",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-primary-fixed-variant": "#665500",
+                        "surface-container-highest": "#dbdddd",
+                        "error": "#b02500",
+                        "on-tertiary": "#fff0e3",
+                        "primary-container": "#ffd709",
+                        "surface-container-low": "#f0f1f1",
+                        "background": "#f6f6f6",
+                        "outline": "#767777",
+                        "error-container": "#f95630",
+                        "on-secondary-fixed": "#532a00",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-error-container": "#520c00",
+                        "on-background": "#2d2f2f",
+                        "on-primary-fixed": "#453900",
+                        "inverse-on-surface": "#9c9d9d"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #f6f6f6;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .chat-container {
+            height: calc(100vh - 128px);
+            overflow-y: auto;
+            padding-bottom: 24px;
+        }
+        .bubble-left {
+            border-bottom-left-radius: 4px;
+        }
+        .bubble-right {
+            border-bottom-right-radius: 4px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
+<div class="flex items-center gap-4">
+<button class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<h1 class="font-headline font-bold text-lg text-[#6c5a00]">星野Kyo</h1>
+<span class="text-[10px] text-primary flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+                    在线
+                </span>
+</div>
+</div>
+<button class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</header>
+<!-- Main Chat Canvas -->
+<main class="pt-20 chat-container px-5 space-y-6">
+<!-- Timestamp -->
+<div class="flex justify-center">
+<span class="text-[11px] font-medium text-outline bg-surface-container-low px-3 py-1 rounded-full">下午 14:30</span>
+</div>
+<!-- Message Left -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="w-10 h-10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Avatar of male gamer with headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0rMSxxOfIFRKLK4fBL1gncTazgYO2RQGvS4t3yEQFNX7vGdSliuaSgQmP_SvAsxLZMQDhpvheEGfD8glXv94KmOUDlVZ04JHJUwmXBw3sUiPwFQfPZcSCCu7tTQdgfMO8CbiTGGDyU8SkLKLiVfdnu6WMeHSBX1J0dxB2z5F1xhqPepxmt0Y-kBdqMHuc6tqfRU62A-ybUp1_wQu7n8i0MmwohHAW0NrGk3aXhVcMJakGyPirIDE-hGsZUgv6-dnVemmf-XVVL-E"/>
+</div>
+<div class="bg-surface-container-lowest p-4 rounded-3xl bubble-left shadow-sm">
+<p class="text-on-surface leading-relaxed text-sm">哈喽，刚结束一局游戏。准备好开始我们的《绝地求生》了吗？</p>
+</div>
+</div>
+<!-- Message Right -->
+<div class="flex items-end justify-end gap-3 ml-auto max-w-[85%]">
+<div class="bg-primary-container p-4 rounded-3xl bubble-right shadow-sm">
+<p class="text-on-primary-container leading-relaxed text-sm">好哒，我也刚上线！这次一定要带我上分哦～</p>
+</div>
+<div class="w-10 h-10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Avatar of female user smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuyVY8He6CZYlr392HOlzoxwVpZM2EuGoAMT1iFq8ioj_Wx-T6ky9SWEnKCc_HoriWlL95Sv2Wp3v-NxA1C6FUoFy_W3QG1uLIHGXFhTJhCl2hLljVR8JPYvnQq_tPE9BgJfkbIRn5DEVrNgfElxjQAS7BfalyFk8vmvUs3zefwsQx6hhEbPjowAFOtT5CrPrfUwngkgmY2ojlbzdNcooq138ZFYfh0D-pHapFs0O2u7zuE1nKEwIbkBhkT3imXvbG4MztaaQVY1M"/>
+</div>
+</div>
+<!-- Appointment Card (Left) -->
+<div class="flex items-start gap-3 max-w-[90%]">
+<div class="w-10 h-10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
+<img class="w-full h-full object-cover" data-alt="Avatar of male gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqrN-qAOYnRujLn3mIWf7mibCgfUNsMSEhDqPmhqW7euQctjRQrl9Izti-i1__rwIWZ9he4lp-Zxs5rK7D3Z35AN3DMpVDsaLDQ7Qww-8z6ZD3qrchjA7Jn9pGNNS2YZ0nnY3rayRuQD4q_kqiK-XYZy8xrfJOKn5gZQkqyPEkU9Kq9OWEwk5BMAANUNS5bZiGvtaPDmJmlm_f0OWcHBKJy0mRM0NsSq37kbxj2fwkcd_5_u7soI_-4DxGwPwWPiON2tMdxu16HLI"/>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-[11px] text-outline ml-2">对方发来一个预约邀请</span>
+<div class="bg-surface-container-lowest p-0 overflow-hidden rounded-[2rem] shadow-sm border border-white">
+<div class="p-5 bg-gradient-to-br from-tertiary-container/20 to-transparent">
+<div class="flex items-center gap-3 mb-4">
+<div class="p-3 bg-primary-container rounded-2xl">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="sports_esports">sports_esports</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface">绝地求生陪玩</h3>
+<p class="text-xs text-outline">时长: 2小时 / 技术陪练</p>
+</div>
+</div>
+<div class="flex items-baseline gap-1 mb-5">
+<span class="text-xs font-bold text-secondary">¥</span>
+<span class="text-3xl font-extrabold text-secondary tracking-tight">158</span>
+</div>
+<button class="w-full bg-primary-container py-3.5 rounded-full font-bold text-on-primary-container text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg shadow-primary-container/20">
+                            去支付
+                            <span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Message Left (Follow up) -->
+<div class="flex items-end gap-3 max-w-[85%]">
+<div class="w-10 h-10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm opacity-0"></div> <!-- Placeholder for alignment -->
+<div class="bg-surface-container-lowest p-4 rounded-3xl bubble-left shadow-sm">
+<p class="text-on-surface leading-relaxed text-sm">订单已经开好啦，付完款我们就发车 🚗</p>
+</div>
+</div>
+</main>
+<!-- Bottom Input Bar -->
+<footer class="fixed bottom-0 w-full z-50 bg-white/80 backdrop-blur-xl rounded-t-[2.5rem] shadow-[0_-8px_30px_rgba(0,0,0,0.04)] pb-safe">
+<div class="flex items-center gap-3 px-6 py-4">
+<button class="transition-transform active:scale-90 text-on-surface-variant">
+<span class="material-symbols-outlined text-[28px]" data-icon="mic">mic</span>
+</button>
+<div class="flex-1 bg-surface-container-low rounded-full px-5 py-2.5 flex items-center">
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder:text-outline text-on-surface" placeholder="输入消息..." type="text"/>
+<button class="text-on-surface-variant ml-2">
+<span class="material-symbols-outlined text-[24px]" data-icon="mood">mood</span>
+</button>
+</div>
+<button class="w-11 h-11 bg-primary-container rounded-full flex items-center justify-center text-on-primary-container transition-transform active:scale-90 shadow-sm">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+</div>
+<!-- Bottom Indicator Area -->
+<div class="h-1.5 w-32 bg-surface-container-highest mx-auto mb-2 rounded-full opacity-30"></div>
+</footer>
+</body></html>

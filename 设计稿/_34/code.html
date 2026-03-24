@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary": "#fff0e7",
+                        "on-surface-variant": "#5a5c5c",
+                        "tertiary-dim": "#704700",
+                        "primary": "#6c5a00",
+                        "primary-container": "#ffd709",
+                        "background": "#f6f6f6",
+                        "surface-tint": "#6c5a00",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "secondary": "#8c4a00",
+                        "surface-container-low": "#f0f1f1",
+                        "surface-dim": "#d3d5d5",
+                        "on-error-container": "#520c00",
+                        "surface": "#f6f6f6",
+                        "surface-variant": "#dbdddd",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-container-highest": "#dbdddd",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "on-primary-fixed-variant": "#665500",
+                        "secondary-fixed": "#ffc69a",
+                        "secondary-container": "#ffc69a",
+                        "on-primary-fixed": "#453900",
+                        "secondary-dim": "#7b4000",
+                        "on-primary-container": "#5b4b00",
+                        "surface-bright": "#f6f6f6",
+                        "primary-fixed-dim": "#efc900",
+                        "primary-fixed": "#ffd709",
+                        "tertiary": "#805100",
+                        "error": "#b02500",
+                        "on-tertiary": "#fff0e3",
+                        "surface-container": "#e7e8e8",
+                        "error-container": "#f95630",
+                        "inverse-primary": "#ffd709",
+                        "on-tertiary-container": "#563500",
+                        "outline": "#767777",
+                        "on-tertiary-fixed": "#3a2300",
+                        "outline-variant": "#acadad",
+                        "on-secondary-container": "#6f3a00",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-background": "#2d2f2f",
+                        "tertiary-fixed": "#feb246",
+                        "surface-container-high": "#e1e3e3",
+                        "on-primary": "#fff2cd",
+                        "primary-dim": "#5e4e00",
+                        "on-surface": "#2d2f2f",
+                        "error-dim": "#b92902",
+                        "tertiary-container": "#feb246",
+                        "secondary-fixed-dim": "#ffb375",
+                        "on-error": "#ffefec",
+                        "inverse-surface": "#0c0f0f",
+                        "on-secondary-fixed": "#532a00"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .editorial-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.25rem;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased pb-32">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900 flex items-center justify-between px-5 h-16 w-full">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden ring-2 ring-white">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="User profile avatar with level badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDolPIQMvHvoBix7f-GnDhMNd-JpE18GLUF7Lv1YXG4k_WOJ_R7hGLW3RlxrLezIvUZnil_ZEyErnA3lQ7fQJ4G3toNnIfr9PvUhP74tA-2ngYj6jZLThUmwHnIH9OjDDveBxGjg9R5nFVf3hAGa6LlkZ0Kd5wiPElzDQEhRhFAtWU1qckoc9AfYLiVeXCwdWAxq8hHDKEKE_Fj7W22y1EoWNscKiCDOOhZZE7PnEvQXbFQBmqx8k8HZKY8bOgFLWhrPJdEcu9Tj8U"/>
+</div>
+<span class="text-[#6c5a00] dark:text-[#FFD700] font-['Plus_Jakarta_Sans'] font-black tracking-tighter text-lg">SunnyPlay</span>
+</div>
+<button class="w-10 h-10 flex items-center justify-center text-[#6c5a00] dark:text-[#FFD700] hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200 rounded-full">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+</header>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+<main class="px-5 pt-8 max-w-2xl mx-auto">
+<!-- Hero Section: Level Card -->
+<section class="relative overflow-hidden rounded-[2rem] bg-primary-container p-8 mb-10 shadow-sm">
+<div class="absolute -right-12 -top-12 w-48 h-48 bg-white/20 rounded-full blur-3xl"></div>
+<div class="absolute -left-8 -bottom-8 w-32 h-32 bg-secondary-container/30 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-end justify-between mb-6">
+<div>
+<span class="inline-block px-3 py-1 rounded-full bg-primary text-on-primary text-[10px] font-bold tracking-widest uppercase mb-2">Current Tier</span>
+<h1 class="text-4xl font-headline font-extrabold text-on-primary-container leading-none">Lv.5 黄金玩家</h1>
+</div>
+<span class="material-symbols-outlined text-6xl text-primary/20" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+</div>
+<!-- Progress Bar -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<span class="text-on-primary-container font-bold text-sm">距离 Lv.6 铂金</span>
+<span class="font-headline font-bold text-lg text-primary">850 <span class="text-sm font-medium opacity-60">/ 1200 EXP</span></span>
+</div>
+<div class="h-4 w-full bg-white/40 rounded-full overflow-hidden p-1">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 70%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bento Grid: Privileges -->
+<section class="mb-12">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-2xl font-headline font-extrabold tracking-tight text-on-surface">已解锁权益</h2>
+<span class="text-primary font-bold text-sm">查看全部</span>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col gap-4 transition-all hover:scale-[1.02]">
+<div class="w-12 h-12 rounded-2xl bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="pentagon" style="font-variation-settings: 'FILL' 1;">pentagon</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface mb-1">专属头像框</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">彰显黄金段位尊贵身份标识</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-[1.5rem] flex flex-col gap-4 transition-all hover:scale-[1.02]">
+<div class="w-12 h-12 rounded-2xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="auto_awesome" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+</div>
+<div>
+<h3 class="font-bold text-on-surface mb-1">进场特效</h3>
+<p class="text-xs text-on-surface-variant leading-relaxed">进入聊天室自带金色闪光</p>
+</div>
+</div>
+<div class="col-span-2 bg-surface-container-lowest p-6 rounded-[1.5rem] flex items-center gap-6 transition-all hover:scale-[1.01]">
+<div class="w-16 h-16 rounded-3xl bg-primary-container/20 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-3xl" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-bold text-on-surface">优先匹配权</h3>
+<span class="px-2 py-0.5 rounded-md bg-green-100 text-green-700 text-[10px] font-bold">ACTIVE</span>
+</div>
+<p class="text-sm text-on-surface-variant">高峰期享受陪玩师优先接单特权，无需排队等待。</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Editorial Section: Level Up Guide -->
+<section class="mb-8">
+<h2 class="text-2xl font-headline font-extrabold tracking-tight text-on-surface mb-6">升级指南</h2>
+<div class="space-y-4">
+<div class="group flex items-center p-5 rounded-[1.25rem] bg-surface-container-low hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mr-4 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="sports_esports">sports_esports</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">参与陪玩订单</h4>
+<p class="text-xs text-on-surface-variant">+50 经验/小时</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="group flex items-center p-5 rounded-[1.25rem] bg-surface-container-low hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mr-4 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="volunteer_activism">volunteer_activism</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">获得优质评价</h4>
+<p class="text-xs text-on-surface-variant">+20 经验/五星评价</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="group flex items-center p-5 rounded-[1.25rem] bg-surface-container-low hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm mr-4 group-hover:bg-primary-container transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="celebration">celebration</span>
+</div>
+<div class="flex-1">
+<h4 class="font-bold text-on-surface">完成每日挑战</h4>
+<p class="text-xs text-on-surface-variant">+100 经验/任务</p>
+</div>
+<span class="material-symbols-outlined text-outline-variant" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium mt-1">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium mt-1">社区</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium mt-1">订单</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-4 py-1.5 hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="military_tech" style="font-variation-settings: 'FILL' 1;">military_tech</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-bold mt-1">成就</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium mt-1">我的</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-fixed": "#ffd709",
+              "surface-container": "#e7e8e8",
+              "on-tertiary-container": "#563500",
+              "error-dim": "#b92902",
+              "tertiary-fixed": "#feb246",
+              "tertiary": "#805100",
+              "surface-container-high": "#e1e3e3",
+              "surface-container-lowest": "#ffffff",
+              "tertiary-container": "#feb246",
+              "inverse-surface": "#0c0f0f",
+              "on-surface": "#2d2f2f",
+              "primary": "#6c5a00",
+              "on-secondary": "#fff0e7",
+              "surface-bright": "#f6f6f6",
+              "surface": "#f6f6f6",
+              "inverse-primary": "#ffd709",
+              "secondary-container": "#ffc69a",
+              "on-error": "#ffefec",
+              "on-primary": "#fff2cd",
+              "outline-variant": "#acadad",
+              "secondary": "#8c4a00",
+              "secondary-dim": "#7b4000",
+              "on-secondary-container": "#6f3a00",
+              "on-tertiary-fixed-variant": "#623d00",
+              "on-surface-variant": "#5a5c5c",
+              "primary-dim": "#5e4e00",
+              "surface-tint": "#6c5a00",
+              "surface-variant": "#dbdddd",
+              "tertiary-dim": "#704700",
+              "primary-fixed-dim": "#efc900",
+              "surface-dim": "#d3d5d5",
+              "secondary-fixed": "#ffc69a",
+              "on-primary-container": "#5b4b00",
+              "tertiary-fixed-dim": "#eea439",
+              "secondary-fixed-dim": "#ffb375",
+              "on-tertiary-fixed": "#3a2300",
+              "on-primary-fixed-variant": "#665500",
+              "surface-container-highest": "#dbdddd",
+              "error": "#b02500",
+              "on-tertiary": "#fff0e3",
+              "primary-container": "#ffd709",
+              "surface-container-low": "#f0f1f1",
+              "background": "#f6f6f6",
+              "outline": "#767777",
+              "error-container": "#f95630",
+              "on-secondary-fixed": "#532a00",
+              "on-secondary-fixed-variant": "#7c4100",
+              "on-error-container": "#520c00",
+              "on-background": "#2d2f2f",
+              "on-primary-fixed": "#453900",
+              "inverse-on-surface": "#9c9d9d"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        body {
+            background-color: #f6f6f6;
+            font-family: 'Be Vietnam Pro', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-surface min-h-screen pb-24">
+<header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900 flex items-center justify-between px-5 h-16">
+<div class="flex items-center transition-all duration-200 active:scale-95 text-[#6c5a00]">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">消息</h1>
+<div class="flex items-center transition-all duration-200 active:scale-95 text-[#6c5a00]">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</div>
+</header>
+<main class="pt-20 px-5">
+<div class="relative mb-6">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="search">search</span>
+</div>
+<input class="w-full h-12 pl-12 pr-4 bg-surface-container-high border-none rounded-2xl focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary-container/30 transition-all placeholder:text-outline/70" placeholder="搜索大神或联系人..." type="text"/>
+</div>
+<section class="space-y-3">
+<div class="p-4 bg-surface-container-lowest rounded-3xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer">
+<div class="relative flex-shrink-0">
+<img class="w-14 h-14 rounded-2xl object-cover" data-alt="Portrait of a young stylish Asian man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9KzKGtkUbNdkYfAvXUjWNvN61j6rALzIGwpAmwReVV6eABjWOmoTj0O5d7YHaBlV7dzQsKGnB1Nd_IU_wJmLVNal7C8PTzmpzLmQG-Yuts7pAuTLC8uuqdwNs3QCiUoVsrq3fonUeWyFsFDNbbdMdGoEZk6menZWEqZKylqc0a23AJLUZJ1gclIc6BgzFSgXcMCk6yPENn5jGbzBPwj8YUorfubRitZYF5Pb5Dki1Yrxorm9-J4rXcERhON2Y7lKnIdOeuAa10Bc"/>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-error border-2 border-surface-container-lowest rounded-full flex items-center justify-center">
+<span class="text-[10px] text-white font-bold">2</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">星野Kyo</h3>
+<span class="text-xs text-outline shrink-0">14:20</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">老板，晚上的排位赛还准时开始吗？</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-3xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer">
+<div class="relative flex-shrink-0">
+<img class="w-14 h-14 rounded-2xl object-cover" data-alt="Close up of a smiling young Asian woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXuY4tmjoCAqlgO-qwDdOb90HznH4_ytLlFCG7n2Wfjh1ciny4ideyGmw8FyqiLzhw0pLnmtIoOJ7yjwlqK6YMVkUwFAeZwEhE2tRoYu9FxawsfpTXzdG3dQrk1JzgEFH1NX9XyHMBI0GNDJjmo3ANJ_SdEVIXJ9T45e_CYMinCBnyhFK0oMAi5RjunvQOdLeqzbN4XXd-eirY_dT0o_RdSuxV3SOz8WEZE7F0WufbyylPZTXiQ2eklLw5oq2ekccpfxHjMpZcGW0"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">林间小鹿</h3>
+<span class="text-xs text-outline shrink-0">12:05</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">刚打完一把，这局MVP太帅了！</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-3xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer">
+<div class="relative flex-shrink-0">
+<img class="w-14 h-14 rounded-2xl object-cover" data-alt="Portrait of a cool young man with headphones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2LK06jzzUOsDXdgNsK60ttmgsbRfG5g61jHXpxsYXKdEmZWV57_LHcwQ-eg-abdqibHIhlseWtk2uawWpItLMw4uprZ937PofLVy8Ko-sWkSAhaSVemzZ8zonITBRouj6p7KLJLuVf6gwi_jKyPXa3Nf3gYdA455-UC2Jn0z2DuhsdqDttodtJYuQjq7c0S2fw_sfGtPp_a4ZhghiZ1xpRZDR6JU-zN3j0igXGUcL93dbiW7Mm5GQlBsqtXFZW3cefc4Uj0IhYGU"/>
+<div class="absolute -top-1 -right-1 w-5 h-5 bg-error border-2 border-surface-container-lowest rounded-full flex items-center justify-center">
+<span class="text-[10px] text-white font-bold">1</span>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">月下电音</h3>
+<span class="text-xs text-outline shrink-0">昨天</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">[语音 5"]</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-3xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer">
+<div class="relative flex-shrink-0">
+<img class="w-14 h-14 rounded-2xl object-cover" data-alt="Young woman looking at camera with friendly smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBT63E06uxelgpjvWoFbub9KIjMYefTtDK0V9xXlurgnb0PhTvk8QO8dHuz9qmHLDOANPzAPfzsvUtIgUGMsbLTLM_TsIBZYUxglfV_dsWP_zUdKtP2bFLvpnoHwVxbn6fCJ64x_JNfCAVQ0e0JhKAaSiJKcD0-In2i7mD_-TgvuA4Pq4IlAyoj7VqKfodlDRcRSRoc8tzmNI9axnWjPcVExyAQ7yD4rtcUek7HjXeb81o3AxwSadoCgAGGzMWcfx1DorJN5XKTrss"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">浅浅喵</h3>
+<span class="text-xs text-outline shrink-0">昨天</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">下次一定带你飞，嘿嘿~</p>
+</div>
+</div>
+<div class="p-4 bg-surface-container-lowest rounded-3xl flex items-center gap-4 transition-all duration-200 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer">
+<div class="relative flex-shrink-0">
+<img class="w-14 h-14 rounded-2xl object-cover" data-alt="Cool looking male profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAai_ZKbfBYzlsxCXt0Fmxzy_T11deB4vbl8CeV7EitjjLUde0T_RNcytUWbJp01051w93qiRofPujqzraPCaNRBY1ft1YO047o52mp1qlNT7v_rxrAZHRBt1mSv2syEDAkys9rbs27Wp0pkoHc0BEx26FNzxMp9GOBZQTDgMGO1gccSSBnOaTDopn1usxVrSqUhyKOIJpQIgbgryi9eRTlt_Q2R4W4cuUMWk4882N2UIrofwav3pojTW4kHDIs9xbM8Ts16pnkhok"/>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-1">
+<h3 class="font-headline font-bold text-on-surface truncate">孤狼战神</h3>
+<span class="text-xs text-outline shrink-0">星期一</span>
+</div>
+<p class="text-sm text-on-surface-variant truncate">合作愉快。</p>
+</div>
+</div>
+</section>
+</main>
+<nav class="fixed bottom-0 w-full z-50 rounded-t-[1.5rem] bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_rgba(0,0,0,0.04)] flex justify-around items-center pt-2 pb-8 px-4">
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-1.5 transition-transform duration-300 ease-out active:scale-90 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">首页</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-1.5 transition-transform duration-300 ease-out active:scale-90 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="sports_esports">sports_esports</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">陪玩</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-5 py-1.5 transition-transform duration-300 ease-out active:scale-90 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="chat_bubble" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">消息</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-5 py-1.5 transition-transform duration-300 ease-out active:scale-90 hover:opacity-80">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">我的</span>
+</div>
+</nav>
+</body></html>

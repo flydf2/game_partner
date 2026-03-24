@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#563500",
+              "on-primary": "#fff2cd",
+              "on-secondary": "#fff0e7",
+              "primary-dim": "#5e4e00",
+              "tertiary": "#805100",
+              "surface-container": "#e7e8e8",
+              "primary-fixed-dim": "#efc900",
+              "on-primary-fixed": "#453900",
+              "on-secondary-container": "#6f3a00",
+              "on-primary-container": "#5b4b00",
+              "surface-container-low": "#f0f1f1",
+              "inverse-surface": "#0c0f0f",
+              "error": "#b02500",
+              "background": "#f6f6f6",
+              "on-tertiary": "#fff0e3",
+              "on-secondary-fixed-variant": "#7c4100",
+              "on-tertiary-fixed-variant": "#623d00",
+              "secondary-fixed-dim": "#ffb375",
+              "tertiary-dim": "#704700",
+              "surface-variant": "#dbdddd",
+              "tertiary-fixed": "#feb246",
+              "outline": "#767777",
+              "on-surface-variant": "#5a5c5c",
+              "on-primary-fixed-variant": "#665500",
+              "secondary-fixed": "#ffc69a",
+              "error-dim": "#b92902",
+              "primary-fixed": "#ffd709",
+              "inverse-on-surface": "#9c9d9d",
+              "secondary": "#8c4a00",
+              "inverse-primary": "#ffd709",
+              "surface-dim": "#d3d5d5",
+              "primary-container": "#ffd709",
+              "on-error": "#ffefec",
+              "on-surface": "#2d2f2f",
+              "outline-variant": "#acadad",
+              "tertiary-container": "#feb246",
+              "on-background": "#2d2f2f",
+              "surface-container-lowest": "#ffffff",
+              "secondary-dim": "#7b4000",
+              "surface-bright": "#f6f6f6",
+              "on-error-container": "#520c00",
+              "surface-tint": "#6c5a00",
+              "surface": "#f6f6f6",
+              "on-secondary-fixed": "#532a00",
+              "surface-container-high": "#e1e3e3",
+              "tertiary-fixed-dim": "#eea439",
+              "primary": "#6c5a00",
+              "error-container": "#f95630",
+              "on-tertiary-fixed": "#3a2300",
+              "surface-container-highest": "#dbdddd",
+              "secondary-container": "#ffc69a"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1.5rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        h1, h2, h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="User profile photo showing a friendly gaming avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7XW0UZcmPyJIDiTFsdSqHXc7rx6VtxSOhJNB1_X9bvaofloUh65J1BA98dOsf0NCJtvf9xgThhJ7Lup2FaJt9NRBFzI6D_rXurpC_DB0KwVJ-guU5WfVyNAN1u3Kmf0S1mCuQN2qBdD15EhU6hTkCLEcyKU0yugBjz8ikE25XG3mAZt4MhXk-1gt0t4H5mAgWQhTnYPd8t8Nsg9vBv7l7AnCXUQXxcD1qgtrAJqdu3DGDdfoo_923GxHtU5PxbakK3VzDPlx6r2A"/>
+</div>
+<span class="text-[#6c5a00] dark:text-[#FFD700] font-black tracking-tight font-headline text-lg">SunnyPlay</span>
+</div>
+<button class="p-2 rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]" data-icon="search">search</span>
+</button>
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+</header>
+<main class="max-w-md mx-auto px-5 pt-6">
+<!-- Search Field -->
+<div class="mb-8">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-outline" data-icon="search">search</span>
+<input class="w-full pl-12 pr-4 py-4 bg-surface-container-high rounded-2xl border-none focus:ring-0 focus:bg-surface-container-lowest transition-all font-medium text-on-surface" placeholder="搜索游戏或陪玩" type="text" value="League of Legends"/>
+<button class="absolute right-4 text-primary font-bold text-sm">清空</button>
+</div>
+</div>
+<!-- Filters Asymmetric Row -->
+<div class="flex gap-2 mb-8 overflow-x-auto no-scrollbar pb-2">
+<span class="px-5 py-2.5 bg-primary-container text-on-primary-container rounded-full text-sm font-bold whitespace-nowrap">全部</span>
+<span class="px-5 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">最高段位</span>
+<span class="px-5 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">好评最多</span>
+<span class="px-5 py-2.5 bg-surface-container-lowest text-on-surface-variant rounded-full text-sm font-medium whitespace-nowrap">仅女性</span>
+</div>
+<!-- Result Stats -->
+<div class="mb-6 flex justify-between items-end px-1">
+<div>
+<h2 class="text-2xl font-extrabold text-on-surface tracking-tight">推荐陪玩</h2>
+<p class="text-on-surface-variant text-sm mt-1">发现 128 位活跃陪玩</p>
+</div>
+<div class="flex items-center gap-1 text-primary text-sm font-bold">
+<span>筛选</span>
+<span class="material-symbols-outlined text-sm" data-icon="tune">tune</span>
+</div>
+</div>
+<!-- Playmate Result List (Bento-style editorial cards) -->
+<div class="space-y-6">
+<!-- Playmate Card 1 -->
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] flex flex-col gap-4">
+<div class="flex gap-4">
+<div class="relative">
+<img alt="Yuki" class="w-24 h-24 rounded-2xl object-cover" data-alt="Portrait of a young woman with gaming headset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2OWo61_YmGgNLawwolyYZSWPmtENoIxNiZEPWuDpPsfPUl5hgRsIyXMfmTfBHhELP2W9ORWj8Mwl4b2i09esxl7DlZntaUJ7ik100-xAnJFncZwlJBDgfbO102esxpcmEDwvIrj8m_so6i2Os7oHLUNRZxyVkW6RDucS5dOmtrs8IUSDn-jqbKU6H-zMpRKZUvH3mCbquCBTeZCfHz7Gf93H008kboralVBwToVXnuBNQ3IhYmush6FsEmjL8fn9ICFmJN06vwTE"/>
+<div class="absolute -bottom-2 -right-2 bg-green-500 w-5 h-5 rounded-full border-4 border-white"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Yuki_Moon</h3>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+<span class="text-xs text-outline-variant">(已售 %s)</span>
+</div>
+</div>
+<span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container rounded-lg text-[10px] font-bold uppercase tracking-wider">Challenger</span>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[10px] rounded-md font-medium">主玩ADC</span>
+<span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[10px] rounded-md font-medium">声优陪玩</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-low pt-4">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline-variant font-medium">起价</span>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-black text-secondary">$15</span>
+<span class="text-xs text-on-surface-variant">/ 局</span>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-bold text-sm active:scale-90 transition-transform shadow-lg shadow-primary-container/20">立即约Ta</button>
+</div>
+</div>
+<!-- Playmate Card 2 -->
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] flex flex-col gap-4">
+<div class="flex gap-4">
+<div class="relative">
+<img alt="Sora" class="w-24 h-24 rounded-2xl object-cover" data-alt="Portrait of a male gamer in a stylized gaming room" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9H64fg9LyUGXZR7dn3rqRaaz03eFyJYx92la9BYTjgbE1qoMK9WYkjdtFXiX554pjrFwEV4wrPAnhHt4IGybGxVicoxnn77gLdLptwZRL_v1WTMRLJtBvMKoZyGhl82G5BZRiNGR894XF4tvfTBAZtlKfrR79TLn05i9ngqXaSVWt2IJ3YKtIfkU_kDJtt0Cu_5GhU1IzPZonZzc5JRWQZDEg6pE4ry6aGEBUu_f6taHwMCA4nquygtM2yiAB38icoINYQAKG6WQ"/>
+<div class="absolute -bottom-2 -right-2 bg-neutral-300 w-5 h-5 rounded-full border-4 border-white"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Sora_Pro</h3>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="text-xs font-bold text-on-surface">5.0</span>
+<span class="text-xs text-outline-variant">(已售 %s)</span>
+</div>
+</div>
+<span class="px-2 py-1 bg-tertiary-container text-on-tertiary-container rounded-lg text-[10px] font-bold uppercase tracking-wider">Grandmaster</span>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[10px] rounded-md font-medium">带飞大神</span>
+<span class="px-2 py-0.5 bg-surface-container-low text-on-surface-variant text-[10px] rounded-md font-medium">野区霸主</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-surface-container-low pt-4">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline-variant font-medium">起价</span>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-black text-secondary">$12</span>
+<span class="text-xs text-on-surface-variant">/ 局</span>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container px-6 py-3 rounded-full font-bold text-sm active:scale-90 transition-transform shadow-lg shadow-primary-container/20">立即约Ta</button>
+</div>
+</div>
+<!-- Playmate Card 3 (Promoted Glass Variation) -->
+<div class="relative p-[1px] rounded-2xl overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary via-tertiary to-secondary opacity-20"></div>
+<div class="relative glass-card rounded-2xl p-4 flex flex-col gap-4">
+<div class="absolute top-0 right-0 p-3">
+<span class="flex items-center gap-1 bg-primary px-2 py-1 rounded-md text-[9px] font-black text-primary-dim uppercase tracking-tighter"><span class="material-symbols-outlined text-[10px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>精选推荐</span>
+</div>
+<div class="flex gap-4">
+<div class="relative">
+<img alt="Lina" class="w-24 h-24 rounded-2xl object-cover" data-alt="A portrait of a female gaming streamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbjbTDnHxp0-BgDi05nDfimIppUbDrjNoKTV3TEznPgsl_fN5vRfgJss6hee67n9rIYvxTkr-NCV_-Oa2J__mSesPq_gmKR7CA1YEODGS9qHfxJPCX7j675pXkPLcgjL5TgIHx4tiOVo6Tf5Ee2tgOLYGhL_Z-h17qC3tcQOt6FRkZTBBA9TVZhz-Bjxyl_4tS80GrDJRjpVOm2vGl6hTRSH8psbx_bD2Kj3NUod8JK_lMBqg7OVrOstMZgCKJHID41UloXqx2Oo4"/>
+<div class="absolute -bottom-2 -right-2 bg-green-500 w-5 h-5 rounded-full border-4 border-white"></div>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-lg font-bold text-on-surface">Lina_Bunny</h3>
+<div class="flex items-center gap-1 mt-0.5">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="grade" style="font-variation-settings: 'FILL' 1;">grade</span>
+<span class="text-xs font-bold text-on-surface">4.9</span>
+<span class="text-xs text-outline-variant">(已售 %s)</span>
+</div>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mt-3">
+<span class="px-2 py-0.5 bg-primary-container/30 text-on-primary-container text-[10px] rounded-md font-bold italic">金牌辅助</span>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between border-t border-white/40 pt-4">
+<div class="flex flex-col">
+<span class="text-[10px] text-outline-variant font-medium">起价</span>
+<div class="flex items-baseline gap-1">
+<span class="text-xl font-black text-secondary">$18</span>
+<span class="text-xs text-on-surface-variant">/ 局</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary-fixed px-6 py-3 rounded-full font-extrabold text-sm active:scale-90 transition-transform shadow-xl shadow-primary/30">立即约Ta</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Suggestion Section -->
+<div class="mt-10 mb-6">
+<h3 class="text-lg font-extrabold text-on-surface mb-4">其他热门游戏</h3>
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="videogame_asset">videogame_asset</span>
+</div>
+<span class="text-sm font-bold">Valorant</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex items-center gap-3">
+<div class="w-10 h-10 bg-surface-container-highest rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="sports_esports">sports_esports</span>
+</div>
+<span class="text-sm font-bold">Genshin</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-[1.5rem]">
+<div class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">首页</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">订单</span>
+</div>
+<div class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-4 py-1.5 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="local_mall">local_mall</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">商城</span>
+</div>
+<div class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">我的</span>
+</div>
+</nav>
+</body></html>

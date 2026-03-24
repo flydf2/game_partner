@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f6f6f6",
+              "on-secondary-fixed-variant": "#7c4100",
+              "on-primary-fixed-variant": "#665500",
+              "error-dim": "#b92902",
+              "tertiary-fixed": "#feb246",
+              "error": "#b02500",
+              "on-secondary-container": "#6f3a00",
+              "on-tertiary": "#fff0e3",
+              "surface-container-highest": "#dbdddd",
+              "secondary": "#8c4a00",
+              "on-surface-variant": "#5a5c5c",
+              "secondary-dim": "#7b4000",
+              "on-error-container": "#520c00",
+              "primary-dim": "#5e4e00",
+              "on-tertiary-container": "#563500",
+              "surface-container-low": "#f0f1f1",
+              "tertiary-dim": "#704700",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface-dim": "#d3d5d5",
+              "primary-fixed-dim": "#efc900",
+              "tertiary-fixed-dim": "#eea439",
+              "inverse-on-surface": "#9c9d9d",
+              "surface-tint": "#6c5a00",
+              "on-background": "#2d2f2f",
+              "inverse-primary": "#ffd709",
+              "tertiary-container": "#feb246",
+              "surface-container-high": "#e1e3e3",
+              "tertiary": "#805100",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#ffc69a",
+              "inverse-surface": "#0c0f0f",
+              "on-primary": "#fff2cd",
+              "on-tertiary-fixed": "#3a2300",
+              "on-primary-fixed": "#453900",
+              "secondary-container": "#ffc69a",
+              "surface-variant": "#dbdddd",
+              "outline-variant": "#acadad",
+              "on-error": "#ffefec",
+              "on-primary-container": "#5b4b00",
+              "on-secondary": "#fff0e7",
+              "background": "#f6f6f6",
+              "on-surface": "#2d2f2f",
+              "secondary-fixed-dim": "#ffb375",
+              "primary-fixed": "#ffd709",
+              "error-container": "#f95630",
+              "surface-bright": "#f6f6f6",
+              "on-secondary-fixed": "#532a00",
+              "primary-container": "#ffd709",
+              "primary": "#6c5a00",
+              "surface-container": "#e7e8e8",
+              "outline": "#767777"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .editorial-shadow {
+            box-shadow: 0 20px 40px -10px rgba(255, 215, 0, 0.1);
+        }
+        .glass-solar {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface pb-32">
+<!-- Top App Bar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-900 active:scale-95 transition-transform" data-icon="arrow_back">arrow_back</span>
+<h1 class="font-headline font-bold text-lg tracking-tight text-zinc-900">大神主页</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-900" data-icon="share">share</span>
+<span class="material-symbols-outlined text-zinc-900" data-icon="more_horiz">more_horiz</span>
+</div>
+</header>
+<!-- Hero Section -->
+<div class="relative w-full h-[420px] overflow-hidden">
+<img alt="Hero Banner" class="w-full h-full object-cover" data-alt="Cinematic gaming setup with neon yellow lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPO2DBKN-H1FWbrWcSWYg-WhIjfHuLM-OJyMiqMrMFOsWn8BSSp5nBOOC--KLp9rQeVdNW6eMEJjtq53AovIveTZfTKFJEG3zYoO6Y6ozLSWhKRHEkF0P2L4XivO0NEHnHXc9H6HFUpN3mTEk_vWgVIUiM9WlY0B1k2jn7DAoQnwPPclXc7hu_ihkd5P542CxbXOt0_CRaInMHufM4tUl6tec8WLrmxejkSJ0mipN0vxZHL8vlBHzsNRTfTmhUUrK5R07MSyUyDko"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-black/20"></div>
+</div>
+<!-- Profile Header Card -->
+<div class="relative px-5 -mt-24 z-10">
+<div class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-xl shadow-black/5">
+<div class="flex justify-between items-start">
+<div class="relative">
+<img alt="Avatar" class="w-24 h-24 rounded-3xl object-cover border-4 border-white shadow-lg" data-alt="Professional male gamer avatar portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3Yx21l3XQH58JEjdPvp2NeoI5LIs_51ynV3rForFFjwT3Hd5AqMSy-sxYD_dlyN682W91abmSgg8KAw9tpHslBqThqBE3aE1ZVVOsHMHttJaF7wdtEpDJ2OL28yGHnfz11wPG1Jw2fXoB8C6dHlBSmulomn9y3CFDd8uDRgc2wm8DxSw67mMZ3pZTXdnJa4MLoz4Dl06hB9dHtby_V56tqiQv_vAAw9oI9xP2_AoxO74HKUfN1fVEaKcK9T4LY_KB9LY0itiXfHU"/>
+<div class="absolute -bottom-2 -right-2 bg-primary-container text-on-primary-container p-1 rounded-xl shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="verified" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-low text-zinc-600 px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-all">关注</button>
+<button class="bg-primary-container text-on-primary-container px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-all">私聊</button>
+</div>
+</div>
+<div class="mt-6">
+<div class="flex items-center gap-2">
+<h2 class="text-2xl font-headline font-black tracking-tight text-on-surface">星野 Kyo</h2>
+<span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-md text-[10px] font-bold">V10</span>
+</div>
+<p class="text-on-surface-variant text-sm mt-1">“国服第一野王，带你轻松上分。性格超好，不压力。”</p>
+</div>
+<!-- Stats Bento -->
+<div class="grid grid-cols-3 gap-3 mt-8">
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+<span class="text-xl font-headline font-black text-on-surface">98%</span>
+<span class="text-[11px] text-zinc-500 font-medium">胜率</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+<span class="text-xl font-headline font-black text-on-surface">12.5k</span>
+<span class="text-[11px] text-zinc-500 font-medium">粉丝</span>
+</div>
+<div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+<span class="text-xl font-headline font-black text-on-surface">4.9</span>
+<span class="text-[11px] text-zinc-500 font-medium">评分</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Voice Intro -->
+<div class="px-5 mt-6">
+<div class="bg-primary-container rounded-[1.5rem] p-4 flex items-center gap-4 relative overflow-hidden">
+<div class="absolute right-0 top-0 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<span class="font-bold text-on-primary-container text-sm">语音介绍</span>
+<span class="text-xs text-on-primary-container/60 font-medium">15"</span>
+</div>
+<!-- Visualizer mock -->
+<div class="flex items-end gap-1 h-4 mt-1">
+<div class="w-1 h-3 bg-on-primary-container/40 rounded-full"></div>
+<div class="w-1 h-4 bg-on-primary-container rounded-full"></div>
+<div class="w-1 h-2 bg-on-primary-container/60 rounded-full"></div>
+<div class="w-1 h-3 bg-on-primary-container rounded-full"></div>
+<div class="w-1 h-4 bg-on-primary-container rounded-full"></div>
+<div class="w-1 h-2 bg-on-primary-container/60 rounded-full"></div>
+<div class="w-1 h-3 bg-on-primary-container rounded-full"></div>
+<div class="w-1 h-1 bg-on-primary-container/40 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Skills Section -->
+<div class="px-5 mt-8">
+<h3 class="font-headline font-extrabold text-xl mb-4 flex items-center gap-2">
+            技能专区 <span class="text-primary-dim text-sm font-normal">Expertise</span>
+</h3>
+<div class="space-y-4">
+<!-- Skill Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-[1.5rem] shadow-sm flex items-center justify-between border-l-4 border-primary">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="League of Legends game icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFRn9sKdbZUjI2cK_RArJlKQsKs4hHmE9vmu-5KXEK5Pn1hKzN7p2Yx_AIE1LmQRt6LjBMAsYB6fJydPFzVwk7h0Gv_LQHVIp7p0qED1Yl0jMMoO_l6gwRl8BduskFcZpKPJJP1zM7V31rJ7YWmT9bmeoanaOnFkgar_4hScagabz7escAfpMwD3hh5FuN0Z0moKWW6xmHRCyu6YYtFOyOn1in3xoW2j2Uo-tyHZ9mSRn0fb0br_nZ8mIXlvlDml16jk6L9UtLNuU"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-zinc-900">英雄联盟 LOL</span>
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-1.5 py-0.5 rounded-md font-bold">最强王者</span>
+</div>
+<p class="text-xs text-zinc-500 mt-1">擅长：打野/中单 · 全英雄精通</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-primary font-black text-lg">¥50</span>
+<span class="text-zinc-400 text-[10px] block">/小时</span>
+</div>
+</div>
+<!-- Skill Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-[1.5rem] shadow-sm flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-zinc-50 rounded-2xl flex items-center justify-center">
+<img class="w-10 h-10 rounded-lg object-cover" data-alt="Valorant FPS game icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDWJmCSAGl7RtIzai8lEsTWahruNsMfexkYpjiXWfhDBgy6JgRrBJ1lEakZCcyztCTzmfYfrdwDmw9RneRfHSlRRSi3CuPvjg134p6F08KQEVUZB8RewvmczIqQ34nmhTXfRDRIElfpRU4Gmxr6t5mA0UsJqTGipTOLjLQYES3H3Ss1LMGB61MUosczOfnTqBka7jRiD7EHMch7iC4DK9N3yI2SALmqwxTNf2BIR3i3RC9YBvNeE5FM5ekc3oEvtFDGq1Z685xTjXs"/>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-bold text-zinc-900">无畏契约 FPS</span>
+<span class="bg-zinc-200 text-zinc-700 text-[10px] px-1.5 py-0.5 rounded-md font-bold">神话</span>
+</div>
+<p class="text-xs text-zinc-500 mt-1">擅长：决斗者 · 准星极稳</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-zinc-900 font-black text-lg">¥45</span>
+<span class="text-zinc-400 text-[10px] block">/小时</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Reviews -->
+<div class="px-5 mt-10">
+<div class="flex justify-between items-end mb-6">
+<h3 class="font-headline font-extrabold text-xl">用户评价 <span class="text-zinc-400 text-sm font-normal ml-1">2,482</span></h3>
+<span class="text-primary font-bold text-sm">查看全部</span>
+</div>
+<div class="space-y-6">
+<!-- Review Item -->
+<div class="bg-surface-container-lowest p-5 rounded-[2rem] shadow-sm">
+<div class="flex justify-between">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Female user avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA255ssriqx239upv8-12k7zCZRVehwBMDwNbxBDVWFHTXeU9kDiEO9QDelxUR7qMzQ75J-4ro7_ZMZwik9PTEdzzd455C4MqYkMBHBgZUIIE3UUxXuZUzd9hBOzXfu3LsQIb_K1cS4c8zbYJaZXj4FIJciSMjb3OZ7mNFzGgGCjvimrN_9WQg4FONTf5MEWUNC7cIxE0HJ_2v3fuqE_KzIwg_BDneDCMgvQTt--ApEg5QvmzBze7lomDKVKJDidgKcF1yQvoJA1lA"/>
+<div>
+<span class="font-bold text-sm block text-zinc-900">皮卡丘爱吃肉</span>
+<div class="flex gap-0.5">
+<span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+</div>
+</div>
+</div>
+<span class="text-zinc-400 text-[10px]">2小时前</span>
+</div>
+<p class="mt-4 text-zinc-600 text-sm leading-relaxed">大神带飞，这把LOL打野节奏拉满！不仅技术好，声音也好听，非常有耐心，推荐大家下单！</p>
+<div class="mt-4 flex gap-2">
+<img class="w-20 h-20 rounded-xl object-cover" data-alt="Game screenshot match result" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0dK_MZqKKAmyA4yP_BkKpGsS_W87iCSLeuAAmwt_w2J0Fv2TJ3nFinGP1J3GSQx67aimew8FhrXUj4yr1rs9GdeQQ0HoLz7PYrcmT-menQ1ggX6R3fg-gRg1AOiAechpMCNklo7nlzYm6oTif3LxCbdYzd3J-GAlZr6SEyxpjOmVPDUFE4dwfMogxpTTQg-RVyvcN33jdsEkwf8vjjX4NIE1tfsILkkmLj6dL8Mu-pfvMf__Z-Ik58KyaejQd1RAt3s-oj5nsyo8"/>
+<img class="w-20 h-20 rounded-xl object-cover" data-alt="In-game achievement badge" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEmpdbvtDhgZD_al92d9UI34_Hdgx0lhDPaCMLxI396ibkIwnkHhQgElnrvKK99NMJCJUTb0oUacUJlfBtSVBio7RbOP2yT6BWioWUtDTQu5HSF-SkK-clyK7C8dtjL9o6536cNSpZXdFloouA3PXd9Z8PoTF7Afh2iwhK1e7ZEDa6MN2cko6FgDLIsigFGp1dU2NYkV6n3e6gM4rPirLzCeIdGtetGabAjpKBEZd54kiFOLcOJv9aIbYemFtqoWURxEhJKD6upv0"/>
+</div>
+</div>
+</div>
+</div>
+<!-- Sticky Footer Booking -->
+<div class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] px-6 pt-5 pb-10">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-zinc-600" data-icon="favorite">favorite</span>
+<span class="text-[10px] font-bold text-zinc-500">收藏</span>
+</div>
+<div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-zinc-600" data-icon="mail">mail</span>
+<span class="text-[10px] font-bold text-zinc-500">留言</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="flex items-baseline gap-0.5 justify-end">
+<span class="text-xs font-bold text-primary">¥</span>
+<span class="text-2xl font-black text-primary font-headline tracking-tighter">50</span>
+</div>
+<span class="text-[10px] font-bold text-zinc-400">起/小时</span>
+</div>
+<button class="bg-primary-container text-on-primary-container px-10 py-4 rounded-full font-black text-base shadow-lg shadow-yellow-500/20 active:scale-95 transition-all">
+                    立即下单
+                </button>
+</div>
+</div>
+</div>
+</body></html>

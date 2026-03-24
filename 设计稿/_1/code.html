@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface": "#f6f6f6",
+              "on-secondary-fixed-variant": "#7c4100",
+              "on-primary-fixed-variant": "#665500",
+              "error-dim": "#b92902",
+              "tertiary-fixed": "#feb246",
+              "error": "#b02500",
+              "on-secondary-container": "#6f3a00",
+              "on-tertiary": "#fff0e3",
+              "surface-container-highest": "#dbdddd",
+              "secondary": "#8c4a00",
+              "on-surface-variant": "#5a5c5c",
+              "secondary-dim": "#7b4000",
+              "on-error-container": "#520c00",
+              "primary-dim": "#5e4e00",
+              "on-tertiary-container": "#563500",
+              "surface-container-low": "#f0f1f1",
+              "tertiary-dim": "#704700",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface-dim": "#d3d5d5",
+              "primary-fixed-dim": "#efc900",
+              "tertiary-fixed-dim": "#eea439",
+              "inverse-on-surface": "#9c9d9d",
+              "surface-tint": "#6c5a00",
+              "on-background": "#2d2f2f",
+              "inverse-primary": "#ffd709",
+              "tertiary-container": "#feb246",
+              "surface-container-high": "#e1e3e3",
+              "tertiary": "#805100",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#ffc69a",
+              "inverse-surface": "#0c0f0f",
+              "on-primary": "#fff2cd",
+              "on-tertiary-fixed": "#3a2300",
+              "on-primary-fixed": "#453900",
+              "secondary-container": "#ffc69a",
+              "surface-variant": "#dbdddd",
+              "outline-variant": "#acadad",
+              "on-error": "#ffefec",
+              "on-primary-container": "#5b4b00",
+              "on-secondary": "#fff0e7",
+              "background": "#f6f6f6",
+              "on-surface": "#2d2f2f",
+              "secondary-fixed-dim": "#ffb375",
+              "primary-fixed": "#ffd709",
+              "error-container": "#f95630",
+              "surface-bright": "#f6f6f6",
+              "on-secondary-fixed": "#532a00",
+              "primary-container": "#ffd709",
+              "primary": "#6c5a00",
+              "surface-container": "#e7e8e8",
+              "outline": "#767777"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4 w-full">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out cursor-pointer" data-icon="menu">menu</span>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-400">阳关陪玩</h1>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-zinc-500" data-icon="search">search</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="User Avatar" class="w-full h-full object-cover" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoBTc_5bZuXQ8l_u2UKFazkITvVt5UY-tB83GE9qFMKnbb7Gz7DBuHH11MCcfExFpNociu2AurEP9Lt2NRc9nvSntdZ9hgcWNL_d-0yyyC7bLbO0F8qFUi1FZ_0xgHBG5ZWEfyBs3f5BMl_rBN4SHJoDd3xp76P8kx7eQBwXzcI46GuMySscFwGrnXs_YK9_ArHQEUVcsZUe0o_yRl84Nf4j3WwXor_Xd2gFFDgNuPdbSQuyQiPQkAovGTm7Cek_vM2ZGapACwBM4"/>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
+</header>
+<main class="pt-20 pb-28 px-5 space-y-8">
+<!-- Hero Banner: Honor of Kings Tournament -->
+<section class="relative w-full h-48 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/10">
+<div class="absolute inset-0 bg-gradient-to-r from-primary to-tertiary-fixed opacity-90 mix-blend-multiply"></div>
+<img alt="Honor of Kings Tournament" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" data-alt="Epic cinematic background of a competitive gaming arena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChoKqMjV8Zopn6t52b1X_D1IHpomYuX0uMCtUOdsEjdUbzmVSeBr-5ZKxEhOUlx1mPSxANNKH4sghnW_76nSPFe5RQDcs0D0146L6oIlgGmuRs6DcX59vrx67krFal1DduP8vpSj5o2giMgdNHYP2pIzqcKEuJfnSxyvoN_fgqJahQCNwzPm37cGoeZUvBWw_zifeh-pvUxLyRR7_8puuGkKr-5w05-1orNhrAYXS-S8PDY6s1vdzatJ05jaJSvNTo7dS88EwkP2M"/>
+<div class="absolute inset-0 flex flex-col justify-end p-6 space-y-2">
+<span class="inline-flex items-center px-3 py-1 bg-surface-container-lowest/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-widest w-fit">
+                    Tournament Live
+                </span>
+<h2 class="text-3xl font-headline font-extrabold text-white leading-tight tracking-tighter">王者荣耀<br/>巅峰挑战赛</h2>
+<div class="flex items-center gap-4 pt-2">
+<button class="bg-white text-primary px-6 py-2 rounded-full font-bold text-sm shadow-lg active:scale-95 transition-all">
+                        立即报名
+                    </button>
+<p class="text-white/80 text-xs font-medium">1.2w 人已参与</p>
+</div>
+</div>
+</section>
+<!-- Game Categories -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">热门游戏</h3>
+<span class="text-xs font-semibold text-primary underline decoration-2 underline-offset-4">查看全部</span>
+</div>
+<div class="flex gap-4 overflow-x-auto no-scrollbar pb-2">
+<!-- LOL Card -->
+<div class="flex-shrink-0 w-28 h-36 bg-surface-container-lowest rounded-3xl p-4 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-primary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="videogame_asset">videogame_asset</span>
+</div>
+<span class="font-bold text-sm">LOL</span>
+</div>
+<!-- Valorant Card -->
+<div class="flex-shrink-0 w-28 h-36 bg-surface-container-lowest rounded-3xl p-4 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-secondary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-3xl" data-icon="target">target</span>
+</div>
+<span class="font-bold text-sm">Valorant</span>
+</div>
+<!-- Honor of Kings -->
+<div class="flex-shrink-0 w-28 h-36 bg-surface-container-lowest rounded-3xl p-4 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-tertiary-container flex items-center justify-center">
+<span class="material-symbols-outlined text-on-tertiary-container text-3xl" data-icon="shield">shield</span>
+</div>
+<span class="font-bold text-sm">王者荣耀</span>
+</div>
+<!-- Genshin -->
+<div class="flex-shrink-0 w-28 h-36 bg-surface-container-lowest rounded-3xl p-4 flex flex-col items-center justify-center gap-3 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+<div class="w-14 h-14 rounded-2xl bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant text-3xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<span class="font-bold text-sm">原神</span>
+</div>
+</div>
+</section>
+<!-- Top Playmates (Bento Style Grid) -->
+<section class="space-y-4">
+<div class="flex items-center gap-2">
+<h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">优秀陪玩</h3>
+<div class="px-2 py-0.5 bg-primary/10 rounded text-[10px] font-bold text-primary tracking-widest uppercase">Editor's Choice</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<!-- Playmate Card 1 -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-4 space-y-4 shadow-sm relative overflow-hidden flex flex-col">
+<div class="absolute top-0 right-0 p-3">
+<div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[10px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold">5.0</span>
+</div>
+</div>
+<div class="w-full aspect-square rounded-2xl overflow-hidden bg-surface-container">
+<img alt="Playmate" class="w-full h-full object-cover" data-alt="Profile portrait of a smiling female gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPWd42wRhAneFPqDBu00-X6zV_3VmT3LwRUFe1rO4eEyOa-IDEPhh1HH7x2WWdyarjgr_4WzatpsdpqaJXJlMRwo9dtnaBbaYDQBj0-oao709scndaRZifLRuzJRgNVcSzd8XsuGJ-4uBbEUbdAlWFQz_6HkFw-AT6QvtHY4sIV4zpurtJ13FIBZJw5DYnKUc0lTPGLItY507UIdcj7nBxJ2WZ7zMMYQN6FvTlEsX9vRQQ51tpjD9-9ylRac-P1jqyPFi7WtKf__I"/>
+</div>
+<div class="space-y-2">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-primary-container/30 text-on-primary-container text-[9px] font-bold rounded-lg">王者</span>
+<span class="px-2 py-0.5 bg-tertiary-container/30 text-on-tertiary-container text-[9px] font-bold rounded-lg">萌妹</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-sm">林间小鹿</span>
+<span class="text-primary text-xs font-black">¥45/hr</span>
+</div>
+</div>
+</div>
+<!-- Playmate Card 2 -->
+<div class="bg-surface-container-lowest rounded-[2rem] p-4 space-y-4 shadow-sm relative overflow-hidden flex flex-col">
+<div class="absolute top-0 right-0 p-3">
+<div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[10px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="text-[10px] font-bold">4.9</span>
+</div>
+</div>
+<div class="w-full aspect-square rounded-2xl overflow-hidden bg-surface-container">
+<img alt="Playmate" class="w-full h-full object-cover" data-alt="Cool portrait of a male pro gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAkokFDlJJU2ut7ADXOxXgokfLf-nFbve3PmdniZPK8ZjoxO1reJWexxqbxEwDy4thsHQWxI68ySeYsam7yLDI2EWIKoa7no1yZya_-OvKHcnsOU5ukziXluccC3dUHzW8BMFTNlh6bLkgI8bMSDhUTMaTR2jWDsFNRzAKs9RzZ11om4Ki5c9Xj92fIm685lMzUrq9Bk1QuG6y3TXwjzpc6HZVTEFv-aZfUUXt5s020g03CNeOFTD-_F8HtoWP1VEGiCAo5k4gC9o"/>
+</div>
+<div class="space-y-2">
+<div class="flex flex-wrap gap-1">
+<span class="px-2 py-0.5 bg-primary-container/30 text-on-primary-container text-[9px] font-bold rounded-lg">国服第一</span>
+<span class="px-2 py-0.5 bg-secondary-container/30 text-on-secondary-container text-[9px] font-bold rounded-lg">技术流</span>
+</div>
+<div class="flex flex-col">
+<span class="font-bold text-sm">影子猎手</span>
+<span class="text-primary text-xs font-black">¥60/hr</span>
+</div>
+</div>
+</div>
+<!-- Playmate Card 3 (Featured Wide) -->
+<div class="col-span-2 bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm flex items-center gap-5 relative overflow-hidden group">
+<div class="w-24 h-24 rounded-2xl overflow-hidden bg-surface-container flex-shrink-0">
+<img alt="Playmate" class="w-full h-full object-cover" data-alt="Professional female gamer with headset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDI76aOeylc3VRSRNZ04zYnjdju83SPGLpYh8d2uB5bogOv5w6wJcvfx6AJMDR5RQKBUrAlNQptRHNf3XJ61WGVmFOAc3-gFksvrlt6w6F_TaBfQ6Mij2zaM_KjWfcqlVkL82KYbgijsqdy-ptNMAsnQRBVHpqk2dGVjd6UsWwcuOnY9ToQPlAZwJXaT0sdGvDFkoLuAn_IIt1cP9aJJ9LXF0dXPKQK0bAJi57JnH1pgIKL4F5lFuQICzWqRy0VNT1R6BfwuOFvKg"/>
+</div>
+<div class="flex-grow space-y-2">
+<div class="flex justify-between items-start">
+<div class="flex flex-col">
+<span class="font-bold text-lg">安妮喵呜</span>
+<span class="text-[10px] text-zinc-500 font-medium">累计陪玩 1,200+ 小时</span>
+</div>
+<span class="text-primary text-lg font-black">¥55/hr</span>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-low text-on-surface text-[10px] font-bold rounded-full">温柔语聊</span>
+<span class="px-3 py-1 bg-surface-container-low text-on-surface text-[10px] font-bold rounded-full">绝地求生</span>
+</div>
+</div>
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-primary/10 rounded-full group-hover:scale-125 transition-transform"></div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] z-50 rounded-t-[24px]">
+<!-- 首页 (Active) -->
+<a class="flex flex-col items-center justify-center bg-yellow-400 dark:bg-yellow-500 text-zinc-900 rounded-2xl px-5 py-2 scale-105 transform transition-all active:scale-90 duration-300 cubic-bezier(0.34,1.56,0.64,1)" href="#">
+<span class="material-symbols-outlined" data-icon="home_filled" style="font-variation-settings: 'FILL' 1;">home_filled</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">首页</span>
+</a>
+<!-- 发现 -->
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="explore">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">发现</span>
+</a>
+<!-- 聊天 -->
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">聊天</span>
+</a>
+<!-- 订单 -->
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">订单</span>
+</a>
+<!-- 我的 -->
+<a class="flex flex-col items-center justify-center text-zinc-400 dark:text-zinc-500 px-5 py-2 hover:text-yellow-500 transition-all active:scale-90 duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[11px] font-semibold tracking-wide">我的</span>
+</a>
+</nav>
+<!-- FAB (Suppressed based on context guidelines, but provided for potential core screens) -->
+<div class="fixed bottom-28 right-6 z-40">
+<button class="w-14 h-14 bg-primary rounded-full shadow-2xl flex items-center justify-center text-on-primary-container active:scale-90 transition-transform">
+<span class="material-symbols-outlined text-3xl" data-icon="add" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</div>
+</body></html>

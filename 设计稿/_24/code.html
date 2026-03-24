@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#feb246",
+              "inverse-primary": "#ffd709",
+              "surface-variant": "#dbdddd",
+              "on-tertiary-container": "#563500",
+              "inverse-on-surface": "#9c9d9d",
+              "primary": "#6c5a00",
+              "surface-container-highest": "#dbdddd",
+              "on-secondary-fixed": "#532a00",
+              "outline": "#767777",
+              "surface-tint": "#6c5a00",
+              "surface-container-high": "#e1e3e3",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface": "#f6f6f6",
+              "tertiary-dim": "#704700",
+              "tertiary-fixed": "#feb246",
+              "secondary-fixed-dim": "#ffb375",
+              "on-surface": "#2d2f2f",
+              "on-secondary-fixed-variant": "#7c4100",
+              "secondary": "#8c4a00",
+              "surface-bright": "#f6f6f6",
+              "on-primary-fixed": "#453900",
+              "inverse-surface": "#0c0f0f",
+              "on-primary": "#fff2cd",
+              "on-error": "#ffefec",
+              "tertiary-fixed-dim": "#eea439",
+              "on-background": "#2d2f2f",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f0f1f1",
+              "on-primary-container": "#5b4b00",
+              "surface-container": "#e7e8e8",
+              "outline-variant": "#acadad",
+              "error-container": "#f95630",
+              "on-primary-fixed-variant": "#665500",
+              "on-tertiary": "#fff0e3",
+              "on-surface-variant": "#5a5c5c",
+              "background": "#f6f6f6",
+              "error": "#b02500",
+              "secondary-dim": "#7b4000",
+              "on-tertiary-fixed": "#3a2300",
+              "secondary-container": "#ffc69a",
+              "primary-container": "#ffd709",
+              "primary-fixed-dim": "#efc900",
+              "primary-dim": "#5e4e00",
+              "primary-fixed": "#ffd709",
+              "secondary-fixed": "#ffc69a",
+              "on-secondary": "#fff0e7",
+              "on-secondary-container": "#6f3a00",
+              "error-dim": "#b92902",
+              "on-error-container": "#520c00",
+              "tertiary": "#805100",
+              "surface-dim": "#d3d5d5"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-plus-jakarta-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface font-body text-on-surface">
+<!-- TopAppBar Shell (Transactional focus, limited nav) -->
+<header class="flex justify-between items-center px-5 h-16 w-full fixed top-0 z-50 bg-surface-container-highest/50 backdrop-blur-xl">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity">arrow_back</span>
+<h1 class="font-headline font-bold text-lg text-primary">语音设置</h1>
+</div>
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar smiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5QzecoufJ2wHHI4vQzi5lU7yzmqKWwRcHRpcUFD-Vk_Tl9syYpZMOZgUOhK_O-yR3jwYrftd2NTuBqZQnwKzHlKo6MNhOy_e4umfohoC2weXxFkUzIBQ-xTUGPhtHMWrK475Ds80qjKjp5MI58uyVI7P0Xy_fwlrVvORy_PUPRpHS2Q6e6R7W-Ca_1GlQuud7rnfxihvHpAs0O-pwDRIANHYcqMS2jL-gr6SnYdCmwT8v3V-OdNMQ1kI6J92oh_LQukq157HH0uk"/>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-md mx-auto min-h-screen">
+<!-- Voice Identity Section -->
+<section class="mb-10">
+<div class="flex flex-col gap-2 mb-6">
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-3 py-1 rounded-full self-start tracking-wider">VOICE IDENTITY</span>
+<h2 class="font-headline font-extrabold text-3xl text-on-surface leading-tight">用声音<br/><span class="text-primary">征服</span>你的听众</h2>
+<p class="text-on-surface-variant text-sm mt-2">好的音质能提升 40% 的约战成功率</p>
+</div>
+<!-- Bento Layout for Voice Controls -->
+<div class="grid grid-cols-2 gap-4">
+<!-- Recording Card (Main Focus) -->
+<div class="col-span-2 bg-surface-container-lowest rounded-[2rem] p-8 flex flex-col items-center justify-center text-center shadow-sm">
+<div class="relative mb-6">
+<!-- Pulse effect -->
+<div class="absolute inset-0 bg-primary-container/20 rounded-full animate-ping"></div>
+<button class="relative w-24 h-24 bg-primary-container text-on-primary-container rounded-full flex items-center justify-center active:scale-95 transition-all shadow-lg">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">mic</span>
+</button>
+</div>
+<h3 class="font-headline font-bold text-xl mb-1">开始录制</h3>
+<p class="text-on-surface-variant text-xs mb-4">建议时长：10-30秒</p>
+<div class="flex gap-1 items-center justify-center h-4">
+<div class="w-1 h-3 bg-primary/30 rounded-full"></div>
+<div class="w-1 h-4 bg-primary/40 rounded-full"></div>
+<div class="w-1 h-2 bg-primary/20 rounded-full"></div>
+<div class="w-1 h-5 bg-primary/60 rounded-full"></div>
+<div class="w-1 h-3 bg-primary/30 rounded-full"></div>
+</div>
+</div>
+<!-- Playback Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex flex-col gap-4">
+<div class="w-10 h-10 bg-secondary-container text-on-secondary-container rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-sm">试听语音</h4>
+<p class="text-[10px] text-on-surface-variant">检查录制质量</p>
+</div>
+</div>
+<!-- Upload Card -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex flex-col gap-4">
+<div class="w-10 h-10 bg-surface-container-high text-on-surface-variant rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">upload_file</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-sm">本地上传</h4>
+<p class="text-[10px] text-on-surface-variant">支持 MP3/WAV</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Current Status / Preview -->
+<section class="mb-10">
+<h3 class="font-headline font-bold text-lg mb-4 flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span>
+                当前声音展示
+            </h3>
+<div class="bg-primary-container/30 backdrop-blur-sm rounded-[1.5rem] p-4 flex items-center gap-4">
+<div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary">graphic_eq</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-1">
+<span class="text-xs font-bold text-on-primary-container">我的声卡预览.mp3</span>
+<span class="text-[10px] text-on-primary-container/60">0:15</span>
+</div>
+<div class="w-full h-1 bg-white/50 rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-primary rounded-full"></div>
+</div>
+</div>
+<button class="text-primary hover:bg-white/50 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</section>
+<!-- Tips Section -->
+<div class="bg-surface-container-low rounded-2xl p-5 mb-8">
+<div class="flex items-start gap-3">
+<span class="material-symbols-outlined text-secondary text-xl">lightbulb</span>
+<div>
+<h5 class="text-xs font-bold text-on-surface mb-1">大神录音贴士</h5>
+<ul class="text-[11px] text-on-surface-variant space-y-1">
+<li>• 保持环境安静，避免背景杂音。</li>
+<li>• 用最自然的状态介绍你的游戏特色。</li>
+<li>• 声音明亮自信更有吸引力哦！</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Action Button -->
+<div class="fixed bottom-10 left-0 w-full px-6 flex flex-col gap-3">
+<button class="w-full py-4 bg-primary text-on-primary font-headline font-bold rounded-full shadow-lg shadow-primary/20 active:scale-[0.98] transition-all">
+                保存语音设置
+            </button>
+<p class="text-center text-[10px] text-on-surface-variant px-4">保存即代表您同意《声音权属协议》，我们将对您的声音进行安全审核</p>
+</div>
+</main>
+<!-- Navigation Drawer (Mapped from JSON) -->
+<!-- Note: Hidden by default, typically toggled by a menu icon if present -->
+<div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[60] hidden">
+<aside class="flex flex-col w-72 h-full p-6 bg-[#f6f6f6] dark:bg-zinc-900 rounded-r-3xl shadow-2xl">
+<div class="flex flex-col gap-1 mb-10">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container border-2 border-white overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Profile avatar in drawer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCROvyomSToofxWKvepZ3O0P1hzl8fUASB_seqCw3uFNLkasYvhwOqFXFcum6QY90uL3Jh6bwTEbA0RP2VBdbawR2lKDjpYTLCL8qOiX_cwvcqRPkcJQFwrMP4jrLbOasLMYxKLf1Uc2_7FPe7wKfV55uDCDdHi4wTKRfXTdIdl37xZKnla-Dod5xFdvGWy_ecb6EmymkvqOTKDKVMh3aKwImmC8PuA7w_W-GI4OAQuD2cahT_VJMIJrC-wdFmKkwCbKigOxMpzhso"/>
+</div>
+<div>
+<h4 class="text-[#6c5a00] font-black font-headline">阳光陪玩师</h4>
+<p class="text-[10px] text-zinc-500">ID: 888888</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-200 font-plus-jakarta-sans text-sm rounded-xl" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span>个人资料</span>
+</a>
+<!-- Active Item: 语音设置 -->
+<a class="flex items-center gap-3 px-4 py-3 bg-[#FFD700] text-[#6c5a00] font-bold rounded-xl transition-colors duration-200 font-plus-jakarta-sans text-sm" href="#">
+<span class="material-symbols-outlined">mic_none</span>
+<span>语音设置</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-200 font-plus-jakarta-sans text-sm rounded-xl" href="#">
+<span class="material-symbols-outlined">phonelink_setup</span>
+<span>绑定手机</span>
+</a>
+<div class="mt-auto border-t border-zinc-200 pt-4">
+<a class="flex items-center gap-3 px-4 py-3 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors duration-200 font-plus-jakarta-sans text-sm rounded-xl" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>退出登录</span>
+</a>
+</div>
+</nav>
+</aside>
+</div>
+</body></html>

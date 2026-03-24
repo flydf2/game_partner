@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>绑定手机号 - SunnyPlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#feb246",
+              "inverse-primary": "#ffd709",
+              "surface-variant": "#dbdddd",
+              "on-tertiary-container": "#563500",
+              "inverse-on-surface": "#9c9d9d",
+              "primary": "#6c5a00",
+              "surface-container-highest": "#dbdddd",
+              "on-secondary-fixed": "#532a00",
+              "outline": "#767777",
+              "surface-tint": "#6c5a00",
+              "surface-container-high": "#e1e3e3",
+              "on-tertiary-fixed-variant": "#623d00",
+              "surface": "#f6f6f6",
+              "tertiary-dim": "#704700",
+              "tertiary-fixed": "#feb246",
+              "secondary-fixed-dim": "#ffb375",
+              "on-surface": "#2d2f2f",
+              "on-secondary-fixed-variant": "#7c4100",
+              "secondary": "#8c4a00",
+              "surface-bright": "#f6f6f6",
+              "on-primary-fixed": "#453900",
+              "inverse-surface": "#0c0f0f",
+              "on-primary": "#fff2cd",
+              "on-error": "#ffefec",
+              "tertiary-fixed-dim": "#eea439",
+              "on-background": "#2d2f2f",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f0f1f1",
+              "on-primary-container": "#5b4b00",
+              "surface-container": "#e7e8e8",
+              "outline-variant": "#acadad",
+              "error-container": "#f95630",
+              "on-primary-fixed-variant": "#665500",
+              "on-tertiary": "#fff0e3",
+              "on-surface-variant": "#5a5c5c",
+              "background": "#f6f6f6",
+              "error": "#b02500",
+              "secondary-dim": "#7b4000",
+              "on-tertiary-fixed": "#3a2300",
+              "secondary-container": "#ffc69a",
+              "primary-container": "#ffd709",
+              "primary-fixed-dim": "#efc900",
+              "primary-dim": "#5e4e00",
+              "primary-fixed": "#ffd709",
+              "secondary-fixed": "#ffc69a",
+              "on-secondary": "#fff0e7",
+              "on-secondary-container": "#6f3a00",
+              "error-dim": "#b92902",
+              "on-error-container": "#520c00",
+              "tertiary": "#805100",
+              "surface-dim": "#d3d5d5"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar Shell (Transactional Variant: Hide Nav, Show Back) -->
+<header class="flex justify-between items-center px-5 h-16 w-full fixed top-0 z-50 bg-surface-container-highest/50 backdrop-blur-xl">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95">
+<span class="material-symbols-outlined text-on-surface" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold text-lg text-primary">绑定手机</h1>
+<div class="w-10"></div> <!-- Placeholder to center title -->
+</header>
+<main class="pt-24 pb-12 px-6 flex flex-col min-h-screen max-w-md mx-auto">
+<!-- Brand Narrative / Header Section -->
+<section class="mb-10 mt-4">
+<div class="inline-flex items-center justify-center p-4 bg-primary-container rounded-3xl mb-6 shadow-sm">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="phonelink_setup">phonelink_setup</span>
+</div>
+<h2 class="font-headline text-3xl font-extrabold tracking-tight text-on-surface mb-2">安全加固</h2>
+<p class="text-on-surface-variant leading-relaxed opacity-80">绑定手机号，开启您的 SunnyPlay 活力社交之旅，实时获取陪玩动态。</p>
+</section>
+<!-- Functional Bento Form Area -->
+<div class="space-y-6">
+<!-- Input Group: Phone Number -->
+<div class="group">
+<label class="block font-label text-xs font-semibold text-on-surface-variant mb-2 px-1">手机号码</label>
+<div class="flex items-center bg-surface-container-high rounded-2xl p-4 transition-all focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container">
+<span class="material-symbols-outlined text-outline-variant mr-3" data-icon="smartphone">smartphone</span>
+<span class="text-on-surface font-medium mr-3">+86</span>
+<input class="bg-transparent border-none p-0 w-full focus:ring-0 text-on-surface placeholder:text-outline-variant font-medium" placeholder="请输入11位手机号" type="tel"/>
+</div>
+</div>
+<!-- Input Group: OTP -->
+<div class="group">
+<label class="block font-label text-xs font-semibold text-on-surface-variant mb-2 px-1">验证码</label>
+<div class="flex gap-3">
+<div class="flex-grow flex items-center bg-surface-container-high rounded-2xl p-4 transition-all focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container">
+<span class="material-symbols-outlined text-outline-variant mr-3" data-icon="shield_lock">shield_lock</span>
+<input class="bg-transparent border-none p-0 w-full focus:ring-0 text-on-surface placeholder:text-outline-variant font-medium" placeholder="6位验证码" type="number"/>
+</div>
+<button class="bg-secondary-container text-on-secondary-container font-headline font-bold text-sm px-5 py-4 rounded-2xl whitespace-nowrap active:scale-95 transition-transform hover:opacity-90">
+                        获取验证码
+                    </button>
+</div>
+</div>
+</div>
+<!-- Submit Section -->
+<section class="mt-12 flex flex-col gap-6">
+<button class="w-full py-5 bg-primary-container text-on-primary-container font-headline font-extrabold text-lg rounded-full shadow-[0_12px_24px_-8px_rgba(255,215,0,0.4)] active:scale-[0.98] active:bg-primary-dim transition-all flex items-center justify-center gap-2">
+                确认绑定
+                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+<p class="text-center text-[11px] text-on-surface-variant px-8 leading-relaxed opacity-60">
+                绑定即代表您已阅读并同意 
+                <span class="text-secondary font-semibold">《用户服务协议》</span> 与 
+                <span class="text-secondary font-semibold">《隐私政策》</span>
+</p>
+</section>
+<!-- Decorative Element -->
+<div class="mt-auto pt-10 flex justify-center opacity-10">
+<img alt="SunnyPlay Abstract Pattern" class="w-32 h-auto object-contain grayscale" data-alt="Abstract sunny brand pattern for background decoration" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9oGEvk9NaDVRRX1BDVsjWTtmWHggy1VJW-c8exho_tCHaHuJHMCztSEHg5QEtFFxv0oS5-pZximhdzFw71J0scpbhPp2rYxtAy_CvTdxi1XvBSUkAiJlcosbZe2-beUVnz80tLR4hUQTuxt6NjyAClwQdVE1MEJUItHMQqzBBgWUZYZP0MWrebmJxmprB1zvm7xNiIVOXUizGQgkaV4foP1JkVPjgr7FcbY_dwSdCQ2rap4G1G15SJ6zCa4jy9h6xoZXLW5hhCaU"/>
+</div>
+</main>
+<!-- Visual Identity Background Elements (No logic, just branding) -->
+<div class="fixed -top-24 -right-24 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl -z-10"></div>
+<div class="fixed bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-surface-container-low to-transparent -z-10"></div>
+</body></html>

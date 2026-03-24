@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-tertiary-container": "#563500",
+              "on-primary": "#fff2cd",
+              "on-secondary": "#fff0e7",
+              "primary-dim": "#5e4e00",
+              "tertiary": "#805100",
+              "surface-container": "#e7e8e8",
+              "primary-fixed-dim": "#efc900",
+              "on-primary-fixed": "#453900",
+              "on-secondary-container": "#6f3a00",
+              "on-primary-container": "#5b4b00",
+              "surface-container-low": "#f0f1f1",
+              "inverse-surface": "#0c0f0f",
+              "error": "#b02500",
+              "background": "#f6f6f6",
+              "on-tertiary": "#fff0e3",
+              "on-secondary-fixed-variant": "#7c4100",
+              "on-tertiary-fixed-variant": "#623d00",
+              "secondary-fixed-dim": "#ffb375",
+              "tertiary-dim": "#704700",
+              "surface-variant": "#dbdddd",
+              "tertiary-fixed": "#feb246",
+              "outline": "#767777",
+              "on-surface-variant": "#5a5c5c",
+              "on-primary-fixed-variant": "#665500",
+              "secondary-fixed": "#ffc69a",
+              "error-dim": "#b92902",
+              "primary-fixed": "#ffd709",
+              "inverse-on-surface": "#9c9d9d",
+              "secondary": "#8c4a00",
+              "inverse-primary": "#ffd709",
+              "surface-dim": "#d3d5d5",
+              "primary-container": "#ffd709",
+              "on-error": "#ffefec",
+              "on-surface": "#2d2f2f",
+              "outline-variant": "#acadad",
+              "tertiary-container": "#feb246",
+              "on-background": "#2d2f2f",
+              "surface-container-lowest": "#ffffff",
+              "secondary-dim": "#7b4000",
+              "surface-bright": "#f6f6f6",
+              "on-error-container": "#520c00",
+              "surface-tint": "#6c5a00",
+              "surface": "#f6f6f6",
+              "on-secondary-fixed": "#532a00",
+              "surface-container-high": "#e1e3e3",
+              "tertiary-fixed-dim": "#eea439",
+              "primary": "#6c5a00",
+              "error-container": "#f95630",
+              "on-tertiary-fixed": "#3a2300",
+              "surface-container-highest": "#dbdddd",
+              "secondary-container": "#ffc69a"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background min-h-screen flex flex-col items-center">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-high">
+<img alt="User profile" data-alt="User avatar with friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOPc21LkaI4p2OLxav_lpY5LxNryxNw7lv9c0a1RQFZ-WxUhOzktwfrQIURmEjIm_CkPlxNMN59VcxvRmv9nxFqXCYgwE0EcHf4Kj_ovydI--5W6EP_-0a7ze_QKIM6EnzApU226206nNIcwB3IqmJcjmRmXYN3jTcdtHMi6_Mb1i-lL3tmHtA3a-6GZcdrjqJAC4MsWS-rg1EX3vXLvH8xSPUCQdAnA_Ob_EpfHpmO44efCLO3CWZbUaoUpzqBRZ6J1WTuNCzny4"/>
+</div>
+<h1 class="text-[#6c5a00] dark:text-[#FFD700] font-['Plus_Jakarta_Sans'] font-bold text-lg">阳光电竞</h1>
+</div>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">search</span>
+</button>
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+</header>
+<main class="w-full max-w-md pb-32">
+<!-- Status Tabs -->
+<div class="px-5 py-4 sticky top-16 bg-background z-40">
+<div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
+<button class="flex-none px-5 py-2 rounded-full bg-primary-container text-on-primary-container font-headline font-bold text-sm shadow-sm transition-all">全部</button>
+<button class="flex-none px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-headline font-medium text-sm hover:bg-surface-container-high transition-all">待确认</button>
+<button class="flex-none px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-headline font-medium text-sm hover:bg-surface-container-high transition-all">进行中</button>
+<button class="flex-none px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-headline font-medium text-sm hover:bg-surface-container-high transition-all">已完成</button>
+<button class="flex-none px-5 py-2 rounded-full bg-surface-container-lowest text-on-surface-variant font-headline font-medium text-sm hover:bg-surface-container-high transition-all">已取消</button>
+</div>
+</div>
+<!-- Orders List -->
+<div class="px-5 space-y-4">
+<!-- Order Card 1: Ongoing -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden">
+<div class="absolute top-0 right-0">
+<div class="bg-tertiary-container/20 text-on-tertiary-container text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">进行中</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-primary-container/10 flex items-center justify-center">
+<img alt="Game icon" class="w-full h-full object-cover" data-alt="League of Legends stylized champion icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBlP-dDH5L4uhhCvFnaGzn1KNipNI3vRECaf0dNus0QFQB4wshcgFZxRyvD1zwjrKM63RJpyjqKZ5x-QzMGsEncZZcLdLimJP5enKrkSXsMSzWuP_HSRsfCEb0DjoSnc-RgBMddRklJhASmptoTB_bIgAwzYRXdCzQx8X_9qRwyu7a638NjfuKax4mYW6JcKbXNLgWbtYSzrD8Z0a3loMG_xd8O6LXH0zUFKgytl6w5_oWCxGIMb03SSJ0CdLDNJLGOfLTpoAgiKU"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface text-base">Luna_Gamer</h3>
+<p class="text-on-surface-variant text-xs font-medium">League of Legends • Ranked Carry</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-3 flex justify-between items-center">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs">Today, 20:00</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">timelapse</span>
+<span class="text-xs">2小时 • 1局</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">总价</p>
+<p class="text-xl font-headline font-extrabold text-primary">$45.00</p>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="flex-1 py-2.5 rounded-full bg-surface-container-high text-primary font-headline font-bold text-sm active:scale-95 transition-transform">联系Ta</button>
+<button class="flex-1 py-2.5 rounded-full bg-primary text-on-primary-fixed font-headline font-bold text-sm shadow-md active:scale-95 transition-transform">进入房间</button>
+</div>
+</div>
+<!-- Order Card 2: Completed -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden opacity-95">
+<div class="absolute top-0 right-0">
+<div class="bg-surface-container-high text-on-surface-variant text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">已完成</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-primary-container/10 flex items-center justify-center">
+<img alt="Game icon" class="w-full h-full object-cover" data-alt="Retro gaming pixel art controller icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCoZ4bsSgqut4Pu2mximOY5_WV3kBtQIaIl3MLkzgS8WYbcGYIJ1qCZhxaswsiz5VsSpkNXBCxCJZXENcNW51s79ic_Qps8nrvNYbMfo4d2IQOzFdohZ8LpAzcdBo2pa5rccbiMV4AuSfOspCcT5F89qUWpIrbRAPDB3Jg6YS8mWcQ1tjj8Du3mK86A2c5wzvWfLHpC1pEOzk4UH0nFv-Rpvlx9nddtq9q_jhUpqz0pbFixkXk-sVtroHvKWh2mP9rygI6x0L1u4r8"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface text-base">MochiMeow</h3>
+<p class="text-on-surface-variant text-xs font-medium">Genshin Impact • Exploration</p>
+</div>
+</div>
+<div class="bg-surface-container-low/50 rounded-xl p-3 flex justify-between items-center">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">event_available</span>
+<span class="text-xs">昨天, 14:30</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">timelapse</span>
+<span class="text-xs">1小时 • 娱乐上分</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">总价</p>
+<p class="text-xl font-headline font-extrabold text-on-surface-variant">$18.00</p>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="flex-1 py-2.5 rounded-full border border-outline-variant/20 text-on-surface-variant font-headline font-bold text-sm active:scale-95 transition-transform">再来一单</button>
+<button class="flex-1 py-2.5 rounded-full bg-tertiary-container text-on-tertiary-container font-headline font-bold text-sm shadow-md active:scale-95 transition-transform">去评价</button>
+</div>
+</div>
+<!-- Order Card 3: Pending -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden">
+<div class="absolute top-0 right-0">
+<div class="bg-primary-container text-on-primary-container text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">待确认</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-primary-container/10 flex items-center justify-center">
+<img alt="Game icon" class="w-full h-full object-cover" data-alt="Abstract neon gaming logo" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZkLw7Z2hvgTLvmnMy4uP9PtPlJbNOJEPKXTN0b1_kWk6T1ZMIefafb8O7brh_y6YYitEh4gQKq6tS6hmRGJhPhEvgiPRtbtWtGNEVgyxGH0NOBsT6BS6BD4pEEDiGjITAOQqzBItp52oa20RWq97DZvLvg5auLeZxeNbdQjtD20X6lJcb7bxLVc6Ckn-Vyxj2Ha-HNTO7rD56xgCbPz3wQUm4msl1GAkYgseE2hA1evc5BGQnWpxu5oFxUbptmRah9A3IeXtXGIw"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface text-base">Ace_Striker</h3>
+<p class="text-on-surface-variant text-xs font-medium">Valorant • Duo Queue</p>
+</div>
+</div>
+<div class="bg-surface-container-low rounded-xl p-3 flex justify-between items-center">
+<div class="space-y-1">
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">hourglass_empty</span>
+<span class="text-xs">等待确认中...</span>
+</div>
+<div class="flex items-center gap-1.5 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="text-xs">11月24日, 19:00</span>
+</div>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">总价</p>
+<p class="text-xl font-headline font-extrabold text-primary">$32.50</p>
+</div>
+</div>
+<div class="flex gap-3 pt-1">
+<button class="w-full py-2.5 rounded-full bg-surface-container-high text-error font-headline font-bold text-sm active:scale-95 transition-transform">取消订单</button>
+</div>
+</div>
+<!-- Order Card 4: Cancelled -->
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden opacity-70 grayscale-[0.5]">
+<div class="absolute top-0 right-0">
+<div class="bg-error-container/10 text-error text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider">已取消</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 rounded-xl overflow-hidden bg-surface-container-high flex items-center justify-center">
+<img alt="Game icon" class="w-full h-full object-cover" data-alt="Dark gaming headset aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2YmIJNnItMbXeENVsj7hCFgNbIJUjT8aXZVxjC2k5blZm9fKx46QynWnInSZ_I8Ay1ttQ4w12gnCWAUxA-jb2LM6yB5a36__MOMcjaUN3O912Yd-zArsYawj55SnQe-xCXQbKMN54RC00vN_8CGc5WcqDkFJxIEX4be0e-g9ktnGNB5oK_L-ZxMpkkCzqAstyEip7TRkkrxOHSlqqSQ3Xn30x7CeiAwfykm_m18fD2v8gA1RD6hCQ7mVNijHXnpEhUvnfeKinI4Q"/>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-surface text-base">Shadow_Ninja</h3>
+<p class="text-on-surface-variant text-xs font-medium">PUBG • Squad Help</p>
+</div>
+</div>
+<div class="flex justify-between items-center text-on-surface-variant">
+<span class="text-xs italic">用户已取消申请</span>
+<button class="text-xs font-bold text-primary underline">查看详情</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-[1.5rem]">
+<a class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-4 py-1.5 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">receipt_long</span>
+<span class="font-['Plus_Jakarta_Sans'] font-bold text-[10px]">订单</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">local_mall</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">商城</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 hover:opacity-80 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">我的</span>
+</a>
+</nav>
+</body></html>
