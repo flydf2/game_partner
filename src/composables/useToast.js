@@ -1,57 +1,46 @@
 import { ref } from 'vue'
 
-const toastQueue = ref([])
-let currentToast = null
+const toasts = ref([])
+let toastId = 0
 
 export function useToast() {
-  function show(message, type = 'success', duration = 3000) {
-    const toast = {
-      id: Date.now(),
+  const showToast = (message, type = 'success', duration = 3000) => {
+    const id = ++toastId
+    
+    toasts.value.push({
+      id,
       message,
       type,
-      duration,
-      visible: true
-    }
-
-    toastQueue.value.push(toast)
-
+      duration
+    })
+    
     setTimeout(() => {
-      const index = toastQueue.value.findIndex(t => t.id === toast.id)
-      if (index !== -1) {
-        toastQueue.value.splice(index, 1)
-      }
+      toasts.value = toasts.value.filter(toast => toast.id !== id)
     }, duration)
-
-    return toast
   }
-
-  function success(message, duration) {
-    return show(message, 'success', duration)
+  
+  const success = (message, duration = 3000) => {
+    showToast(message, 'success', duration)
   }
-
-  function error(message, duration) {
-    return show(message, 'error', duration)
+  
+  const error = (message, duration = 3000) => {
+    showToast(message, 'error', duration)
   }
-
-  function warning(message, duration) {
-    return show(message, 'warning', duration)
+  
+  const warning = (message, duration = 3000) => {
+    showToast(message, 'warning', duration)
   }
-
-  function info(message, duration) {
-    return show(message, 'info', duration)
+  
+  const info = (message, duration = 3000) => {
+    showToast(message, 'info', duration)
   }
-
-  function clear() {
-    toastQueue.value = []
-  }
-
+  
   return {
-    toastQueue,
-    show,
+    showToast,
     success,
     error,
     warning,
     info,
-    clear
+    toasts
   }
 }

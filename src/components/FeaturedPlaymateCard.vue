@@ -1,7 +1,7 @@
 <template>
   <router-link 
     :to="`/expert/${playmate.id}`" 
-    class="col-span-2 bg-surface-container-lowest rounded-[1.5rem] sm:rounded-[2rem] p-4 sm:p-5 shadow-sm flex items-center gap-4 sm:gap-5 relative overflow-hidden group hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:scale-95"
+    class="col-span-2 bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm flex items-center gap-5 relative overflow-hidden group hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:scale-95"
   >
     <div class="w-24 h-24 rounded-2xl overflow-hidden bg-surface-container flex-shrink-0 group">
       <img :alt="playmate.name" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" :src="playmate.avatar"/>
@@ -30,7 +30,15 @@ import { defineProps } from 'vue'
 const props = defineProps({
   playmate: {
     type: Object,
-    required: true
+    required: true,
+    default: () => ({
+      id: '',
+      name: '',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      price: 0,
+      tags: [],
+      description: ''
+    })
   }
 })
 </script>

@@ -86,7 +86,7 @@ const handleBack = () => {
       <div class="w-6"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4 space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 space-y-4">
       <div class="bg-surface-container-lowest rounded-3xl overflow-hidden">
         <div
           v-for="item in privacyItems"

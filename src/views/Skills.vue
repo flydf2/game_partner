@@ -1,22 +1,20 @@
 <template>
   <div class="min-h-screen bg-background text-on-background font-body pb-24">
-    <!-- TopAppBar -->
-    <nav class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
-        <div class="flex items-center gap-3">
-          <button @click="handleBack" class="text-primary active:scale-95 duration-200">
-            <span class="material-symbols-outlined">arrow_back</span>
-          </button>
-          <h1 class="font-headline font-bold text-lg text-primary">我的技能</h1>
-        </div>
-        <button @click="handleAddSkill" class="text-primary text-sm font-semibold active:scale-95 duration-200">
-          添加技能
-        </button>
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">我的技能</h1>
       </div>
-      <div class="bg-neutral-200/50 h-[1px] w-full"></div>
-    </nav>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
+    </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
       <!-- 技能分类 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <h2 class="text-sm font-bold text-on-surface mb-4">技能分类</h2>
@@ -170,6 +168,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { skillApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
@@ -220,41 +219,16 @@ const loadSkills = async () => {
   loading.value = true
   error.value = ''
   try {
-    // 模拟数据
-    skills.value = [
-      {
-        id: 1,
-        game: 'LOL',
-        skill: '钻石段位',
-        level: 'advanced',
-        levelText: '高级',
-        certificationStatus: '已认证',
-        serviceCount: 45,
-        rating: 4.8
-      },
-      {
-        id: 2,
-        game: 'CS:GO',
-        skill: '大师陪玩',
-        level: 'expert',
-        levelText: '专家',
-        certificationStatus: '已认证',
-        serviceCount: 32,
-        rating: 4.9
-      },
-      {
-        id: 3,
-        game: 'PUBG',
-        skill: '吃鸡大神',
-        level: 'intermediate',
-        levelText: '中级',
-        certificationStatus: '待认证',
-        serviceCount: 15,
-        rating: 4.5
-      }
-    ]
+    const response = await skillApi.getSkills()
+    if (response.success || response.code === 0) {
+      skills.value = response.data || []
+    } else {
+      throw new Error(response.message || response.msg || '获取技能列表失败')
+    }
   } catch (err) {
-    error.value = '获取技能列表失败'
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取技能列表失败:', err)
   } finally {
     loading.value = false
   }
@@ -270,7 +244,6 @@ const handleAddSkill = () => {
 
 const handleEditSkill = (skillId) => {
   console.log('编辑技能:', skillId)
-  // 这里可以打开编辑对话框
 }
 
 const handleSubmitSkill = async () => {
@@ -280,33 +253,39 @@ const handleSubmitSkill = async () => {
   }
   
   try {
-    // 模拟添加技能
-    const skillLevelMap = {
-      beginner: '新手',
-      intermediate: '中级',
-      advanced: '高级',
-      expert: '专家'
-    }
-    
-    skills.value.push({
-      id: skills.value.length + 1,
-      game: newSkill.value.game,
-      skill: newSkill.value.skill,
-      level: newSkill.value.level,
-      levelText: skillLevelMap[newSkill.value.level],
-      certificationStatus: '待认证',
-      serviceCount: 0,
-      rating: 0
-    })
-    
-    showAddSkillDialog.value = false
-    newSkill.value = {
-      game: '',
-      skill: '',
-      level: ''
+    const response = await skillApi.addSkill(newSkill.value)
+    if (response.success || response.code === 0) {
+      const skillLevelMap = {
+        beginner: '新手',
+        intermediate: '中级',
+        advanced: '高级',
+        expert: '专家'
+      }
+      
+      skills.value.push({
+        id: skills.value.length + 1,
+        game: newSkill.value.game,
+        skill: newSkill.value.skill,
+        level: newSkill.value.level,
+        levelText: skillLevelMap[newSkill.value.level],
+        certificationStatus: '待认证',
+        serviceCount: 0,
+        rating: 0
+      })
+      
+      showAddSkillDialog.value = false
+      newSkill.value = {
+        game: '',
+        skill: '',
+        level: ''
+      }
+    } else {
+      throw new Error(response.message || response.msg || '添加技能失败')
     }
   } catch (err) {
-    error.value = '添加技能失败'
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('添加技能失败:', err)
   }
 }
 

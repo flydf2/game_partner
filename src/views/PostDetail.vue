@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { communityApi } from '../api/index.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,100 +11,140 @@ const post = ref(null)
 const comments = ref([])
 const newComment = ref('')
 const loading = ref(true)
+const error = ref(null)
 
 const loadPostDetail = async () => {
   try {
     loading.value = true
-    // 模拟数据
-    post.value = {
-      id: postId.value,
-      user: {
-        name: '林间风',
-        avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlkyk2DWoqAMqSUflUl265Ii7S--sjgKUnoHp_qkIK9uW4YWK4t57peM5UOx0i92fhird_hlkuwYjce1i1Ix_HS2QYkENbRjQQUHaf9k7KsxK7U_719an0BAAZY6q7T-oJ9O17vsi77mdMlksC6JbwPkj3JziYokPVUER-nDsZBSTTiMXrmSdKxN7ApaCB6R7rc1YLFHhTbIZVtrVpTZudIk6w8vA4jVA3Zusi4DRCceevuB13RK2Z6n3VYD-yhN22EmkUCuLdXxE',
-        game: '英雄联盟'
-      },
-      time: '2小时前',
-      content: '今天在峡谷遇到一个超级温柔的辅助，操作意识拉满！有人想一起组队排位吗？坐标艾欧尼亚，主玩AD。 ✨',
-      images: [
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBU8XrMhk3VFwj3Ceer0yCVb-HelGKX5ryLoHAYthnekinYCfvHoJ83xSPEZdrL2tht2CTf_d1atj0kQiKVMY41s8kFOBgY2l5a9dPvoP6yXh3HyA9pdom7W1PkI1l7drYVsVSEeg-BnjsOK2tD_lvHVqzF3VZCAhg6pbcyZj11rhzX6V52RT4jlbNYqEKBRxP818vVewrnT3E6phVAdGXO9zQIWGaIvWWk6pXEzjpNwOh3xDn8FNjv-sGQOhsOt1srbfvB0MFCo-A',
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBq4AH6Y7D9L3js3AeN_vpUSza4-PdEYsZbo6sLRP3jUY5UwegYPx3xB9NLMbxzijv13O-siVI5RljmMLqN_Gr5WevHBvslpJbeCO97PCdtgKwNIXBrfQfGanIkq-uktmkkEyoBN9MXdNEwYcjzTObAUzdyii37QkpNmj9bZP7Bcl5uaq012JA-ku0hKny8SxUd9oCA63jFafkb_YzLfo3nDoPbHw27pT7fpKdYQd2sZiXMQL7sMljpCn5eqqS3c5aJtgaLu6pHQpU'
-      ],
-      likes: 1200,
-      comments: 348,
-      isLiked: false,
-      isFollowing: false
-    }
+    error.value = null
     
-    // 模拟评论数据
-    comments.value = [
-      {
-        id: 1,
-        user: {
-          name: '小禾悠悠',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAo3hiZMbuWCmrkmqDp0MNg-nzMlqn4AgGNgFofJ-IJJ59AeEGJZox-r1xg8drTN14GtBID78Yfm0NN6Wl-MX_ZHWaF8-LdFumF5to5bPc46yM5zIaucC3a4KP-Y2-i2tCwQd-duGHsg9F8AzLemDvG9s_6W3hw-pjjJN-PKkQI7oILcDHGkalxMkbZWOmaqIaik3owuV2Ghbrqr3MraHwibw8jkhxJWFQhPSpHM7em0RfJhdOUnqGVa3qBY2EA9DWUXnYNrTFFiM4'
-        },
-        time: '1小时前',
-        content: '我也在艾欧尼亚，一起玩啊！'
-      },
-      {
-        id: 2,
-        user: {
-          name: 'Ace玩家',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwJXWYv1t2M1S8jlZ3nJwEK4xXnZfwXDgO_ryYTFAAPD3NJ6pmTUhpeJsra6qrl4sekbm3zZ7874XLIqf6W__ReW-xU87woTXwpcGzN5Q3b-1FAHT-7Q9ZJvEhBpGxJwr8JPIoII8MLGmKtsx2rIr1BNvzlerT6UrU1DTTnRE1vevhiuXzR1drRXXUNZdGjDRSQmxQUYJwpOCdchivrmLpaAcpR5c8eCBholl_o0fI_vrf4Lu_oTTxHGoqzJuNdhfVVbxvwguDqZQ'
-        },
-        time: '30分钟前',
-        content: '辅助玩家报道！'
+    // 使用真实 API 获取帖子详情
+    const response = await communityApi.getPostDetail(postId.value)
+    
+    if (response.success || response.code === 0) {
+      // 处理 API 返回的数据格式
+      const postData = response.data?.data || response.data
+      
+      // 转换 images 字符串为数组
+      let imagesArray = []
+      if (postData.images) {
+        if (Array.isArray(postData.images)) {
+          imagesArray = postData.images
+        } else {
+          imagesArray = postData.images.split(',')
+        }
       }
-    ]
-  } catch (error) {
-    console.error('加载帖子详情失败:', error)
+      
+      // 构建完整的帖子数据结构
+      post.value = {
+        ...postData,
+        images: imagesArray,
+        user: postData.user || {
+          id: postData.userId || postData.user_id || '1',
+          name: postData.user?.name || `用户${postData.userId || postData.user_id || '1'}`,
+          avatar: postData.user?.avatar || `https://randomuser.me/api/portraits/${(postData.userId || postData.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(postData.userId || postData.user_id || 1) % 70 + 1}.jpg`,
+          game: postData.user?.game || postData.game || '未知游戏'
+        },
+        time: postData.time || formatTime(postData.createdAt),
+        isLiked: postData.isLiked || false,
+        isFollowing: postData.isFollowing || false
+      }
+      
+      // 处理评论
+      comments.value = (postData.commentsList || []).map(comment => ({
+        ...comment,
+        user: comment.user || {
+          id: comment.userId || comment.user_id || '1',
+          name: comment.user?.name || `用户${comment.userId || comment.user_id || '1'}`,
+          avatar: comment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.userId || comment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.userId || comment.user_id || 1) % 70 + 1}.jpg`
+        },
+        time: comment.time || formatTime(comment.createdAt)
+      }))
+    } else {
+      error.value = response.message || response.msg || '加载失败'
+    }
+  } catch (err) {
+    console.error('加载帖子详情失败:', err)
+    error.value = '网络错误，请稍后重试'
   } finally {
     loading.value = false
   }
 }
 
-const handleLike = () => {
+// 时间格式化函数
+const formatTime = (dateString) => {
+  const now = new Date()
+  const date = new Date(dateString)
+  const diff = now - date
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+  
+  if (minutes < 1) return '刚刚'
+  if (minutes < 60) return `${minutes}分钟前`
+  if (hours < 24) return `${hours}小时前`
+  if (days < 7) return `${days}天前`
+  return date.toLocaleDateString()
+}
+
+const handleLike = async () => {
   if (post.value) {
-    post.value.isLiked = !post.value.isLiked
-    post.value.likes += post.value.isLiked ? 1 : -1
+    try {
+      const response = await communityApi.likePost(postId.value)
+      if (response.success) {
+        post.value.isLiked = !post.value.isLiked
+        post.value.likes += post.value.isLiked ? 1 : -1
+      }
+    } catch (error) {
+      console.error('点赞失败:', error)
+    }
   }
 }
 
-const handleComment = () => {
+const handleComment = async () => {
   if (!newComment.value.trim()) return
   
-  const comment = {
-    id: Date.now(),
-    user: {
-      name: '我',
-      avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
-    },
-    time: '刚刚',
-    content: newComment.value.trim()
+  try {
+    const response = await communityApi.commentPost(postId.value, newComment.value.trim())
+    if (response.success && response.data) {
+      comments.value.unshift(response.data)
+      post.value.comments++
+      newComment.value = ''
+    }
+  } catch (error) {
+    console.error('评论失败:', error)
   }
-  
-  comments.value.unshift(comment)
-  post.value.comments++
-  newComment.value = ''
 }
 
 const handleShare = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: post.value.user.name + '的动态',
-      text: post.value.content,
-      url: window.location.href
-    })
-  } else {
-    // 复制链接
-    navigator.clipboard.writeText(window.location.href)
-    alert('链接已复制到剪贴板')
+  if (post.value && post.value.user) {
+    if (navigator.share) {
+      navigator.share({
+        title: post.value.user.name + '的动态',
+        text: post.value.content,
+        url: window.location.href
+      })
+    } else {
+      // 复制链接
+      navigator.clipboard.writeText(window.location.href)
+      alert('链接已复制到剪贴板')
+    }
   }
 }
 
-const handleFollow = () => {
-  if (post.value) {
-    post.value.isFollowing = !post.value.isFollowing
+const handleFollow = async () => {
+  if (post.value && post.value.user) {
+    try {
+      // 这里需要根据实际 API 设计调用关注接口
+      // 假设用户ID在 post.user.id 中
+      if (post.value.user.id) {
+        // 这里应该调用关注用户的 API
+        // 暂时先更新本地状态
+        post.value.isFollowing = !post.value.isFollowing
+      }
+    } catch (error) {
+      console.error('关注失败:', error)
+    }
   }
 }
 
@@ -137,21 +178,34 @@ onMounted(() => {
       </div>
     </main>
 
-    <main v-else-if="post" class="pt-20 px-5 max-w-2xl mx-auto space-y-4">
+    <main v-else-if="error" class="pt-20 px-5 max-w-2xl mx-auto">
+      <div class="flex flex-col items-center justify-center py-12 space-y-4">
+        <span class="material-symbols-outlined text-4xl text-error">error_outline</span>
+        <p class="text-error text-center">{{ error }}</p>
+        <button 
+          @click="loadPostDetail"
+          class="px-6 py-2 bg-primary text-primary-container rounded-full font-medium hover:opacity-80 transition-opacity"
+        >
+          重试
+        </button>
+      </div>
+    </main>
+
+    <main v-else-if="post" class="pt-20 px-5 max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- 帖子内容 -->
       <article class="bg-surface-container-lowest rounded-3xl p-5">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-3">
             <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container">
-              <img :alt="post.user.name" class="w-full h-auto" :src="post.user.avatar" />
+              <img :alt="post.user?.name || '用户'" class="w-full h-auto" :src="post.user?.avatar || 'https://randomuser.me/api/portraits/men/32.jpg'" />
             </div>
             <div>
-              <h3 class="font-bold text-on-surface">{{ post.user.name }}</h3>
-              <p class="text-[0.6875rem] text-outline">{{ post.time }} · {{ post.user.game }}</p>
+              <h3 class="font-bold text-on-surface">{{ post.user?.name || '用户' }}</h3>
+              <p class="text-[0.6875rem] text-outline">{{ post.time }} · {{ post.user?.game || '未知游戏' }}</p>
             </div>
           </div>
           <button
-            v-if="!post.isFollowing"
+            v-if="!post.isFollowing && post.user?.id"
             @click="handleFollow"
             class="text-primary font-bold px-4 py-1.5 bg-primary-container/10 rounded-full text-sm active:scale-95 transition-transform"
           >

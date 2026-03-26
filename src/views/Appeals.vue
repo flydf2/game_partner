@@ -1,49 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { appealApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
 const activeTab = ref('all')
 
-const appeals = ref([
-  {
-    id: 'SP202310240092',
-    type: '违规言论/引战',
-    status: 'processing',
-    statusText: '处理中',
-    statusClass: 'bg-primary-container/20 text-primary',
-    target: {
-      name: '夜火狂潮',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbFFFTOLXk3uh3QYfT5K_O_xwli3756CWmaRPqDURn9hQdMMVr69OFKFYEukdPgpij-8M4aF0yOB8_9gnq9msePksq2gNyksu7Hkg7P-D35FvPBA2Twqv76_3GXssW6kh69xJayXRj3FCsOiIYAaPAlkp5YLofI2Wslskx-FnkMhpF6MMJlsszgOF44PrEgT5KnzAF1JGKBQvsLyc-BpgyvqRjkfkJTD6-ugewCJITW4SZdjMZ_eNFAL71PG_4uVmFZoTbVoilpW0'
-    },
-    submitTime: '2023.10.24 14:20'
-  },
-  {
-    id: 'SP202310220145',
-    type: '消极比赛/挂机',
-    status: 'completed',
-    statusText: '已完成',
-    statusClass: 'bg-emerald-100 text-emerald-700',
-    target: {
-      name: '小甜心软软',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBh9xMrg68oicE9e-VAIhkrdgB1TkNcEtOcvR3FySiy-94rXsb84VQ4BrXjM2LNCCZbLlFep70TkMaAG8UPDOhjF2rolCEzNfjo2qxKZ5OVTvk9p0VjQooN9hnjHyviPZDE_C8I1mwk0p_3a7zwtRplZx3bi-LaJ5iSDXBeasRWzS7qap6X_QquQkk4wj3lYqsRWzKW_AMARsM0VMQxUylN0AGwq_3Bx5yVh7htFKk6AKYjs7hUVfnCLnXsj4Ftbf4HEdzH7_bHfCE'
-    },
-    submitTime: '2023.10.22 09:15'
-  },
-  {
-    id: 'SP202310210887',
-    type: '代练嫌疑',
-    status: 'pending',
-    statusText: '待处理',
-    statusClass: 'bg-neutral-200 text-neutral-500',
-    target: {
-      name: '野王带你飞',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgCfdtE87j_277mqHdGOrVB5ODdk3PB9qPrI4KHjwEwSoOCXY0PeDGmnjvQOV4amb7ApX9KpPnJdC_O441R5hJqPFtRFp53BwPBmmq_OdGBWQlxjL4KuGZcflFM3yGX98CoBIX2NP7o698CcpxL-c5ojRrLjgGZu-Nu3phfR801amAJqexlBDP66TlaB2FgQdLiURLe3N5rsHVf4WI86UXNKfO-rHzaRM2REmbRbUiHP737OFWo18X-rfw-c0iVZCVRILangWQY0A'
-    },
-    submitTime: '2023.10.21 21:00'
-  }
-])
+const appeals = ref([])
+const loading = ref(false)
+const error = ref('')
 
 const tabs = [
   { id: 'all', label: '全部' },
@@ -51,6 +17,26 @@ const tabs = [
   { id: 'processing', label: '处理中' },
   { id: 'completed', label: '已完成' }
 ]
+
+const loadAppeals = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await appealApi.getAppeals()
+    if (response.success || response.code === 0) {
+      appeals.value = response.data || []
+    } else {
+      throw new Error(response.message || response.msg || '获取申诉列表失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取申诉列表失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleTabChange = (tabId) => {
   activeTab.value = tabId
@@ -61,16 +47,18 @@ const handleBack = () => {
 }
 
 const handleViewDetail = (appeal) => {
-  // 跳转到申诉详情页
   console.log('查看申诉详情:', appeal.id)
 }
 
 const handleAppeal = () => {
-  // 跳转到新申诉页面
   console.log('去申诉')
 }
 
 const filteredAppeals = ref(appeals.value)
+
+onMounted(() => {
+  loadAppeals()
+})
 </script>
 
 <template>
@@ -85,7 +73,24 @@ const filteredAppeals = ref(appeals.value)
       <div class="w-6"></div>
     </header>
 
-    <main class="pt-24 pb-32 px-5">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+      <!-- 加载状态 -->
+      <div v-if="loading" class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+
+      <!-- 错误状态 -->
+      <div v-else-if="error" class="bg-error/10 border border-error/20 rounded-3xl p-8 text-center">
+        <span class="material-symbols-outlined text-error text-4xl mb-4">error_outline</span>
+        <p class="text-sm text-error mb-4">{{ error }}</p>
+        <button
+          @click="loadAppeals"
+          class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
+        >
+          重试
+        </button>
+      </div>
+
       <!-- Tabs Section -->
       <div class="flex items-center justify-between py-6 overflow-x-auto no-scrollbar gap-2">
         <button

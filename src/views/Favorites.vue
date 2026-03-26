@@ -1,53 +1,37 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { userApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const favorites = ref([
-  {
-    id: 1,
-    type: 'expert',
-    expertId: '1',
-    avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
-    name: '电竞少女',
-    game: '英雄联盟',
-    skill: '钻石段位',
-    price: 48,
-    rating: 4.9,
-    orders: 128,
-    tags: ['技术陪练', '温柔语聊']
-  },
-  {
-    id: 2,
-    type: 'expert',
-    expertId: '2',
-    avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-    name: '游戏大师',
-    game: 'CS:GO',
-    skill: '大师段位',
-    price: 52,
-    rating: 4.8,
-    orders: 95,
-    tags: ['技术陪练', '战术指导']
-  },
-  {
-    id: 3,
-    type: 'expert',
-    expertId: '3',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    name: '安妮喵呜',
-    game: '绝地求生',
-    skill: '温柔语聊',
-    price: 55,
-    rating: 5.0,
-    orders: 236,
-    tags: ['温柔语聊', '游戏陪伴']
-  }
-])
-
+const favorites = ref([])
 const loading = ref(false)
 const error = ref('')
+
+const loadFavorites = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await userApi.getFavorites()
+    if (response.success || response.code === 0) {
+      // 清理avatar字段中的多余空格和反引号
+      favorites.value = (response.data || []).map(favorite => ({
+        ...favorite,
+        avatar: favorite.avatar ? favorite.avatar.trim().replace(/^`|`$/g, '') : ''
+      }))
+    } else {
+      throw new Error(response.message || response.msg || '获取收藏列表失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取收藏列表失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleExpertDetail = (expertId) => {
   router.push(`/expert/${expertId}`)
@@ -55,9 +39,15 @@ const handleExpertDetail = (expertId) => {
 
 const handleRemoveFavorite = async (favoriteId) => {
   try {
-    // 模拟取消收藏
-    favorites.value = favorites.value.filter(f => f.id !== favoriteId)
+    const response = await userApi.removeFavorite(favoriteId)
+    if (response.success || response.code === 0) {
+      favorites.value = favorites.value.filter(f => f.id !== favoriteId)
+    } else {
+      throw new Error(response.message || response.msg || '取消收藏失败')
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
     console.error('取消收藏失败:', err)
   }
 }
@@ -65,6 +55,16 @@ const handleRemoveFavorite = async (favoriteId) => {
 const handleBack = () => {
   router.back()
 }
+
+// 格式化标签为数组
+const formatTags = (tags) => {
+  if (!tags) return []
+  return tags.split(',').map(tag => tag.trim())
+}
+
+onMounted(() => {
+  loadFavorites()
+})
 </script>
 
 <template>
@@ -79,10 +79,10 @@ const handleBack = () => {
         </span>
         <h1 class="font-headline font-bold text-lg text-primary">我的收藏</h1>
       </div>
-      <div class="w-6"></div>
+      <div class="text-sm text-on-surface-variant">{{ favorites.length }}人</div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -93,7 +93,7 @@ const handleBack = () => {
         <span class="material-symbols-outlined text-error text-4xl mb-4">error_outline</span>
         <p class="text-sm text-error mb-4">{{ error }}</p>
         <button
-          @click="loading = false; error = ''"
+          @click="loadFavorites"
           class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
         >
           重试
@@ -124,22 +124,31 @@ const handleBack = () => {
         >
           <div class="flex items-start gap-4">
             <div
-              @click="handleExpertDetail(favorite.expertId)"
-              class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+              @click="handleExpertDetail(favorite.expertId || favorite.userId)"
+              class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer relative"
             >
-              <img :alt="favorite.name" class="w-full h-full object-cover" :src="favorite.avatar" />
+              <img :alt="favorite.nickname || favorite.name" class="w-full h-full object-cover" :src="favorite.avatar" />
+              <!-- 在线状态 -->
+              <div 
+                v-if="favorite.isOnline" 
+                class="absolute bottom-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
+              ></div>
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between mb-2">
                 <div
-                  @click="handleExpertDetail(favorite.expertId)"
+                  @click="handleExpertDetail(favorite.expertId || favorite.userId)"
                   class="flex-1 min-w-0 cursor-pointer"
                 >
-                  <h3 class="font-bold text-on-surface truncate">{{ favorite.name }}</h3>
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-on-surface truncate">{{ favorite.nickname || favorite.name }}</h3>
+                    <span v-if="favorite.title" class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">{{ favorite.title }}</span>
+                  </div>
+                  <p class="text-xs text-on-surface-variant mt-1 truncate">{{ favorite.description }}</p>
                   <div class="flex items-center gap-1 mt-1">
                     <span class="material-symbols-outlined text-primary text-sm">star</span>
                     <span class="text-sm font-medium text-primary">{{ favorite.rating }}</span>
-                    <span class="text-xs text-on-surface-variant">· {{ favorite.orders }}单</span>
+                    <span class="text-xs text-on-surface-variant">· {{ favorite.orders || 0 }}单</span>
                   </div>
                 </div>
                 <button
@@ -149,25 +158,41 @@ const handleBack = () => {
                   favorite
                 </button>
               </div>
+              
+              <!-- 游戏信息 -->
               <div class="flex items-center gap-2 mb-2">
                 <span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
                   {{ favorite.game }}
                 </span>
                 <span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
-                  {{ favorite.skill }}
+                  {{ favorite.rank || favorite.skill }}
                 </span>
               </div>
+              
+              <!-- 标签 -->
+              <div class="flex items-center gap-2 mb-2 flex-wrap">
+                <span
+                  v-for="tag in formatTags(favorite.tags)"
+                  :key="tag"
+                  class="bg-surface-container text-on-surface-variant text-[10px] px-2 py-0.5 rounded-full font-medium"
+                >
+                  {{ tag }}
+                </span>
+              </div>
+              
+              <!-- 统计信息 -->
               <div class="flex items-center justify-between">
-                <div class="flex gap-1 flex-wrap">
-                  <span
-                    v-for="tag in favorite.tags"
-                    :key="tag"
-                    class="bg-surface-container text-on-surface-variant text-[10px] px-2 py-0.5 rounded"
-                  >
-                    {{ tag }}
-                  </span>
+                <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                  <div class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">favorite</span>
+                    <span>{{ favorite.likes || 0 }}赞</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <span class="material-symbols-outlined text-sm">level</span>
+                    <span>Lv{{ favorite.level || 1 }}</span>
+                  </div>
                 </div>
-                <span class="text-lg font-bold text-primary">¥{{ favorite.price }}/小时</span>
+                <span class="text-lg font-bold text-primary">¥{{ favorite.price }}/{{ favorite.unit || '局' }}</span>
               </div>
             </div>
           </div>

@@ -1,75 +1,34 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { userApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const history = ref([
-  {
-    id: 1,
-    type: 'expert',
-    expertId: '1',
-    avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
-    name: '电竞少女',
-    game: '英雄联盟',
-    skill: '钻石段位',
-    price: 48,
-    rating: 4.9,
-    viewTime: '2026-03-23 18:30'
-  },
-  {
-    id: 2,
-    type: 'expert',
-    expertId: '2',
-    avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-    name: '游戏大师',
-    game: 'CS:GO',
-    skill: '大师段位',
-    price: 52,
-    rating: 4.8,
-    viewTime: '2026-03-23 15:20'
-  },
-  {
-    id: 3,
-    type: 'expert',
-    expertId: '3',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    name: '安妮喵呜',
-    game: '绝地求生',
-    skill: '温柔语聊',
-    price: 55,
-    rating: 5.0,
-    viewTime: '2026-03-22 20:15'
-  },
-  {
-    id: 4,
-    type: 'expert',
-    expertId: '4',
-    avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
-    name: '电竞王子',
-    game: '王者荣耀',
-    skill: '王者段位',
-    price: 60,
-    rating: 4.7,
-    viewTime: '2026-03-22 10:30'
-  },
-  {
-    id: 5,
-    type: 'expert',
-    expertId: '5',
-    avatar: 'https://randomuser.me/api/portraits/women/66.jpg',
-    name: '游戏小仙女',
-    game: '原神',
-    skill: '深渊满星',
-    price: 45,
-    rating: 4.9,
-    viewTime: '2026-03-21 19:45'
-  }
-])
-
+const history = ref([])
 const loading = ref(false)
 const error = ref('')
 const showClearDialog = ref(false)
+
+const loadHistory = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await userApi.getBrowseHistory()
+    if (response.success || response.code === 0) {
+      history.value = response.data || []
+    } else {
+      throw new Error(response.message || response.msg || '获取浏览历史失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取浏览历史失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleExpertDetail = (expertId) => {
   router.push(`/expert/${expertId}`)
@@ -77,10 +36,16 @@ const handleExpertDetail = (expertId) => {
 
 const handleClearHistory = async () => {
   try {
-    // 模拟清空历史
-    history.value = []
-    showClearDialog.value = false
+    const response = await userApi.clearHistory()
+    if (response.success || response.code === 0) {
+      history.value = []
+      showClearDialog.value = false
+    } else {
+      throw new Error(response.message || response.msg || '清空历史失败')
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
     console.error('清空历史失败:', err)
   }
 }
@@ -106,6 +71,10 @@ const formatViewTime = (time) => {
     return date.toLocaleDateString('zh-CN')
   }
 }
+
+onMounted(() => {
+  loadHistory()
+})
 </script>
 
 <template>
@@ -130,7 +99,7 @@ const formatViewTime = (time) => {
       <div v-else class="w-6"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

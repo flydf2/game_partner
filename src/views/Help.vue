@@ -1,22 +1,20 @@
 <template>
   <div class="min-h-screen bg-background text-on-background font-body pb-24">
-    <!-- TopAppBar -->
-    <nav class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
-        <div class="flex items-center gap-3">
-          <button @click="handleBack" class="text-primary active:scale-95 duration-200">
-            <span class="material-symbols-outlined">arrow_back</span>
-          </button>
-          <h1 class="font-headline font-bold text-lg text-primary">帮助与客服</h1>
-        </div>
-        <button @click="handleContactSupport" class="text-primary text-sm font-semibold active:scale-95 duration-200">
-          联系客服
-        </button>
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">帮助与客服</h1>
       </div>
-      <div class="bg-neutral-200/50 h-[1px] w-full"></div>
-    </nav>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
+    </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
       <!-- 常见问题 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <h2 class="text-sm font-bold text-on-surface mb-4">常见问题</h2>

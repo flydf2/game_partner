@@ -99,7 +99,7 @@ const handleBack = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32">
+  <div class="min-h-screen bg-surface text-on-surface">
     <header class="flex justify-between items-center px-5 h-16 w-full fixed top-0 z-50 bg-surface-container-highest/50 backdrop-blur-xl">
       <div class="flex items-center gap-4">
         <span @click="handleBack" class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity">
@@ -276,15 +276,15 @@ const handleBack = () => {
           </div>
         </div>
       </section>
-    </main>
 
-    <div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl px-6 pb-8 pt-4 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50">
-      <button
-        @click="handleApply"
-        class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"
-      >
-        应用筛选
-      </button>
-    </div>
+      <div class="bg-surface-container-low rounded-xl p-5 shadow-sm">
+        <button
+          @click="handleApply"
+          class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"
+        >
+          应用筛选
+        </button>
+      </div>
+    </main>
   </div>
 </template>

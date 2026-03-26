@@ -1,15 +1,19 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user.js'
+import { useToast } from '../composables/useToast.js'
 
 const router = useRouter()
+const userStore = useUserStore()
+const { showToast } = useToast()
 
 const registerForm = ref({
+  username: '',
   phone: '',
   code: '',
   password: '',
-  confirmPassword: '',
-  nickname: ''
+  confirmPassword: ''
 })
 
 const showPassword = ref(false)
@@ -31,10 +35,9 @@ const handleSendCode = async () => {
   }
 
   try {
-    // 模拟发送验证码
-    await new Promise(resolve => setTimeout(resolve, 500))
+    await userStore.sendSmsCode(registerForm.value.phone)
+    showToast('验证码发送成功', 'success')
     
-    // 开始倒计时
     countdown.value = 60
     const timer = setInterval(() => {
       countdown.value--
@@ -43,14 +46,14 @@ const handleSendCode = async () => {
       }
     }, 1000)
   } catch (err) {
-    error.value = '发送验证码失败'
+    error.value = err.message || '发送验证码失败'
+    showToast(error.value, 'error')
   }
 }
 
 const handleRegister = async () => {
-  if (!registerForm.value.phone || !registerForm.value.code || 
-      !registerForm.value.password || !registerForm.value.confirmPassword || 
-      !registerForm.value.nickname) {
+  if (!registerForm.value.username || !registerForm.value.phone || !registerForm.value.code || 
+      !registerForm.value.password || !registerForm.value.confirmPassword) {
     error.value = '请填写完整信息'
     return
   }
@@ -79,16 +82,18 @@ const handleRegister = async () => {
   error.value = ''
   
   try {
-    // 模拟注册请求
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await userStore.register({
+      username: registerForm.value.username,
+      phone: registerForm.value.phone,
+      code: registerForm.value.code,
+      password: registerForm.value.password
+    })
     
-    // 模拟注册成功
-    localStorage.setItem('auth_token', 'mock_token_' + Date.now())
-    
-    // 跳转到首页
+    showToast('注册成功', 'success')
     router.push('/')
   } catch (err) {
-    error.value = '注册失败，请稍后重试'
+    error.value = err.message || '注册失败，请稍后重试'
+    showToast(error.value, 'error')
   } finally {
     loading.value = false
   }
@@ -141,6 +146,20 @@ const toggleConfirmPasswordVisibility = () => {
             <span class="text-sm text-error">{{ error }}</span>
           </div>
 
+          <!-- 用户名输入 -->
+          <div class="space-y-2">
+            <label class="text-sm font-semibold text-on-surface">用户名</label>
+            <div class="relative">
+              <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">person</span>
+              <input
+                v-model="registerForm.username"
+                type="text"
+                placeholder="请输入用户名"
+                class="w-full bg-surface-container-low rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
+              />
+            </div>
+          </div>
+
           <!-- 手机号输入 -->
           <div class="space-y-2">
             <label class="text-sm font-semibold text-on-surface">手机号</label>
@@ -175,20 +194,6 @@ const toggleConfirmPasswordVisibility = () => {
               >
                 {{ countdown > 0 ? `${countdown}秒后重试` : '获取验证码' }}
               </button>
-            </div>
-          </div>
-
-          <!-- 昵称输入 -->
-          <div class="space-y-2">
-            <label class="text-sm font-semibold text-on-surface">昵称</label>
-            <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline">person</span>
-              <input
-                v-model="registerForm.nickname"
-                type="text"
-                placeholder="请输入昵称"
-                class="w-full bg-surface-container-low rounded-2xl py-4 pl-12 pr-4 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
-              />
             </div>
           </div>
 

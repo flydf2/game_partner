@@ -137,7 +137,7 @@ const handleLogout = async () => {
       <div class="w-6"></div>
     </nav>
 
-    <main class="pt-20 px-5 max-w-2xl mx-auto space-y-4 space-y-6">
+    <main class="pt-20 px-5 max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 space-y-6">
       <div v-for="(category, index) in settings" :key="category.category" class="space-y-4">
         <h2 class="text-sm font-bold text-on-surface-variant px-1">{{ category.category }}</h2>
         

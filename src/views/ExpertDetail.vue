@@ -1,26 +1,20 @@
 <template>
   <div class="min-h-screen bg-surface">
     <!-- 顶部导航栏 -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-surface_container_highest backdrop-blur-md">
-      <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <button @click="handleBack" class="flex items-center space-x-2">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-          </svg>
-          <span class="text-title-md font-medium">返回</span>
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-4">
+        <button @click="handleBack" class="flex items-center active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-2xl text-zinc-900">arrow_back</span>
         </button>
-        <div class="flex items-center space-x-4">
-          <button @click="handleSearch" class="w-8 h-8 flex items-center justify-center rounded-full transition-all hover:bg-surface_container_low">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-            </svg>
-          </button>
-          <button @click="handleNotification" class="w-8 h-8 flex items-center justify-center rounded-full transition-all hover:bg-surface_container_low">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-            </svg>
-          </button>
-        </div>
+        <h1 class="font-headline font-bold text-lg tracking-tight text-zinc-900">大神主页</h1>
+      </div>
+      <div class="flex items-center gap-4">
+        <button @click="handleShare" class="flex items-center justify-center active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-2xl text-zinc-900">share</span>
+        </button>
+        <button @click="handleMore" class="flex items-center justify-center active:scale-95 transition-transform">
+          <span class="material-symbols-outlined text-2xl text-zinc-900">more_horiz</span>
+        </button>
       </div>
     </header>
 
@@ -110,213 +104,182 @@
       <div v-else>
       <!-- Hero区域 -->
       <section class="relative">
-        <div class="h-64 bg-gradient-to-r from-primary_container to-secondary_container">
-          <!-- 背景图 -->
+        <div class="w-full h-[420px] overflow-hidden">
           <img 
-            src="https://neeko-copilot.bytedance.net/api/text2image?prompt=gaming%20background%20with%20sunset&size=1024x512" 
-            alt="背景图" 
-            class="w-full h-full object-cover opacity-70"
+            :src="expertData.banner || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCPO2DBKN-H1FWbrWcSWYg-WhIjfHuLM-OJyMiqMrMFOsWn8BSSp5nBOOC--KLp9rQeVdNW6eMEJjtq53AovIveTZfTKFJEG3zYoO6Y6ozLSWhKRHEkF0P2L4XivO0NEHnHXc9H6HFUpN3mTEk_vWgVIUiM9WlY0B1k2jn7DAoQnwPPclXc7hu_ihkd5P542CxbXOt0_CRaInMHufM4tUl6tec8WLrmxejkSJ0mipN0vxZHL8vlBHzsNRTfTmhUUrK5R07MSyUyDko'" 
+            alt="Hero Banner" 
+            class="w-full h-full object-cover"
             loading="lazy"
             decoding="async"
           />
+          <div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-black/20"></div>
         </div>
         <!-- 个人信息区域 -->
-        <div class="container mx-auto px-4 -mt-20">
+        <div class="relative px-5 -mt-24 z-10">
           <!-- 个人信息卡片 -->
-          <div class="bg-surface_container_lowest rounded-xl p-4 sm:p-6 shadow-sm">
-            <div class="flex flex-col sm:flex-row items-start">
-              <!-- 头像 -->
-              <div class="relative mr-0 sm:mr-4 mb-4 sm:mb-0 mx-auto sm:mx-0">
+          <div class="bg-surface-container-lowest rounded-[2rem] p-6 shadow-xl shadow-black/5">
+            <div class="flex justify-between items-start">
+              <div class="relative">
                 <img 
                   :src="expertData.avatar" 
                   :alt="expertData.name" 
-                  class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-surface"
+                  class="w-24 h-24 rounded-3xl object-cover border-4 border-white shadow-lg"
                   loading="lazy"
                   decoding="async"
                   onerror="this.src='https://via.placeholder.com/150'"
                 />
-                <div class="absolute -bottom-1 -right-1 bg-primary_container text-on_primary_container text-xs font-bold px-2 py-1 rounded-full">
-                  Lv.{{ expertData.level }}
+                <div class="absolute -bottom-2 -right-2 bg-primary-container text-on-primary-container p-1 rounded-xl shadow-sm">
+                  <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">verified</span>
                 </div>
               </div>
-              <!-- 个人信息 -->
-              <div class="flex-1 w-full">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                  <div class="text-center sm:text-left">
-                    <h1 class="text-headline-sm sm:text-headline-md font-bold">{{ expertData.name }}</h1>
-                    <p class="text-body-md text-on_surface_variant">{{ expertData.title }}</p>
-                  </div>
-                  <div class="flex space-x-2 w-full sm:w-auto">
-                    <button @click="handleFollow" class="flex-1 sm:flex-none bg-surface_container_low text-primary px-4 py-2 rounded-full text-body-md font-medium transition-all hover:bg-primary_container hover:text-on_primary_container active:scale-95">
-                      {{ isFollowing ? '已关注' : '关注' }}
-                    </button>
-                    <button @click="handleChat" class="flex-1 sm:flex-none bg-primary_container text-on_primary_container px-4 py-2 rounded-full text-body-md font-medium transition-all hover:opacity-90 active:scale-95">
-                      私聊
-                    </button>
-                  </div>
-                </div>
-                <p class="text-body-md mt-3 text-center sm:text-left">{{ expertData.description }}</p>
+              <div class="flex gap-2">
+                <button @click="handleFollow" class="bg-surface-container-low text-zinc-600 px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-all">
+                  {{ isFollowing ? '已关注' : '关注' }}
+                </button>
+                <button @click="handleChat" class="bg-primary-container text-on-primary-container px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-all">
+                  私聊
+                </button>
+                <button @click="handleShare" class="w-10 h-10 bg-surface-container-low text-zinc-600 rounded-full flex items-center justify-center active:scale-95 transition-all">
+                  <span class="material-symbols-outlined text-[20px]">share</span>
+                </button>
+                <button @click="handleMore" class="w-10 h-10 bg-surface-container-low text-zinc-600 rounded-full flex items-center justify-center active:scale-95 transition-all">
+                  <span class="material-symbols-outlined text-[20px]">more_horiz</span>
+                </button>
               </div>
+            </div>
+            <div class="mt-6">
+              <div class="flex items-center gap-2">
+                <h2 class="text-2xl font-headline font-black tracking-tight text-on-surface">{{ expertData.name }}</h2>
+                <span class="bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded-md text-[10px] font-bold">V{{ expertData.level }}</span>
+              </div>
+              <p class="text-on-surface-variant text-sm mt-1">"{{ expertData.description || '性格超好，不压力。' }}"</p>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- 统计数据 -->
-      <section class="container mx-auto px-4 py-6">
-        <!-- 统计数据卡片 -->
-        <div class="bg-surface_container_lowest rounded-xl p-6 shadow-sm">
-          <div class="grid grid-cols-3 gap-4 sm:gap-6">
-            <div class="text-center">
-              <div class="text-display-lg font-bold text-on_surface sm:text-headline-md">{{ expertData.stats.winRate }}%</div>
-              <div class="text-body-md text-on_surface_variant">胜率</div>
+          
+          <!-- 统计数据 Bento -->
+          <div class="grid grid-cols-3 gap-3 mt-8">
+            <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+              <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.winRate }}%</span>
+              <span class="text-[11px] text-zinc-500 font-medium">胜率</span>
             </div>
-            <div class="text-center">
-              <div class="text-display-lg font-bold text-on_surface sm:text-headline-md">{{ expertData.stats.followers.toLocaleString() }}</div>
-              <div class="text-body-md text-on_surface_variant">粉丝数</div>
+            <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+              <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.followers.toLocaleString() }}</span>
+              <span class="text-[11px] text-zinc-500 font-medium">粉丝</span>
             </div>
-            <div class="text-center">
-              <div class="text-display-lg font-bold text-on_surface sm:text-headline-md">{{ expertData.stats.rating }}</div>
-              <div class="text-body-md text-on_surface_variant">评分</div>
+            <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+              <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.rating }}</span>
+              <span class="text-[11px] text-zinc-500 font-medium">评分</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- 技能专区 -->
-      <section class="container mx-auto px-4 py-6">
-        <h2 class="text-headline-md font-bold mb-4">技能专区</h2>
-        <!-- 技能卡片列表 -->
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <section class="px-5 mt-8">
+        <h3 class="font-headline font-extrabold text-xl mb-4 flex items-center gap-2">
+          技能专区 <span class="text-primary-dim text-sm font-normal">Expertise</span>
+        </h3>
+        <div class="space-y-4">
           <div 
             v-for="skill in expertData.skills" 
             :key="skill.id" 
             @click="selectSkill(skill)"
-            :class="['bg-surface_container_lowest rounded-xl p-6 shadow-sm transition-all cursor-pointer hover:shadow-md', selectedSkill?.id === skill.id ? 'ring-2 ring-primary_container' : '']"
+            :class="['bg-surface-container-lowest p-5 rounded-[1.5rem] shadow-sm flex items-center justify-between border-l-4 transition-all cursor-pointer', selectedSkill?.id === skill.id ? 'border-primary ring-2 ring-primary_container' : 'border-zinc-100']"
           >
-            <div class="flex items-center justify-between sm:flex-col sm:items-start">
-              <div class="flex items-center sm:w-full sm:mb-3">
-                <div class="w-12 h-12 bg-primary_container/20 rounded-lg flex items-center justify-center mr-4">
-                  <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="flex items-center">
-                    <h3 class="text-title-md font-bold mr-2">{{ skill.name }}</h3>
-                    <span class="bg-tertiary_container text-on_tertiary_container text-label-sm px-2 py-1 rounded-full">
-                      {{ skill.level }}
-                    </span>
-                  </div>
-                  <p class="text-body-md text-on_surface_variant">{{ skill.description }}</p>
-                </div>
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-yellow-50 rounded-2xl flex items-center justify-center">
+                <img 
+                  :src="skill.icon || 'https://lh3.googleusercontent.com/aida-public/AB6AXuBFRn9sKdbZUjI2cK_RArJlKQsKs4hHmE9vmu-5KXEK5Pn1hKzN7p2Yx_AIE1LmQRt6LjBMAsYB6fJydPFzVwk7h0Gv_LQHVIp7p0qED1Yl0jMMoO_l6gwRl8BduskFcZpKPJJP1zM7V31rJ7YWmT9bmeoanaOnFkgar_4hScagabz7escAfpMwD3hh5FuN0Z0moKWW6xmHRCyu6YYtFOyOn1in3xoW2j2Uo-tyHZ9mSRn0fb0br_nZ8mIXlvlDml16jk6L9UtLNuU'" 
+                  class="w-10 h-10 rounded-lg object-cover"
+                  alt="技能图标"
+                />
               </div>
-              <div class="text-right sm:text-left sm:w-full">
-                <div class="text-display-lg font-bold text-on_surface">¥{{ skill.price }}</div>
-                <div class="text-label-sm text-on_surface_variant">/小时</div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-zinc-900">{{ skill.name }}</span>
+                  <span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-1.5 py-0.5 rounded-md font-bold">{{ skill.level }}</span>
+                </div>
+                <p class="text-xs text-zinc-500 mt-1">{{ skill.description }}</p>
               </div>
+            </div>
+            <div class="text-right">
+              <span class="text-primary font-black text-lg">¥{{ skill.price }}</span>
+              <span class="text-zinc-400 text-[10px] block">/小时</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- 语音介绍 -->
-      <section class="container mx-auto px-4 py-6">
-        <h2 class="text-headline-md font-bold mb-4">语音介绍</h2>
-        <!-- 语音播放器 -->
-        <div class="bg-surface_container_lowest rounded-xl p-6 shadow-sm">
-          <div class="flex items-center space-x-4">
-            <!-- 播放按钮 -->
-            <button @click="toggleAudio" class="w-12 h-12 bg-primary_container rounded-full flex items-center justify-center transition-all hover:opacity-90">
-              <svg v-if="!isPlaying" class="w-6 h-6 text-on_primary_container" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-              <svg v-else class="w-6 h-6 text-on_primary_container" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-              </svg>
-            </button>
-            <!-- 波形可视化 -->
-            <div class="flex-1">
-              <div class="flex items-center space-x-1 mb-2">
-                <div v-for="i in 20" :key="i" class="h-4 bg-primary_container/30 rounded-full transition-all" :style="{ width: `${Math.random() * 10 + 5}px`, height: isPlaying ? `${Math.random() * 16 + 8}px` : '8px' }"></div>
-              </div>
-              <!-- 进度条 -->
-              <div class="flex items-center space-x-3">
-                <span class="text-label-sm text-on_surface_variant">{{ formatTime(currentTime) }}</span>
-                <div class="flex-1 h-1 bg-surface_container_low rounded-full overflow-hidden cursor-pointer" @click="seekAudio">
-                  <div class="h-full bg-primary_container transition-all" :style="{ width: `${progress}%` }"></div>
-                </div>
-                <span class="text-label-sm text-on_surface_variant">{{ expertData.voiceIntroduction.duration }}</span>
-              </div>
+      <section class="px-5 mt-6">
+        <div class="bg-primary-container rounded-[1.5rem] p-4 flex items-center gap-4 relative overflow-hidden">
+          <div class="absolute right-0 top-0 opacity-10">
+            <span class="material-symbols-outlined text-[120px]" data-icon="graphic_eq" style="font-variation-settings: 'FILL' 0;">graphic_eq</span>
+          </div>
+          <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+            <span class="material-symbols-outlined text-primary" data-icon="play_arrow" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-on-primary-container text-sm">语音介绍</span>
+              <span class="text-xs text-on-primary-container/60 font-medium">15"</span>
+            </div>
+            <!-- Visualizer mock -->
+            <div class="flex items-end gap-1 h-4 mt-1">
+              <div v-for="i in 9" :key="i" class="w-1 h-3 bg-on-primary-container/40 rounded-full transition-all" :style="{ height: isPlaying ? `${Math.random() * 12 + 8}px` : '8px' }"></div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- 用户评价 -->
-      <section class="container mx-auto px-4 py-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-headline-md font-bold">用户评价</h2>
-          <button 
-            v-if="!showAllReviews && reviews.length > 0" 
-            @click="handleShowAllReviews" 
-            class="text-primary text-body-md active:scale-95 transition-all"
-          >
-            查看全部
-          </button>
+      <section class="px-5 mt-10">
+        <div class="flex justify-between items-end mb-6">
+          <h3 class="font-headline font-extrabold text-xl">用户评价 <span class="text-zinc-400 text-sm font-normal ml-1">{{ reviewsTotalCount }}</span></h3>
+          <span class="text-primary font-bold text-sm" v-if="reviews.length > 0" @click="handleShowAllReviews">查看全部</span>
         </div>
-        <!-- 评价列表 -->
-        <div class="grid grid-cols-1 gap-4">
-          <div v-for="review in (showAllReviews ? reviews : reviews.slice(0, 2))" :key="review.id" class="bg-surface_container_lowest rounded-xl p-6 shadow-sm">
-            <div class="flex items-start">
-              <!-- 用户头像 -->
-              <img 
-                :src="review.user.avatar" 
-                :alt="review.user.name" 
-                class="w-12 h-12 rounded-full object-cover mr-4"
-                loading="lazy"
-                decoding="async"
-                onerror="this.src='https://via.placeholder.com/150'"
-              />
-              <!-- 评价内容 -->
-              <div class="flex-1">
-                <div class="flex items-center justify-between mb-2">
-                  <h3 class="text-title-md font-bold">{{ review.user.name }}</h3>
-                  <div class="flex items-center">
-                    <div class="flex mr-2">
-                      <svg v-for="i in 5" :key="i" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" :class="i <= review.rating ? 'text-primary_container' : 'text-surface_container_low'"/>
-                      </svg>
-                    </div>
-                    <span class="text-body-md">{{ review.rating }}</span>
-                  </div>
-                </div>
-                <p class="text-body-md mb-3">{{ review.content }}</p>
-                <div class="flex items-center justify-between">
-                  <span class="text-label-sm text-on_surface_variant">{{ review.date }}</span>
-                  <!-- 评价图片 -->
-                  <div v-if="review.images && review.images.length > 0" class="flex space-x-2">
-                    <img 
-                      v-for="(image, index) in review.images" 
-                      :key="index" 
-                      :src="image" 
-                      alt="评价图片" 
-                      class="w-12 h-12 rounded-lg object-cover cursor-pointer active:scale-95 transition-all"
-                      @click="openImagePreview(review.images, index)"
-                    />
+        <div class="space-y-6">
+          <div v-for="review in (showAllReviews ? reviews : reviews.slice(0, 2))" :key="review.id" class="bg-surface-container-lowest p-5 rounded-[2rem] shadow-sm">
+            <div class="flex justify-between">
+              <div class="flex items-center gap-3">
+                <img 
+                  :src="review.user.avatar" 
+                  :alt="review.user.name" 
+                  class="w-10 h-10 rounded-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  onerror="this.src='https://via.placeholder.com/150'"
+                />
+                <div>
+                  <span class="font-bold text-sm block text-zinc-900">{{ review.user.name }}</span>
+                  <div class="flex gap-0.5">
+                    <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
                   </div>
                 </div>
               </div>
+              <span class="text-zinc-400 text-[10px]">{{ review.date }}</span>
+            </div>
+            <p class="mt-4 text-zinc-600 text-sm leading-relaxed">{{ review.content }}</p>
+            <div class="mt-4 flex gap-2" v-if="review.images && review.images.length > 0">
+              <img 
+                v-for="(image, index) in review.images" 
+                :key="index" 
+                :src="image" 
+                class="w-20 h-20 rounded-xl object-cover cursor-pointer active:scale-95 transition-all"
+                alt="评价图片"
+              />
             </div>
           </div>
         </div>
-        <!-- 加载更多按钮 -->
         <div v-if="showAllReviews && reviewsPage < reviewsTotalPages" class="mt-4 text-center">
           <button 
             @click="loadMoreReviews" 
             :disabled="reviewsLoading"
-            class="bg-surface_container_low text-primary px-6 py-2 rounded-full font-medium active:scale-95 transition-all"
+            class="bg-surface-container-low text-primary px-6 py-2 rounded-full font-medium active:scale-95 transition-all"
           >
             {{ reviewsLoading ? '加载中...' : '加载更多' }}
           </button>
@@ -326,31 +289,29 @@
     </main>
 
     <!-- 固定底部下单栏 -->
-    <footer class="fixed bottom-0 left-0 right-0 bg-surface_container_highest backdrop-blur-md border-t border-surface_tint/10">
-      <div class="container mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-4">
-            <button @click="handleFavorite" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface_container_low active:scale-95 transition-all">
-              <svg class="w-5 h-5 text-primary" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-              </svg>
-            </button>
-            <button @click="handleMessage" class="w-10 h-10 flex items-center justify-center rounded-full bg-surface_container_low active:scale-95 transition-all">
-              <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-              </svg>
-            </button>
+    <footer class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] px-6 pt-5 pb-10">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-6">
+          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
+            <span class="material-symbols-outlined text-zinc-600" data-icon="favorite">favorite</span>
+            <span class="text-[10px] font-bold text-zinc-500">收藏</span>
           </div>
-          <div class="flex items-center space-x-3">
-            <div class="text-right">
-              <div class="text-label-sm text-on_surface_variant">{{ selectedSkill ? '当前选择' : '起价' }}</div>
-              <div class="text-display-lg font-bold text-on_surface">¥{{ selectedSkill ? selectedSkill.price : expertData.skills[0]?.price || 0 }}</div>
+          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
+            <span class="material-symbols-outlined text-zinc-600" data-icon="mail">mail</span>
+            <span class="text-[10px] font-bold text-zinc-500">留言</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <div class="flex items-baseline gap-0.5 justify-end">
+              <span class="text-xs font-bold text-primary">¥</span>
+              <span class="text-2xl font-black text-primary font-headline tracking-tighter">{{ selectedSkill ? selectedSkill.price : expertData.skills[0]?.price || 0 }}</span>
             </div>
-            <button @click="handleOrder" :disabled="isLoading || !selectedSkill" class="bg-primary_container text-on_primary_container px-6 py-2 rounded-full font-medium flex items-center active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-              <span v-if="isLoading" class="mr-2 w-4 h-4 border-2 border-on_primary_container border-t-transparent rounded-full animate-spin"></span>
-              {{ isLoading ? '下单中...' : '立即下单' }}
-            </button>
+            <span class="text-[10px] font-bold text-zinc-400">起/小时</span>
           </div>
+          <button @click="handleOrder" :disabled="isLoading || !selectedSkill" class="bg-primary-container text-on-primary-container px-10 py-4 rounded-full font-black text-base shadow-lg shadow-yellow-500/20 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+            {{ isLoading ? '下单中...' : '立即下单' }}
+          </button>
         </div>
       </div>
     </footer>
@@ -407,9 +368,10 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { expertApi, orderApi, handleApiError } from '../api/index.js'
+import { expertService } from '../services/expert.js'
+import { orderApi, handleApiError } from '../api/index.js'
 import Toast from '../components/common/Toast.vue'
 
 const router = useRouter()
@@ -461,6 +423,11 @@ const reviewsPage = ref(1)
 const reviewsTotalPages = ref(1)
 const reviewsLoading = ref(false)
 const showAllReviews = ref(false)
+
+// 评价总数
+const reviewsTotalCount = computed(() => {
+  return reviews.value.length
+})
 
 // 图片预览状态
 const imagePreview = ref({
@@ -562,7 +529,7 @@ const loadReviews = async (page = 1) => {
       }
     }
     
-    const response = await expertApi.getExpertReviews(expertId, page, 10)
+    const response = await expertService.getExpertReviews(expertId, page, 10)
     if (response.success) {
       if (page === 1) {
         reviews.value = response.data.reviews
@@ -636,6 +603,8 @@ const loadExpertData = async () => {
     // 如果缓存存在
     if (cachedData) {
       expertData.value = cachedData
+      // 加载语音数据
+      await loadVoiceData(expertId)
       // 添加到浏览历史
       addToHistory(expertData.value)
       // 加载评价列表
@@ -648,11 +617,13 @@ const loadExpertData = async () => {
       return
     }
     
-    const response = await expertApi.getExpertDetail(expertId)
+    const response = await expertService.getExpertDetail(expertId)
     if (response.success) {
       expertData.value = response.data
+      // 加载语音数据
+      await loadVoiceData(expertId)
       // 缓存数据（5分钟）
-      storage.set(cacheKey, response.data, 5)
+      storage.set(cacheKey, expertData.value, 5)
       // 添加到浏览历史
       addToHistory(expertData.value)
       // 加载评价列表
@@ -672,11 +643,46 @@ const loadExpertData = async () => {
   }
 }
 
+// 加载语音数据
+const loadVoiceData = async (expertId) => {
+  try {
+    const voiceCacheKey = `expert_voice_${expertId}`
+    const cachedVoice = storage.get(voiceCacheKey)
+    
+    if (cachedVoice) {
+      if (!expertData.value.voiceIntroduction) {
+        expertData.value.voiceIntroduction = {}
+      }
+      expertData.value.voiceIntroduction = {
+        ...expertData.value.voiceIntroduction,
+        ...cachedVoice
+      }
+      return
+    }
+    
+    const voiceResponse = await expertService.getExpertVoice(expertId)
+    if (voiceResponse.success) {
+      if (!expertData.value.voiceIntroduction) {
+        expertData.value.voiceIntroduction = {}
+      }
+      expertData.value.voiceIntroduction = {
+        ...expertData.value.voiceIntroduction,
+        ...voiceResponse.data
+      }
+      // 缓存语音数据（10分钟）
+      storage.set(voiceCacheKey, voiceResponse.data, 10)
+    }
+  } catch (err) {
+    console.error('加载语音数据失败:', err)
+    // 语音数据加载失败不影响主页面显示
+  }
+}
+
 const handleFollow = async () => {
   try {
     const expertId = expertData.value.id
     if (isFollowing.value) {
-      const response = await expertApi.unfollowExpert(expertId)
+      const response = await expertService.unfollowExpert(expertId)
       if (response.success) {
         isFollowing.value = false
         showToast('取消关注成功')
@@ -684,7 +690,7 @@ const handleFollow = async () => {
         clearExpertCache()
       }
     } else {
-      const response = await expertApi.followExpert(expertId)
+      const response = await expertService.followExpert(expertId)
       if (response.success) {
         isFollowing.value = true
         showToast('关注成功')
@@ -871,7 +877,17 @@ const handleFavorite = () => {
 }
 
 const handleMessage = () => {
-  console.log('给大神留言')
+  if (!expertData.value.id) {
+    showToast('专家ID不存在', 'error')
+    return
+  }
+  router.push({
+    path: `/chat/${expertData.value.id}`,
+    query: { 
+      expertId: expertData.value.id,
+      expertName: expertData.value.nickname
+    }
+  })
 }
 
 const handleBack = () => {
@@ -988,6 +1004,14 @@ const seekAudio = throttle((event) => {
   currentTime.value = Math.floor(percentage * duration)
   progress.value = percentage * 100
 }, 100)
+
+const handleShare = () => {
+  showToast('分享功能开发中', 'info')
+}
+
+const handleMore = () => {
+  showToast('更多功能开发中', 'info')
+}
 
 onMounted(() => {
   loadExpertData()

@@ -1,75 +1,18 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import TopAppBar from '../components/TopAppBar.vue'
+import { orderApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const activeTab = ref('all')
-const orders = ref([
-  {
-    id: 1,
-    status: 'ongoing',
-    statusText: '进行中',
-    statusClass: 'bg-tertiary-container/20 text-on-tertiary-container',
-    playmate: {
-      name: 'Luna_Gamer',
-      game: 'League of Legends',
-      service: 'Ranked Carry',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBlP-dDH5L4uhhCvFnaGzn1KNipNI3vRECaf0dNus0QFQB4wshcgFZxRyvD1zwjrKM63RJpyjqKZ5x-QzMGsEncZZcLdLimJP5enKrkSXsMSzWuP_HSRsfCEb0DjoSnc-RgBMddRklJhASmptoTB_bIgAwzYRXdCzQx8X_9qRwyu7a638NjfuKax4mYW6JcKbXNLgWbtYSzrD8Z0a3loMG_xd8O6LXH0zUFKgytl6w5_oWCxGIMb03SSJ0CdLDNJLGOfLTpoAgiKU'
-    },
-    time: 'Today, 20:00',
-    duration: '2小时 • 1局',
-    price: 45.00
-  },
-  {
-    id: 2,
-    status: 'completed',
-    statusText: '已完成',
-    statusClass: 'bg-surface-container-high text-on-surface-variant',
-    playmate: {
-      name: 'MochiMeow',
-      game: 'Genshin Impact',
-      service: 'Exploration',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCoZ4bsSgqut4Pu2mximOY5_WV3kBtQIaIl3MLkzgS8WYbcGYIJ1qCZhxaswsiz5VsSpkNXBCxCJZXENcNW51s79ic_Qps8nrvNYbMfo4d2IQOzFdohZ8LpAzcdBo2pa5rccbiMV4AuSfOspCcT5F89qUWpIrbRAPDB3Jg6YS8mWcQ1tjj8Du3mK86A2c5wzvWfLHpC1pEOzk4UH0nFv-Rpvlx9nddtq9q_jhUpqz0pbFixkXk-sVtroHvKWh2mP9rygI6x0L1u4r8'
-    },
-    time: '昨天, 14:30',
-    duration: '1小时 • 娱乐上分',
-    price: 18.00
-  },
-  {
-    id: 3,
-    status: 'pending',
-    statusText: '待确认',
-    statusClass: 'bg-primary-container text-on-primary-container',
-    playmate: {
-      name: 'Ace_Striker',
-      game: 'Valorant',
-      service: 'Duo Queue',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBZkLw7Z2hvgTLvmnMy4uP9PtPlJbNOJEPKXTN0b1_kWk6T1ZMIefafb8O7brh_y6YYitEh4gQKq6tS6hmRGJhPhEvgiPRtbtWtGNEVgyxGH0NOBsT6BS6BD4pEEDiGjITAOQqzBItp52oa20RWq97DZvLvg5auLeZxeNbdQjtD20X6lJcb7bxLVc6kkn-Vyxj2Ha-HNTO7rD56xgCbPz3wQUm4msl1GAkYgseE2hA1evc5BGQnWpxu5oFxUbptmRah9A3eXtXGIw'
-    },
-    time: '11月24日, 19:00',
-    duration: '等待确认中...',
-    price: 32.50
-  },
-  {
-    id: 4,
-    status: 'cancelled',
-    statusText: '已取消',
-    statusClass: 'bg-error-container/10 text-error',
-    playmate: {
-      name: 'Shadow_Ninja',
-      game: 'PUBG',
-      service: 'Squad Help',
-      avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC2YmIJNnItMbXeENVsj7hCFgNbIJUjT8aXZVxjC2k5blZm9fKx46QynWnInSZ_I8Ay1ttQ4w12gnCWAUxA-jb2LM6yB5a36__MOMcjaUN3O912Yd-zArsYawj55SnQe-xCXQbKMN54RC00vN_8CGc5WcqDkFJxIEX4be0e-g9ktnGNB5o_L-ZxMpkkCzqAstyEip7TRkkrxOHSlqqSQ3Xn30x7CeiAwfykm_m18fD2v8gA1RD6hQ7VNijHXnpEhUvnfeKinI4Q'
-    },
-    time: '11月20日',
-    duration: '用户已取消申请',
-    price: 25.00
-  }
-])
+const handleBack = () => {
+  router.back()
+}
 
-const filteredOrders = ref(orders.value)
+const activeTab = ref('all')
+const orders = ref([])
+const loading = ref(false)
+const error = ref(null)
 
 const tabs = [
   { id: 'all', label: '全部' },
@@ -79,13 +22,106 @@ const tabs = [
   { id: 'cancelled', label: '已取消' }
 ]
 
-const handleTabChange = (tabId) => {
-  activeTab.value = tabId
-  if (tabId === 'all') {
-    filteredOrders.value = orders.value
+const filteredOrders = computed(() => {
+  if (activeTab.value === 'all') {
+    return orders.value
   } else {
-    filteredOrders.value = orders.value.filter(order => order.status === tabId)
+    return orders.value.filter(order => order.status === activeTab.value)
   }
+})
+
+const loadOrders = async () => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    const response = await orderApi.getOrders(activeTab.value === 'all' ? 'all' : activeTab.value)
+    if (response.success || response.code === 0) {
+      // 转换订单数据格式
+      orders.value = (response.data?.data || response.data || []).map(order => ({
+        id: order.id,
+        status: order.status,
+        statusText: getStatusText(order.status),
+        statusClass: getStatusClass(order.status),
+        playmate: {
+          name: order.expertName || order.playmate?.name || '未知',
+          game: order.game || order.playmate?.game || '未知',
+          service: order.skill || order.playmate?.service || '未知服务',
+          avatar: order.expertAvatar || order.playmate?.avatar || 'https://via.placeholder.com/150'
+        },
+        time: formatTime(order.serviceTime || order.createdAt),
+        duration: getDurationText(order.status),
+        price: order.amount || order.price || 0
+      }))
+    } else {
+      throw new Error(response.message || response.msg || '获取订单失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取订单失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const getStatusText = (status) => {
+  const statusMap = {
+    pending: '待确认',
+    ongoing: '进行中',
+    completed: '已完成',
+    cancelled: '已取消'
+  }
+  return statusMap[status] || '未知状态'
+}
+
+const getStatusClass = (status) => {
+  const classMap = {
+    pending: 'bg-primary-container text-on-primary-container',
+    ongoing: 'bg-tertiary-container/20 text-on-tertiary-container',
+    completed: 'bg-surface-container-high text-on-surface-variant',
+    cancelled: 'bg-error-container/10 text-error'
+  }
+  return classMap[status] || 'bg-surface-container text-on-surface'
+}
+
+const getDurationText = (status) => {
+  switch (status) {
+    case 'ongoing':
+      return '2小时 • 1局'
+    case 'completed':
+      return '1小时 • 娱乐上分'
+    case 'pending':
+      return '等待确认中...'
+    case 'cancelled':
+      return '用户已取消申请'
+    default:
+      return ''
+  }
+}
+
+const formatTime = (dateString) => {
+  if (!dateString) return '未知时间'
+  
+  const date = new Date(dateString)
+  const now = new Date()
+  const diff = now - date
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  
+  if (days === 0) {
+    return `今天, ${date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`
+  } else if (days === 1) {
+    return `昨天, ${date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`
+  } else if (days < 7) {
+    return `${days}天前`
+  } else {
+    return date.toLocaleDateString('zh-CN')
+  }
+}
+
+const handleTabChange = async (tabId) => {
+  activeTab.value = tabId
+  await loadOrders()
 }
 
 const handleContact = (orderId) => {
@@ -111,10 +147,68 @@ const handleReview = (orderId) => {
   router.push(`/review/${orderId}`)
 }
 
-const handleCancelOrder = (orderId) => {
-  console.log('取消订单:', orderId)
-  // 这里可以添加取消订单的逻辑
-  alert('订单已取消')
+const handleCancelOrder = async (orderId) => {
+  try {
+    const response = await orderApi.cancelOrder(orderId)
+    if (response.success || response.code === 0) {
+      alert('订单已取消')
+      await loadOrders()
+    } else {
+      alert(response.message || response.msg || '取消订单失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    alert(result.error || '取消订单失败，请重试')
+    console.error('取消订单失败:', err)
+  }
+}
+
+const handleConfirmOrder = async (orderId) => {
+  try {
+    const response = await orderApi.confirmOrder(orderId)
+    if (response.success || response.code === 0) {
+      alert('订单已确认')
+      await loadOrders()
+    } else {
+      alert(response.message || response.msg || '确认订单失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    alert(result.error || '确认订单失败，请重试')
+    console.error('确认订单失败:', err)
+  }
+}
+
+const handleAcceptOrder = async (orderId) => {
+  try {
+    const response = await orderApi.acceptOrder(orderId)
+    if (response.success || response.code === 0) {
+      alert('订单已接单')
+      await loadOrders()
+    } else {
+      alert(response.message || response.msg || '接单失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    alert(result.error || '接单失败，请重试')
+    console.error('接单失败:', err)
+  }
+}
+
+const handleRejectOrder = async (orderId) => {
+  try {
+    const response = await orderApi.rejectOrder(orderId)
+    if (response.success || response.code === 0) {
+      alert('订单已拒绝')
+      await loadOrders()
+    } else {
+      alert(response.message || response.msg || '拒绝订单失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    alert(result.error || '拒绝订单失败，请重试')
+    console.error('拒绝订单失败:', err)
+  }
 }
 
 const handleViewDetails = (orderId) => {
@@ -122,13 +216,29 @@ const handleViewDetails = (orderId) => {
   // 跳转到订单详情页面
   router.push(`/order/${orderId}`)
 }
+
+onMounted(() => {
+  loadOrders()
+})
 </script>
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-32">
-    <TopAppBar title="我的订单" />
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">我的订单</h1>
+      </div>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
+    </header>
 
-    <main class="w-full max-w-md pb-32">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- Status Tabs -->
       <div class="px-5 py-4 sticky top-16 bg-background z-40">
         <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
@@ -148,8 +258,37 @@ const handleViewDetails = (orderId) => {
         </div>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="loading" class="flex items-center justify-center py-20">
+        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="flex flex-col items-center justify-center py-20 px-5">
+        <span class="material-symbols-outlined text-4xl text-error mb-4">error_outline</span>
+        <p class="text-center text-error mb-4">{{ error }}</p>
+        <button
+          @click="loadOrders"
+          class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold active:scale-95 transition-transform"
+        >
+          重试
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="filteredOrders.length === 0" class="flex flex-col items-center justify-center py-20 px-5">
+        <span class="material-symbols-outlined text-4xl text-outline mb-4">receipt_long</span>
+        <p class="text-center text-on-surface-variant mb-4">暂无订单</p>
+        <button
+          @click="router.push('/discover')"
+          class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold active:scale-95 transition-transform"
+        >
+          去下单
+        </button>
+      </div>
+
       <!-- Orders List -->
-      <div class="px-5 space-y-4">
+      <div v-else class="px-5 space-y-4">
         <div
           v-for="order in filteredOrders"
           :key="order.id"

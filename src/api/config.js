@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/playmate'
 
 const apiConfig = {
   baseURL: API_BASE_URL,
@@ -22,6 +22,11 @@ async function request(endpoint, options = {}) {
   const timeoutId = setTimeout(() => controller.abort(), apiConfig.timeout)
 
   try {
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+
     const response = await fetch(url, {
       ...config,
       signal: controller.signal

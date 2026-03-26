@@ -69,7 +69,7 @@ const handlePayment = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-background pb-32">
+  <div class="min-h-screen bg-surface text-on-background">
     <!-- Top Navigation (Fixed) -->
     <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
       <div class="flex items-center gap-4">
@@ -84,7 +84,7 @@ const handlePayment = () => {
       <div class="absolute bottom-0 left-0 bg-zinc-100 h-[1px] w-full"></div>
     </header>
 
-    <main class="pt-24 pb-32 px-5 max-w-2xl mx-auto space-y-6">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-2xl mx-auto space-y-6">
       <!-- Service Summary Section (Asymmetric Editorial Style) -->
       <section class="bg-surface-container-lowest rounded-3xl p-6 relative overflow-hidden">
         <div class="flex gap-5 items-start relative z-10">
@@ -214,27 +214,24 @@ const handlePayment = () => {
           </div>
         </div>
       </section>
-    </main>
 
-    <!-- Bottom Action Bar (Fixed) -->
-    <footer class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl px-6 pb-10 pt-4 z-50 rounded-t-[32px] shadow-[0_-4px_30px_rgba(255,215,0,0.12)]">
-      <div class="max-w-2xl mx-auto flex items-center justify-between gap-6">
-        <div class="flex flex-col">
-          <span class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-0.5">实付款</span>
-          <div class="flex items-baseline gap-1">
-            <span class="text-sm font-black text-primary">¥</span>
-            <span class="text-2xl font-black text-on-surface tracking-tight">{{ totalPrice.toFixed(2) }}</span>
+      <!-- Bottom Action Bar (In Main) -->
+      <section class="bg-surface-container-low rounded-3xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex flex-col">
+            <span class="text-[10px] font-black text-zinc-400 uppercase tracking-[0.2em] mb-0.5">实付款</span>
+            <div class="flex items-baseline gap-1">
+              <span class="text-sm font-black text-primary">¥</span>
+              <span class="text-2xl font-black text-on-surface tracking-tight">{{ totalPrice.toFixed(2) }}</span>
+            </div>
           </div>
         </div>
-        <button @click="handlePayment" class="flex-1 bg-primary-container text-on-primary-container font-black py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-95 duration-200 ease-out shadow-lg shadow-yellow-500/20">
+        <button @click="handlePayment" class="w-full bg-primary-container text-on-primary-container font-black py-4 rounded-2xl flex items-center justify-center gap-2 active:scale-95 duration-200 ease-out shadow-lg shadow-yellow-500/20">
           <span>立即支付</span>
           <span class="material-symbols-outlined text-xl">flash_on</span>
         </button>
-      </div>
-    </footer>
-
-    <!-- Invisible spacer for bottom padding -->
-    <div class="h-32"></div>
+      </section>
+    </main>
   </div>
 </template>
 

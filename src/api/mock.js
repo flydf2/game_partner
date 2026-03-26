@@ -1271,3 +1271,76 @@ export function mockGrabRewardOrder(orderId) {
     }, 500)
   })
 }
+
+export function mockCreatePost(postData) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        success: true,
+        data: {
+          id: Date.now(),
+          ...postData,
+          user: {
+            name: '当前用户',
+            avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+          },
+          createdAt: new Date().toISOString(),
+          likes: 0,
+          comments: 0
+        },
+        message: '发布成功'
+      })
+    }, 500)
+  })
+}
+
+export function mockGetRewardOrderDetail(orderId) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        success: true,
+        data: {
+          id: orderId,
+          title: '代打服务',
+          expert: {
+            name: '林间小鹿',
+            avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPWd42wRhAneFPqDBu00-X6zV_3VmT3LwRUFe1rO4eEyOa-IDEPhh1HH7x2WWdyarjgr_4WzatpsdpqaJXJlMRwo9dtnaBbaYDQBj0-oao709scndaRZifLRuzJRgNVcSzd8XsuGJ-4uBbEUbdAlWFQz_6HkFw-AT6QvtHY4sIV4zpurtJ13FIBZJw5DYnKUc0lTPGLItY507UIdcj7nBxJ2WZ7zMMYQN6FvTlEsX9vRQQ51tpjD9-9ylRac-P1jqyPFi7WtKf__I',
+            rating: 5.0,
+            game: 'honor_of_kings'
+          },
+          price: 100,
+          status: 'pending',
+          createdAt: '2026-03-26 10:00',
+          description: '代打上分服务'
+        },
+        message: '获取成功'
+      })
+    }, 300)
+  })
+}
+
+export function mockGetOrderDetail(orderId) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        success: true,
+        data: {
+          id: orderId,
+          title: '游戏陪玩',
+          playmate: {
+            name: '影子猎手',
+            avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAkokFDlJJU2ut7ADXOxXgokfLf-nFbve3PmdniZPK8ZjoxO1reJWexxqbxEwDy4thsHQWxI68ySeYsam7yLDI2EWIKoa7no1yZya_-OvKHcnsOU5ukziXluccC3dUHzW8BMFTNlh6bLkgI8bMSDhUTMaTR2jWDsFNRzAKs9RzZ11om4Ki5c9Xj92fIm685lMzUrq9Bk1QuG6y3TXwjzpc6HZVTEFv-aZfUUXt5s020g03CNeOFTD-_F8HtoWP1VEGiCAo5k4gC9o',
+            rating: 4.9,
+            game: 'lol'
+          },
+          price: 60,
+          duration: 2,
+          status: 'completed',
+          createdAt: '2026-03-25 15:00',
+          completedAt: '2026-03-25 17:00'
+        },
+        message: '获取成功'
+      })
+    }, 300)
+  })
+}

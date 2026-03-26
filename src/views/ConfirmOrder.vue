@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { expertApi } from '../api'
+import { expertApi, orderApi, handleApiError } from '../api'
 
 const route = useRoute()
 const router = useRouter()
@@ -23,6 +23,7 @@ const coupons = ref([
 const serviceDuration = ref(2)
 const serviceDate = ref('2026-03-15')
 const serviceTime = ref('20:00')
+const isSubmitting = ref(false)
 
 const serviceFee = computed(() => {
   if (!expert.value) return 0
@@ -52,14 +53,35 @@ const loadExpertDetail = async () => {
   }
 }
 
-const handlePay = () => {
-  router.push({
-    path: '/payment-success',
-    query: {
+const handlePay = async () => {
+  isSubmitting.value = true
+  try {
+    const response = await orderApi.createOrder({
       expertId: expertId.value,
-      amount: totalAmount.value
+      serviceTime: `${serviceDate.value} ${serviceTime.value}`,
+      duration: serviceDuration.value,
+      couponId: selectedCoupon.value?.id,
+      remarks: ''
+    })
+    
+    if (response.success || response.code === 0) {
+      router.push({
+        path: '/payment-success',
+        query: {
+          expertId: expertId.value,
+          amount: totalAmount.value,
+          orderId: response.data?.orderId
+        }
+      })
+    } else {
+      throw new Error(response.message || response.msg || '创建订单失败')
     }
-  })
+  } catch (err) {
+    const result = handleApiError(err)
+    alert(result.error || '创建订单失败，请重试')
+    console.error('创建订单失败:', err)
+    isSubmitting.value = false
+  }
 }
 
 const handleCouponClick = (coupon) => {
@@ -72,7 +94,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32">
+  <div class="min-h-screen bg-surface text-on-surface">
     <nav data-v-3b8a03f8="" class="bg-surface w-full top-0 sticky z-50">
       <div class="flex items-center gap-4">
         <span
@@ -92,7 +114,7 @@ onMounted(() => {
       </div>
     </main>
 
-    <main v-else-if="expert" class="pt-20 pb-32 px-5 max-w-2xl mx-auto space-y-4">
+    <main v-else-if="expert" class="pt-20 px-5 max-w-2xl mx-auto space-y-6">
       <section class="bg-surface-container-lowest rounded-xl p-5 shadow-sm overflow-hidden relative">
         <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
         <div class="flex items-center gap-4 relative z-10">
@@ -172,22 +194,26 @@ onMounted(() => {
           </p>
         </div>
       </div>
-    </main>
 
-    <footer class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl px-6 pb-8 pt-4 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] flex items-center justify-between z-50">
-      <div class="flex flex-col">
-        <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">待支付总额</span>
-        <div class="flex items-baseline gap-1">
-          <span class="text-primary font-bold text-sm">¥</span>
-          <span class="text-3xl font-extrabold font-headline text-on-surface">{{ totalAmount }}</span>
+      <div class="bg-surface-container-low rounded-xl p-5 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex flex-col">
+            <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">待支付总额</span>
+            <div class="flex items-baseline gap-1">
+              <span class="text-primary font-bold text-sm">¥</span>
+              <span class="text-3xl font-extrabold font-headline text-on-surface">{{ totalAmount }}</span>
+            </div>
+          </div>
         </div>
+        <button
+          @click="handlePay"
+          :disabled="isSubmitting"
+          class="w-full py-4 rounded-full bg-primary-container text-on-primary-container font-headline font-bold shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"
+          :class="isSubmitting ? 'opacity-50 cursor-not-allowed' : ''"
+        >
+          {{ isSubmitting ? '提交中...' : '立即支付' }}
+        </button>
       </div>
-      <button
-        @click="handlePay"
-        class="bg-primary-container text-on-primary-container font-headline font-bold px-10 py-4 rounded-full shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"
-      >
-        立即支付
-      </button>
-    </footer>
+    </main>
   </div>
 </template>

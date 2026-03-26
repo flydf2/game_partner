@@ -1,50 +1,71 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { api } from '../services/api.js'
 
 const router = useRouter()
 
-const activeCategory = ref('moba')
+const activeCategory = ref('')
 const searchQuery = ref('')
+const games = ref([])
+const categories = ref([])
+const loading = ref(false)
+const error = ref('')
 
-const categories = [
-  { id: 'moba', label: 'MOBA' },
-  { id: 'shooting', label: '射击' },
-  { id: 'competitive', label: '竞技' },
-  { id: 'entertainment', label: '娱乐' },
-  { id: 'online', label: '网游' },
-  { id: 'console', label: '主机' }
-]
-
-const games = [
-  { id: 1, name: '英雄联盟', category: 'moba', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDwJMK-vPtlCamAbtTRphsnIFcd1mWDzm1_T7KpzrxayEqLvesNtlHnzdM4rYKM0uo9g2_54Jj3Y0EPW5FB1sDjdErswcmdN1SmvaBqTh5bJD9-J5ucaAwF12MByzHgfaBX5CqrBM321UsnOg5GpZieNcmb7SaK-iUOOlTN_jvoYnW1BDpgm3eWB-0IPh1akuOUcitl05xf5FC8iPrAgKeciCRH1Odd9DYxPNu8sE8cfOFkv7uk_HsPwBjE-FUF43lV3AZE7uLVp0I' },
-  { id: 2, name: '王者荣耀', category: 'moba', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCO6Fv1fyGzYvj3dZ-H2AFzfu7X6Y6_yA1taG4ZuIR2PMnd96dzALMWRYtklMtial0VLZJtSVsAP5y9m9b_xwTQoq2zVnAq5fBxhcejRsjtv0IFfLF3aOhYMHtKueVSCXz0ow78iQTjbi5HbOPPPjqeZ2tC6L9LrFZ7WoKghDYAwKmcr9P1XBCv0W5pbF7hZ5hbHCBu8G7UM2eH-_Buh3zy9Zts0inQl1gewpndP5Cqfi6i-yux-QSrRAebo6d1Z5tXpcefUZCMnE0' },
-  { id: 3, name: '和平精英', category: 'shooting', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBvdKZ4vBDmJiGGoIdY5uN8vk6NP2skn5qTAfHBUjn_XhnvxhinOjbExV7IZTrLvHYx_cM7mnDxDdHV7liBkAmlFCHP1FjfQXAT9JFOFL-bW7VvCpDV8ALyyZQxWzGYxF_tBHLcywbN52GPzD8b_i9EG_geNM22_Ry3-u7yFzQx5X7gOB9M-HNmDCLsJJRyWYYYTwWyDSzv_0TPVZ5LBNP67K2Q2jfbzRMqsISc8gaxeDYUD1WoAt8P6AIc0EmqW3TKxYpUBjpmciE' },
-  { id: 4, name: 'Dota 2', category: 'moba', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCig4vCjf8ynERRlJw6j7E-3ZfKnw3ksy3SLjVpnw99A5bjjtVmmZlDcRGgdDBVojT-NlTqiZlBWwqSKxmKeF1aPZzRuW4w9Z8HO0THinpJiLI2TpCy_uMtiVy2l0wIIqGj2yus3EC6mUevTVsHyo2bqqvBCKW-4KtNnENw1eGB07txvjLJTGb3zpzgmAV5am0uyzCz9IJbe7zOo9HRzgvkOS5mmL2g2mZJUTenpWh05M_usWd43ahAPDLisvmnDmUP7F4FgyP5730' },
-  { id: 5, name: '原神', category: 'entertainment', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCdUkaUZGDBcCAcjxT3f9Z7kvGkPdT3w8bqDluc3iqSErfCGRjzL_0ZOcLQsR9kJ-B48g4oD0-LYMpVyMizWjSaGuOrv4IJuxr7Q9sM46dgvZLmFBazQNCInUgQSWWf7Ei_hTLzJ9zbHSg6XdbfMoeKpo2Kx7RdCyKulFDPeds0dbsHSSJqMoL89znPuERLPN2vXgzEH1c-UjXwpi61RYvSGU9GsNswjgAbWeq6oGsbLw6bfZC3vTxlIu_wBCAay7PeYyYLCQf_moM' },
-  { id: 6, name: '永劫无间', category: 'competitive', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDQJJK1QQu5hytrrQz6-9PVcDQ_U5A5aFb5aKsG3nc4hta6PDVhkEuZqbQ9-9RE4huLdPSZb7w9-d65-ormxf6PLyrtY197b3IP8--uW7vVkwsPX9FnWtiQmusWN24Rxo7GI1vm8PS0q2vE6E9wI0j_J4HhWxALc7cV3dh4g6uw7PsYJ8_JxKqOvV1NUn1P-4arJV6psl5XStZc01itaEqm7KKkKpZOaxNqQhDLMlxli0poz7fcvoEPgDynsti4DVYLwiXzLV4OEyk' },
-  { id: 7, name: '决战平安京', category: 'moba', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAAb-x90DK6MePE4PFHS7KgUv8Z0fWx3AAV_aSUBD9bgnPtp_DDOV0QcorEuoF9L8EEauuGUnerUPtt7UuFYcat1rXsFWECBpum8Sv-PopUh1cZh-XeVcAw6hEKnxTVcUfK3Z7KYuhWRupQw1Al_4QPLI1Izlb6ADoHV7_ZsTgLXUwExllC9KZji9o6fd9MuOBtSdM0KWdbCR473FQvnjNUZdXHCINeS8ndfvdFZZe6hvgx16OurtkhZkqYC3lTuH-fDBBYSBX7UV0' },
-  { id: 8, name: '第五人格', category: 'entertainment', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLCwcS754hCh6ggV3wdNDwshCz9TOfWbVrRUuppWZhYjJ16ufic_fBkx9wwSCqYDXf_xyrEcyAnAv7CnBZ1ahLPHFRhU7W8UW_eWswyvg518Te0HFoJPrHQOVeb-Rf6EWLCZh5RvMqiqKY9VsqH_R7xy0A1uq0EZJEOU-M0CwRIPkQbDj2ZCHz1XgcZLwmQ3Mjpt58W8JiMZwGpPvksGwPNYZatlHvuDluE1FxB6Mg30HfpxovYJhQlCVua5iJMPF732KijA2z-YA' },
-  { id: 9, name: '英雄联盟手游', category: 'moba', image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAoF3F1MQOLKt8g5tJmSwhNEBH72gw-ndT2ii2kf5h-Rx8x5--0z3McICzfZFJIy3Da3VXizRgM73JCWLAW4CFK_bWIWKQkH-I1iuMgmo19VLLkBYvCBi-a4fGhxUrWsQMC5HD2aF_48366vg4V5ccJy60tbg_b0KnU-S3BOf-TwKeEDxULpzZg8297caghuE3J3LRvIf9THvqDF59qkxwANu5YDuX5aRCnvcBa26nlCt_-0eZMSngG-FlsuGSvicmwFScS0sAzI7A' }
-]
-
-const filteredGames = ref(games.filter(game => game.category === activeCategory.value))
+const filteredGames = computed(() => {
+  let result = activeCategory.value 
+    ? games.value.filter(game => game.category === activeCategory.value)
+    : games.value
+  if (searchQuery.value) {
+    result = result.filter(game => 
+      game.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+    )
+  }
+  return result
+})
 
 const handleCategoryChange = (categoryId) => {
   activeCategory.value = categoryId
-  filteredGames.value = games.filter(game => game.category === categoryId)
 }
 
 const handleSearch = () => {
-  if (searchQuery.value) {
-    filteredGames.value = games.filter(game => 
-      game.name.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
-      game.category === activeCategory.value
-    )
-  } else {
-    filteredGames.value = games.filter(game => game.category === activeCategory.value)
+  // 搜索逻辑已在computed属性中处理
+}
+
+const loadGames = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await api.getGames()
+    if (response.success) {
+      games.value = Array.isArray(response.data) ? response.data : []
+      
+      // 提取唯一的分类
+      const uniqueCategories = [...new Set(games.value.map(game => game.category))]
+      categories.value = uniqueCategories.map(category => ({
+        id: category,
+        label: category
+      }))
+      
+      // 设置默认活跃分类
+      if (categories.value.length > 0 && !activeCategory.value) {
+        activeCategory.value = categories.value[0].id
+      }
+    } else {
+      error.value = '加载游戏数据失败'
+    }
+  } catch (err) {
+    error.value = '加载游戏数据失败'
+    console.error('加载游戏数据错误:', err)
+  } finally {
+    loading.value = false
   }
 }
+
+onMounted(() => {
+  loadGames()
+})
 
 const handleGameSelect = (gameId) => {
   console.log('选择游戏:', gameId)
@@ -97,7 +118,14 @@ const handleProfile = () => {
       <div class="flex gap-6 h-[calc(100vh-220px)] overflow-hidden">
         <!-- Sidebar Navigation -->
         <aside class="w-24 flex-shrink-0 flex flex-col gap-4 overflow-y-auto pb-4">
+          <div v-if="loading" class="flex justify-center items-center p-4">
+            <div class="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          <div v-else-if="categories.length === 0" class="flex justify-center items-center p-4 text-on-surface-variant">
+            <span class="text-sm">暂无分类</span>
+          </div>
           <div
+            v-else
             v-for="category in categories"
             :key="category.id"
             @click="handleCategoryChange(category.id)"
@@ -114,7 +142,28 @@ const handleProfile = () => {
 
         <!-- Content Area - Game Grid -->
         <section class="flex-grow overflow-y-auto pb-8">
-          <div class="grid grid-cols-3 gap-y-6 gap-x-4">
+          <!-- Loading State -->
+          <div v-if="loading" class="flex items-center justify-center h-full">
+            <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          </div>
+          
+          <!-- Error State -->
+          <div v-else-if="error" class="flex flex-col items-center justify-center h-full gap-4">
+            <span class="material-symbols-outlined text-4xl text-error">error_outline</span>
+            <p class="text-error text-center">{{ error }}</p>
+            <button @click="loadGames" class="px-4 py-2 bg-primary text-white rounded-full text-sm font-bold">
+              重试
+            </button>
+          </div>
+          
+          <!-- Empty State -->
+          <div v-else-if="filteredGames.length === 0" class="flex flex-col items-center justify-center h-full gap-4">
+            <span class="material-symbols-outlined text-4xl text-outline">sports_esports</span>
+            <p class="text-on-surface-variant text-center">暂无游戏</p>
+          </div>
+          
+          <!-- Game Grid -->
+          <div v-else class="grid grid-cols-3 gap-y-6 gap-x-4">
             <!-- Game Card -->
             <div
               v-for="game in filteredGames"
@@ -123,7 +172,7 @@ const handleProfile = () => {
               class="flex flex-col items-center gap-2 group active:scale-95 transition-transform cursor-pointer"
             >
               <div class="w-full aspect-square rounded-2xl bg-surface-container-lowest shadow-sm overflow-hidden flex items-center justify-center">
-                <img :alt="game.name" class="w-full h-full object-cover" :src="game.image" />
+                <img :alt="game.name" class="w-full h-full object-cover" :src="game.image || 'https://via.placeholder.com/150'" />
               </div>
               <span class="text-xs font-medium text-on-surface text-center">{{ game.name }}</span>
             </div>

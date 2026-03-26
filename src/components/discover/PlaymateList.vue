@@ -21,7 +21,7 @@
       <p class="text-zinc-400 text-sm mt-2">试试调整筛选条件或搜索关键词</p>
     </div>
 
-    <div v-else class="grid grid-cols-2 gap-4">
+    <div v-else class="space-y-5">
       <PlaymateCard
         v-for="(playmate, index) in playmates"
         :key="playmate.id"

@@ -62,7 +62,7 @@ const handleBack = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32">
+  <div class="min-h-screen bg-surface text-on-surface">
     <header class="bg-surface docked full-width top-0 z-50 flex justify-between items-center px-6 py-4 w-full sticky">
       <div class="flex items-center gap-3">
         <span @click="handleBack" class="material-symbols-outlined text-primary cursor-pointer">arrow_back</span>
@@ -149,7 +149,7 @@ const handleBack = () => {
         </div>
       </div>
 
-      <div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl px-6 pb-8 pt-4 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50">
+      <div class="bg-surface-container-low rounded-xl p-5 shadow-sm">
         <button
           @click="handleNext"
           class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"

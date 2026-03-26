@@ -1,7 +1,7 @@
 <template>
   <router-link 
     :to="`/expert/${id}`" 
-    class="bg-surface-container-lowest rounded-[1.5rem] sm:rounded-[2rem] p-3 sm:p-4 space-y-3 sm:space-y-4 shadow-sm relative overflow-hidden flex flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:scale-95"
+    class="bg-surface-container-lowest rounded-[2rem] p-4 space-y-4 shadow-sm relative overflow-hidden flex flex-col hover:shadow-md transition-all duration-300 hover:-translate-y-1 active:scale-95"
   >
     <div class="absolute top-0 right-0 p-3">
       <div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">

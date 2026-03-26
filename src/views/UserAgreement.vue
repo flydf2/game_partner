@@ -29,7 +29,7 @@ const handleAgree = () => {
       <div class="bg-neutral-200/50 h-[1px] w-full"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <div class="mb-10">
         <span class="inline-block px-3 py-1 rounded-full bg-primary-container text-on-primary-container font-label text-[10px] font-semibold mb-4">版本更新：2023年10月24日</span>
         <h2 class="font-headline text-3xl font-extrabold tracking-tight text-on-background leading-tight">

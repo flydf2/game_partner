@@ -1,8 +1,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user.js'
+import { useToast } from '../composables/useToast.js'
 
 const router = useRouter()
+const userStore = useUserStore()
+const { showToast } = useToast()
 
 const loginForm = ref({
   phone: '',
@@ -23,17 +27,17 @@ const handleLogin = async () => {
   error.value = ''
   
   try {
-    // 模拟登录请求
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await userStore.login({
+      phone: loginForm.value.phone,
+      password: loginForm.value.password
+    })
     
-    // 模拟登录成功
-    localStorage.setItem('auth_token', 'mock_token_' + Date.now())
-    
-    // 跳转到首页或之前的页面
+    showToast('登录成功', 'success')
     const redirect = router.currentRoute.value.query.redirect || '/'
     router.push(redirect)
   } catch (err) {
-    error.value = '登录失败，请检查账号密码'
+    error.value = err.message || '登录失败，请检查账号密码'
+    showToast(error.value, 'error')
   } finally {
     loading.value = false
   }

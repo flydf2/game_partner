@@ -1,69 +1,59 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { notificationApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const notifications = ref([
-  {
-    id: 1,
-    type: 'order',
-    title: '订单已完成',
-    message: '您的陪玩订单已完成，感谢您的使用',
-    time: '2026-03-23 18:30',
-    read: false
-  },
-  {
-    id: 2,
-    type: 'system',
-    title: '系统通知',
-    message: '新版本已发布，新增多种游戏类型',
-    time: '2026-03-23 15:20',
-    read: false
-  },
-  {
-    id: 3,
-    type: 'expert',
-    title: '大神上线',
-    message: '您关注的电竞少女已上线，快去预约吧',
-    time: '2026-03-22 20:15',
-    read: true
-  },
-  {
-    id: 4,
-    type: 'order',
-    title: '订单已开始',
-    message: '您的陪玩订单已开始，请注意查收',
-    time: '2026-03-22 10:30',
-    read: true
-  },
-  {
-    id: 5,
-    type: 'system',
-    title: '账户余额变动',
-    message: '您的账户收到100元订单收入',
-    time: '2026-03-21 19:45',
-    read: true
-  }
-])
-
+const notifications = ref([])
 const loading = ref(false)
 const error = ref('')
 const showClearDialog = ref(false)
 
 const unreadCount = ref(0)
 
-onMounted(() => {
-  calculateUnreadCount()
-})
+const loadNotifications = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await notificationApi.getNotifications()
+    if (response.success || response.code === 0) {
+      notifications.value = (response.data?.data || response.data || []).map(notification => ({
+        id: notification.id,
+        type: notification.type || 'system',
+        title: notification.title,
+        message: notification.content || notification.message,
+        time: notification.createdAt || notification.time,
+        read: notification.readStatus || notification.read
+      }))
+      calculateUnreadCount()
+    } else {
+      throw new Error(response.message || response.msg || '获取通知失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取通知失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const calculateUnreadCount = () => {
   unreadCount.value = notifications.value.filter(n => !n.read).length
 }
 
-const handleNotificationClick = (notification) => {
+const handleNotificationClick = async (notification) => {
+  // 标记为已读
   notification.read = true
   calculateUnreadCount()
+  
+  try {
+    await notificationApi.markAsRead(notification.id)
+  } catch (err) {
+    console.error('标记已读失败:', err)
+  }
   
   // 根据通知类型跳转到不同页面
   switch (notification.type) {
@@ -78,17 +68,31 @@ const handleNotificationClick = (notification) => {
   }
 }
 
-const handleMarkAllRead = () => {
-  notifications.value.forEach(notification => {
-    notification.read = true
-  })
-  calculateUnreadCount()
+const handleMarkAllRead = async () => {
+  try {
+    const response = await notificationApi.markAllAsRead()
+    if (response.success || response.code === 0) {
+      notifications.value.forEach(notification => {
+        notification.read = true
+      })
+      calculateUnreadCount()
+    }
+  } catch (err) {
+    console.error('标记全部已读失败:', err)
+  }
 }
 
-const handleClearAll = () => {
-  notifications.value = []
-  calculateUnreadCount()
-  showClearDialog.value = false
+const handleClearAll = async () => {
+  try {
+    const response = await notificationApi.clearAll()
+    if (response.success || response.code === 0) {
+      notifications.value = []
+      calculateUnreadCount()
+      showClearDialog.value = false
+    }
+  } catch (err) {
+    console.error('清空通知失败:', err)
+  }
 }
 
 const handleBack = () => {
@@ -138,6 +142,10 @@ const getNotificationColor = (type) => {
       return 'bg-surface-container/20 text-on-surface'
   }
 }
+
+onMounted(() => {
+  loadNotifications()
+})
 </script>
 
 <template>
@@ -170,7 +178,7 @@ const getNotificationColor = (type) => {
       </div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

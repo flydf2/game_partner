@@ -1,11 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { usePlaymateStore } from '../stores/playmate'
 import { searchPlaymates, getSearchSuggestions } from '../api'
 import PlaymateListCard from '../components/PlaymateListCard.vue'
 
 const router = useRouter()
+const route = useRoute()
 const playmateStore = usePlaymateStore()
 
 const searchKeyword = ref('')
@@ -100,11 +101,19 @@ const fetchPlaymates = async () => {
 }
 
 const filteredPlaymates = computed(() => {
+  console.info('playmateStore.playmates', playmateStore.playmates)
   return playmateStore.playmates
 })
 
 onMounted(() => {
-  fetchPlaymates()
+  // 从URL参数中获取keyword
+  const urlKeyword = route.query.keyword
+  if (urlKeyword) {
+    searchKeyword.value = urlKeyword
+    handleSearch()
+  } else {
+    fetchPlaymates()
+  }
 })
 </script>
 
@@ -120,7 +129,7 @@ onMounted(() => {
       </div>
     </nav>
 
-    <main class="pt-24 pb-32 px-5 max-w-md mx-auto">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-md mx-auto">
       <header class="mb-8">
         <h2 class="text-3xl font-extrabold font-headline text-on-surface tracking-tight mb-6">寻找队友</h2>
         
@@ -218,7 +227,7 @@ onMounted(() => {
           :key="playmate.id"
           :playmate="{
             id: playmate.id,
-            nickname: playmate.name,
+            nickname: playmate.nickname,
             avatar: playmate.avatar,
             rating: playmate.rating,
             price: playmate.price,

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { expertApi } from '../api'
+import { orderApi, expertApi, handleApiError } from '../api/index.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,33 +10,27 @@ const orderId = ref(route.params.id || '1')
 const order = ref(null)
 const expert = ref(null)
 const loading = ref(true)
+const error = ref('')
 
 const loadOrderDetail = async () => {
   try {
     loading.value = true
-    // 这里应该调用订单详情API，暂时使用模拟数据
-    // const response = await orderApi.getOrderDetail(orderId.value)
-    // order.value = response.data
+    error.value = ''
     
-    // 模拟订单数据
-    order.value = {
-      id: orderId.value,
-      expertId: '1',
-      serviceType: '技术陪练',
-      game: '王者荣耀',
-      duration: 2,
-      price: 68,
-      totalAmount: 141,
-      status: 'completed',
-      createdAt: '2026-03-15 19:30:00',
-      scheduledAt: '2026-03-15 20:00:00',
-      completedAt: '2026-03-15 22:00:00'
+    const response = await orderApi.getOrderDetail(orderId.value)
+    if (response.success || response.code === 0) {
+      order.value = response.data
+      
+      if (order.value.expertId) {
+        await loadExpertDetail(order.value.expertId)
+      }
+    } else {
+      throw new Error(response.message || response.msg || '获取订单详情失败')
     }
-    
-    // 加载专家详情
-    await loadExpertDetail(order.value.expertId)
-  } catch (error) {
-    console.error('加载订单详情失败:', error)
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('加载订单详情失败:', err)
   } finally {
     loading.value = false
   }
@@ -45,7 +39,9 @@ const loadOrderDetail = async () => {
 const loadExpertDetail = async (expertId) => {
   try {
     const response = await expertApi.getExpertDetail(expertId)
-    expert.value = response.data
+    if (response.success || response.code === 0) {
+      expert.value = response.data
+    }
   } catch (error) {
     console.error('加载大神详情失败:', error)
   }
@@ -85,7 +81,7 @@ onMounted(() => {
       </div>
     </main>
 
-    <main v-else-if="order" class="pt-20 pb-32 px-5 max-w-2xl mx-auto space-y-4">
+    <main v-else-if="order" class="pt-20 pb-32 px-5 max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- 订单状态 -->
       <section class="bg-surface-container-lowest rounded-xl p-5 shadow-sm overflow-hidden relative">
         <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>

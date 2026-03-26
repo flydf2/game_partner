@@ -1,55 +1,31 @@
 <template>
-  <div
-    class="bg-surface-container-lowest rounded-[1.5rem] sm:rounded-[2rem] p-3 sm:p-4 space-y-3 sm:space-y-4 shadow-sm relative overflow-hidden flex flex-col cursor-pointer hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
-    @click="handleClick"
-  >
-    <div class="absolute top-0 right-0 p-3">
-      <div class="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 shadow-sm">
-        <span class="material-symbols-outlined text-primary text-[10px]" style="font-variation-settings: 'FILL' 1;">star</span>
-        <span class="text-[10px] font-bold">{{ playmate.rating }}</span>
+  <div class="bg-surface-container-lowest rounded-[1.5rem] p-5 flex items-center gap-5 group active:scale-[0.98] transition-all duration-300">
+    <div class="relative flex-none">
+      <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-md">
+        <img class="w-full h-full object-cover" :alt="playmate.nickname" :src="playmate.avatar"/>
+      </div>
+      <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full" v-if="playmate.isOnline"></div>
+      <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-zinc-400 border-2 border-white rounded-full" v-else></div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between mb-1">
+        <h3 class="text-lg font-bold text-on-surface truncate">{{ playmate.nickname }}</h3>
+        <span class="text-primary font-bold header-font">¥{{ playmate.price }}/h</span>
+      </div>
+      <p class="text-sm text-on-surface-variant mb-2 flex items-center gap-1">
+        <span class="material-symbols-outlined text-[16px]">videogame_asset</span>
+        {{ playmate.game }} · {{ playmate.rank }}
+      </p>
+      <div class="flex gap-2">
+        <span v-for="(tag, index) in playmate.tags" :key="`tag-${index}`" class="px-2 py-0.5 rounded-md bg-tertiary-container text-on-tertiary-container text-[10px] font-bold">{{ tag }}</span>
       </div>
     </div>
-
-    <LazyImage
-      :src="playmate.avatar"
-      :alt="playmate.nickname"
-      aspect-ratio="square"
-      rounded="2xl"
-      class="relative"
-    >
-      <div
-        v-if="playmate.isOnline"
-        class="absolute bottom-2 right-2 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm"
-      />
-    </LazyImage>
-
-    <div class="space-y-2">
-      <div class="flex flex-wrap gap-1">
-        <span
-          v-for="(tag, index) in playmate.tags"
-          :key="`tag-${index}`"
-          class="px-2 py-0.5 bg-primary-container/30 text-on-primary-container text-[9px] font-bold rounded-lg"
-        >
-          {{ tag }}
-        </span>
-      </div>
-
-      <div class="flex justify-between items-end">
-        <div class="flex flex-col">
-          <span class="font-bold text-sm">{{ playmate.nickname }}</span>
-          <span class="text-primary text-xs font-black">¥{{ playmate.price }}/hr</span>
-        </div>
-        <div class="flex items-center gap-1">
-          <span class="material-symbols-outlined text-zinc-400 text-xs">favorite</span>
-          <span class="text-xs text-zinc-500">{{ playmate.likes }}</span>
-        </div>
-      </div>
-    </div>
+    <button class="ml-2 px-4 py-2 bg-primary-container text-on-primary-container font-black rounded-full text-xs active:scale-90 transition-transform" @click="handleBookClick">约TA</button>
   </div>
 </template>
 
 <script setup>
-import LazyImage from '../common/LazyImage.vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   playmate: {
@@ -58,19 +34,24 @@ const props = defineProps({
     default: () => ({
       id: '',
       nickname: '',
-      avatar: '',
-      rating: 0,
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
       price: 0,
-      likes: 0,
       tags: [],
-      isOnline: false
+      isOnline: false,
+      game: '',
+      rank: ''
     })
   }
 })
 
 const emit = defineEmits(['click'])
+const router = useRouter()
 
 function handleClick() {
   emit('click', props.playmate.id)
+}
+
+function handleBookClick() {
+  router.push(`/expert/${props.playmate.id}`)
 }
 </script>

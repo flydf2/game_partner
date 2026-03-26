@@ -39,6 +39,11 @@ export const easing = {
  */
 export const animate = (element, styles, options = {}) => {
   return new Promise((resolve) => {
+    if (!element) {
+      resolve()
+      return
+    }
+
     const duration = options.duration || ANIMATION_CONFIG.DEFAULT_DURATION
     const easingFunc = options.easing || ANIMATION_CONFIG.DEFAULT_EASING
     const delay = options.delay || 0
@@ -54,13 +59,20 @@ export const animate = (element, styles, options = {}) => {
 
     // 应用目标样式
     setTimeout(() => {
+      if (!element) {
+        resolve()
+        return
+      }
+
       Object.keys(styles).forEach(prop => {
         element.style[prop] = styles[prop]
       })
 
       // 动画完成后清理
       setTimeout(() => {
-        element.style.transition = ''
+        if (element) {
+          element.style.transition = ''
+        }
         resolve()
       }, duration + delay)
     }, 10)
@@ -74,6 +86,10 @@ export const animate = (element, styles, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const fadeIn = (element, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   element.style.opacity = '0'
   element.style.display = 'block'
   return animate(element, { opacity: '1' }, options)
@@ -86,8 +102,14 @@ export const fadeIn = (element, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const fadeOut = (element, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   return animate(element, { opacity: '0' }, options).then(() => {
-    element.style.display = 'none'
+    if (element) {
+      element.style.display = 'none'
+    }
   })
 }
 
@@ -99,6 +121,10 @@ export const fadeOut = (element, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const slideIn = (element, direction = 'top', options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   const distance = options.distance || '20px'
   const initialStyles = {
     opacity: '0',
@@ -140,6 +166,10 @@ export const slideIn = (element, direction = 'top', options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const slideOut = (element, direction = 'top', options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   const distance = options.distance || '20px'
   const targetStyles = {
     opacity: '0'
@@ -161,7 +191,9 @@ export const slideOut = (element, direction = 'top', options = {}) => {
   }
 
   return animate(element, targetStyles, options).then(() => {
-    element.style.display = 'none'
+    if (element) {
+      element.style.display = 'none'
+    }
   })
 }
 
@@ -174,6 +206,10 @@ export const slideOut = (element, direction = 'top', options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const scale = (element, from = 0.8, to = 1, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   element.style.transform = `scale(${from})`
   element.style.opacity = '0'
   element.style.display = 'block'
@@ -191,11 +227,18 @@ export const scale = (element, from = 0.8, to = 1, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const heartbeat = (element, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   const duration = options.duration || 1000
 
   return animate(element, {
     transform: 'scale(1.1)'
   }, { ...options, duration: duration / 2 }).then(() => {
+    if (!element) {
+      return Promise.resolve()
+    }
     return animate(element, {
       transform: 'scale(1)'
     }, { ...options, duration: duration / 2 })
@@ -209,11 +252,18 @@ export const heartbeat = (element, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const pulse = (element, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   const duration = options.duration || 1000
 
   return animate(element, {
     transform: 'scale(1.05)'
   }, { ...options, duration: duration / 2 }).then(() => {
+    if (!element) {
+      return Promise.resolve()
+    }
     return animate(element, {
       transform: 'scale(1)'
     }, { ...options, duration: duration / 2 })
@@ -227,20 +277,33 @@ export const pulse = (element, options = {}) => {
  * @returns {Promise} 动画完成Promise
  */
 export const shake = (element, options = {}) => {
+  if (!element) {
+    return Promise.resolve()
+  }
+
   const duration = options.duration || 500
   const distance = options.distance || '10px'
 
   return animate(element, {
     transform: `translateX(${distance})`
   }, { ...options, duration: duration / 3 }).then(() => {
+    if (!element) {
+      return Promise.resolve()
+    }
     return animate(element, {
       transform: `translateX(-${distance})`
     }, { ...options, duration: duration / 3 })
   }).then(() => {
+    if (!element) {
+      return Promise.resolve()
+    }
     return animate(element, {
       transform: `translateX(${distance})`
     }, { ...options, duration: duration / 3 })
   }).then(() => {
+    if (!element) {
+      return Promise.resolve()
+    }
     return animate(element, {
       transform: 'translateX(0)'
     }, { ...options, duration: duration / 3 })

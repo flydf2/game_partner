@@ -94,20 +94,21 @@ const handleSkip = () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-background pb-32">
-    <!-- TopAppBar -->
-    <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm">
-      <div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
-        <div class="flex items-center gap-4">
-          <button @click="handleBack" class="p-2 -ml-2 hover:bg-yellow-50 rounded-full transition-colors active:scale-95 duration-200">
-            <span class="material-symbols-outlined text-on-surface">arrow_back_ios_new</span>
-          </button>
-          <h1 class="font-headline font-bold text-lg tracking-tight text-on-surface">评价服务</h1>
-        </div>
-        <div class="absolute bottom-0 left-0 bg-zinc-100 h-[1px] w-full"></div>
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">评价服务</h1>
       </div>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
     </header>
 
-    <main class="pt-24 pb-32 px-5 max-w-md mx-auto space-y-8">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-md mx-auto space-y-8">
       <!-- Order Summary -->
       <section class="bg-surface-container-lowest rounded-2xl p-5 shadow-sm">
         <div class="flex items-center gap-4">

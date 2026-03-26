@@ -1,215 +1,225 @@
 <template>
-  <div class="space-y-6">
-    <!-- 加载状态 -->
-    <section v-if="loading" class="bg-surface-container-lowest rounded-3xl p-6 flex items-center justify-center">
-      <div class="flex flex-col items-center gap-3">
-        <div class="w-12 h-12 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-sm text-on-surface-variant">加载中...</p>
-      </div>
-    </section>
-
-    <!-- 错误状态 -->
-    <section v-else-if="error" class="bg-surface-container-lowest rounded-3xl p-6">
-      <div class="flex flex-col items-center gap-3">
-        <span class="material-symbols-outlined text-error text-4xl">error_outline</span>
-        <p class="text-sm text-error">{{ error }}</p>
-        <button 
-          class="px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
-          @click="loadData"
-        >
-          重试
-        </button>
-      </div>
-    </section>
-
-    <!-- 主内容 -->
-    <template v-else>
-      <section class="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-6 flex items-center gap-5 transition-all duration-300 hover:shadow-md">
-        <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-bl-full -mr-8 -mt-8"></div>
-        <div class="relative w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-primary-container/30">
-          <img alt="Avatar" class="w-full h-full object-cover" :src="userInfo.avatar" />
-        </div>
-        <div class="flex-1 space-y-1">
-          <h2 class="text-xl font-bold text-on-surface font-headline">{{ userInfo.nickname }}</h2>
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-on-primary">VIP {{ userInfo.vipLevel }}</span>
-            <span class="text-xs text-on-surface-variant">ID: {{ userInfo.id }}</span>
-          </div>
-        </div>
-        <span class="material-symbols-outlined text-outline transition-transform duration-200 hover:translate-x-1">chevron_right</span>
-      </section>
-
-      <section class="grid grid-cols-2 gap-4">
-        <div class="bg-primary-container rounded-3xl p-5 space-y-2 transition-all duration-300 hover:shadow-md">
-          <div class="flex items-center justify-between text-on-primary-container">
-            <span class="text-sm font-semibold">账户余额</span>
-            <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
-          </div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-xs font-bold text-on-primary-container">¥</span>
-            <span class="text-2xl font-black font-headline text-on-primary-container tracking-tight">{{ formatAmount(userInfo.balance) }}</span>
-          </div>
-        </div>
-        <div class="bg-white rounded-3xl p-5 space-y-2 border border-surface-container transition-all duration-300 hover:shadow-md">
-          <div class="flex items-center justify-between text-on-surface-variant">
-            <span class="text-sm font-semibold">优惠券</span>
-            <span class="material-symbols-outlined text-lg">confirmation_number</span>
-          </div>
-          <div class="flex items-baseline gap-1">
-            <span class="text-2xl font-black font-headline text-primary tracking-tight">{{ userInfo.couponCount }}</span>
-            <span class="text-xs font-bold text-on-surface-variant">张</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="bg-surface-container-lowest rounded-3xl p-5">
-        <h3 class="text-sm font-bold text-on-surface mb-5 px-1">服务订单</h3>
-        <div class="flex justify-between items-center">
-          <button 
-            v-for="status in orderStatuses" 
-            :key="status.key"
-            class="flex flex-col items-center gap-2 group transition-all active:scale-95"
-            :class="{ 'text-primary': activeOrderStatus === status.key }"
-            @click="handleOrderStatusClick(status.key)"
-          >
-            <div class="relative w-12 h-12 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container transition-colors">
-              <span class="material-symbols-outlined">{{ status.icon }}</span>
-              <span 
-                v-if="status.badge" 
-                class="absolute -top-1 -right-1 w-4 h-4 bg-error text-[9px] text-white flex items-center justify-center rounded-full border-2 border-white"
-              >
-                {{ status.badge }}
-              </span>
-            </div>
-            <span class="text-[11px] font-medium text-on-surface-variant">{{ status.label }}</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- 订单加载状态 -->
-      <section v-if="orderLoading" class="bg-surface-container-lowest rounded-3xl p-8 flex items-center justify-center">
+  <div class="min-h-screen bg-surface text-on-surface pb-32">
+    <!-- TopAppBar -->
+    <TopAppBar title="个人中心" />
+    
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+      <!-- 加载状态 -->
+      <section v-if="loading" class="bg-surface-container-lowest rounded-3xl p-6 flex items-center justify-center">
         <div class="flex flex-col items-center gap-3">
-          <div class="w-10 h-10 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
-          <p class="text-sm text-on-surface-variant">加载订单中...</p>
+          <div class="w-12 h-12 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-sm text-on-surface-variant">加载中...</p>
         </div>
       </section>
 
-      <!-- 订单错误状态 -->
-      <section v-else-if="orderError" class="bg-surface-container-lowest rounded-3xl p-6">
+      <!-- 错误状态 -->
+      <section v-else-if="error" class="bg-surface-container-lowest rounded-3xl p-6">
         <div class="flex flex-col items-center gap-3">
-          <span class="material-symbols-outlined text-error text-3xl">error_outline</span>
-          <p class="text-sm text-error">{{ orderError }}</p>
+          <span class="material-symbols-outlined text-error text-4xl">error_outline</span>
+          <p class="text-sm text-error">{{ error }}</p>
           <button 
             class="px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
-            @click="loadOrders"
+            @click="loadData"
           >
             重试
           </button>
         </div>
       </section>
 
-      <!-- 订单列表 -->
-      <section v-else-if="filteredOrders.length > 0" class="space-y-4">
-        <h3 class="text-sm font-bold text-on-surface px-1">订单列表</h3>
-        <div 
-          v-for="order in filteredOrders" 
-          :key="order.id"
-          class="bg-surface-container-lowest rounded-3xl p-5 transition-all duration-300 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer"
-          @click="handleOrderDetail(order.id)"
-        >
-          <div class="flex justify-between items-start mb-4">
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl overflow-hidden">
-                <img :src="order.expertAvatar" alt="Expert Avatar" class="w-full h-full object-cover" />
-              </div>
-              <div>
-                <h4 class="font-bold text-sm">{{ order.expertName }}</h4>
-                <p class="text-xs text-on-surface-variant">{{ order.game }} · {{ order.skill }}</p>
-              </div>
-            </div>
-            <span :class="getOrderStatusClass(order.status)" class="text-xs font-bold px-2 py-1 rounded-full">
-              {{ order.statusText }}
-            </span>
+      <!-- 主内容 -->
+      <template v-else>
+        <section class="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-6 flex items-center gap-5 transition-all duration-300 hover:shadow-md">
+          <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-bl-full -mr-8 -mt-8"></div>
+          <div class="relative w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-primary-container/30">
+            <img alt="Avatar" class="w-full h-full object-cover" :src="userInfo.avatar" />
           </div>
+          <div class="flex-1 space-y-1">
+            <h2 class="text-xl font-bold text-on-surface font-headline">{{ userInfo.nickname }}</h2>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-primary text-on-primary">VIP {{ userInfo.vipLevel }}</span>
+              <span class="text-xs text-on-surface-variant">ID: {{ userInfo.id }}</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline transition-transform duration-200 hover:translate-x-1">chevron_right</span>
+        </section>
+
+        <section class="grid grid-cols-2 gap-4">
+          <div class="bg-primary-container rounded-3xl p-5 space-y-2 transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center justify-between text-on-primary-container">
+              <span class="text-sm font-semibold">账户余额</span>
+              <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="text-xs font-bold text-on-primary-container">¥</span>
+              <span class="text-2xl font-black font-headline text-on-primary-container tracking-tight">{{ formatAmount(userInfo.balance) }}</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-3xl p-5 space-y-2 border border-surface-container transition-all duration-300 hover:shadow-md">
+            <div class="flex items-center justify-between text-on-surface-variant">
+              <span class="text-sm font-semibold">优惠券</span>
+              <span class="material-symbols-outlined text-lg">confirmation_number</span>
+            </div>
+            <div class="flex items-baseline gap-1">
+              <span class="text-2xl font-black font-headline text-primary tracking-tight">{{ userInfo.couponCount }}</span>
+              <span class="text-xs font-bold text-on-surface-variant">张</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="bg-surface-container-lowest rounded-3xl p-5">
+          <h3 class="text-sm font-bold text-on-surface mb-5 px-1">服务订单</h3>
           <div class="flex justify-between items-center">
-            <div>
-              <span class="text-xs text-on-surface-variant">服务时间</span>
-              <p class="text-sm font-medium">{{ order.serviceTime }}</p>
+            <button 
+              v-for="status in orderStatuses" 
+              :key="status.key"
+              class="flex flex-col items-center gap-2 group transition-all active:scale-95"
+              :class="{ 'text-primary': activeOrderStatus === status.key }"
+              @click="handleOrderStatusClick(status.key)"
+            >
+              <div class="relative w-12 h-12 rounded-2xl bg-surface-container-low flex items-center justify-center text-primary group-hover:bg-primary-container transition-colors">
+                <span class="material-symbols-outlined">{{ status.icon }}</span>
+                <span 
+                  v-if="status.badge" 
+                  class="absolute -top-1 -right-1 w-4 h-4 bg-error text-[9px] text-white flex items-center justify-center rounded-full border-2 border-white"
+                >
+                  {{ status.badge }}
+                </span>
+              </div>
+              <span class="text-[11px] font-medium text-on-surface-variant">{{ status.label }}</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- 订单加载状态 -->
+        <section v-if="orderLoading" class="bg-surface-container-lowest rounded-3xl p-8 flex items-center justify-center">
+          <div class="flex flex-col items-center gap-3">
+            <div class="w-10 h-10 border-4 border-primary-container border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-sm text-on-surface-variant">加载订单中...</p>
+          </div>
+        </section>
+
+        <!-- 订单错误状态 -->
+        <section v-else-if="orderError" class="bg-surface-container-lowest rounded-3xl p-6">
+          <div class="flex flex-col items-center gap-3">
+            <span class="material-symbols-outlined text-error text-3xl">error_outline</span>
+            <p class="text-sm text-error">{{ orderError }}</p>
+            <button 
+              class="px-4 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
+              @click="loadOrders"
+            >
+              重试
+            </button>
+          </div>
+        </section>
+
+        <!-- 订单列表 -->
+        <section v-else-if="filteredOrders.length > 0" class="space-y-4">
+          <h3 class="text-sm font-bold text-on-surface px-1">订单列表</h3>
+          <div 
+            v-for="order in filteredOrders" 
+            :key="order.id"
+            class="bg-surface-container-lowest rounded-3xl p-5 transition-all duration-300 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer"
+            @click="handleOrderDetail(order.id)"
+          >
+            <div class="flex justify-between items-start mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl overflow-hidden">
+                  <img :src="order.expertAvatar" alt="Expert Avatar" class="w-full h-full object-cover" />
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm">{{ order.expertName }}</h4>
+                  <p class="text-xs text-on-surface-variant">{{ order.game }} · {{ order.skill }}</p>
+                </div>
+              </div>
+              <span :class="getOrderStatusClass(order.status)" class="text-xs font-bold px-2 py-1 rounded-full">
+                {{ order.statusText }}
+              </span>
             </div>
-            <div class="text-right">
-              <span class="text-xs text-on-surface-variant">金额</span>
-              <p class="text-sm font-bold text-primary">¥{{ order.amount }}</p>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="text-xs text-on-surface-variant">服务时间</span>
+                <p class="text-sm font-medium">{{ order.serviceTime }}</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs text-on-surface-variant">金额</span>
+                <p class="text-sm font-bold text-primary">¥{{ order.amount }}</p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- 空订单状态 -->
-      <section v-else class="bg-surface-container-lowest rounded-3xl p-8 text-center">
-        <div class="w-20 h-20 mx-auto bg-surface-container flex items-center justify-center mb-4">
-          <span class="material-symbols-outlined text-outline text-4xl">receipt_long</span>
-        </div>
-        <p class="text-sm text-on-surface-variant">暂无订单</p>
-      </section>
+        <!-- 空订单状态 -->
+        <section v-else class="bg-surface-container-lowest rounded-3xl p-8 text-center">
+          <div class="w-20 h-20 mx-auto bg-surface-container flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-outline text-4xl">receipt_long</span>
+          </div>
+          <p class="text-sm text-on-surface-variant">暂无订单</p>
+        </section>
 
-      <!-- 设置菜单 -->
-      <section class="bg-surface-container-lowest rounded-3xl overflow-hidden">
-        <div class="divide-y divide-surface-container">
-          <a 
-            v-for="item in menuItems" 
-            :key="item.key"
-            class="flex items-center gap-4 p-5 hover:bg-surface-container-low transition-colors cursor-pointer duration-200"
-            @click="handleMenuClick(item.key)"
-          >
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="item.iconBg">
-              <span class="material-symbols-outlined" :class="item.iconColor" style="font-variation-settings: 'FILL' 1;">{{ item.icon }}</span>
-            </div>
-            <span class="flex-1 font-semibold text-on-surface">{{ item.label }}</span>
-            <span v-if="item.badge" class="text-xs text-outline mr-1">{{ item.badge }}</span>
-            <span class="material-symbols-outlined text-outline text-lg transition-transform duration-200 hover:translate-x-1">chevron_right</span>
-          </a>
-        </div>
-      </section>
+        <!-- 设置菜单 -->
+        <section class="bg-surface-container-lowest rounded-3xl overflow-hidden">
+          <div class="divide-y divide-surface-container">
+            <a 
+              v-for="item in menuItems" 
+              :key="item.key"
+              class="flex items-center gap-4 p-5 hover:bg-surface-container-low transition-colors cursor-pointer duration-200"
+              @click="handleMenuClick(item.key)"
+            >
+              <div class="w-10 h-10 rounded-xl flex items-center justify-center" :class="item.iconBg">
+                <span class="material-symbols-outlined" :class="item.iconColor" style="font-variation-settings: 'FILL' 1;">{{ item.icon }}</span>
+              </div>
+              <span class="flex-1 font-semibold text-on-surface">{{ item.label }}</span>
+              <span v-if="item.badge" class="text-xs text-outline mr-1">{{ item.badge }}</span>
+              <span class="material-symbols-outlined text-outline text-lg transition-transform duration-200 hover:translate-x-1">chevron_right</span>
+            </a>
+          </div>
+        </section>
 
-      <!-- 退出登录按钮 -->
-      <button 
-        class="w-full py-4 rounded-full bg-white text-error font-bold text-sm shadow-sm active:scale-95 transition-all duration-200 hover:bg-red-50"
-        @click="showLogoutDialog = true"
-      >
-        退出登录
-      </button>
-    </template>
+        <!-- 退出登录按钮 -->
+        <button 
+          class="w-full py-4 rounded-full bg-white text-error font-bold text-sm shadow-sm active:scale-95 transition-all duration-200 hover:bg-red-50"
+          @click="showLogoutDialog = true"
+        >
+          退出登录
+        </button>
+      </template>
 
-    <!-- 退出登录确认对话框 -->
-    <div v-if="showLogoutDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
-      <div class="bg-surface-container-lowest rounded-3xl p-6 w-full max-w-sm animate-in fade-in-90 slide-in-from-bottom-5">
-        <h3 class="text-lg font-bold text-on-surface font-headline mb-4 text-center">确认退出登录</h3>
-        <p class="text-sm text-on-surface-variant mb-6 text-center">您确定要退出当前账号吗？</p>
-        <div class="flex gap-4">
-          <button 
-            class="flex-1 py-3 rounded-full bg-surface-container text-on-surface font-bold text-sm transition-all active:scale-95 hover:bg-surface-container-low"
-            @click="showLogoutDialog = false"
-          >
-            取消
-          </button>
-          <button 
-            class="flex-1 py-3 rounded-full bg-error text-white font-bold text-sm transition-all active:scale-95 hover:bg-error-dim"
-            @click="handleLogout"
-          >
-            确定退出
-          </button>
+      <!-- 退出登录确认对话框 -->
+      <div v-if="showLogoutDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
+        <div class="bg-surface-container-lowest rounded-3xl p-6 w-full max-w-sm animate-in fade-in-90 slide-in-from-bottom-5">
+          <h3 class="text-lg font-bold text-on-surface font-headline mb-4 text-center">确认退出登录</h3>
+          <p class="text-sm text-on-surface-variant mb-6 text-center">您确定要退出当前账号吗？</p>
+          <div class="flex gap-4">
+            <button 
+              class="flex-1 py-3 rounded-full bg-surface-container text-on-surface font-bold text-sm transition-all active:scale-95 hover:bg-surface-container-low"
+              @click="showLogoutDialog = false"
+            >
+              取消
+            </button>
+            <button 
+              class="flex-1 py-3 rounded-full bg-error text-white font-bold text-sm transition-all active:scale-95 hover:bg-error-dim"
+              @click="handleLogout"
+            >
+              确定退出
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
+import TopAppBar from '../components/TopAppBar.vue'
+import { useUserStore } from '../stores/user.js'
+import { useToast } from '../composables/useToast.js'
+import { userApi, orderApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
+const userStore = useUserStore()
+const { showToast } = useToast()
 
 const userInfo = ref({
   avatar: '',
@@ -223,7 +233,7 @@ const userInfo = ref({
 const orders = ref([])
 const orderStatuses = ref([
   { key: 'all', label: '全部', icon: 'receipt_long', badge: null },
-  { key: 'pending', label: '待进行', icon: 'pending_actions', badge: 2 },
+  { key: 'pending', label: '待进行', icon: 'pending_actions', badge: null },
   { key: 'completed', label: '已完成', icon: 'check_circle', badge: null },
   { key: 'cancelled', label: '已取消', icon: 'cancel', badge: null }
 ])
@@ -273,7 +283,7 @@ const menuItems = ref([
     icon: 'favorite', 
     iconBg: 'bg-pink-50', 
     iconColor: 'text-pink-600',
-    badge: '128 人' 
+    badge: null 
   },
   { 
     key: 'history', 
@@ -378,17 +388,23 @@ const loadData = async () => {
   loading.value = true
   error.value = ''
   try {
-    // 模拟数据
-    userInfo.value = {
-      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      nickname: '游戏达人',
-      vipLevel: 3,
-      id: '1000001',
-      balance: 1280.50,
-      couponCount: 5
+    const response = await userApi.getUserInfo()
+    if (response.success || response.code === 0) {
+      userInfo.value = {
+        avatar: response.data.avatar || 'https://randomuser.me/api/portraits/men/32.jpg',
+        nickname: response.data.nickname || response.data.username || '用户',
+        vipLevel: response.data.vipLevel || 0,
+        id: response.data.id || '',
+        balance: response.data.balance || 0,
+        couponCount: response.data.couponCount || 0
+      }
+    } else {
+      throw new Error(response.message || response.msg || '获取用户信息失败')
     }
   } catch (err) {
-    error.value = '获取用户信息失败'
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取用户信息失败:', err)
   } finally {
     loading.value = false
   }
@@ -398,47 +414,45 @@ const loadOrders = async () => {
   orderLoading.value = true
   orderError.value = ''
   try {
-    // 模拟数据
-    orders.value = [
-      {
-        id: 1,
-        expertAvatar: 'https://randomuser.me/api/portraits/women/33.jpg',
-        expertName: '电竞少女',
-        game: 'LOL',
-        skill: '钻石段位',
-        status: 'pending',
-        statusText: '待进行',
-        serviceTime: '2026-03-25 19:00-20:00',
-        amount: 48
-      },
-      {
-        id: 2,
-        expertAvatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-        expertName: '游戏大师',
-        game: 'CS:GO',
-        skill: '大师段位',
-        status: 'completed',
-        statusText: '已完成',
-        serviceTime: '2026-03-20 20:00-21:00',
-        amount: 52
-      },
-      {
-        id: 3,
-        expertAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-        expertName: '安妮喵呜',
-        game: '绝地求生',
-        skill: '温柔语聊',
-        status: 'cancelled',
-        statusText: '已取消',
-        serviceTime: '2026-03-15 18:00-19:00',
-        amount: 55
-      }
-    ]
+    const response = await orderApi.getOrders(activeOrderStatus.value === 'all' ? 'all' : activeOrderStatus.value)
+    if (response.success || response.code === 0) {
+      orders.value = (response.data?.data || response.data || []).map(order => ({
+        id: order.id,
+        expertAvatar: order.expertAvatar || order.playmate?.avatar || 'https://via.placeholder.com/150',
+        expertName: order.expertName || order.playmate?.name || '未知',
+        game: order.game || order.playmate?.game || '未知',
+        skill: order.skill || order.playmate?.service || '未知服务',
+        status: order.status,
+        statusText: getStatusText(order.status),
+        serviceTime: formatServiceTime(order.serviceTime || order.createdAt),
+        amount: order.amount || order.price || 0
+      }))
+    } else {
+      throw new Error(response.message || response.msg || '获取订单列表失败')
+    }
   } catch (err) {
-    orderError.value = '获取订单列表失败'
+    const result = handleApiError(err)
+    orderError.value = result.error
+    console.error('获取订单列表失败:', err)
   } finally {
     orderLoading.value = false
   }
+}
+
+const getStatusText = (status) => {
+  const statusMap = {
+    pending: '待进行',
+    ongoing: '进行中',
+    completed: '已完成',
+    cancelled: '已取消'
+  }
+  return statusMap[status] || '未知状态'
+}
+
+const formatServiceTime = (dateString) => {
+  if (!dateString) return '未知时间'
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-CN')
 }
 
 const handleOrderStatusClick = (status) => {
@@ -506,14 +520,21 @@ const handleMenuClick = (key) => {
 const handleLogout = async () => {
   try {
     showLogoutDialog.value = false
-    // 模拟退出登录
-    console.log('退出登录成功')
+    await userStore.logout()
+    showToast('退出登录成功', 'success')
+    router.push('/login')
   } catch (err) {
     console.error('退出登录失败:', err)
+    showToast('退出登录失败，请重试', 'error')
   }
 }
 
 onMounted(() => {
+  // 检查登录状态
+  if (!userStore.getIsLoggedIn) {
+    router.push('/login')
+    return
+  }
   loadData()
   loadOrders()
 })

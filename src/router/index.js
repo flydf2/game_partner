@@ -29,9 +29,9 @@ const routes = [
     }
   },
   { path: '/notifications', name: 'Notifications', component: () => import('../views/Notifications.vue'), meta: { title: '通知', requireAuth: true } },
-  { path: '/messages', name: 'Messages', component: () => import('../views/Messages.vue'), meta: { title: '消息', requireAuth: true, keepAlive: true } },
-  { path: '/chat/:id', name: 'Chat', component: () => import('../views/Chat.vue'), meta: { title: '聊天', requireAuth: true } },
-  { path: '/create-post', name: 'CreatePost', component: () => import('../views/CreatePost.vue'), meta: { title: '发布动态', requireAuth: true } },
+  { path: '/messages', name: 'Messages', component: () => import('../views/Chat.vue'), meta: { title: '消息', requireAuth: true, keepAlive: true } },
+  { path: '/chat/:id', name: 'Chat', component: () => import('../views/Chat.vue'), meta: { title: '聊天', requireAuth: true, noBottomNav: true } },
+  { path: '/create-post', name: 'CreatePost', component: () => import('../views/CreatePost.vue'), meta: { title: '发布动态', requireAuth: true, noBottomNav: true } },
   { path: '/reward-orders', name: 'RewardOrders', component: () => import('../views/RewardOrders.vue'), meta: { title: '悬赏订单', requireAuth: true } },
   { path: '/grab-order/:id', name: 'GrabOrder', component: () => import('../views/GrabOrder.vue'), meta: { title: '抢单确认', requireAuth: true } },
   {
@@ -128,7 +128,8 @@ const routes = [
     name: 'Profile',
     component: () => import('../views/Profile.vue'),
     meta: {
-      title: '个人中心'
+      title: '个人中心',
+      requireAuth: true
     }
   },
   {
@@ -227,6 +228,14 @@ const routes = [
   { path: '/register', name: 'Register', component: () => import('../views/Register.vue'), meta: { title: '注册', guest: true } },
   { path: '/forgot-password', name: 'ForgotPassword', component: () => import('../views/ForgotPassword.vue'), meta: { title: '忘记密码', guest: true } },
   {
+    path: '/api-test',
+    name: 'ApiTest',
+    component: () => import('../views/ApiTest.vue'),
+    meta: {
+      title: 'API 调试'
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('../views/NotFound.vue'),
@@ -255,20 +264,31 @@ router.beforeEach((to, from, next) => {
   const requireAuth = to.meta.requireAuth
   const guestOnly = to.meta.guest
   
+  console.log('路由守卫:', {
+    to: to.path,
+    requireAuth,
+    isAuthenticated,
+    guestOnly
+  })
+  
   if (requireAuth && !isAuthenticated) {
+    console.log('需要认证，重定向到登录页面')
     next({
       name: 'Login',
       query: { redirect: to.fullPath }
     })
   } else if (guestOnly && isAuthenticated) {
+    console.log('已认证，重定向到首页')
     next({ name: 'Home' })
   } else {
+    console.log('继续导航')
     next()
   }
 })
 
 function checkAuth() {
-  const token = localStorage.getItem('auth_token')
+  const token = localStorage.getItem('token')
+  console.log('检查认证状态，token:', !!token)
   return !!token
 }
 

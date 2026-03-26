@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { mockService } from '../services/mock'
+import { playmateAPI } from '../api/playmate.js'
 
 export const usePlaymateStore = defineStore('playmate', {
   state: () => ({
@@ -29,10 +29,25 @@ export const usePlaymateStore = defineStore('playmate', {
       try {
         this.isLoading = true
         this.error = null
-        const response = await mockService.getPlaymates(params)
-        this.playmates = response.list
-        this.total = response.total
-        return response
+        const response = await playmateAPI.getPlaymates(params)
+        if (response.code === 0) {
+          // 处理数据格式，确保正确解析data.data和data.pagination
+          const playmateData = response.data.data || []
+          this.playmates = playmateData.map(playmate => ({
+            ...playmate,
+            tags: playmate.tags ? playmate.tags.split(',') : [],
+          }))
+          console.info(this.playmates)
+          this.total = response.data.pagination?.totalCount || 0
+          this.setPagination(
+            response.data.pagination?.currentPage || 1,
+            response.data.pagination?.totalPages || 1,
+            response.data.pagination?.totalCount || 0
+          )
+          return response.data
+        } else {
+          throw new Error(response.msg || '获取失败')
+        }
       } catch (error) {
         this.error = error.message
         throw error
@@ -45,9 +60,13 @@ export const usePlaymateStore = defineStore('playmate', {
       try {
         this.isLoading = true
         this.error = null
-        const response = await mockService.getPlaymateDetail(id)
-        this.currentPlaymate = response
-        return response
+        const response = await playmateAPI.getPlaymateDetail(id)
+        if (response.code === 0) {
+          this.currentPlaymate = response.data
+          return response.data
+        } else {
+          throw new Error(response.msg || '获取失败')
+        }
       } catch (error) {
         this.error = error.message
         throw error
@@ -56,14 +75,37 @@ export const usePlaymateStore = defineStore('playmate', {
       }
     },
     
-    async searchPlaymates(params) {
+    async searchPlaymates(keyword, params = {}) {
       try {
         this.isLoading = true
         this.error = null
-        const response = await mockService.searchPlaymates(params)
-        this.playmates = response.list
-        this.total = response.total
-        return response
+        const response = await playmateAPI.searchPlaymates(keyword, params)
+        
+        // 处理不同格式的响应
+        let playmateData = []
+        let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
+        
+        if (response.code === 0) {
+          // 真实API格式
+          playmateData = response.data.data || []
+          pagination = response.data.pagination || pagination
+        } else if (response.success) {
+          // Mock数据格式
+          playmateData = response.data || []
+          pagination = response.pagination || pagination
+        }
+        
+        this.playmates = playmateData.map(playmate => ({
+          ...playmate,
+          tags: playmate.tags ? playmate.tags.split(',') : [],
+        }))
+        this.total = pagination.totalCount || 0
+        this.setPagination(
+          pagination.currentPage || 1,
+          pagination.totalPages || 1,
+          pagination.totalCount || 0
+        )
+        return playmateData
       } catch (error) {
         this.error = error.message
         throw error

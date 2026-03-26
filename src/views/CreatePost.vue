@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { communityApi } from '../api/index.js'
 
 const router = useRouter()
 
@@ -18,12 +19,11 @@ const categories = [
 
 const isRewardPost = ref(false)
 const rewardAmount = ref('')
-const paymentMethod = ref('prepay') // prepay: 预支付, postpay: 确认后支付
+const paymentMethod = ref('prepay')
 
 const handleImageUpload = (event) => {
   const files = event.target.files
   if (files.length > 0) {
-    // 限制最多上传3张图片
     const images = Array.from(files).slice(0, 3)
     selectedImages.value = images.map(file => URL.createObjectURL(file))
   }
@@ -48,7 +48,6 @@ const handleSubmit = async () => {
 
   isSubmitting.value = true
   try {
-    // 模拟发布请求
     const postData = {
       content: postContent.value,
       images: selectedImages.value,
@@ -58,28 +57,19 @@ const handleSubmit = async () => {
       paymentMethod: isRewardPost.value ? paymentMethod.value : null
     }
     
-    console.log('发布动态:', postData)
-    
-    // 模拟延迟
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await communityApi.createPost(postData)
     
     if (isRewardPost.value) {
-      // 对于悬赏动态，根据支付方式进行处理
       if (paymentMethod.value === 'prepay') {
-        // 跳转到支付页面
-        console.log('跳转到支付页面')
-        alert('即将跳转到支付页面')
-        // 这里应该跳转到支付页面，暂时返回社区
-        router.push('/community')
+        alert('发布成功，即将跳转到支付页面')
       } else {
-        // 确认后支付，直接发布
-        console.log('发布悬赏动态，确认后支付')
-        router.push('/community')
+        alert('发布成功')
       }
     } else {
-      // 普通动态，直接发布
-      router.push('/community')
+      alert('发布成功')
     }
+    
+    router.push('/community')
   } catch (error) {
     console.error('发布失败:', error)
     alert('发布失败，请重试')
@@ -97,20 +87,24 @@ const handleCancel = () => {
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-surface-container-low/50">
       <div class="flex items-center gap-4">
-        <span
+        <button
           @click="handleCancel"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+          class="transition-all duration-200 active:scale-95 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full"
         >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">发布动态</h1>
+          <span class="material-symbols-outlined">arrow_back</span>
+        </button>
+        <h1 class="font-headline font-bold text-lg text-on-surface">发布动态</h1>
       </div>
       <button
-            @click="handleSubmit"
-            :disabled="isSubmitting || !postContent.trim()"
-            class="text-primary font-bold text-sm px-4 py-2 rounded-full transition-all"
-            :class="isSubmitting || !postContent.trim() ? 'opacity-50 cursor-not-allowed' : 'active:scale-95'"
-          >
+        @click="handleSubmit"
+        :disabled="isSubmitting || !postContent.trim()"
+        class="font-bold text-sm px-5 py-2 rounded-full transition-all duration-200 active:scale-95 flex items-center gap-2"
+        :class="isSubmitting || !postContent.trim() 
+          ? 'bg-surface-container text-on-surface-variant cursor-not-allowed' 
+          : 'bg-primary-container text-on-primary-container hover:bg-primary hover:shadow-lg shadow-primary-container/30'"
+      >
+        <span v-if="isSubmitting" class="material-symbols-outlined animate-spin">sync</span>
+        <span v-else class="material-symbols-outlined">publish</span>
         {{ isSubmitting ? '发布中...' : '发布' }}
       </button>
     </header>

@@ -31,10 +31,13 @@ import {
   mockGetCategories,
   mockGetRecommendations,
   mockGetCommunityPosts,
+  mockCreatePost,
   mockGetGamesByCategory,
   mockGetOrderConfirmation,
   mockGetRewardOrders,
-  mockGrabRewardOrder
+  mockGrabRewardOrder,
+  mockGetRewardOrderDetail,
+  mockGetOrderDetail
 } from './mock.js'
 
 // 拦截器配置
@@ -53,6 +56,31 @@ export function addResponseInterceptor(interceptor) {
   interceptors.response.push(interceptor)
 }
 
+// 认证请求拦截器
+addRequestInterceptor(async (config) => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+// 响应拦截器 - 统一处理后端响应格式
+addResponseInterceptor(async ({ response, data }) => {
+  // 后端返回格式: { code: 0, data: {...}, msg: "获取成功" }
+  if (data.code === 0) {
+    // 成功响应，返回标准化格式
+    return {
+      success: true,
+      data: data.data,
+      message: data.msg
+    }
+  } else {
+    // 错误响应
+    throw new Error(data.msg || `API error: code ${data.code}`)
+  }
+})
+
 // 基础请求函数
 async function request(url, options = {}) {
   let config = {
@@ -60,7 +88,8 @@ async function request(url, options = {}) {
       'Content-Type': 'application/json',
       ...options.headers
     },
-    ...options
+    ...options,
+    credentials: 'include' // 包含凭据，解决CORS问题
   }
 
   // 执行请求拦截器
@@ -72,6 +101,7 @@ async function request(url, options = {}) {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), 10000) // 10秒超时
 
+    console.log('API Request:', `${API_BASE_URL}${url}`)
     const response = await fetch(`${API_BASE_URL}${url}`, {
       ...config,
       signal: controller.signal
@@ -85,6 +115,8 @@ async function request(url, options = {}) {
     } catch (error) {
       responseData = {}
     }
+
+    console.log('API Response:', responseData)
 
     // 执行响应拦截器
     for (const interceptor of interceptors.response) {
@@ -107,7 +139,21 @@ async function request(url, options = {}) {
 
 // HTTP方法
 export async function get(url, options = {}) {
-  return request(url, {
+  // 处理查询参数
+  let finalUrl = url
+  if (options.params) {
+    const queryParams = new URLSearchParams()
+    for (const [key, value] of Object.entries(options.params)) {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value)
+      }
+    }
+    const queryString = queryParams.toString()
+    if (queryString) {
+      finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryString}`
+    }
+  }
+  return request(finalUrl, {
     method: 'GET',
     ...options
   })
@@ -130,7 +176,21 @@ export async function put(url, data, options = {}) {
 }
 
 export async function del(url, options = {}) {
-  return request(url, {
+  // 处理查询参数
+  let finalUrl = url
+  if (options.params) {
+    const queryParams = new URLSearchParams()
+    for (const [key, value] of Object.entries(options.params)) {
+      if (value !== undefined && value !== null) {
+        queryParams.append(key, value)
+      }
+    }
+    const queryString = queryParams.toString()
+    if (queryString) {
+      finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryString}`
+    }
+  }
+  return request(finalUrl, {
     method: 'DELETE',
     ...options
   })
@@ -180,27 +240,12 @@ async function withRetry(fn, retries = 3, delay = 1000, maxDelay = 10000) {
 
 // 判断是否应该重试
 function shouldRetry(error) {
-  // 网络错误
-  if (!error.response) {
-    return true
-  }
-  
-  // 服务器错误（5xx）
-  if (error.response.status >= 500) {
-    return true
-  }
-  
-  // 429 Too Many Requests
-  if (error.response.status === 429) {
-    return true
-  }
-  
-  // 其他错误不重试
+  // 所有请求异常都不重试
   return false
 }
 
 // 是否使用 Mock 数据
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true' || true
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
 
 // 专家详情相关API
 export const expertApi = {
@@ -310,6 +355,25 @@ export const expertApi = {
         params: { page, pageSize }
       }))
     }
+  },
+  
+  async getExpertVoice(expertId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              voiceUrl: 'https://example.com/voice.mp3',
+              duration: 120,
+              waveform: [0.1, 0.3, 0.5, 0.7, 0.9, 0.7, 0.5, 0.3, 0.1]
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/experts/${expertId}/voice`))
+    }
   }
 }
 
@@ -345,6 +409,21 @@ export const withdrawalApi = {
 
 // 用户相关API
 export const userApi = {
+  async sendSmsCode(phone) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '验证码发送成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/auth/send-code', { phone }))
+    }
+  },
+
   async getUserInfo() {
     return withLoading('user_info', async () => {
       // 尝试从缓存获取
@@ -530,6 +609,36 @@ export const userApi = {
     }
   },
   
+  async followUser(userId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '关注成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post(`/user/following/${userId}`))
+    }
+  },
+  
+  async unfollowUser(userId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '取消关注成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => del(`/user/following/${userId}`))
+    }
+  },
+  
   async getFavorites() {
     if (USE_MOCK) {
       return await mockGetFavorites()
@@ -538,11 +647,41 @@ export const userApi = {
     }
   },
   
+  async removeFavorite(favoriteId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '取消收藏成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => del(`/user/favorites/${favoriteId}`))
+    }
+  },
+  
   async getBrowseHistory() {
     if (USE_MOCK) {
       return await mockGetBrowseHistory()
     } else {
       return await withRetry(() => get('/user/history'))
+    }
+  },
+  
+  async clearHistory() {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '清空历史成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => del('/user/history'))
     }
   },
   
@@ -584,11 +723,49 @@ export const notificationApi = {
 
 // 消息相关API
 export const messageApi = {
-  async getMessages() {
+  async getConversations() {
     if (USE_MOCK) {
       return await mockGetMessages()
     } else {
-      return await withRetry(() => get('/messages'))
+      return await withRetry(() => get('/conversations'))
+    }
+  },
+
+  async archiveConversation(conversationId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '归档成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => put(`/conversations/${conversationId}/archive`))
+    }
+  },
+
+  async markConversationAsRead(userId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '标记成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => put(`/conversations/${userId}/read`))
+    }
+  },
+
+  async getMessages(params = {}) {
+    if (USE_MOCK) {
+      return await mockGetMessages()
+    } else {
+      return await withRetry(() => get('/messages', { params }))
     }
   },
   
@@ -600,7 +777,7 @@ export const messageApi = {
     }
   },
   
-  async sendMessage(userId, content) {
+  async sendMessage(userId, content, type = 'text') {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -610,13 +787,29 @@ export const messageApi = {
               id: Date.now(),
               from: 'self',
               content: content,
+              type: type,
               time: new Date().toLocaleString()
             }
           })
         }, 200)
       })
     } else {
-      return await withRetry(() => post(`/messages/chat/${userId}`, { content }))
+      return await withRetry(() => post(`/messages/chat/${userId}`, { content, type }))
+    }
+  },
+
+  async markMessageAsRead(messageId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '标记成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => put(`/messages/${messageId}/read`))
     }
   }
 }
@@ -633,27 +826,7 @@ export const orderApi = {
   
   async getOrderDetail(orderId) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            data: {
-              id: orderId,
-              expertAvatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA3Yx21l3XQH58JEjdPvp2NeoI5LIs_51ynV3rForFFjwT3Hd5AqMSy-sxYD_dlyN682W91abmSgg8KAw9tpHslBqThqBE3aE1ZVVOsHMHttJaF7wdtEpDJ2OL28yGHnfz11wPG1Jw2fXoB8C6dHlBSmulomn9y3CFDd8uDRgc2wm8DxSw67mMZ3pZTXdnJa4MLoz4Dl06hB9dHtby_V56tqiQv_vAAw9oI9xP2_AoxO74HKUfN1fVEaKcK9T4LY_KB9LY0itiXfHU',
-              expertName: '星野 Kyo',
-              game: '英雄联盟',
-              skill: '最强王者',
-              status: 'pending',
-              statusText: '待进行',
-              serviceTime: '2026-03-25 19:00',
-              amount: 50,
-              createdAt: '2026-03-23 10:30',
-              paymentMethod: '支付宝',
-              orderNumber: 'GP2026032310301001'
-            }
-          })
-        }, 400)
-      })
+      return await mockGetOrderDetail(orderId)
     } else {
       return await withRetry(() => get(`/orders/${orderId}`))
     }
@@ -676,6 +849,66 @@ export const orderApi = {
       })
     } else {
       return await withRetry(() => post('/orders', orderData))
+    }
+  },
+  
+  async cancelOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已取消'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/orders/${orderId}/cancel`))
+    }
+  },
+  
+  async confirmOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已确认'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/orders/${orderId}/confirm`))
+    }
+  },
+  
+  async acceptOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已接单'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/orders/${orderId}/accept`))
+    }
+  },
+  
+  async rejectOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已拒绝'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/orders/${orderId}/reject`))
     }
   }
 }
@@ -761,9 +994,9 @@ export const communityApi = {
     const cacheKey = cache.generateKey('community_posts', params)
     const cachedData = cache.get(cacheKey)
     
-    if (cachedData) {
-      return cachedData
-    }
+    // if (cachedData) {
+    //   return cachedData
+    // }
     
     // 缓存未命中，请求数据
     let data
@@ -870,6 +1103,14 @@ export const communityApi = {
     } else {
       return await withRetry(() => post(`/community/posts/${postId}/comments`, { content }))
     }
+  },
+  
+  async createPost(postData) {
+    if (USE_MOCK) {
+      return await mockCreatePost(postData)
+    } else {
+      return await withRetry(() => post('/community/posts', postData))
+    }
   }
 }
 
@@ -957,11 +1198,183 @@ export const rewardOrderApi = {
     }
   },
   
+  async getRewardOrderDetail(orderId) {
+    if (USE_MOCK) {
+      return await mockGetRewardOrderDetail(orderId)
+    } else {
+      return await withRetry(() => get(`/reward-orders/${orderId}`))
+    }
+  },
+  
   async grabRewardOrder(orderId) {
     if (USE_MOCK) {
       return await mockGrabRewardOrder(orderId)
     } else {
       return await withRetry(() => post(`/reward-orders/${orderId}/grab`))
+    }
+  }
+}
+
+// 申诉相关API
+export const appealApi = {
+  async getAppeals(params = {}) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 'SP202310240092',
+                type: '违规言论/引战',
+                status: 'processing',
+                statusText: '处理中',
+                statusClass: 'bg-primary-container/20 text-primary',
+                target: {
+                  name: '夜火狂潮',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbFFFTOLXk3uh3QYfT5K_O_xwli3756CWmaRPqDURn9hQdMMVr69OFKFYEukdPgpij-8M4aF0yOB8_9gnq9msePksq2gNyksu7Hkg7P-D35FvPBA2Twqv76_3GXssW6kh69xJayXRj3FCsOiIYAaPAlkp5YLofI2Wslskx-FnkMhpF6MMJlsszgOF44PrEgT5KnzAF1JGKBQvsLyc-BpgyvqRjkfkJTD6-ugewCJITW4SZdjMZ_eNFAL71PG_4uVmFZoTbVoilpW0'
+                },
+                submitTime: '2023.10.24 14:20'
+              },
+              {
+                id: 'SP202310220145',
+                type: '消极比赛/挂机',
+                status: 'completed',
+                statusText: '已完成',
+                statusClass: 'bg-emerald-100 text-emerald-700',
+                target: {
+                  name: '小甜心软软',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBh9xMrg68oicE9e-VAIhkrdgB1TkNcEtOcvR3FySiy-94rXsb84VQ4BrXjM2LNCCZbLlFep70TkMaAG8UPDOhjF2rolCEzNfjo2qxKZ5OVTvk9p0VjQooN9hnjHyviPZDE_C8I1mwk0p_3a7zwtRplZx3bi-LaJ5iSDXBeasRWzS7qap6X_QquQkk4wj3lYqsRWzKW_AMARsM0VMQxUylN0AGwq_3Bx5yVh7htFKk6AKYjs7hUVfnCLnXsj4Ftbf4HEdzH7_bHfCE'
+                },
+                submitTime: '2023.10.22 09:15'
+              },
+              {
+                id: 'SP202310210887',
+                type: '代练嫌疑',
+                status: 'pending',
+                statusText: '待处理',
+                statusClass: 'bg-neutral-200 text-neutral-500',
+                target: {
+                  name: '野王带你飞',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgCfdtE87j_277mqHdGOrVB5ODdk3PB9qPrI4KHjwEwSoOCXY0PeDGmnjvQOV4amb7ApX9KpPnJdC_O441R5hJqPFtRFp53BwPBmmq_OdGBWQlxjL4KuGZcflFM3yGX98CoBIX2NP7o698CcpxL-c5ojRrLjgGZu-Nu3phfR801amAJqexlBDP66TlaB2FgQdLiURLe3N5rsHVf4WI86UXNKfO-rHzaRM2REmbRbUiHP737OFWo18X-rfw-c0iVZCVRILangWQY0A'
+                },
+                submitTime: '2023.10.21 21:00'
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get('/appeals', { params }))
+    }
+  },
+
+  async createAppeal(appealData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '申诉提交成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/appeals', appealData))
+    }
+  }
+}
+
+// 技能相关API
+export const skillApi = {
+  async getSkills(params = {}) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 1,
+                game: 'LOL',
+                skill: '钻石段位',
+                level: 'advanced',
+                levelText: '高级',
+                certificationStatus: '已认证',
+                serviceCount: 45,
+                rating: 4.8
+              },
+              {
+                id: 2,
+                game: 'CS:GO',
+                skill: '大师陪玩',
+                level: 'expert',
+                levelText: '专家',
+                certificationStatus: '已认证',
+                serviceCount: 32,
+                rating: 4.9
+              },
+              {
+                id: 3,
+                game: 'PUBG',
+                skill: '吃鸡大神',
+                level: 'intermediate',
+                levelText: '中级',
+                certificationStatus: '待认证',
+                serviceCount: 15,
+                rating: 4.5
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get('/skills', { params }))
+    }
+  },
+
+  async addSkill(skillData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '添加技能成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/skills', skillData))
+    }
+  },
+
+  async updateSkill(skillId, skillData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '更新技能成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => put(`/skills/${skillId}`, skillData))
+    }
+  },
+
+  async deleteSkill(skillId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '删除技能成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => del(`/skills/${skillId}`))
     }
   }
 }
@@ -1063,16 +1476,40 @@ export async function fetchPlaymates(params = {}) {
       response = await withRetry(() => get('/playmates', { params }))
     }
     
-    if (params.page > 1) {
-      store.appendPlaymates(response.data || [])
+    // 处理响应格式
+    // Mock返回: {code: 0, data: {data: [...], pagination: {...}}}
+    // 真实API通过拦截器返回: {success: true, data: {...}}
+    let playmateData = []
+    let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
+    
+    if (USE_MOCK) {
+      // Mock数据格式
+      if (response.code === 0) {
+        playmateData = response.data?.data || []
+        pagination = response.data?.pagination || pagination
+      }
     } else {
-      store.setPlaymates(response.data || [])
+      // 真实API格式（已通过拦截器处理）
+      if (response.success) {
+        playmateData = response.data?.data || response.data || []
+        pagination = response.data?.pagination || pagination
+      }
+    }
+    
+    const processedPlaymateData = playmateData.map(playmate => ({
+      ...playmate,
+      tags: playmate.tags ? playmate.tags.split(',') : [],
+    }))
+    if (params.page > 1) {
+      store.appendPlaymates(processedPlaymateData)
+    } else {
+      store.setPlaymates(processedPlaymateData)
     }
 
     store.setPagination(
-      response.pagination?.currentPage || 1,
-      response.pagination?.totalPages || 1,
-      response.pagination?.totalCount || 0
+      pagination.currentPage,
+      pagination.totalPages,
+      pagination.totalCount
     )
 
     return response
@@ -1098,11 +1535,33 @@ export async function searchPlaymates(keyword, params = {}) {
       response = await withRetry(() => get('/playmates/search', { params: { ...params, keyword } }))
     }
     
-    store.setPlaymates(response.data || [])
+    // 处理响应格式
+    let playmateData = []
+    let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
+    
+    if (USE_MOCK) {
+      if (response.success) {
+        playmateData = response.data || []
+        pagination = response.pagination || pagination
+      }
+    } else {
+      if (response.success) {
+        playmateData = response.data?.data || response.data || []
+        pagination = response.data?.pagination || pagination
+      }
+    }
+    
+    // 处理playmate数据，将description从字符串转换为数组（如果需要）
+    const processedPlaymateData = playmateData.map(playmate => ({
+      ...playmate,
+      tags: playmate.tags ? playmate.tags.split(',') : [],
+    }))
+    console.info(processedPlaymateData)
+    store.setPlaymates(processedPlaymateData)
     store.setPagination(
-      response.pagination?.currentPage || 1,
-      response.pagination?.totalPages || 1,
-      response.pagination?.totalCount || 0
+      pagination.currentPage || 1,
+      pagination.totalPages || 1,
+      pagination.totalCount || 0
     )
 
     return response
@@ -1119,10 +1578,19 @@ export async function getSearchSuggestions(keyword) {
     let response
     if (USE_MOCK) {
       response = await mockGetSearchSuggestions(keyword)
+      // Mock返回: {success: true, data: [...]}
+      if (response.success) {
+        return response.data || []
+      }
+      return []
     } else {
       response = await withRetry(() => get('/playmates/suggestions', { params: { keyword } }))
+      // 真实API返回: {success: true, data: [...]}
+      if (response.success) {
+        return response.data || []
+      }
+      return []
     }
-    return response.data || []
   } catch (error) {
     console.error('获取搜索建议失败:', error)
     return []
@@ -1146,6 +1614,8 @@ export default {
   gameCategory: gameCategoryApi,
   orderConfirmation: orderConfirmationApi,
   rewardOrder: rewardOrderApi,
+  appeal: appealApi,
+  skill: skillApi,
   upload: uploadApi,
   fetchPlaymates,
   searchPlaymates,

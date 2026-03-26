@@ -1,44 +1,38 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { userApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const following = ref([
-  {
-    id: 1,
-    userId: '1',
-    avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
-    name: '电竞少女',
-    bio: '钻石段位，技术陪练',
-    games: ['英雄联盟'],
-    followers: 1280,
-    isFollowing: true
-  },
-  {
-    id: 2,
-    userId: '2',
-    avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-    name: '游戏大师',
-    bio: 'CS:GO大师段位，战术指导',
-    games: ['CS:GO', 'Valorant'],
-    followers: 956,
-    isFollowing: true
-  },
-  {
-    id: 3,
-    userId: '3',
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    name: '安妮喵呜',
-    bio: '温柔语聊，游戏陪伴',
-    games: ['绝地求生', '王者荣耀'],
-    followers: 2368,
-    isFollowing: true
-  }
-])
-
+const following = ref([])
 const loading = ref(false)
 const error = ref('')
+
+const loadFollowing = async () => {
+  loading.value = true
+  error.value = ''
+  
+  try {
+    const response = await userApi.getFollowing()
+    if (response.success || response.code === 0) {
+      // 清理avatar字段中的多余空格和反引号
+      following.value = (response.data || []).map(user => ({
+        ...user,
+        avatar: user.avatar ? user.avatar.trim().replace(/^`|`$/g, '') : '',
+        isFollowing: true // 默认所有返回的用户都是已关注状态
+      }))
+    } else {
+      throw new Error(response.message || response.msg || '获取关注列表失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
+    console.error('获取关注列表失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const handleUserDetail = (userId) => {
   router.push(`/expert/${userId}`)
@@ -46,26 +40,38 @@ const handleUserDetail = (userId) => {
 
 const handleUnfollow = async (userId) => {
   try {
-    // 模拟取消关注
-    const user = following.value.find(u => u.userId === userId)
-    if (user) {
-      user.isFollowing = false
-      user.followers--
+    const response = await userApi.unfollowUser(userId)
+    if (response.success || response.code === 0) {
+      const user = following.value.find(u => u.userId === userId)
+      if (user) {
+        user.isFollowing = false
+      }
+      // 从列表中移除已取消关注的用户
+      following.value = following.value.filter(u => u.userId !== userId)
+    } else {
+      throw new Error(response.message || response.msg || '取消关注失败')
     }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
     console.error('取消关注失败:', err)
   }
 }
 
 const handleFollow = async (userId) => {
   try {
-    // 模拟关注
-    const user = following.value.find(u => u.userId === userId)
-    if (user) {
-      user.isFollowing = true
-      user.followers++
+    const response = await userApi.followUser(userId)
+    if (response.success || response.code === 0) {
+      const user = following.value.find(u => u.userId === userId)
+      if (user) {
+        user.isFollowing = true
+      }
+    } else {
+      throw new Error(response.message || response.msg || '关注失败')
     }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error
     console.error('关注失败:', err)
   }
 }
@@ -73,6 +79,16 @@ const handleFollow = async (userId) => {
 const handleBack = () => {
   router.back()
 }
+
+// 格式化标签为数组
+const formatTags = (tags) => {
+  if (!tags) return []
+  return tags.split(',').map(tag => tag.trim())
+}
+
+onMounted(() => {
+  loadFollowing()
+})
 </script>
 
 <template>
@@ -90,7 +106,7 @@ const handleBack = () => {
       <div class="text-sm text-on-surface-variant">{{ following.length }}人</div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -101,7 +117,7 @@ const handleBack = () => {
         <span class="material-symbols-outlined text-error text-4xl mb-4">error_outline</span>
         <p class="text-sm text-error mb-4">{{ error }}</p>
         <button
-          @click="loading = false; error = ''"
+          @click="loadFollowing"
           class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
         >
           重试
@@ -133,9 +149,14 @@ const handleBack = () => {
           <div class="flex items-start gap-4">
             <div
               @click="handleUserDetail(user.userId)"
-              class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer"
+              class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer relative"
             >
-              <img :alt="user.name" class="w-full h-full object-cover" :src="user.avatar" />
+              <img :alt="user.nickname" class="w-full h-full object-cover" :src="user.avatar" />
+              <!-- 在线状态 -->
+              <div 
+                v-if="user.isOnline" 
+                class="absolute bottom-1 right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
+              ></div>
             </div>
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between mb-2">
@@ -143,8 +164,11 @@ const handleBack = () => {
                   @click="handleUserDetail(user.userId)"
                   class="flex-1 min-w-0 cursor-pointer"
                 >
-                  <h3 class="font-bold text-on-surface truncate">{{ user.name }}</h3>
-                  <p class="text-xs text-on-surface-variant mt-1 truncate">{{ user.bio }}</p>
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-bold text-on-surface truncate">{{ user.nickname }}</h3>
+                    <span v-if="user.title" class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">{{ user.title }}</span>
+                  </div>
+                  <p class="text-xs text-on-surface-variant mt-1 truncate">{{ user.description }}</p>
                 </div>
                 <button
                   @click="user.isFollowing ? handleUnfollow(user.userId) : handleFollow(user.userId)"
@@ -154,18 +178,46 @@ const handleBack = () => {
                   {{ user.isFollowing ? '已关注' : '关注' }}
                 </button>
               </div>
+              
+              <!-- 游戏信息 -->
               <div class="flex items-center gap-2 mb-2">
-                <span
-                  v-for="game in user.games"
-                  :key="game"
-                  class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-medium"
-                >
-                  {{ game }}
+                <span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
+                  {{ user.game }}
+                </span>
+                <span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
+                  {{ user.rank }}
                 </span>
               </div>
-              <div class="flex items-center gap-1 text-xs text-on-surface-variant">
-                <span class="material-symbols-outlined text-sm">people</span>
-                <span>{{ user.followers }} 粉丝</span>
+              
+              <!-- 标签 -->
+              <div class="flex items-center gap-2 mb-2 flex-wrap">
+                <span
+                  v-for="tag in formatTags(user.tags)"
+                  :key="tag"
+                  class="bg-surface-container text-on-surface-variant text-[10px] px-2 py-0.5 rounded-full font-medium"
+                >
+                  {{ tag }}
+                </span>
+              </div>
+              
+              <!-- 统计信息 -->
+              <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">star</span>
+                  <span>{{ user.rating }}分</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">attach_money</span>
+                  <span>¥{{ user.price }}/局</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">favorite</span>
+                  <span>{{ user.likes }}赞</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">level</span>
+                  <span>Lv{{ user.level }}</span>
+                </div>
               </div>
             </div>
           </div>

@@ -1,55 +1,35 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
-      <SearchInput ref="searchInputRef" @search="handleSearch" />
-
+    <!-- TopAppBar -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
       <div class="flex items-center gap-3">
-        <router-link
-          to="/filter"
-          class="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-full text-sm font-medium hover:bg-surface-container transition-colors"
-        >
-          <span class="material-symbols-outlined text-lg">tune</span>
-          <span>筛选</span>
-          <span
-            v-if="activeFiltersCount > 0"
-            class="bg-primary text-white text-xs px-1.5 py-0.5 rounded-full"
-          >
-            {{ activeFiltersCount }}
-          </span>
-        </router-link>
-
-        <div class="flex gap-2 overflow-x-auto no-scrollbar flex-1">
-          <button
-            v-for="game in popularGames"
-            :key="game.id"
-            class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors"
-            :class="selectedGame === game.id ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'"
-            @click="handleGameSelect(game.id)"
-          >
-            {{ game.name }}
-          </button>
-        </div>
+        <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out" data-icon="menu">menu</span>
+        <h1 class="font-headline font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-500 font-black tracking-tighter">SunnyPlay 日光陪玩</h1>
       </div>
-
-      <div class="flex justify-between items-center">
-        <h2 class="text-xl font-headline font-bold text-on-surface">
-          推荐陪玩
-        </h2>
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-zinc-500">排序:</span>
-          <select
-            v-model="sortBy"
-            class="bg-surface-container-low border-0 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20"
-            @change="handleSortChange"
-          >
-            <option value="default">综合排序</option>
-            <option value="rating">评分最高</option>
-            <option value="price_asc">价格最低</option>
-            <option value="price_desc">价格最高</option>
-            <option value="newest">最新上线</option>
-          </select>
-        </div>
+      <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary-container">
+        <img class="w-full h-full object-cover" data-alt="User profile avatar of a young gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNN7pNKogoJYe4wsv3o-FDAyvSBuhTul48i-mZ8WsuTaiMYduHla1_zSjL2SVhNTYWcl8KXkzkFWu37CDNXR17T-IqRbkRE3YSkz9RDnoBDmP-PV4kccs__KEv3e8g6ZgTTBbhrzVg7gEB1CRLgL8Gw62MMBPFzUD9Iqe68g2fv4HYlswHzjHItNgFjyODx_dufgH7IzM8JT7PIHeVxMyHtCYvaRKAjhGPpwmk79mWP-Se0BHWL9iJ2xgSD4kBoikIe8dxtqe1tRc"/>
       </div>
+    </nav>
+    
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-md mx-auto">
+      <!-- Search and Title Section -->
+      <header class="mb-8">
+        <h2 class="text-3xl font-extrabold header-font text-on-surface tracking-tight mb-6">寻找队友</h2>
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+            <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+          </div>
+          <input class="w-full h-14 pl-12 pr-4 bg-surface-container-high border-none rounded-2xl focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest transition-all text-body-md placeholder:text-outline" placeholder="搜索大神或游戏" type="text" @input="handleSearchInput" />
+        </div>
+      </header>
+      
+      <!-- Filter Chips -->
+      <section class="flex gap-3 overflow-x-auto pb-6 scrollbar-hide no-scrollbar">
+        <button class="flex-none px-6 py-2.5 rounded-full bg-primary-container text-on-primary-container font-bold text-sm shadow-sm active:scale-95 transition-transform">在线</button>
+        <button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">价格</button>
+        <button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">段位</button>
+        <button class="flex-none px-6 py-2.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-semibold text-sm border border-transparent hover:bg-surface-container-low active:scale-95 transition-transform">性别</button>
+      </section>
 
       <div class="min-h-[500px]">
         <PullToRefresh :on-refresh="handleRefresh" :min-height="500">
@@ -63,48 +43,25 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { useFilterStore } from '../stores/filter.js'
 import { usePlaymateStore } from '../stores/playmate.js'
 import { fetchPlaymates } from '../api/index.js'
 import { useToast } from '../composables/useToast.js'
-import SearchInput from '../components/common/SearchInput.vue'
 import PlaymateList from '../components/discover/PlaymateList.vue'
 import PullToRefresh from '../components/common/PullToRefresh.vue'
 
 const router = useRouter()
-const filterStore = useFilterStore()
 const playmateStore = usePlaymateStore()
 const { success, error: showError } = useToast()
 
-const searchInputRef = ref(null)
-const sortBy = ref('default')
-const selectedGame = ref(null)
-
-const activeFiltersCount = computed(() => filterStore.activeFiltersCount)
-
-const popularGames = [
-  { id: 'honor_of_kings', name: '王者荣耀' },
-  { id: 'lol', name: 'LOL' },
-  { id: 'valorant', name: 'Valorant' },
-  { id: 'genshin', name: '原神' },
-  { id: 'pubg', name: '绝地求生' }
-]
+const searchInput = ref('')
 
 async function loadData() {
   playmateStore.resetState()
 
   const params = {
     page: 1,
-    pageSize: 20,
-    sortBy: sortBy.value
+    pageSize: 20
   }
-
-  if (selectedGame.value) {
-    params.game = selectedGame.value
-  }
-
-  const filterQuery = filterStore.getFilterQuery()
-  Object.assign(params, filterQuery)
 
   try {
     await fetchPlaymates(params)
@@ -113,27 +70,9 @@ async function loadData() {
   }
 }
 
-function handleSearch(keyword) {
-  router.push({ path: '/search', query: { keyword } })
-}
-
-function handleSortChange() {
-  loadData()
-}
-
-async function handleGameSelect(gameId) {
-  if (selectedGame.value === gameId) {
-    selectedGame.value = null
-  } else {
-    selectedGame.value = gameId
-  }
-  await loadData()
-  if (selectedGame.value) {
-    const game = popularGames.find(g => g.id === gameId)
-    success(`已选择${game?.name || ''}`)
-  } else {
-    success('已清除游戏筛选')
-  }
+function handleSearchInput(event) {
+  searchInput.value = event.target.value
+  // 这里可以添加防抖处理，当用户输入完成后跳转到搜索结果页
 }
 
 async function handleRetry() {
@@ -154,32 +93,12 @@ async function handleScroll() {
 
     const params = {
       page: playmateStore.currentPage,
-      pageSize: 20,
-      sortBy: sortBy.value
+      pageSize: 20
     }
 
-    if (selectedGame.value) {
-      params.game = selectedGame.value
-    }
-
-    const filterQuery = filterStore.getFilterQuery()
-    Object.assign(params, filterQuery)
-
-    if (searchKeyword.value) {
-      await searchPlaymates(searchKeyword.value, params)
-    } else {
-      await fetchPlaymates(params)
-    }
+    await fetchPlaymates(params)
   }
 }
-
-watch(sortBy, async () => {
-  await loadData()
-})
-
-watch(() => filterStore.filters, async () => {
-  await loadData()
-}, { deep: true })
 
 onMounted(() => {
   loadData()

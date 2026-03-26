@@ -1,155 +1,112 @@
-import { ref, computed } from 'vue'
-
-export function useFormValidation() {
-  const errors = ref({})
-  const touched = ref({})
-
-  function validateField(field, rules, value) {
-    const fieldErrors = []
-
-    for (const rule of rules) {
-      const result = rule(value)
-      if (result !== true) {
-        fieldErrors.push(result)
-      }
-    }
-
-    if (fieldErrors.length > 0) {
-      errors.value[field] = fieldErrors
-      return false
-    } else {
-      delete errors.value[field]
-      return true
-    }
-  }
-
-  function validateForm(schema, data) {
-    const isValid = true
-    const newErrors = {}
-
-    for (const [field, rules] of Object.entries(schema)) {
-      const value = data[field]
-      const fieldErrors = []
-
-      for (const rule of rules) {
-        const result = rule(value)
-        if (result !== true) {
-          fieldErrors.push(result)
-        }
-      }
-
-      if (fieldErrors.length > 0) {
-        newErrors[field] = fieldErrors
-      }
-    }
-
-    errors.value = newErrors
-    return Object.keys(newErrors).length === 0
-  }
-
-  function clearErrors() {
-    errors.value = {}
-    touched.value = {}
-  }
-
-  function clearFieldError(field) {
-    delete errors.value[field]
-  }
-
-  function markTouched(field) {
-    touched.value[field] = true
-  }
-
-  function isFieldTouched(field) {
-    return touched.value[field] || false
-  }
-
-  function hasFieldError(field) {
-    return errors.value[field] && errors.value[field].length > 0
-  }
-
-  function getFieldError(field) {
-    return errors.value[field]?.[0] || ''
-  }
-
-  const hasErrors = computed(() => {
-    return Object.keys(errors.value).length > 0
-  })
-
-  return {
-    errors,
-    touched,
-    hasErrors,
-    validateField,
-    validateForm,
-    clearErrors,
-    clearFieldError,
-    markTouched,
-    isFieldTouched,
-    hasFieldError,
-    getFieldError
-  }
-}
+import { ref, reactive } from 'vue'
 
 export const validationRules = {
-  required: (message = '此项为必填项') => (value) => {
+  required: (message = '此字段为必填项') => (value) => {
     if (value === null || value === undefined || value === '') {
       return message
     }
-    return true
-  },
-
-  minLength: (min, message) => (value) => {
-    if (value && value.length < min) {
-      return message || `最少需要${min}个字符`
+    if (Array.isArray(value) && value.length === 0) {
+      return message
     }
     return true
   },
-
-  maxLength: (max, message) => (value) => {
-    if (value && value.length > max) {
-      return message || `最多${max}个字符`
-    }
-    return true
+  
+  minLength: (length, message = `最少需要${length}个字符`) => (value) => {
+    if (!value) return true
+    return value.length >= length || message
   },
-
+  
+  maxLength: (length, message = `最多允许${length}个字符`) => (value) => {
+    if (!value) return true
+    return value.length <= length || message
+  },
+  
   email: (message = '请输入有效的邮箱地址') => (value) => {
     if (!value) return true
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(value)) {
-      return message
-    }
-    return true
+    return emailRegex.test(value) || message
   },
-
-  phone: (message = '请输入有效的手机号码') => (value) => {
+  
+  phone: (message = '请输入有效的手机号') => (value) => {
     if (!value) return true
     const phoneRegex = /^1[3-9]\d{9}$/
-    if (!phoneRegex.test(value)) {
-      return message
-    }
-    return true
+    return phoneRegex.test(value) || message
   },
-
-  pattern: (regex, message) => (value) => {
+  
+  number: (message = '请输入数字') => (value) => {
     if (!value) return true
-    if (!regex.test(value)) {
-      return message
-    }
-    return true
+    return !isNaN(value) || message
   },
-
-  min: (min, message) => (value) => {
-    if (value !== null && value !== undefined && value < min) {
-      return message || `最小值为${min}`
-    }
-    return true
+  
+  positive: (message = '请输入正数') => (value) => {
+    if (!value) return true
+    return Number(value) > 0 || message
   },
+  
+  integer: (message = '请输入整数') => (value) => {
+    if (!value) return true
+    return Number.isInteger(Number(value)) || message
+  }
+}
 
-  max: (max, message) => (value) => {
-    if (value !== null && value !== undefined && value > max) {
-      return message || `最大值为${max}`
+export function useFormValidation() {
+  const errors = reactive({})
+  
+  function validateField(field, rules, value) {
+    for (const rule of rules) {
+      const result = rule(value)
+      if (result !== true) {
+        errors[field] = result
+        return false
+      }
     }
+    clearFieldError(field)
     return true
+  }
+  
+  function validateForm(formData, validationRules) {
+    let isValid = true
+    
+    for (const [field, rules] of Object.entries(validationRules)) {
+      const value = formData[field]
+      if (!validateField(field, rules, value)) {
+        isValid = false
+      }
+    }
+    
+    return isValid
+  }
+  
+  function clearFieldError(field) {
+    delete errors[field]
+  }
+  
+  function clearAllErrors() {
+    Object.keys(errors).forEach(field => {
+      delete errors[field]
+    })
+  }
+  
+  function hasFieldError(field) {
+    return !!errors[field]
+  }
+  
+  function getFieldError(field) {
+    return errors[field] || ''
+  }
+  
+  function hasErrors() {
+    return Object.keys(errors).length > 0
+  }
+  
+  return {
+    errors,
+    validateField,
+    validateForm,
+    clearFieldError,
+    clearAllErrors,
+    hasFieldError,
+    getFieldError,
+    hasErrors
   }
 }

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { mockService } from '../services/mock'
+import { orderApi } from '../api/index.js'
 
 export const useOrderStore = defineStore('order', {
   state: () => ({
@@ -23,7 +23,7 @@ export const useOrderStore = defineStore('order', {
       try {
         this.isLoading = true
         this.error = null
-        const response = await apiService.order.create(data)
+        const response = await orderApi.createOrder(data)
         return response
       } catch (error) {
         this.error = error.message
@@ -37,9 +37,13 @@ export const useOrderStore = defineStore('order', {
       try {
         this.isLoading = true
         this.error = null
-        const response = await mockService.getOrders(params)
-        this.orders = response.list
-        this.total = response.total
+        const response = await orderApi.getOrders(params.status || 'all')
+        if (response.success || response.code === 0) {
+          this.orders = response.data?.data || response.data || []
+          this.total = this.orders.length
+        } else {
+          throw new Error(response.message || response.msg || '获取订单列表失败')
+        }
         return response
       } catch (error) {
         this.error = error.message
@@ -53,8 +57,8 @@ export const useOrderStore = defineStore('order', {
       try {
         this.isLoading = true
         this.error = null
-        const response = await apiService.order.getDetail(id)
-        this.currentOrder = response
+        const response = await orderApi.getOrderDetail(id)
+        this.currentOrder = response.data
         return response
       } catch (error) {
         this.error = error.message

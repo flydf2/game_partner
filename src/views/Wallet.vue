@@ -1,28 +1,61 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { userApi, withdrawalApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
 const walletInfo = ref({
-  balance: 1280.50,
-  frozen: 50.00,
-  totalIncome: 5680.00,
-  totalWithdraw: 4400.00
+  balance: 0,
+  frozen: 0,
+  totalIncome: 0,
+  totalWithdraw: 0
 })
 
-const transactions = ref([
-  { id: 1, type: 'income', title: '订单收入', amount: 68.00, time: '2026-03-23 18:30', status: 'completed' },
-  { id: 2, type: 'withdraw', title: '提现到微信', amount: -200.00, time: '2026-03-22 15:20', status: 'completed' },
-  { id: 3, type: 'income', title: '订单收入', amount: 52.00, time: '2026-03-21 20:15', status: 'completed' },
-  { id: 4, type: 'income', title: '订单收入', amount: 48.00, time: '2026-03-20 19:45', status: 'completed' },
-  { id: 5, type: 'withdraw', title: '提现到支付宝', amount: -300.00, time: '2026-03-19 10:30', status: 'completed' }
-])
-
+const transactions = ref([])
 const loading = ref(false)
 const showWithdrawDialog = ref(false)
 const withdrawAmount = ref('')
 const withdrawError = ref('')
+
+const loadWallet = async () => {
+  loading.value = true
+  try {
+    const response = await userApi.getWallet()
+    if (response.success || response.code === 0) {
+      const data = response.data || {}
+      walletInfo.value = {
+        balance: data.balance || 0,
+        frozen: data.frozen || 0,
+        totalIncome: data.totalIncome || 0,
+        totalWithdraw: data.totalExpense || 0
+      }
+      
+      // 转换交易记录格式
+      transactions.value = (data.transactions || []).map(transaction => ({
+        id: transaction.id,
+        type: transaction.type === 'expense' ? 'withdraw' : transaction.type,
+        title: transaction.description,
+        amount: transaction.type === 'income' ? transaction.amount : -transaction.amount,
+        time: new Date(transaction.time).toLocaleString('zh-CN', { 
+          year: 'numeric', 
+          month: '2-digit', 
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        status: 'completed'
+      }))
+    } else {
+      throw new Error(response.message || response.msg || '获取钱包信息失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    console.error('获取钱包信息失败:', err)
+  } finally {
+    loading.value = false
+  }
+}
 
 const availableBalance = computed(() => {
   return walletInfo.value.balance - walletInfo.value.frozen
@@ -55,33 +88,37 @@ const handleWithdraw = () => {
 const confirmWithdraw = async () => {
   loading.value = true
   try {
-    // 模拟提现请求
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    
-    // 更新余额
-    const amount = parseFloat(withdrawAmount.value)
-    walletInfo.value.balance -= amount
-    
-    // 添加交易记录
-    transactions.value.unshift({
-      id: Date.now(),
-      type: 'withdraw',
-      title: '提现到微信',
-      amount: -amount,
-      time: new Date().toLocaleString('zh-CN', { 
-        year: 'numeric', 
-        month: '2-digit', 
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      }),
-      status: 'processing'
+    const response = await withdrawalApi.submitWithdrawal({
+      amount: parseFloat(withdrawAmount.value)
     })
-    
-    showWithdrawDialog.value = false
-    withdrawAmount.value = ''
-    withdrawError.value = ''
+    if (response.success || response.code === 0) {
+      walletInfo.value.balance -= parseFloat(withdrawAmount.value)
+      walletInfo.value.totalWithdraw += parseFloat(withdrawAmount.value)
+      
+      transactions.value.unshift({
+        id: Date.now(),
+        type: 'withdraw',
+        title: '提现到微信',
+        amount: -parseFloat(withdrawAmount.value),
+        time: new Date().toLocaleString('zh-CN', { 
+          year: 'numeric', 
+          month: '2-digit', 
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit'
+        }),
+        status: 'processing'
+      })
+      
+      showWithdrawDialog.value = false
+      withdrawAmount.value = ''
+      withdrawError.value = ''
+    } else {
+      throw new Error(response.message || response.msg || '提现失败')
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    withdrawError.value = result.error
     console.error('提现失败:', err)
   } finally {
     loading.value = false
@@ -92,6 +129,11 @@ const handleBack = () => {
   router.back()
 }
 
+const handleBill = () => {
+  // 账单功能，暂时显示提示
+  alert('账单功能开发中')
+}
+
 const getTransactionIcon = (type) => {
   return type === 'income' ? 'arrow_downward' : 'arrow_upward'
 }
@@ -99,6 +141,10 @@ const getTransactionIcon = (type) => {
 const getTransactionColor = (type) => {
   return type === 'income' ? 'text-success' : 'text-error'
 }
+
+onMounted(() => {
+  loadWallet()
+})
 </script>
 
 <template>
@@ -116,7 +162,7 @@ const getTransactionColor = (type) => {
       <div class="w-6"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto space-y-4 space-y-6">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 space-y-6">
       <!-- 钱包卡片 -->
       <section class="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-6 shadow-xl shadow-primary/20 text-white">
         <div class="space-y-4">
@@ -153,6 +199,7 @@ const getTransactionColor = (type) => {
           <span class="font-bold text-on-surface">提现</span>
         </button>
         <button
+          @click="handleBill"
           class="bg-surface-container-lowest rounded-3xl p-5 flex flex-col items-center gap-3 hover:bg-surface-container-low transition-all active:scale-95"
         >
           <div class="w-12 h-12 bg-secondary-container/20 rounded-full flex items-center justify-center">

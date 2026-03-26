@@ -112,23 +112,21 @@ const handleConfirmWithdrawal = async () => {
 
 <template>
   <div class="min-h-screen bg-background text-on-background font-body pb-24">
-    <!-- TopAppBar -->
-    <nav class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
-        <div class="flex items-center gap-3">
-          <button @click="handleBack" class="text-primary active:scale-95 duration-200">
-            <span class="material-symbols-outlined">arrow_back</span>
-          </button>
-          <h1 class="font-headline font-bold text-lg text-primary">收益提现</h1>
-        </div>
-        <button @click="handleWithdrawalRecord" class="text-primary text-sm font-semibold active:scale-95 duration-200">
-          提现记录
-        </button>
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">收益提现</h1>
       </div>
-      <div class="bg-neutral-200/50 h-[1px] w-full"></div>
-    </nav>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
+    </header>
 
-    <main class="max-w-md mx-auto px-5 pt-8 space-y-8">
+    <main class="max-w-md mx-auto px-5 pt-24 space-y-8">
       <!-- Balance Section -->
       <section class="relative overflow-hidden bg-primary-container rounded-[2rem] p-8 flex flex-col items-center justify-center text-on-primary-container">
         <!-- Decorative Element -->

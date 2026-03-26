@@ -79,19 +79,18 @@ const handlePrevStep = () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-background pb-32">
-    <!-- TopAppBar -->
-    <header class="bg-surface fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4">
-      <div class="flex items-center gap-3">
-        <button @click="handleBack" class="text-primary cursor-pointer">
-          <span class="material-symbols-outlined">arrow_back</span>
-        </button>
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
         <h1 class="font-headline font-bold text-lg text-primary">大神认证</h1>
       </div>
-      <div class="flex items-center gap-4">
-        <button class="text-neutral-500">
-          <span class="material-symbols-outlined">help_outline</span>
-        </button>
-      </div>
+      <div class="w-6"></div>
+      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
     </header>
 
     <main class="px-5 pt-20 space-y-8 max-w-2xl mx-auto">
