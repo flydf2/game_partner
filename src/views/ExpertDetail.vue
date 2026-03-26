@@ -242,16 +242,11 @@
           <div v-for="review in (showAllReviews ? reviews : reviews.slice(0, 2))" :key="review.id" class="bg-surface-container-lowest p-5 rounded-[2rem] shadow-sm">
             <div class="flex justify-between">
               <div class="flex items-center gap-3">
-                <img 
-                  :src="review.user.avatar" 
-                  :alt="review.user.name" 
-                  class="w-10 h-10 rounded-full object-cover"
-                  loading="lazy"
-                  decoding="async"
-                  onerror="this.src='https://via.placeholder.com/150'"
-                />
+                <div class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center">
+                  <span class="material-symbols-outlined text-zinc-500" data-icon="person">person</span>
+                </div>
                 <div>
-                  <span class="font-bold text-sm block text-zinc-900">{{ review.user.name }}</span>
+                  <span class="font-bold text-sm block text-zinc-900">用户{{ review.userId }}</span>
                   <div class="flex gap-0.5">
                     <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
                     <span class="material-symbols-outlined text-[12px] text-yellow-500" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -261,7 +256,7 @@
                   </div>
                 </div>
               </div>
-              <span class="text-zinc-400 text-[10px]">{{ review.date }}</span>
+              <span class="text-zinc-400 text-[10px]">{{ review.createdAt }}</span>
             </div>
             <p class="mt-4 text-zinc-600 text-sm leading-relaxed">{{ review.content }}</p>
             <div class="mt-4 flex gap-2" v-if="review.images && review.images.length > 0">
@@ -271,6 +266,9 @@
                 :src="image" 
                 class="w-20 h-20 rounded-xl object-cover cursor-pointer active:scale-95 transition-all"
                 alt="评价图片"
+                loading="lazy"
+                decoding="async"
+                onerror="this.src='https://via.placeholder.com/80'"
               />
             </div>
           </div>
@@ -292,11 +290,11 @@
     <footer class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] px-6 pt-5 pb-10">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-6">
-          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
-            <span class="material-symbols-outlined text-zinc-600" data-icon="favorite">favorite</span>
+          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform cursor-pointer" @click="handleFavorite">
+            <span class="material-symbols-outlined" :class="isFavorite ? 'text-primary' : 'text-zinc-600'" data-icon="favorite">favorite</span>
             <span class="text-[10px] font-bold text-zinc-500">收藏</span>
           </div>
-          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform">
+          <div class="flex flex-col items-center gap-1 active:scale-90 transition-transform cursor-pointer" @click="handleMessage">
             <span class="material-symbols-outlined text-zinc-600" data-icon="mail">mail</span>
             <span class="text-[10px] font-bold text-zinc-500">留言</span>
           </div>
@@ -401,6 +399,7 @@ const loading = ref(true)
 const error = ref('')
 const isLoading = ref(false)
 const isFollowing = ref(false)
+const isFavorite = ref(false)
 
 // Toast状态
 const toast = ref({
@@ -521,7 +520,13 @@ const loadReviews = async (page = 1) => {
       const cachedReviews = storage.get(cacheKey)
       
       if (cachedReviews) {
-        reviews.value = cachedReviews.reviews
+        reviews.value = cachedReviews.reviews.map(review => ({
+          ...review,
+          images: typeof review.images === 'string' 
+            ? review.images.split(',').filter(img => img.trim() !== '')
+            : Array.isArray(review.images) ? review.images : []
+        }))
+        
         reviewsPage.value = cachedReviews.pagination.currentPage
         reviewsTotalPages.value = cachedReviews.pagination.totalPages
         reviewsLoading.value = false
@@ -531,13 +536,21 @@ const loadReviews = async (page = 1) => {
     
     const response = await expertService.getExpertReviews(expertId, page, 10)
     if (response.success) {
+      let processedReviews = response.data.reviews
+      processedReviews = processedReviews.map(review => ({
+        ...review,
+        images: typeof review.images === 'string' 
+          ? review.images.split(',').filter(img => img.trim() !== '')
+          : Array.isArray(review.images) ? review.images : []
+      }))
+      
       if (page === 1) {
-        reviews.value = response.data.reviews
+        reviews.value = processedReviews
         // 缓存第一页数据（3分钟）
         const cacheKey = `expert_reviews_${expertId}`
         storage.set(cacheKey, response.data, 3)
       } else {
-        reviews.value = [...reviews.value, ...response.data.reviews]
+        reviews.value = [...reviews.value, ...processedReviews]
       }
       reviewsPage.value = response.data.pagination.currentPage
       reviewsTotalPages.value = response.data.pagination.totalPages
@@ -620,6 +633,9 @@ const loadExpertData = async () => {
     const response = await expertService.getExpertDetail(expertId)
     if (response.success) {
       expertData.value = response.data
+      // 检查是否已收藏
+      const favorites = getStorageData(STORAGE_KEYS.FAVORITES) || []
+      isFavorite.value = favorites.some(item => item.id === expertData.value.id)
       // 加载语音数据
       await loadVoiceData(expertId)
       // 缓存数据（5分钟）
@@ -821,7 +837,6 @@ const removeFromFollowing = (expertId) => {
 }
 
 const handleOrder = async () => {
-  // 表单验证
   if (!expertData.value.id) {
     showToast('大神ID不存在', 'error')
     return
@@ -837,7 +852,6 @@ const handleOrder = async () => {
     return
   }
   
-  // 检查用户是否已登录
   const userInfo = localStorage.getItem('userInfo')
   if (!userInfo) {
     showToast('请先登录', 'error')
@@ -846,32 +860,25 @@ const handleOrder = async () => {
   }
   
   isLoading.value = true
-  try {
-    const orderData = {
-      expertId: expertData.value.id,
+  router.push({
+    path: '/confirm-order',
+    query: {
+      userId: expertData.value.id,
       skillId: selectedSkill.value.id,
+      serviceTime: '',
       amount: selectedSkill.value.price
     }
-    const response = await orderApi.createOrder(orderData)
-    if (response.success) {
-      showToast('订单创建成功', 'success')
-      // 跳转到订单确认页面
-      router.push('/confirm-order')
-    }
-  } catch (err) {
-    const result = handleApiError(err)
-    showToast(result.error, 'error')
-  } finally {
-    isLoading.value = false
-  }
+  })
 }
 
 const handleFavorite = () => {
   const isAdded = addToFavorites(expertData.value)
   if (isAdded) {
+    isFavorite.value = true
     showToast('收藏成功', 'success')
   } else {
     removeFromFavorites(expertData.value.id)
+    isFavorite.value = false
     showToast('已取消收藏', 'success')
   }
 }
@@ -882,7 +889,7 @@ const handleMessage = () => {
     return
   }
   router.push({
-    path: `/chat/${expertData.value.id}`,
+    path: '/messages',
     query: { 
       expertId: expertData.value.id,
       expertName: expertData.value.nickname
@@ -904,7 +911,17 @@ const handleNotification = () => {
 
 // 私聊功能
 const handleChat = () => {
-  console.log('打开私聊窗口')
+  if (!expertData.value.id) {
+    showToast('专家ID不存在', 'error')
+    return
+  }
+  router.push({
+    path: `/chat/${expertData.value.id}`,
+    query: { 
+      expertId: expertData.value.id,
+      expertName: expertData.value.nickname
+    }
+  })
 }
 
 // 选择技能

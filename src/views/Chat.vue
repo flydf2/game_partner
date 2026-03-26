@@ -7,10 +7,8 @@ const router = useRouter()
 const route = useRoute()
 
 const userId = route.params.id
-const isListView = !userId
 
 const messages = ref([])
-const conversations = ref([])
 const inputMessage = ref('')
 const loading = ref(false)
 const error = ref('')
@@ -30,8 +28,6 @@ const pollingInterval = ref(null)
 const lastMessageId = ref(null)
 
 const loadMessages = async () => {
-  if (isListView) return
-  
   loading.value = true
   error.value = ''
   
@@ -84,35 +80,9 @@ const loadMessages = async () => {
   }
 }
 
-const loadConversations = async () => {
-  if (!isListView) return
-  
-  loading.value = true
-  error.value = ''
-  
-  try {
-    const response = await messageApi.getConversations()
-    if (response.success || response.code === 0) {
-      conversations.value = response.data || []
-    } else {
-      throw new Error(response.message || response.msg || '获取会话列表失败')
-    }
-  } catch (err) {
-    const result = handleApiError(err)
-    error.value = result.error
-    console.error('获取会话列表失败:', err)
-  } finally {
-    loading.value = false
-  }
-}
-
 onMounted(() => {
-  if (isListView) {
-    loadConversations()
-  } else {
-    loadMessages()
-    startPolling()
-  }
+  loadMessages()
+  startPolling()
 })
 
 onUnmounted(() => {
@@ -291,31 +261,16 @@ const formatTimeDisplay = (time) => {
   return date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', hour12: false })
 }
 
-const handleConversationClick = (userId) => {
-  router.push(`/chat/${userId}`)
-}
-
 watch(() => route.params.id, (newUserId) => {
   if (newUserId) {
     loadMessages()
-  } else {
-    loadConversations()
   }
 })
 </script>
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-24">
-    <!-- List View Header -->
-    <header v-if="isListView" class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
-      <h1 class="font-headline font-bold text-lg text-[#6c5a00]">消息</h1>
-      <button class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full">
-        <span class="material-symbols-outlined" data-icon="settings">settings</span>
-      </button>
-    </header>
-
-    <!-- Chat View Header -->
-    <header v-else class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
+    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
       <div class="flex items-center gap-4">
         <button 
           class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full"
@@ -336,59 +291,7 @@ watch(() => route.params.id, (newUserId) => {
       </button>
     </header>
 
-    <!-- List View Content -->
-    <main v-if="isListView" class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
-      <div v-if="loading" class="w-full flex justify-center py-10">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-      
-      <div v-else-if="error" class="w-full flex justify-center py-10">
-        <div class="bg-error/10 border border-error/20 rounded-full px-4 py-2 flex items-center gap-2">
-          <span class="material-symbols-outlined text-error text-sm">error_outline</span>
-          <span class="text-sm text-error">{{ error }}</span>
-          <button @click="error = ''; loadConversations()" class="material-symbols-outlined text-error text-sm cursor-pointer hover:opacity-80">refresh</button>
-        </div>
-      </div>
-      
-      <div v-else-if="conversations.length === 0" class="w-full flex flex-col items-center justify-center py-20">
-        <div class="w-20 h-20 rounded-full bg-surface-container-low flex items-center justify-center mb-4">
-          <span class="material-symbols-outlined text-4xl text-on-surface-variant">chat_bubble_outline</span>
-        </div>
-        <p class="text-on-surface-variant text-center">暂无消息</p>
-      </div>
-      
-      <div v-else class="space-y-3">
-        <div 
-          v-for="conversation in conversations" 
-          :key="conversation.id"
-          @click="handleConversationClick(conversation.userId)"
-          class="flex items-center gap-4 p-4 rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors duration-200 cursor-pointer"
-        >
-          <div class="w-14 h-14 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
-            <img 
-              :alt="conversation.userName" 
-              class="w-full h-full object-cover" 
-              :src="conversation.userAvatar" 
-            />
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center justify-between mb-1">
-              <h3 class="font-medium text-on-surface truncate">{{ conversation.userName }}</h3>
-              <span class="text-[11px] text-outline ml-2">{{ formatMessageTime(conversation.lastTime) }}</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <p class="text-sm text-on-surface-variant truncate">{{ conversation.lastMessage }}</p>
-              <span v-if="conversation.unread > 0" class="bg-primary text-white text-[10px] font-medium px-2 py-0.5 rounded-full min-w-6 text-center">
-                {{ conversation.unread }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </main>
-
-    <!-- Chat View Content -->
-    <main v-else class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <div ref="messageContainer" class="h-[calc(100vh-12rem)] overflow-y-auto pb-4">
         <div v-for="(message, index) in messages" :key="message.id">
           <div v-if="shouldShowTime(index)" class="flex justify-center mb-4">
@@ -445,14 +348,13 @@ watch(() => route.params.id, (newUserId) => {
           <div class="bg-error/10 border border-error/20 rounded-full px-4 py-2 flex items-center gap-2">
             <span class="material-symbols-outlined text-error text-sm">error_outline</span>
             <span class="text-sm text-error">{{ error }}</span>
-            <button @click="error = ''; loadMessages()" class="material-symbols-outlined text-error text-sm cursor-pointer hover:opacity-80">refresh</button>
+            <button @click="error = ''" class="material-symbols-outlined text-error text-sm cursor-pointer hover:opacity-80">close</button>
           </div>
         </div>
       </div>
     </main>
 
-    <!-- Chat View Footer -->
-    <footer v-if="!isListView" class="fixed bottom-0 w-full z-50 bg-white/80 backdrop-blur-xl rounded-t-[2.5rem] shadow-[0_-8px_30px_rgba(0,0,0,0.04)] pb-safe">
+    <footer class="fixed bottom-0 w-full z-50 bg-white/80 backdrop-blur-xl rounded-t-[2.5rem] shadow-[0_-8px_30px_rgba(0,0,0,0.04)] pb-safe">
       <div class="flex items-center gap-3 px-6 py-4">
         <button class="transition-transform active:scale-90 text-on-surface-variant">
           <span class="material-symbols-outlined text-[28px]" data-icon="mic">mic</span>

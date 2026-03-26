@@ -350,14 +350,19 @@ const loadPlaymates = async () => {
   loading.value.playmates = true
   error.value.playmates = ''
   
-  const playmatesResponse = await api.getPlaymates({page:1,pageSize:5})
-  
-  if (playmatesResponse.success) {
-    playmates.value = playmatesResponse.data
+  const response = await api.getPlaymates({page:1,pageSize:5})
+  console.info('response', response)
+  if (response.success === true) {
+    // 处理数据格式，确保正确解析data.data和data.pagination
+    const playmateData = response.data || []
+    playmates.value = playmateData.map(playmate => ({
+      ...playmate,
+      tags: playmate.tags ? playmate.tags.split(',') : [],
+    }))
   } else {
-    error.value.playmates = playmatesResponse.error || '加载陪玩数据失败'
+    error.value.playmates = response.error || '加载陪玩数据失败'
   }
-  
+    
   loading.value.playmates = false
 }
 // 时间格式化函数

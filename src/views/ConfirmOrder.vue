@@ -6,46 +6,24 @@ import { expertApi, orderApi, handleApiError } from '../api'
 const route = useRoute()
 const router = useRouter()
 
-const expertId = ref(route.query.expertId || '1')
+const userId = ref(route.query.userId || '1')
+const skillId = ref(route.query.skillId)
+const serviceTime = ref(route.query.serviceTime || '')
+const amount = ref(parseFloat(route.query.amount || '0'))
+
 const expert = ref(null)
 const loading = ref(true)
-const selectedCoupon = ref(null)
-const coupons = ref([
-  {
-    id: 1,
-    title: '新人专享',
-    discount: 10,
-    type: 'discount',
-    description: '首次下单立减10元'
-  }
-])
-
-const serviceDuration = ref(2)
-const serviceDate = ref('2026-03-15')
-const serviceTime = ref('20:00')
+const selectedSkill = ref(null)
 const isSubmitting = ref(false)
-
-const serviceFee = computed(() => {
-  if (!expert.value) return 0
-  return expert.value.price * serviceDuration.value
-})
-
-const platformFee = computed(() => 5)
-
-const couponDiscount = computed(() => {
-  if (!selectedCoupon.value) return 0
-  return selectedCoupon.value.discount
-})
-
-const totalAmount = computed(() => {
-  return serviceFee.value + platformFee.value - couponDiscount.value
-})
 
 const loadExpertDetail = async () => {
   try {
     loading.value = true
-    const response = await expertApi.getExpertDetail(expertId.value)
+    const response = await expertApi.getExpertDetail(userId.value)
     expert.value = response.data
+    if (response.data.skills && skillId.value) {
+      selectedSkill.value = response.data.skills.find(s => s.id === parseInt(skillId.value))
+    }
   } catch (error) {
     console.error('加载大神详情失败:', error)
   } finally {
@@ -57,19 +35,20 @@ const handlePay = async () => {
   isSubmitting.value = true
   try {
     const response = await orderApi.createOrder({
-      expertId: expertId.value,
-      serviceTime: `${serviceDate.value} ${serviceTime.value}`,
-      duration: serviceDuration.value,
-      couponId: selectedCoupon.value?.id,
-      remarks: ''
+      playmateId: expert.value.id,
+      game: expert.value.game,
+      skill: selectedSkill.value?.name || '技术陪练',
+      serviceTime: serviceTime.value,
+      amount: amount.value
     })
     
     if (response.success || response.code === 0) {
       router.push({
         path: '/payment-success',
         query: {
-          expertId: expertId.value,
-          amount: totalAmount.value,
+          userId: userId.value,
+          skillId: skillId.value,
+          amount: amount.value,
           orderId: response.data?.orderId
         }
       })
@@ -82,10 +61,6 @@ const handlePay = async () => {
     console.error('创建订单失败:', err)
     isSubmitting.value = false
   }
-}
-
-const handleCouponClick = (coupon) => {
-  selectedCoupon.value = selectedCoupon.value?.id === coupon.id ? null : coupon
 }
 
 onMounted(() => {
@@ -128,7 +103,7 @@ onMounted(() => {
                 {{ expert.game }}
               </span>
               <span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
-                技术陪练
+                {{ selectedSkill?.name || '技术陪练' }}
               </span>
             </div>
           </div>
@@ -143,22 +118,15 @@ onMounted(() => {
               <span class="text-on-surface-variant font-medium">预约时间</span>
             </div>
             <span class="font-headline font-semibold text-on-surface text-sm">
-              {{ serviceDate }} {{ serviceTime }}
+              {{ serviceTime || '待选择' }}
             </span>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary text-xl">timer</span>
-              <span class="text-on-surface-variant font-medium">时长</span>
-            </div>
-            <span class="font-headline font-semibold text-on-surface text-sm">{{ serviceDuration }}小时</span>
           </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="material-symbols-outlined text-primary text-xl">payments</span>
               <span class="text-on-surface-variant font-medium">单价</span>
             </div>
-            <span class="font-headline font-semibold text-on-surface text-sm">¥{{ expert.price }}/小时</span>
+            <span class="font-headline font-semibold text-on-surface text-sm">¥{{ selectedSkill?.price || expert.price }}/小时</span>
           </div>
         </div>
 
@@ -166,21 +134,12 @@ onMounted(() => {
 
         <div class="space-y-4">
           <div class="flex items-center justify-between">
-            <span class="text-on-surface-variant">服务费小计</span>
-            <span class="font-headline font-bold text-on-surface">¥{{ serviceFee }}</span>
+            <span class="text-on-surface-variant">服务费</span>
+            <span class="font-headline font-bold text-on-surface">¥{{ amount }}</span>
           </div>
           <div class="flex items-center justify-between">
             <span class="text-on-surface-variant">平台保障费</span>
-            <span class="font-headline font-bold text-on-surface">¥{{ platformFee }}</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-              <span class="text-on-surface-variant">优惠券</span>
-              <span v-if="selectedCoupon" class="bg-error/10 text-error text-[10px] px-1.5 py-0.5 rounded border border-error/20">
-                {{ selectedCoupon.title }}
-              </span>
-            </div>
-            <span class="font-headline font-bold text-error">-¥{{ couponDiscount }}</span>
+            <span class="font-headline font-bold text-on-surface">¥5</span>
           </div>
         </div>
       </section>
@@ -201,7 +160,7 @@ onMounted(() => {
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">待支付总额</span>
             <div class="flex items-baseline gap-1">
               <span class="text-primary font-bold text-sm">¥</span>
-              <span class="text-3xl font-extrabold font-headline text-on-surface">{{ totalAmount }}</span>
+              <span class="text-3xl font-extrabold font-headline text-on-surface">{{ amount + 5 }}</span>
             </div>
           </div>
         </div>

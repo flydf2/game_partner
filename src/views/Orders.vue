@@ -39,6 +39,7 @@ const loadOrders = async () => {
     if (response.success || response.code === 0) {
       // 转换订单数据格式
       orders.value = (response.data?.data || response.data || []).map(order => ({
+        ...order,
         id: order.id,
         status: order.status,
         statusText: getStatusText(order.status),
@@ -137,9 +138,20 @@ const handleEnterRoom = (orderId) => {
 }
 
 const handleOrderAgain = (orderId) => {
-  console.log('再来一单:', orderId)
-  // 跳转到确认订单页面
-  router.push('/confirm-order')
+  const order = orders.value.find(o => o.id === orderId)
+  console.log('再来一单:', orderId, order)
+
+  if (order) {
+    router.push({
+      path: '/confirm-order',
+      query: {
+        userId: order.playmateId,
+        skillId: order.skillId,
+        serviceTime: '',
+        amount: order.price.toString()
+      }
+    })
+  }
 }
 
 const handleReview = (orderId) => {

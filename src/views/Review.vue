@@ -6,12 +6,14 @@ import { reviewApi } from '../api'
 const router = useRouter()
 const route = useRoute()
 
-const orderId = ref(route.params.id || '1001')
+const routeParams = route.params
+const playmateId = ref(routeParams.playmateId ? parseInt(routeParams.playmateId) : 41)
+const orderId = ref(routeParams.id ? parseInt(routeParams.id) : 1001)
 
 const orderData = ref({
   playmate: {
     name: '沐沐酱',
-    avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAvBZJ1bNVIFN-np7subUrFxA6Bhyg7VwosCo5tIJr4ufDIjGLxMmrwxv9qeTH-ZsiY-KtYt9J49NDYUwSm8uUvp6TyqIgAczehL0SaZZp4vvZxyhCMR662q2YtVgWvel38x4CCw1MWyOQCbUlKMeU4-a9FeDJe_VyT6hz2STzfT170AB-G0TZGxWpjOukBRGDztoxZ5OVhmI71uzoxOZgEUtc5c1c74or2UPFcS92VdcDzVE6KIFBpLBG2ALcUlhQ_qhyxw2t0lY4',
+    avatar: 'https://lh3.googleusercontent.com/AB6AXuAvBZJ1bNVIFN-np7subUrFxA6Bhyg7VwosCo5tIJr4ufDIjGLxMmrwxv9qeTH-ZsiY-KtYt9J49NDYUwSm8uUvp6TyqIgAczehL0SaZZp4vvZxyhCMR662q2YtVgWvel38x4CCw1MWyOQCbUlKMeU4-a9FeDJe_VyT6hz2STzfT170AB-G0TZGxWpjOukBRGDztoxZ5OVhmI71uzoxOZgEUtc5c1c74or2UPFcS92VdcDzVE6KIFBpLBG2ALcUlhQ_qhyxw2t0lY4',
     game: '王者荣耀',
     service: '排位上分'
   },
@@ -64,7 +66,8 @@ const handleSubmit = async () => {
     submitting.value = true
     
     const reviewData = {
-      orderId: orderId.value,
+      playmateId: playmateId.value,
+      orderId: orderId.value || undefined,
       rating: rating.value,
       tags: selectedTags.value,
       content: comment.value

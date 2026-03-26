@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { userApi, withdrawalApi, handleApiError } from '../api/index.js'
+import { userApi } from '../api/index.js'
 
 const router = useRouter()
 
@@ -14,9 +14,6 @@ const walletInfo = ref({
 
 const transactions = ref([])
 const loading = ref(false)
-const showWithdrawDialog = ref(false)
-const withdrawAmount = ref('')
-const withdrawError = ref('')
 
 const loadWallet = async () => {
   loading.value = true
@@ -50,7 +47,6 @@ const loadWallet = async () => {
       throw new Error(response.message || response.msg || '获取钱包信息失败')
     }
   } catch (err) {
-    const result = handleApiError(err)
     console.error('获取钱包信息失败:', err)
   } finally {
     loading.value = false
@@ -66,63 +62,7 @@ const formatAmount = (amount) => {
 }
 
 const handleWithdraw = () => {
-  if (!withdrawAmount.value) {
-    withdrawError.value = '请输入提现金额'
-    return
-  }
-
-  const amount = parseFloat(withdrawAmount.value)
-  if (amount <= 0) {
-    withdrawError.value = '提现金额必须大于0'
-    return
-  }
-
-  if (amount > availableBalance.value) {
-    withdrawError.value = '提现金额不能超过可用余额'
-    return
-  }
-
-  showWithdrawDialog.value = true
-}
-
-const confirmWithdraw = async () => {
-  loading.value = true
-  try {
-    const response = await withdrawalApi.submitWithdrawal({
-      amount: parseFloat(withdrawAmount.value)
-    })
-    if (response.success || response.code === 0) {
-      walletInfo.value.balance -= parseFloat(withdrawAmount.value)
-      walletInfo.value.totalWithdraw += parseFloat(withdrawAmount.value)
-      
-      transactions.value.unshift({
-        id: Date.now(),
-        type: 'withdraw',
-        title: '提现到微信',
-        amount: -parseFloat(withdrawAmount.value),
-        time: new Date().toLocaleString('zh-CN', { 
-          year: 'numeric', 
-          month: '2-digit', 
-          day: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit'
-        }),
-        status: 'processing'
-      })
-      
-      showWithdrawDialog.value = false
-      withdrawAmount.value = ''
-      withdrawError.value = ''
-    } else {
-      throw new Error(response.message || response.msg || '提现失败')
-    }
-  } catch (err) {
-    const result = handleApiError(err)
-    withdrawError.value = result.error
-    console.error('提现失败:', err)
-  } finally {
-    loading.value = false
-  }
+  router.push('/withdrawal')
 }
 
 const handleBack = () => {
@@ -130,7 +70,6 @@ const handleBack = () => {
 }
 
 const handleBill = () => {
-  // 账单功能，暂时显示提示
   alert('账单功能开发中')
 }
 
@@ -254,50 +193,6 @@ onMounted(() => {
         </div>
       </section>
     </main>
-
-    <!-- 提现对话框 -->
-    <div v-if="showWithdrawDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
-      <div class="bg-surface-container-lowest rounded-3xl p-6 w-full max-w-sm animate-in fade-in-90 slide-in-from-bottom-5">
-        <h3 class="text-lg font-bold text-on-surface font-headline mb-4">提现申请</h3>
-        
-        <div class="space-y-4">
-          <div class="bg-surface-container rounded-2xl p-4">
-            <p class="text-sm text-on-surface-variant">可用余额</p>
-            <p class="text-2xl font-bold text-primary">¥{{ formatAmount(availableBalance) }}</p>
-          </div>
-
-          <div class="space-y-2">
-            <label class="text-sm font-semibold text-on-surface">提现金额</label>
-            <div class="relative">
-              <span class="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">¥</span>
-              <input
-                v-model="withdrawAmount"
-                type="number"
-                placeholder="请输入提现金额"
-                class="w-full bg-surface-container-low rounded-2xl py-4 pl-10 pr-4 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
-              />
-            </div>
-            <p v-if="withdrawError" class="text-xs text-error">{{ withdrawError }}</p>
-          </div>
-
-          <div class="flex gap-3">
-            <button
-              @click="showWithdrawDialog = false"
-              class="flex-1 py-3 rounded-full bg-surface-container text-on-surface font-bold text-sm transition-all active:scale-95 hover:bg-surface-container-low"
-            >
-              取消
-            </button>
-            <button
-              @click="confirmWithdraw"
-              :disabled="loading"
-              class="flex-1 py-3 rounded-full bg-primary-container text-on-primary-container font-bold text-sm transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {{ loading ? '处理中...' : '确认提现' }}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

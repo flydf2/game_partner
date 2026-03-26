@@ -848,7 +848,14 @@ export const orderApi = {
         }, 800)
       })
     } else {
-      return await withRetry(() => post('/orders', orderData))
+      const createOrderRequest = {
+        playmateId: orderData.playmateId,
+        game: orderData.game,
+        skill: orderData.skill,
+        serviceTime: orderData.serviceTime,
+        amount: orderData.amount
+      }
+      return await withRetry(() => post('/orders', createOrderRequest))
     }
   },
   
