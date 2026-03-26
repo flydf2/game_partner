@@ -350,7 +350,7 @@ const loadPlaymates = async () => {
   loading.value.playmates = true
   error.value.playmates = ''
   
-  const playmatesResponse = await api.getPlaymates()
+  const playmatesResponse = await api.getPlaymates({page:1,pageSize:5})
   
   if (playmatesResponse.success) {
     playmates.value = playmatesResponse.data
@@ -360,16 +360,54 @@ const loadPlaymates = async () => {
   
   loading.value.playmates = false
 }
-
+// 时间格式化函数
+const formatTime = (dateString) => {
+  if (!dateString) return '未知时间'
+  const now = new Date()
+  const date = new Date(dateString)
+  const diff = now - date
+  const minutes = Math.floor(diff / 60000)
+  const hours = Math.floor(diff / 3600000)
+  const days = Math.floor(diff / 86400000)
+  
+  if (minutes < 1) return '刚刚'
+  if (minutes < 60) return `${minutes}分钟前`
+  if (hours < 24) return `${hours}小时前`
+  if (days < 7) return `${days}天前`
+  return date.toLocaleDateString()
+}
 // 加载社区热帖
 const loadCommunityPosts = async () => {
   loading.value.community = true
   error.value.community = ''
   
-  const communityResponse = await api.getCommunityPosts()
-  
+  const communityResponse = await api.getCommunityPosts({page:1,pagaSize:5})
   if (communityResponse.success) {
-    communityPosts.value = communityResponse.data
+      const rawPosts = communityResponse.data?.data || communityResponse.data || []
+      communityPosts.value = rawPosts.map(post => {
+        let imagesArray = []
+        if (post.images) {
+          if (Array.isArray(post.images)) {
+            imagesArray = post.images
+          } else {
+            imagesArray = post.images.split(',')
+          }
+        }
+        return {
+          ...post,
+          user: post.user || {
+            id: post.userId || post.user_id || '1',
+            name: post.user?.name || `用户${post.userId || post.user_id || '1'}`,
+            avatar: post.user?.avatar || `https://randomuser.me/api/portraits/${(post.userId || post.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(post.userId || post.user_id || 1) % 70 + 1}.jpg`,
+            game: post.user?.game || post.game || '未知游戏'
+          },
+          time: post.time || formatTime(post.createdAt),
+          isLiked: post.isLiked || false,
+          isFollowing: post.isFollowing || false,
+          images: imagesArray
+        }
+      })
+
   } else {
     error.value.community = communityResponse.error || '加载社区热帖失败'
   }
