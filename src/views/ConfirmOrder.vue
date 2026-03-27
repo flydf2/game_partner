@@ -2,6 +2,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { expertApi, orderApi, handleApiError } from '../api'
+import DateTimePicker from '../components/DateTimePicker.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -10,11 +11,17 @@ const userId = ref(route.query.userId || '1')
 const skillId = ref(route.query.skillId)
 const serviceTime = ref(route.query.serviceTime || '')
 const amount = ref(parseFloat(route.query.amount || '0'))
+const quantity = ref(parseInt(route.query.quantity) || 1)
 
 const expert = ref(null)
 const loading = ref(true)
 const selectedSkill = ref(null)
 const isSubmitting = ref(false)
+
+const totalPrice = computed(() => {
+  const skillPrice = selectedSkill.value?.price || expert.value?.price || 0
+  return skillPrice * quantity.value
+})
 
 const loadExpertDetail = async () => {
   try {
@@ -32,15 +39,27 @@ const loadExpertDetail = async () => {
 }
 
 const handlePay = async () => {
+  if (!serviceTime.value) {
+    alert('请选择预约时间')
+    return
+  }
+  if (quantity.value < 1) {
+    alert('数量至少为1')
+    return
+  }
+  
   isSubmitting.value = true
   try {
     const response = await orderApi.createOrder({
       playmateId: expert.value.id,
+      skillId: selectedSkill.value?.id,
       game: expert.value.game,
       skill: selectedSkill.value?.name || '技术陪练',
       serviceTime: serviceTime.value,
-      amount: amount.value
+      amount: totalPrice.value,
+      quantity: quantity.value
     })
+    // 清理用户缓存
     
     if (response.success || response.code === 0) {
       router.push({
@@ -48,8 +67,9 @@ const handlePay = async () => {
         query: {
           userId: userId.value,
           skillId: skillId.value,
-          amount: amount.value,
-          orderId: response.data?.orderId
+          amount: totalPrice.value,
+          orderId: response.data?.orderId,
+          quantity: quantity.value
         }
       })
     } else {
@@ -61,6 +81,10 @@ const handlePay = async () => {
     console.error('创建订单失败:', err)
     isSubmitting.value = false
   }
+}
+
+const handleTimeSelect = (time) => {
+  serviceTime.value = time
 }
 
 onMounted(() => {
@@ -117,9 +141,17 @@ onMounted(() => {
               <span class="material-symbols-outlined text-primary text-xl">schedule</span>
               <span class="text-on-surface-variant font-medium">预约时间</span>
             </div>
-            <span class="font-headline font-semibold text-on-surface text-sm">
-              {{ serviceTime || '待选择' }}
-            </span>
+            <DateTimePicker
+              v-model="serviceTime"
+              @change="handleTimeSelect"
+              class="cursor-pointer"
+            >
+              <template #default="{ date }">
+                <span class="font-headline font-semibold text-on-surface text-sm text-primary">
+                  {{ date || '待选择' }}
+                </span>
+              </template>
+            </DateTimePicker>
           </div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -128,6 +160,27 @@ onMounted(() => {
             </div>
             <span class="font-headline font-semibold text-on-surface text-sm">¥{{ selectedSkill?.price || expert.price }}/小时</span>
           </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="material-symbols-outlined text-primary text-xl">Q</span>
+              <span class="text-on-surface-variant font-medium">数量</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button
+                @click="quantity = Math.max(1, quantity - 1)"
+                class="w-8 h-8 rounded-full bg-surface-container-lowest text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors"
+              >
+                -
+              </button>
+              <span class="font-headline font-semibold text-on-surface text-sm w-8 text-center">{{ quantity }}</span>
+              <button
+                @click="quantity = quantity + 1"
+                class="w-8 h-8 rounded-full bg-surface-container-lowest text-on-surface flex items-center justify-center hover:bg-surface-container-high transition-colors"
+              >
+                +
+              </button>
+            </div>
+          </div>
         </div>
 
         <div class="h-[1px] bg-surface-container-high w-full"></div>
@@ -135,7 +188,7 @@ onMounted(() => {
         <div class="space-y-4">
           <div class="flex items-center justify-between">
             <span class="text-on-surface-variant">服务费</span>
-            <span class="font-headline font-bold text-on-surface">¥{{ amount }}</span>
+            <span class="font-headline font-bold text-on-surface">¥{{ totalPrice }}</span>
           </div>
           <div class="flex items-center justify-between">
             <span class="text-on-surface-variant">平台保障费</span>
@@ -160,7 +213,7 @@ onMounted(() => {
             <span class="text-[10px] text-on-surface-variant uppercase tracking-wider font-bold">待支付总额</span>
             <div class="flex items-baseline gap-1">
               <span class="text-primary font-bold text-sm">¥</span>
-              <span class="text-3xl font-extrabold font-headline text-on-surface">{{ amount + 5 }}</span>
+              <span class="text-3xl font-extrabold font-headline text-on-surface">{{ totalPrice + 5 }}</span>
             </div>
           </div>
         </div>

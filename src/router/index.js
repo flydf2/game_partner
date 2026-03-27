@@ -29,7 +29,7 @@ const routes = [
     }
   },
   { path: '/notifications', name: 'Notifications', component: () => import('../views/Notifications.vue'), meta: { title: '通知', requireAuth: true } },
-  { path: '/messages', name: 'Messages', component: () => import('../views/Messages.vue'), meta: { title: '消息', requireAuth: true, keepAlive: true } },
+  { path: '/messages', name: 'Messages', component: () => import('../views/Chat.vue'), meta: { title: '消息', requireAuth: true, keepAlive: true } },
   { path: '/chat/:id', name: 'Chat', component: () => import('../views/Chat.vue'), meta: { title: '聊天', requireAuth: true, noBottomNav: true } },
   { path: '/create-post', name: 'CreatePost', component: () => import('../views/CreatePost.vue'), meta: { title: '发布动态', requireAuth: true, noBottomNav: true } },
   { path: '/reward-orders', name: 'RewardOrders', component: () => import('../views/RewardOrders.vue'), meta: { title: '悬赏订单', requireAuth: true } },

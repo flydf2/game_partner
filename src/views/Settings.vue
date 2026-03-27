@@ -1,8 +1,32 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { cache } from '../utils/cache.js'
+
 
 const router = useRouter()
+
+const getCacheSize = () => {
+  let totalSize = 0
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key && key.startsWith('game_partner_cache_')) {
+        const value = localStorage.getItem(key)
+        if (value) {
+          totalSize += new Blob([value]).size
+        }
+      }
+    }
+  } catch (err) {
+    console.error('获取缓存大小失败:', err)
+  }
+  const sizeInKB = totalSize / 1024
+  if (sizeInKB < 1024) {
+    return `${sizeInKB.toFixed(1)} KB`
+  }
+  return `${(sizeInKB / 1024).toFixed(1)} MB`
+}
 
 const settings = ref([
   {
@@ -25,7 +49,7 @@ const settings = ref([
     items: [
       { key: 'language', label: '语言', icon: 'language', iconBg: 'bg-cyan-50', iconColor: 'text-cyan-600', value: '简体中文' },
       { key: 'theme', label: '主题', icon: 'palette', iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', value: '跟随系统' },
-      { key: 'clear', label: '清除缓存', icon: 'cleaning_services', iconBg: 'bg-gray-50', iconColor: 'text-gray-600', value: '128 MB' }
+      { key: 'clear', label: '清除缓存', icon: 'cleaning_services', iconBg: 'bg-gray-50', iconColor: 'text-gray-600', value: getCacheSize() }
     ]
   },
   {
@@ -94,13 +118,12 @@ const updateSetting = (key, value) => {
 }
 
 const clearCache = () => {
-  // 模拟清除缓存
-  console.log('清除缓存')
-  // 找到清除缓存项并更新
+  cache.clear()
+  console.log('清除缓存成功')
   for (const category of settings.value) {
     for (const item of category.items) {
       if (item.key === 'clear') {
-        item.value = '0 MB'
+        item.value = getCacheSize()
         break
       }
     }

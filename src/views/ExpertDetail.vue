@@ -370,6 +370,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { expertService } from '../services/expert.js'
 import { orderApi, handleApiError } from '../api/index.js'
+import { cache } from '../utils/cache.js'
 import Toast from '../components/common/Toast.vue'
 
 const router = useRouter()
@@ -449,42 +450,6 @@ const closeToast = () => {
   toast.value.show = false
 }
 
-// 本地存储工具函数
-const storage = {
-  set(key, value, expireMinutes = 5) {
-    const data = {
-      value,
-      expire: Date.now() + expireMinutes * 60 * 1000
-    }
-    localStorage.setItem(key, JSON.stringify(data))
-  },
-  
-  get(key) {
-    try {
-      const item = localStorage.getItem(key)
-      if (!item) return null
-      
-      const data = JSON.parse(item)
-      if (Date.now() > data.expire) {
-        localStorage.removeItem(key)
-        return null
-      }
-      return data.value
-    } catch (err) {
-      console.error('读取本地存储失败:', err)
-      return null
-    }
-  },
-  
-  remove(key) {
-    localStorage.removeItem(key)
-  },
-  
-  clear() {
-    localStorage.clear()
-  }
-}
-
 // 防抖函数
 const debounce = (fn, delay) => {
   let timer = null
@@ -517,7 +482,7 @@ const loadReviews = async (page = 1) => {
     // 检查缓存（仅第一页）
     if (page === 1) {
       const cacheKey = `expert_reviews_${expertId}`
-      const cachedReviews = storage.get(cacheKey)
+      const cachedReviews = cache.get(cacheKey)
       
       if (cachedReviews) {
         reviews.value = cachedReviews.reviews.map(review => ({
@@ -546,9 +511,8 @@ const loadReviews = async (page = 1) => {
       
       if (page === 1) {
         reviews.value = processedReviews
-        // 缓存第一页数据（3分钟）
         const cacheKey = `expert_reviews_${expertId}`
-        storage.set(cacheKey, response.data, 3)
+        cache.set(cacheKey, response.data, 3 * 60 * 1000)
       } else {
         reviews.value = [...reviews.value, ...processedReviews]
       }
@@ -611,7 +575,7 @@ const loadExpertData = async () => {
     
     // 检查缓存
     const cacheKey = `expert_detail_${expertId}`
-    const cachedData = storage.get(cacheKey)
+    const cachedData = cache.get(cacheKey)
     
     // 如果缓存存在
     if (cachedData) {
@@ -639,7 +603,7 @@ const loadExpertData = async () => {
       // 加载语音数据
       await loadVoiceData(expertId)
       // 缓存数据（5分钟）
-      storage.set(cacheKey, expertData.value, 5)
+      cache.set(cacheKey, expertData.value, 5 * 60 * 1000)
       // 添加到浏览历史
       addToHistory(expertData.value)
       // 加载评价列表
@@ -663,7 +627,7 @@ const loadExpertData = async () => {
 const loadVoiceData = async (expertId) => {
   try {
     const voiceCacheKey = `expert_voice_${expertId}`
-    const cachedVoice = storage.get(voiceCacheKey)
+    const cachedVoice = cache.get(voiceCacheKey)
     
     if (cachedVoice) {
       if (!expertData.value.voiceIntroduction) {
@@ -685,8 +649,7 @@ const loadVoiceData = async (expertId) => {
         ...expertData.value.voiceIntroduction,
         ...voiceResponse.data
       }
-      // 缓存语音数据（10分钟）
-      storage.set(voiceCacheKey, voiceResponse.data, 10)
+      cache.set(voiceCacheKey, voiceResponse.data, 10 * 60 * 1000)
     }
   } catch (err) {
     console.error('加载语音数据失败:', err)
@@ -725,7 +688,7 @@ const clearExpertCache = () => {
   const expertId = expertData.value.id
   if (expertId) {
     const cacheKey = `expert_detail_${expertId}`
-    storage.remove(cacheKey)
+    cache.remove(cacheKey)
   }
 }
 

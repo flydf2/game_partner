@@ -1,21 +1,9 @@
 <template>
   <div class="min-h-screen bg-background text-on-background font-body pb-24">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">我的技能</h1>
-      </div>
-      <div class="w-6"></div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
-    </header>
-
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
-      <!-- 技能分类 -->
+    <!-- TopAppBar -->
+    <TopAppBar title="我的技能" showBack />
+    
+    <main class="max-w-2xl mx-auto space-y-4-- 技能分类 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <h2 class="text-sm font-bold text-on-surface mb-4">技能分类</h2>
         <div class="flex gap-3 overflow-x-auto pb-2">
@@ -168,6 +156,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import TopAppBar from '../components/TopAppBar.vue'
 import { skillApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()

@@ -1,14 +1,17 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { expertApi } from '../api'
+import { expertApi, orderApi } from '../api'
 
 const route = useRoute()
 const router = useRouter()
 
-const expertId = ref(route.query.expertId || '1')
-const amount = ref(Number(route.query.amount) || 153)
+const expertId = ref(route.query.userId || '1')
+const amount = ref(Number(route.query.amount) || 0)
+const orderId = ref(Number(route.query.orderId) || 0)
 const expert = ref(null)
+const selectedSkill = ref(null)
+const orderInfo = ref(null)
 const loading = ref(true)
 
 const loadExpertDetail = async () => {
@@ -23,8 +26,20 @@ const loadExpertDetail = async () => {
   }
 }
 
+const loadOrderDetail = async () => {
+  try {
+    if (orderId.value > 0) {
+      const response = await orderApi.getOrderDetail(orderId.value)
+      console.info('订单详情:', response)
+      orderInfo.value = response.data
+    }
+  } catch (error) {
+    console.error('加载订单详情失败:', error)
+  }
+}
+
 const handleContact = () => {
-  router.push(`/expert/${expertId.value}`)
+  router.push(`/chat/${expertId.value}?expertId=${expertId.value}&expertName=${encodeURIComponent(expert.value?.nickname || '')}`)
 }
 
 const handleBackHome = () => {
@@ -32,6 +47,7 @@ const handleBackHome = () => {
 }
 
 onMounted(() => {
+  loadOrderDetail()
   loadExpertDetail()
 })
 </script>
@@ -89,11 +105,15 @@ onMounted(() => {
           <div class="space-y-4">
             <div class="flex justify-between items-center">
               <span class="text-on-surface-variant text-sm font-medium">预约服务</span>
-              <span class="text-on-surface font-bold text-sm">{{ expert.game }}陪练</span>
+              <span class="text-on-surface font-bold text-sm">{{ orderInfo?.skill || expert.value?.game }}陪练</span>
             </div>
             <div class="flex justify-between items-center">
               <span class="text-on-surface-variant text-sm font-medium">预约时间</span>
-              <span class="text-on-surface font-bold text-sm">2026年3月15日 20:00</span>
+              <span class="text-on-surface font-bold text-sm">{{ orderInfo?.serviceTime || '2026年3月15日 20:00' }}</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-on-surface-variant text-sm font-medium">数量</span>
+              <span class="text-on-surface font-bold text-sm">{{ orderInfo?.quantity || 1 }} 小时</span>
             </div>
           </div>
         </div>
