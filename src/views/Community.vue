@@ -8,6 +8,7 @@ const router = useRouter()
 
 const activeCategory = ref('hot')
 const searchQuery = ref('')
+const onlyRewardPosts = ref(false)
 const toast = ref({
   show: false,
   message: ''
@@ -31,7 +32,8 @@ const fetchPosts = async () => {
   
   try {
     const response = await communityApi.getPosts({
-      category: activeCategory.value
+      category: activeCategory.value,
+      onlyReward: onlyRewardPosts.value ? 1 : 0
     })
     
     if (response.success || response.code === 0) {
@@ -88,6 +90,14 @@ const handleCategoryChange = async (categoryId) => {
   await fetchPosts()
 }
 
+const toggleRewardFilter = async () => {
+  onlyRewardPosts.value = !onlyRewardPosts.value
+  if (onlyRewardPosts.value) {
+    activeCategory.value = 'hot'
+  }
+  await fetchPosts()
+}
+
 const handleSearch = async () => {
   if (!searchQuery.value.trim()) return
   
@@ -97,7 +107,8 @@ const handleSearch = async () => {
   try {
     const response = await communityApi.getPosts({
       category: activeCategory.value,
-      keyword: searchQuery.value.trim()
+      keyword: searchQuery.value.trim(),
+      onlyReward: onlyRewardPosts.value ? 1 : 0
     })
     
     if (response.success || response.code === 0) {
@@ -297,6 +308,38 @@ onMounted(() => {
         </button>
       </section>
 
+      <!-- Reward Filter Toggle -->
+      <section class="w-full">
+        <button
+          @click="toggleRewardFilter"
+          :class="[
+            'w-full rounded-3xl p-4 flex items-center justify-between transition-all active:scale-95',
+            onlyRewardPosts
+              ? 'bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700/50'
+              : 'bg-surface-container-lowest hover:bg-surface-container-high'
+          ]"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl flex items-center justify-center transition-colors" :class="[
+              onlyRewardPosts 
+                ? 'bg-amber-200 dark:bg-amber-800/50 text-amber-700 dark:text-amber-400' 
+                : 'bg-primary-container/10 text-primary'
+            ]">
+              <span class="material-symbols-outlined">monetization_on</span>
+            </div>
+            <div>
+              <h3 class="font-bold text-on-surface" :class="[
+                onlyRewardPosts ? 'text-amber-700 dark:text-amber-400' : 'text-on-surface'
+              ]">仅看悬赏贴</h3>
+              <p class="text-xs text-on-surface-variant">
+                {{ onlyRewardPosts ? '已开启悬赏筛选' : '查看悬赏订单，赚取额外收益' }}
+              </p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline">chevron_right</span>
+        </button>
+      </section>
+
       <!-- Category Selector -->
       <section class="flex gap-3 overflow-x-auto hide-scrollbar -mx-5 px-5 py-1">
         <button
@@ -359,7 +402,7 @@ onMounted(() => {
               💰 悬赏订单
             </span>
             <span class="text-xs text-on-surface-variant">
-              {{ post.rewardInfo?.rewardAmount }} {{ post.rewardInfo?.rewardType }} · 截止：{{ post.rewardInfo?.deadline }}
+              {{ post.rewardInfo?.rewardAmount }} {{ post.rewardInfo?.rewardType }} · {{ post.rewardInfo?.hours }}小时 · 截止：{{ post.rewardInfo?.deadline }}
             </span>
           </div>
 

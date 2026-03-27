@@ -10,7 +10,8 @@ export const mockRewardOrders = [
     paymentMethod: 'prepay',
     status: 'available',
     createdAt: '2026-03-23 15:30',
-    tags: ['钻石', '排位', '上分']
+    tags: ['钻石', '排位', '上分'],
+    requirements: ['钻石以上段位', '有稳定网络', '能准时上线']
   },
   {
     id: 2,
@@ -23,7 +24,8 @@ export const mockRewardOrders = [
     paymentMethod: 'postpay',
     status: 'available',
     createdAt: '2026-03-23 14:20',
-    tags: ['荣耀王者', '貂蝉', '教学']
+    tags: ['荣耀王者', '貂蝉', '教学'],
+    requirements: ['荣耀王者及以上', '擅长貂蝉', '有耐心']
   },
   {
     id: 3,
@@ -36,7 +38,8 @@ export const mockRewardOrders = [
     paymentMethod: 'prepay',
     status: 'available',
     createdAt: '2026-03-23 13:10',
-    tags: ['KD3.0', '吃鸡', '技术流']
+    tags: ['KD3.0', '吃鸡', '技术流'],
+    requirements: ['KD3.0以上', '有吃鸡经验', '能配合战术']
   },
   {
     id: 4,
@@ -49,7 +52,8 @@ export const mockRewardOrders = [
     paymentMethod: 'postpay',
     status: 'available',
     createdAt: '2026-03-23 12:00',
-    tags: ['原神', '深渊', '攻略']
+    tags: ['原神', '深渊', '攻略'],
+    requirements: ['深渊12层经验', '熟悉角色搭配', '有教学能力']
   },
   {
     id: 5,
@@ -62,7 +66,8 @@ export const mockRewardOrders = [
     paymentMethod: 'prepay',
     status: 'available',
     createdAt: '2026-03-23 11:30',
-    tags: ['Global Elite', '枪法', '练习']
+    tags: ['Global Elite', '枪法', '练习'],
+    requirements: ['Global Elite段位', '枪法稳定', '有教学经验']
   }
 ]
 
@@ -102,22 +107,36 @@ export function mockGetRewardOrders(params = {}) {
 export function mockGetRewardOrderDetail(orderId) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const order = mockRewardOrders.find(o => o.id === orderId)
+      const order = mockRewardOrders.find(o => String(o.id) === String(orderId))
       if (order) {
         resolve({
-          success: true,
+          code: 0,
           data: {
-            ...order,
+            id: order.id,
+            title: order.game + ' ' + (order.paymentMethod === 'prepay' ? '预付' : '现付') + '悬赏单',
+            userId: order.userId,
+            userAvatar: order.userAvatar,
+            userName: order.userName,
+            game: order.game,
+            content: order.content,
+            reward: order.reward,
+            paymentMethod: order.paymentMethod,
+            status: order.status,
+            createdAt: order.createdAt,
+            tags: order.tags,
+            requirements: order.requirements,
             contactInfo: {
               phone: '138****8888',
               wechat: 'game****1234'
             }
-          }
+          },
+          msg: '获取成功'
         })
       } else {
         resolve({
-          success: false,
-          message: '订单不存在'
+          code: -1,
+          data: {},
+          msg: '订单不存在'
         })
       }
     }, 300)

@@ -36,8 +36,19 @@ const loadPostDetail = async () => {
       }
       
       // 构建完整的帖子数据结构
+      let rewardInfo = null
+      if (postData.extJson) {
+        try {
+          rewardInfo = typeof postData.extJson === 'string' ? JSON.parse(postData.extJson) : postData.extJson
+        } catch (e) {
+          console.error('解析 extJson 失败:', e)
+        }
+      }
+      
       post.value = {
         ...postData,
+        type: postData.type || 'normal',
+        rewardInfo: rewardInfo,
         images: imagesArray,
         user: postData.user || {
           id: postData.userId || postData.user_id || '1',
@@ -152,8 +163,107 @@ const handleBack = () => {
   router.back()
 }
 
+const isAuthor = ref(false)
+const postBids = ref([])
+
+const checkIsAuthor = () => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+  isAuthor.value = post.value?.user?.id === currentUser.id || post.value?.user?.userId === currentUser.id
+}
+
+const loadBids = async () => {
+  if (post.value?.id) {
+    try {
+      const response = await communityApi.getBids(post.value.id)
+      if (response.success && response.data) {
+        postBids.value = response.data
+      }
+    } catch (error) {
+      console.error('加载抢单列表失败:', error)
+    }
+  }
+}
+
+const handleBid = async () => {
+  if (!post.value?.id) return
+  
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+    
+    const bidData = {
+      postId: post.value.id,
+      userId: currentUser.id,
+      message: '我想接这个单子',
+      status: 'pending'
+    }
+    
+    const response = await communityApi.createBid(bidData)
+    
+    if (response.success) {
+      post.value.isBidding = true
+      postBids.value.unshift(response.data)
+    }
+  } catch (error) {
+    console.error('抢单失败:', error)
+    alert('抢单失败，请稍后重试')
+  }
+}
+
+const cancelBid = async () => {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}')
+    const myBid = postBids.value.find(bid => bid.userId === currentUser.id)
+    
+    if (myBid) {
+      const response = await communityApi.cancelBid(myBid.id)
+      
+      if (response.success) {
+        post.value.isBidding = false
+        postBids.value = postBids.value.filter(bid => bid.id !== myBid.id)
+      }
+    }
+  } catch (error) {
+    console.error('取消抢单失败:', error)
+    alert('取消失败，请稍后重试')
+  }
+}
+
+const acceptBid = async (bid) => {
+  try {
+    const response = await communityApi.acceptBid(bid.id)
+    
+    if (response.success) {
+      bid.status = 'accepted'
+      post.value.rewardInfo.status = 'completed'
+      alert('接单成功，已通知用户')
+    }
+  } catch (error) {
+    console.error('接单失败:', error)
+    alert('接单失败，请稍后重试')
+  }
+}
+
+const rejectBid = async (bid) => {
+  try {
+    const response = await communityApi.rejectBid(bid.id)
+    
+    if (response.success) {
+      bid.status = 'rejected'
+      alert('已拒绝该抢单申请')
+    }
+  } catch (error) {
+    console.error('拒绝失败:', error)
+    alert('拒绝失败，请稍后重试')
+  }
+}
+
 onMounted(() => {
-  loadPostDetail()
+  loadPostDetail().then(() => {
+    checkIsAuthor()
+    if (post.value?.type === 'reward') {
+      loadBids()
+    }
+  })
 })
 </script>
 
@@ -239,6 +349,124 @@ onMounted(() => {
           <button @click="handleShare" class="text-on-surface-variant hover:text-primary transition-colors">
             <span class="material-symbols-outlined text-[1.25rem]">share</span>
           </button>
+        </div>
+      </article>
+
+      <!-- 悬赏订单展示 -->
+      <article v-if="post.type === 'reward' && post.rewardInfo" class="bg-surface-container-lowest rounded-3xl p-5">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full">
+            💰 悬赏订单
+          </span>
+          <span class="text-xs text-on-surface-variant">
+            {{ post.rewardInfo.rewardAmount }} {{ post.rewardInfo.rewardType }} · {{ post.rewardInfo.hours }}小时 · 截止：{{ post.rewardInfo.deadline }}
+          </span>
+        </div>
+
+        <div class="bg-surface-container-high rounded-2xl p-4 mb-4 border border-primary-container/10">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-2xl font-bold text-primary">{{ post.rewardInfo.rewardAmount }}</span>
+                <span class="text-sm text-on-surface-variant">{{ post.rewardInfo.rewardType }}</span>
+              </div>
+              <div class="text-xs text-on-surface-variant space-y-1">
+                <div><span>游戏：{{ post.rewardInfo.game }}</span></div>
+                <div><span>预计耗时：{{ post.rewardInfo.hours }} 小时</span></div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-on-surface-variant mb-1">截止时间</div>
+              <div class="text-sm font-semibold text-amber-600 dark:text-amber-400">{{ post.rewardInfo.deadline }}</div>
+            </div>
+          </div>
+          <div class="border-t border-surface-container-low/50 pt-3">
+            <div class="text-xs font-semibold text-on-surface mb-1">需求要求：</div>
+            <p class="text-xs text-on-surface-variant leading-relaxed">{{ post.rewardInfo.requirements }}</p>
+          </div>
+        </div>
+
+        <!-- 抢单功能 -->
+        <div v-if="post.rewardInfo.status === 'available'" class="space-y-4">
+          <!-- 抢单按钮 -->
+          <button
+            v-if="!post.isBidding"
+            @click="handleBid"
+            class="w-full py-3.5 bg-primary text-on-primary rounded-full font-bold text-sm active:scale-95 transition-transform shadow-lg shadow-primary-container/20"
+          >
+            立即抢单
+          </button>
+
+          <!-- 已抢单状态 -->
+          <div v-else class="flex items-center justify-between bg-primary-container/10 rounded-2xl p-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center">
+                <span class="material-symbols-outlined text-sm">check_circle</span>
+              </div>
+              <div>
+                <p class="text-sm font-bold text-on-surface">已提交抢单申请</p>
+                <p class="text-xs text-on-surface-variant">等待作者审核中...</p>
+              </div>
+            </div>
+            <button
+              @click="cancelBid"
+              class="text-error text-xs font-bold px-3 py-1.5 bg-error-container/10 rounded-full active:scale-95 transition-transform"
+            >
+              取消
+            </button>
+          </div>
+
+          <!-- 抢单列表（作者视角） -->
+          <div v-if="isAuthor" class="space-y-3">
+            <h3 class="text-sm font-bold text-on-surface">抢单申请 ({{ bidList.length }})</h3>
+            <div
+              v-for="bid in bidList"
+              :key="bid.id"
+              class="flex items-center gap-3 p-3 bg-surface-container-high rounded-2xl border border-surface-container"
+            >
+              <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+                <img :src="bid.user.avatar" :alt="bid.user.name" class="w-full h-auto" />
+              </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between mb-1">
+                  <p class="text-sm font-bold text-on-surface">{{ bid.user.name }}</p>
+                  <span class="text-xs text-on-surface-variant">{{ bid.time }}</span>
+                </div>
+                <p class="text-xs text-on-surface-variant">{{ bid.message }}</p>
+              </div>
+              <button
+                v-if="bid.status === 'pending'"
+                @click="acceptBid(bid)"
+                class="px-3 py-1.5 bg-primary text-on-primary rounded-full text-xs font-bold active:scale-95 transition-transform"
+              >
+                接单
+              </button>
+              <span v-else-if="bid.status === 'accepted'" class="text-xs text-success font-bold">已接单</span>
+              <span v-else-if="bid.status === 'rejected'" class="text-xs text-error font-bold">已拒绝</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 订单已完成 -->
+        <div v-else-if="post.rewardInfo.status === 'completed'" class="flex items-center gap-3 p-4 bg-success-container/10 rounded-2xl">
+          <div class="w-10 h-10 rounded-full bg-success text-on-success flex items-center justify-center">
+            <span class="material-symbols-outlined">check_circle</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-success">订单已完成</p>
+            <p class="text-xs text-on-surface-variant">服务已交付，金钱已划拨</p>
+          </div>
+        </div>
+
+        <!-- 订单已取消 -->
+        <div v-else-if="post.rewardInfo.status === 'cancelled'" class="flex items-center gap-3 p-4 bg-error-container/10 rounded-2xl">
+          <div class="w-10 h-10 rounded-full bg-error text-on-error flex items-center justify-center">
+            <span class="material-symbols-outlined">cancel</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold text-error">订单已取消</p>
+            <p class="text-xs text-on-surface-variant">悬赏金已退回</p>
+          </div>
         </div>
       </article>
 

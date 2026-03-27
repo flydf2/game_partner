@@ -20,7 +20,7 @@ export const mockCommunityPosts = [
   {
     id: 2,
     type: 'reward',
-    extJson: '{"rewardAmount":500,"rewardType":"金币","deadline":"2026-03-28 23:59","game":"原神","role":"雷电将军","requirements":"熟悉雷电将军配队，能带萌手上限","status":"available"}',
+    extJson: '{"rewardAmount":500,"rewardType":"金币","hours":2,"deadline":"2026-03-28 23:59","game":"原神","role":"雷电将军","requirements":"熟悉雷电将军配队，能带萌手上限","status":"available"}',
     user: {
       name: '小禾悠悠',
       avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAo3hiZMbuWCmrkmqDp0MNg-nzMlqn4AgGNgFofJ-IJJ59AeEGJZox-r1xg8drTN14GtBID78Yfm0NN6Wl-MX_ZHWaF8-LdFumF5to5bPc46yM5zIaucC3a4KP-Y2-i2tCwQd-duGHsg9F8AzLemDvG9s_6W3hw-pjjJN-PKkQI7oILcDHGkalxMkbZWOmaqIaik3owuV2Ghbrqr3MraHwibw8jkhxJWFQhPSpHM7em0RfJhdOUnqGVa3qBY2EA9DWUXnYNrTFFiM4',
@@ -52,7 +52,7 @@ export const mockCommunityPosts = [
   {
     id: 4,
     type: 'reward',
-    extJson: '{"rewardAmount":1000,"rewardType":"金币","deadline":"2026-03-29 18:00","game":"英雄联盟","role":"打野","requirements":"王者段位以上，熟悉当前版本强势打野，能带低分段上分","status":"available"}',
+    extJson: '{"rewardAmount":1000,"rewardType":"金币","hours":3,"deadline":"2026-03-29 18:00","game":"英雄联盟","role":"打野","requirements":"王者段位以上，熟悉当前版本强势打野，能带低分段上分","status":"available"}',
     user: {
       name: '荣耀王者',
       avatar: 'https://randomuser.me/api/portraits/men/64.jpg',
@@ -87,14 +87,20 @@ export const mockCommunityPosts = [
 export function mockGetCommunityPosts(params = {}) {
   return new Promise((resolve) => {
     setTimeout(() => {
+      let filteredPosts = mockCommunityPosts
+      
+      if (params.onlyReward === 1) {
+        filteredPosts = mockCommunityPosts.filter(post => post.type === 'reward')
+      }
+      
       resolve({
         code: 0,
         data: {
-          data: mockCommunityPosts,
+          data: filteredPosts,
           pagination: {
             currentPage: 1,
             totalPages: 1,
-            totalCount: mockCommunityPosts.length
+            totalCount: filteredPosts.length
           }
         },
         msg: '获取成功'

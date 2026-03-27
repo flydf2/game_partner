@@ -24,6 +24,7 @@ const rewardAmount = ref('')
 const paymentMethod = ref('prepay')
 const rewardGame = ref('')
 const rewardRole = ref('')
+const rewardHours = ref('')
 const rewardDeadline = ref('')
 const rewardRequirements = ref('')
 
@@ -54,6 +55,10 @@ const handleSubmit = async () => {
       alert('请选择游戏')
       return
     }
+    if (!rewardHours.value.trim()) {
+      alert('请输入预计耗时（小时）')
+      return
+    }
     if (!rewardDeadline.value) {
       alert('请选择截止时间')
       return
@@ -69,6 +74,7 @@ const handleSubmit = async () => {
     const rewardInfo = isRewardPost.value ? {
       rewardAmount: parseFloat(rewardAmount.value),
       rewardType: '金币',
+      hours: parseFloat(rewardHours.value),
       deadline: rewardDeadline.value,
       game: rewardGame.value,
       role: rewardRole.value,
@@ -252,6 +258,18 @@ const handleCancel = () => {
               type="text"
               class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
               placeholder="例如：雷电将军、打野、辅助"
+            />
+          </div>
+          
+          <!-- 预计耗时 -->
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">预计耗时（小时）</label>
+            <input
+              v-model="rewardHours"
+              type="number"
+              class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
+              placeholder="例如：2"
+              min="1"
             />
           </div>
           

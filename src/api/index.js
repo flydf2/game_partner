@@ -1151,6 +1151,114 @@ export const communityApi = {
     }
   },
   
+  async getBids(postId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 1,
+                postId: postId,
+                userId: 2,
+                user: {
+                  name: '小玩家',
+                  avatar: 'https://randomuser.me/api/portraits/men/45.jpg'
+                },
+                message: '我可以完成这个任务！',
+                time: '10分钟前',
+                status: 'pending'
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/community/posts/${postId}/bids`))
+    }
+  },
+  
+  async createBid(bidData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              id: Date.now(),
+              ...bidData,
+              status: 'pending',
+              time: '刚刚'
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post('/community/bids', bidData))
+    }
+  },
+  
+  async cancelBid(bidId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '取消成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post(`/community/bids/${bidId}/cancel`))
+    }
+  },
+  
+  async acceptBid(bidId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '接单成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post(`/community/bids/${bidId}/accept`))
+    }
+  },
+  
+  async rejectBid(bidId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '已拒绝'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post(`/community/bids/${bidId}/reject`))
+    }
+  },
+  
+  async completeOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已完成，金钱已划拨'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/community/orders/${orderId}/complete`))
+    }
+  },
+  
   async createPost(postData) {
     if (USE_MOCK) {
       return await mockCreatePost(postData)

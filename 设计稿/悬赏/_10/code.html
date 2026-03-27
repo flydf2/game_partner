@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed": "#ffc69a",
+              "background": "#f6f6f6",
+              "on-secondary-container": "#6f3a00",
+              "on-error": "#ffefec",
+              "on-error-container": "#520c00",
+              "error-dim": "#b92902",
+              "tertiary": "#805100",
+              "primary-dim": "#5e4e00",
+              "inverse-surface": "#0c0f0f",
+              "surface-dim": "#d3d5d5",
+              "tertiary-fixed": "#feb246",
+              "primary-fixed": "#ffd709",
+              "on-secondary": "#fff0e7",
+              "tertiary-fixed-dim": "#eea439",
+              "on-secondary-fixed-variant": "#7c4100",
+              "outline": "#767777",
+              "tertiary-container": "#feb246",
+              "on-surface-variant": "#5a5c5c",
+              "error": "#b02500",
+              "inverse-on-surface": "#9c9d9d",
+              "surface-bright": "#f6f6f6",
+              "on-primary-container": "#5b4b00",
+              "on-surface": "#2d2f2f",
+              "on-tertiary-fixed-variant": "#623d00",
+              "error-container": "#f95630",
+              "inverse-primary": "#ffd709",
+              "on-secondary-fixed": "#532a00",
+              "on-tertiary-container": "#563500",
+              "surface-container-highest": "#dbdddd",
+              "on-background": "#2d2f2f",
+              "on-primary-fixed": "#453900",
+              "primary": "#6c5a00",
+              "secondary-container": "#ffc69a",
+              "surface-container": "#e7e8e8",
+              "on-primary-fixed-variant": "#665500",
+              "surface-container-lowest": "#ffffff",
+              "on-primary": "#fff2cd",
+              "surface-variant": "#dbdddd",
+              "surface-container-low": "#f0f1f1",
+              "secondary": "#8c4a00",
+              "surface-tint": "#6c5a00",
+              "primary-container": "#ffd709",
+              "primary-fixed-dim": "#efc900",
+              "surface-container-high": "#e1e3e3",
+              "secondary-dim": "#7b4000",
+              "on-tertiary": "#fff0e3",
+              "tertiary-dim": "#704700",
+              "surface": "#f6f6f6",
+              "outline-variant": "#acadad",
+              "on-tertiary-fixed": "#3a2300",
+              "secondary-fixed-dim": "#ffb375"
+            },
+            fontFamily: {
+              "headline": ["Plus Jakarta Sans"],
+              "body": ["Be Vietnam Pro"],
+              "label": ["Be Vietnam Pro"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- Header Navigation -->
+<header class="w-full top-0 sticky z-50 bg-surface-container-highest/50 backdrop-blur-xl">
+<div class="flex justify-between items-center px-5 h-16 w-full max-w-md mx-auto">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 active:scale-95 duration-200">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<h1 class="font-headline font-bold text-lg text-primary">发布悬赏</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-black/5 active:scale-95 duration-200">
+<span class="material-symbols-outlined text-on-surface">help_outline</span>
+</button>
+</div>
+</header>
+<main class="max-w-md mx-auto px-5 pt-4 pb-32">
+<!-- Hero Section / Editorial Title -->
+<section class="mb-8">
+<h2 class="font-headline text-[2.5rem] leading-tight font-extrabold text-on-background tracking-tight">
+                寻找你的<br/><span class="text-secondary">金牌队友</span>
+</h2>
+<p class="text-on-surface-variant mt-2 text-sm">填写下方信息，立即在社区发布你的游戏悬赏任务。</p>
+</section>
+<!-- Form Container -->
+<form class="space-y-6">
+<!-- Game Selection Bento Style -->
+<div class="space-y-3">
+<label class="font-headline font-bold text-on-surface ml-1">选择游戏</label>
+<div class="grid grid-cols-2 gap-3">
+<button class="group relative overflow-hidden aspect-[4/3] rounded-xl bg-surface-container-lowest p-4 text-left flex flex-col justify-end transition-all active:scale-95 ring-2 ring-primary" type="button">
+<div class="absolute inset-0 opacity-10 bg-primary"></div>
+<span class="material-symbols-outlined text-primary mb-2 text-3xl" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
+<span class="font-bold text-on-surface">王者荣耀</span>
+<div class="absolute top-3 right-3">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+</div>
+</button>
+<button class="group relative overflow-hidden aspect-[4/3] rounded-xl bg-surface-container-lowest p-4 text-left flex flex-col justify-end transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-outline-variant mb-2 text-3xl">videogame_asset</span>
+<span class="font-bold text-on-surface">英雄联盟</span>
+</button>
+<button class="group relative overflow-hidden aspect-[4/3] rounded-xl bg-surface-container-lowest p-4 text-left flex flex-col justify-end transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-outline-variant mb-2 text-3xl">poker_chip</span>
+<span class="font-bold text-on-surface">和平精英</span>
+</button>
+<button class="group relative overflow-hidden aspect-[4/3] rounded-xl bg-surface-container-low border border-dashed border-outline-variant p-4 text-left flex flex-col justify-center items-center transition-all active:scale-95" type="button">
+<span class="material-symbols-outlined text-outline-variant mb-1">add</span>
+<span class="text-xs text-outline-variant">更多游戏</span>
+</button>
+</div>
+</div>
+<!-- Bounty & Duration Row -->
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container-lowest p-5 rounded-xl space-y-4">
+<!-- Amount Input -->
+<div class="space-y-2">
+<label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">悬赏金额 (每小时)</label>
+<div class="flex items-center gap-2 border-b-2 border-surface-container py-2 focus-within:border-primary transition-colors">
+<span class="text-2xl font-headline font-extrabold text-primary">¥</span>
+<input class="w-full bg-transparent border-none p-0 text-3xl font-headline font-extrabold focus:ring-0 placeholder:text-surface-container-highest" placeholder="0.00" type="number"/>
+</div>
+</div>
+<!-- Duration Selection -->
+<div class="space-y-2">
+<label class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">预计时长</label>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full bg-surface-container text-sm font-medium hover:bg-primary-container transition-colors" type="button">0.5h</button>
+<button class="px-4 py-2 rounded-full bg-primary-container text-primary text-sm font-bold" type="button">1.0h</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-sm font-medium hover:bg-primary-container transition-colors" type="button">2.0h</button>
+<button class="px-4 py-2 rounded-full bg-surface-container text-sm font-medium hover:bg-primary-container transition-colors" type="button">包通关</button>
+</div>
+</div>
+</div>
+<!-- Start Time Card -->
+<div class="bg-surface-container-lowest p-5 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/30 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">schedule</span>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface-variant">开始时间</p>
+<p class="font-bold text-on-surface">立即出发</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant">chevron_right</span>
+</div>
+</div>
+<!-- Urgent Toggle -->
+<div class="bg-surface-container-lowest p-5 rounded-xl flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-error-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">加急悬赏</p>
+<p class="text-xs text-on-surface-variant">增加 15% 悬赏金，吸引更多高手</p>
+</div>
+</div>
+<!-- Custom Switch -->
+<div class="w-12 h-6 bg-surface-container rounded-full relative p-1 transition-colors">
+<div class="w-4 h-4 bg-white rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Requirements Textarea -->
+<div class="space-y-3">
+<label class="font-headline font-bold text-on-surface ml-1">详细要求</label>
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm">
+<textarea class="w-full bg-transparent border-none p-0 focus:ring-0 text-sm text-on-surface placeholder:text-outline-variant resize-none" placeholder="例如：本人射手位，需要一个硬辅全程保护，听语音，心态好不压力..." rows="4"></textarea>
+<div class="flex justify-between items-center mt-3 pt-3 border-t border-surface-container-low">
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-on-surface-variant active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined text-xl">image</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-surface-container text-on-surface-variant active:scale-90 transition-transform" type="button">
+<span class="material-symbols-outlined text-xl">mic</span>
+</button>
+</div>
+<span class="text-[10px] font-bold text-outline-variant uppercase">0 / 200</span>
+</div>
+</div>
+</div>
+</form>
+</main>
+<!-- Bottom Action Bar (Fixed) -->
+<div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-white/80 backdrop-blur-2xl px-6 pt-4 pb-8 z-50">
+<div class="flex items-center justify-between mb-4 px-1">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">预估总计</span>
+<span class="text-2xl font-headline font-extrabold text-on-surface">¥ 35.00</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-highest overflow-hidden">
+<img alt="user" data-alt="avatar of a young gamer woman with headphones and orange hair style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAyJ8e9WvQ-faZ2XYJ48-BMwowTPeYOwWE0iRBh0Nkb81BikMmozgISakiG6fl2RJhFzDhAfDK4Bkg-h09BO9LzU2cgF3xg5cYX50bRuhW5zOHXC8H4WJhk18j5loxRwFKCF1li85sZpDfVtf1KA4CrB0yqM7u_CD6CrHUc6ulvMOfFJ_LStPZC52f4CQx_rBr_rl4me3Zp6cp4qoSEMU3kmanIOceT5aNSUyOmtullLG7ijfqAOKkBCQSo-en1ERHxVZERF5tNYBw"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-surface-container-highest overflow-hidden">
+<img alt="user" data-alt="avatar of a professional male gamer with stylish glasses and cool expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXGlp8mADMlFyPBRn5zsMfyGeuIjXa80Bu0rumKUVYB12mwHm9WtPwdgXRTDBKNFSwGtPRj1LvhF55rxyMbK-B0iUjvhM5uqWKAjry8p9LDQDb7TvxK26r4CPjM-x_INXAKJxjSb5ApeyDFFgDfI6E5Wx_u9ytY6M01feIeq-pyiOjSsQHypf1lpttYkXlu8g3uXrtNQfPiIf8q1ihp1t7wYQKdRiL4UDTfM7Uiltruz3IUqgueaFoj3sOl4clwNtp2FOHj5qZHVU"/>
+</div>
+<div class="w-8 h-8 rounded-full border-2 border-white bg-primary-container flex items-center justify-center text-[10px] font-bold text-primary">
+                    +99
+                </div>
+</div>
+</div>
+<button class="w-full bg-primary-container hover:bg-primary-fixed-dim active:scale-[0.98] transition-all py-4 rounded-full flex items-center justify-center gap-3 group">
+<span class="font-headline font-extrabold text-on-primary-container text-lg">立即发布悬赏</span>
+<span class="material-symbols-outlined text-on-primary-container group-hover:translate-x-1 transition-transform">rocket_launch</span>
+</button>
+</div>
+</body></html>

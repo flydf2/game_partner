@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary-fixed-dim": "#efc900",
+                        "inverse-surface": "#0c0f0f",
+                        "primary-container": "#ffd709",
+                        "error-container": "#f95630",
+                        "outline-variant": "#acadad",
+                        "surface-container-low": "#f0f1f1",
+                        "on-primary-container": "#5b4b00",
+                        "primary-dim": "#5e4e00",
+                        "error": "#b02500",
+                        "surface-tint": "#6c5a00",
+                        "surface-container": "#e7e8e8",
+                        "outline": "#767777",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#6f3a00",
+                        "on-error-container": "#520c00",
+                        "tertiary-dim": "#704700",
+                        "on-primary": "#fff2cd",
+                        "on-secondary-fixed": "#532a00",
+                        "surface-bright": "#f6f6f6",
+                        "on-primary-fixed-variant": "#665500",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "tertiary-container": "#feb246",
+                        "tertiary": "#805100",
+                        "tertiary-fixed-dim": "#eea439",
+                        "secondary-dim": "#7b4000",
+                        "secondary-fixed": "#ffc69a",
+                        "surface-container-highest": "#dbdddd",
+                        "primary": "#6c5a00",
+                        "tertiary-fixed": "#feb246",
+                        "on-tertiary-fixed": "#3a2300",
+                        "on-background": "#2d2f2f",
+                        "on-secondary": "#fff0e7",
+                        "secondary-fixed-dim": "#ffb375",
+                        "surface": "#f6f6f6",
+                        "surface-dim": "#d3d5d5",
+                        "on-error": "#ffefec",
+                        "background": "#f6f6f6",
+                        "secondary-container": "#ffc69a",
+                        "surface-container-high": "#e1e3e3",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-surface": "#2d2f2f",
+                        "error-dim": "#b92902",
+                        "on-primary-fixed": "#453900",
+                        "inverse-on-surface": "#9c9d9d",
+                        "primary-fixed": "#ffd709",
+                        "secondary": "#8c4a00",
+                        "surface-variant": "#dbdddd",
+                        "on-surface-variant": "#5a5c5c",
+                        "on-tertiary": "#fff0e3",
+                        "on-tertiary-container": "#563500",
+                        "inverse-primary": "#ffd709"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .bounty-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            background-size: 200% 100%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full max-w-md mx-auto">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden bg-surface-container">
+<img alt="User avatar" data-alt="close-up portrait of a stylish young gamer with neon lighting highlights on their face, soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCVvSVxxTOfaD-KCqvuPQZexIPuFnXB3iw6X19GBbanoDAY91DknOgxu7TkDh2q8hbR21zWOjuZPrVzgUiPlmhsNzwsClmSwsBwpvb67s2vntbKwIJjVtL36V-tqv90YUEDi4OITjJtocFEMgdtKyQ9WI32652aKagTKmNuBvnwop9Tp74Km1Jpx8pOxANjIVCyQaGP-d6l67fb_AlYdIx1xzj1oUQJ9jiYTRupEQkydM0q_bjFKSAPk7T5yBB5lsxjrtWR7rUAW0E"/>
+</div>
+<h1 class="font-['Plus_Jakarta_Sans'] font-black text-xl text-[#6c5a00] dark:text-[#FFD700] tracking-tight">SunnyPlay</h1>
+</div>
+<button class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] active:scale-95 transition-transform">notifications</button>
+</div>
+</header>
+<main class="pt-20 px-5 max-w-md mx-auto space-y-6">
+<!-- Section Header -->
+<div class="flex items-end justify-between">
+<div>
+<span class="text-secondary font-bold text-xs tracking-widest uppercase">Community</span>
+<h2 class="font-headline font-extrabold text-2xl text-on-surface mt-1">广场动态</h2>
+</div>
+<div class="flex gap-2">
+<span class="px-3 py-1 bg-surface-container-high rounded-full text-xs font-medium">推荐</span>
+<span class="px-3 py-1 text-xs font-medium text-outline">最新</span>
+</div>
+</div>
+<!-- NEW: Bounty Card (The Standout Item) -->
+<div class="relative overflow-hidden rounded-[1.5rem] bg-primary-container p-6 shadow-xl shadow-primary-container/20 group">
+<!-- Decorative Elements -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary opacity-10 rounded-full blur-3xl"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-2">
+<div class="bg-on-primary-container/10 p-2 rounded-xl">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">conditions</span>
+</div>
+<div>
+<h3 class="font-headline font-bold text-on-primary-container text-lg leading-tight">悬赏组队</h3>
+<p class="text-on-primary-container/70 text-[10px] font-bold uppercase tracking-wider">Urgent Recruitment</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black text-on-primary-container leading-none">¥50<span class="text-sm font-bold">/h</span></div>
+<span class="inline-block mt-1 px-2 py-0.5 bg-on-primary-container text-primary-container text-[10px] font-black rounded-md">极速结账</span>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center bg-white/40 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container text-xl">sports_esports</span>
+</span>
+<div>
+<p class="text-[10px] text-on-primary-container/60 font-bold uppercase">游戏项目</p>
+<p class="text-on-primary-container font-bold">王者荣耀 (Honor of Kings)</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center bg-white/40 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container text-xl">groups</span>
+</span>
+<div>
+<p class="text-[10px] text-on-primary-container/60 font-bold uppercase">招募要求</p>
+<p class="text-on-primary-container font-bold">需要中路 (Mid)</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="w-8 h-8 flex items-center justify-center bg-white/40 rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container text-xl">schedule</span>
+</span>
+<div>
+<p class="text-[10px] text-on-primary-container/60 font-bold uppercase">开始时间</p>
+<p class="text-on-primary-container font-bold">立即开始</p>
+</div>
+</div>
+</div>
+</div>
+<button class="w-full py-4 bg-on-primary-container text-primary-container font-headline font-black rounded-full flex items-center justify-center gap-2 group-active:scale-95 transition-all shadow-lg shadow-on-primary-container/20">
+<span>立即抢单 (Quick Grab)</span>
+<span class="material-symbols-outlined">bolt</span>
+</button>
+</div>
+</div>
+<!-- Standard Feed Card 1 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] overflow-hidden p-4 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-10 h-10 rounded-full object-cover" data-alt="profile photo of a young woman with pink dyed hair wearing professional gaming headphones, smiling at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3AydUuf2JRWZC5Vlmw3b_RB0g3Mvf7DhiYBI9bFG97xun0_5RjBUMexYcZLfpV68l2li4AdmNOR5FgWkazdwNs8P6zNiPVAanbD6KbiZjhIc9IWNc81zX4UPbtaO_6Kmx-pxJIhJtLCr7WAm8bY4lG1JXOaKQxveDYeBFciJJ_vZ3Vb6_2WdPv3VfgW_MkIyqFGSMzquF0zNTZm9EXGMRTXMslmUxR3jK_j-_GkoF6msWEbSDpOtr2vdTTt9vRIFZW8aGxkvama0"/>
+<div>
+<p class="text-sm font-bold text-on-surface">甜心法师小桃</p>
+<p class="text-[10px] text-outline">2分钟前 · 深圳</p>
+</div>
+</div>
+<button class="text-primary material-symbols-outlined">more_horiz</button>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                今天的手感超级好！有没有小哥哥带带排位？我是国服辅助，听话不粘人，只求连胜～ 🌸✨
+            </p>
+<div class="grid grid-cols-2 gap-2">
+<img alt="Game SS" class="w-full aspect-square object-cover rounded-xl" data-alt="vibrant mobile game screenshot showing a victory screen with gold and blue visual effects and heroic character models" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBM224ae4TN-hgpyPmNS-l8clZkVASEvXhiO95iiQMLZ6x92Z7RySKAAYseTAlxiR0PhuoLESx_kVZ1dr_kvAXOhEbh33X_jqeSdequ-A-zzICyvhpVRblPD_Ew3Z2uzO7ulYBm-E9gHhO8OdB1s-LILcoaDeOB8g_yg8XGnBVwuo7MnfMjrTzQJ8-Zy451khvC4v_a1QmHmv_sQVMNAOlU4efQVj2c048BjyAgZgDpPloc8OPAkSEVv9v7-k4XL6zIg8qjrXzNBw"/>
+<img alt="Selfie" class="w-full aspect-square object-cover rounded-xl" data-alt="casual aesthetic selfie of a girl in a cozy gaming room with purple led strip lighting and anime posters in the background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNnqw1gcEnaexReQc63MGFtnbl6bAUTbKBR9WpcG8biQiYqiCkp3wMjcEuoFqfPRegv85ule6x7ztUxZcXasHSlBS0n3oWUJo_IjuA3DGgCiuiiRzYhWn_EPJ34N3YnL3sGCaIAVHaEuQ1PkFtCFK1l9j73ntrhG5MQCw4b9bp8Z6NBeq5P-rd2RQX38WB0cfy3EKnhYgF4walR_G4qGgn5TrYrYk9er5DBWN7yCnqYVhwvmCgGWJFPzIT_9mw-V4S-dtRS0RyuJ0"/>
+</div>
+<div class="flex items-center gap-4 pt-2">
+<div class="flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-lg">favorite</span>
+<span class="text-xs font-bold">128</span>
+</div>
+<div class="flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+<span class="text-xs font-bold">42</span>
+</div>
+<div class="flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-lg">share</span>
+</div>
+</div>
+</div>
+<!-- Standard Feed Card 2 -->
+<div class="bg-surface-container-lowest rounded-[1.5rem] overflow-hidden p-4 space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-10 h-10 rounded-full object-cover" data-alt="male avatar with a cap and gaming headset, cool urban lighting vibes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyW2sNtG6arTD72ckpQ1kPuqFWQGonxrSF_vPLdquZBY0UuKbaC0XdEb0xGvyotK_Ue-Fe4sL5iSn56muQGFuNOeB9tAys1WH8YWraW42ke9saJ--Xr-asbxxP5h6GX1hGJuzJdQ1X0HaylPUnrBvnFI_bzLjsq-4RSjeMrj8C0dLedzW-HCKLPB8VxdrX-g_qAZnKlJ_p9Ki-wEBh0b5HDshlnKnxWETuPgtNPSuRjj6jshgn-oNyJZiV66h0VcPQI_L8T-CBjT0"/>
+<div>
+<p class="text-sm font-bold text-on-surface">野王阿强</p>
+<p class="text-[10px] text-outline">15分钟前 · 上海</p>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container text-[10px] font-bold rounded-md">巅峰赛</span>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                2200分巅峰赛冲刺中，缺一个稳定配合的中路，意识流滴滴。
+            </p>
+<div class="flex items-center gap-4 pt-2">
+<div class="flex items-center gap-1 text-outline text-primary">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">favorite</span>
+<span class="text-xs font-bold">85</span>
+</div>
+<div class="flex items-center gap-1 text-outline">
+<span class="material-symbols-outlined text-lg">chat_bubble</span>
+<span class="text-xs font-bold">12</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 max-w-md mx-auto bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)]">
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 hover:opacity-80 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">explore</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">Explore</span>
+</a>
+<!-- ACTIVE TAB: Bounty -->
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-4 py-1.5 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">conditions</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">Bounty</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 hover:opacity-80 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 hover:opacity-80 active:scale-90 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-medium text-[10px]">Me</span>
+</a>
+</nav>
+</body></html>
