@@ -108,6 +108,15 @@
           <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">聊天</span>
         </router-link>
 
+        <!-- 社区 -->
+        <a
+          href="http://localhost:5173/community"
+          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+        >
+          <span class="material-symbols-outlined text-zinc-400 hover:text-yellow-500">forum</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">社区</span>
+        </a>
+
         <!-- 订单 -->
         <div class="relative" @click.stop>
           <router-link

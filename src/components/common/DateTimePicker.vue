@@ -95,7 +95,7 @@ watch(() => props.modelValue, (newVal) => {
       @click="showPicker = true"
       class="flex items-center justify-between w-full cursor-pointer"
     >
-      <span class="text-on-surface-variant font-medium">{{ modelValue || '请选择预约时间' }}</span>
+      <span class="text-on-surface-variant font-medium">{{ modelValue || '请选择截止时间' }}</span>
       <span class="material-symbols-outlined text-primary">chevron_right</span>
     </div>
 
@@ -106,7 +106,7 @@ watch(() => props.modelValue, (newVal) => {
     >
       <div class="w-full sm:max-w-md bg-surface-container-high rounded-t-2xl sm:rounded-2xl p-4 max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between mb-4">
-          <h3 class="text-lg font-bold font-headline text-on-surface">选择预约时间</h3>
+          <h3 class="text-lg font-bold font-headline text-on-surface">选择截止时间</h3>
           <button 
             @click="showPicker = false"
             class="p-2 rounded-full hover:bg-surface-container-low transition-colors"
@@ -134,3 +134,85 @@ watch(() => props.modelValue, (newVal) => {
           <div class="grid grid-cols-4 gap-2">
             <div v-for="month in months" :key="month" class="space-y-2">
               <div class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">月</div>
+              <div 
+                v-for="m in [month]" 
+                :key="m"
+                @click="selectedMonth = m"
+                class="w-full aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-all"
+                :class="selectedMonth == m ? 'bg-primary-container text-on-primary-container font-bold' : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high'"
+              >
+                {{ m }}
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-7 gap-2">
+            <div v-for="day in days" :key="day" class="space-y-2">
+              <div class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">日</div>
+              <div 
+                v-for="d in [day]" 
+                :key="d"
+                @click="selectedDay = d"
+                class="w-full aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-all"
+                :class="selectedDay == d ? 'bg-primary-container text-on-primary-container font-bold' : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high'"
+              >
+                {{ d }}
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-6 gap-2">
+            <div v-for="hour in hours" :key="hour" class="space-y-2">
+              <div class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">时</div>
+              <div 
+                v-for="h in [hour]" 
+                :key="h"
+                @click="selectedHour = h"
+                class="w-full aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-all"
+                :class="selectedHour == h ? 'bg-primary-container text-on-primary-container font-bold' : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high'"
+              >
+                {{ formatNumber(h) }}
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-6 gap-2">
+            <div v-for="minute in minutes" :key="minute" class="space-y-2">
+              <div class="text-xs text-on-surface-variant font-medium uppercase tracking-wider">分</div>
+              <div 
+                v-for="mi in [minute]" 
+                :key="mi"
+                @click="selectedMinute = mi"
+                class="w-full aspect-square flex items-center justify-center rounded-lg cursor-pointer transition-all"
+                :class="selectedMinute == mi ? 'bg-primary-container text-on-primary-container font-bold' : 'bg-surface-container-low text-on-surface hover:bg-surface-container-high'"
+              >
+                {{ formatNumber(mi) }}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-4 pt-4 border-t border-surface-container-low">
+          <button
+            @click="clear"
+            class="flex-1 py-3 rounded-xl font-semibold text-on-surface-variant hover:bg-surface-container-low transition-colors"
+          >
+            清除
+          </button>
+          <button
+            @click="confirm"
+            :disabled="!isOpen"
+            class="flex-1 py-3 rounded-xl font-semibold transition-colors"
+            :class="isOpen ? 'bg-primary text-on-primary hover:bg-primary-container' : 'bg-surface-container text-on-surface-variant cursor-not-allowed'"
+          >
+            确认
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+/* 组件样式 */
+</style>

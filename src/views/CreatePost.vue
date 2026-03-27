@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { communityApi } from '../api/index.js'
 
 const router = useRouter()
+
+const DateTimePicker = defineAsyncComponent(() => import('../components/DateTimePicker.vue'))
 
 const postContent = ref('')
 const selectedImages = ref([])
@@ -20,6 +22,10 @@ const categories = [
 const isRewardPost = ref(false)
 const rewardAmount = ref('')
 const paymentMethod = ref('prepay')
+const rewardGame = ref('')
+const rewardRole = ref('')
+const rewardDeadline = ref('')
+const rewardRequirements = ref('')
 
 const handleImageUpload = (event) => {
   const files = event.target.files
@@ -44,15 +50,38 @@ const handleSubmit = async () => {
       alert('请输入有效的悬赏金额')
       return
     }
+    if (!rewardGame.value.trim()) {
+      alert('请选择游戏')
+      return
+    }
+    if (!rewardDeadline.value) {
+      alert('请选择截止时间')
+      return
+    }
+    if (!rewardRequirements.value.trim()) {
+      alert('请输入需求要求')
+      return
+    }
   }
 
   isSubmitting.value = true
   try {
+    const rewardInfo = isRewardPost.value ? {
+      rewardAmount: parseFloat(rewardAmount.value),
+      rewardType: '金币',
+      deadline: rewardDeadline.value,
+      game: rewardGame.value,
+      role: rewardRole.value,
+      requirements: rewardRequirements.value,
+      status: 'available'
+    } : null
+    
     const postData = {
       content: postContent.value,
       images: selectedImages.value,
       category: selectedCategory.value,
-      isReward: isRewardPost.value,
+      type: isRewardPost.value ? 'reward' : 'normal',
+      extJson: rewardInfo ? JSON.stringify(rewardInfo) : null,
       rewardAmount: isRewardPost.value ? parseFloat(rewardAmount.value) : 0,
       paymentMethod: isRewardPost.value ? paymentMethod.value : null
     }
@@ -202,6 +231,47 @@ const handleCancel = () => {
               class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
               placeholder="请输入悬赏金额"
             />
+          </div>
+          
+          <!-- 游戏选择 -->
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">游戏</label>
+            <input
+              v-model="rewardGame"
+              type="text"
+              class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
+              placeholder="例如：英雄联盟、原神、绝地求生"
+            />
+          </div>
+          
+          <!-- 角色 -->
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">角色</label>
+            <input
+              v-model="rewardRole"
+              type="text"
+              class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
+              placeholder="例如：雷电将军、打野、辅助"
+            />
+          </div>
+          
+          <!-- 截止时间 -->
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">截止时间</label>
+            <DateTimePicker
+              v-model="rewardDeadline"
+              class="w-full"
+            />
+          </div>
+          
+          <!-- 需求要求 -->
+          <div>
+            <label class="block text-sm font-medium text-on-surface-variant mb-2">需求要求</label>
+            <textarea
+              v-model="rewardRequirements"
+              class="w-full bg-surface-container rounded-2xl p-3 text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all min-h-[100px]"
+              placeholder="请输入具体的需求要求..."
+            ></textarea>
           </div>
           
           <!-- 支付方式 -->

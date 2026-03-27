@@ -30,81 +30,55 @@ const loadRewardOrders = async (page = 1, isLoadMore = false) => {
     error.value = null
     console.log('开始加载悬赏订单...', { page, isLoadMore })
     
-    // 传递分页参数
     const response = await api.rewardOrder.getRewardOrders({
       page,
       pageSize: pageSize.value
     })
     
     console.log('API 响应:', response)
-    console.log('API 响应类型:', typeof response)
-    console.log('API 响应.data:', response.data)
-    console.log('API 响应.data 类型:', typeof response.data)
     
-    if (response.success) {
-      // 检查 response.data 是否是一个对象，并且包含 data 数组和分页信息
-      if (response.data && typeof response.data === 'object' && Array.isArray(response.data.data)) {
-        // 保存分页信息
-        if (response.data.pagination) {
-          currentPage.value = response.data.pagination.currentPage || page
-          totalPages.value = response.data.pagination.totalPages || 1
-          totalCount.value = response.data.pagination.totalCount || 0
+    if (response && response.success) {
+      const responseData = response.data
+      
+      if (responseData && typeof responseData === 'object') {
+        if (responseData.pagination) {
+          currentPage.value = responseData.pagination.currentPage || page
+          totalPages.value = responseData.pagination.totalPages || 1
+          totalCount.value = responseData.pagination.totalCount || 0
         }
         
-        // 转换数据结构以匹配组件期望的格式
-        const formattedOrders = response.data.data.map(order => ({
-          id: order.id,
-          status: order.status,
-          title: `${order.content.substring(0, 20)}${order.content.length > 20 ? '...' : ''}`,
-          content: order.content,
-          reward: order.reward,
-          game: order.game,
-          publisher: {
-            name: order.userName,
-            avatar: order.userAvatar
-          },
-          createdAt: order.createdAt,
-          paymentMethod: order.paymentMethod,
-          tags: order.tags
-        }))
+        const ordersData = Array.isArray(responseData.data) ? responseData.data : (Array.isArray(responseData) ? responseData : [])
         
-        // 如果是加载更多，则追加数据，否则替换数据
-        if (isLoadMore) {
-          rewardOrders.value = [...rewardOrders.value, ...formattedOrders]
+        if (ordersData.length > 0) {
+          const formattedOrders = ordersData.map(order => ({
+            id: order.id,
+            status: order.status,
+            title: `${order.content.substring(0, 20)}${order.content.length > 20 ? '...' : ''}`,
+            content: order.content,
+            reward: order.reward,
+            game: order.game,
+            publisher: {
+              name: order.userName,
+              avatar: order.userAvatar
+            },
+            createdAt: order.createdAt,
+            paymentMethod: order.paymentMethod,
+            tags: order.tags || []
+          }))
+          
+          if (isLoadMore) {
+            rewardOrders.value = [...rewardOrders.value, ...formattedOrders]
+          } else {
+            rewardOrders.value = formattedOrders
+          }
+          
+          console.log('转换后的订单数据:', rewardOrders.value)
         } else {
-          rewardOrders.value = formattedOrders
+          rewardOrders.value = []
         }
-        
-        console.log('转换后的订单数据:', rewardOrders.value)
-        console.log('分页信息:', { currentPage: currentPage.value, totalPages: totalPages.value, totalCount: totalCount.value })
-      } else if (Array.isArray(response.data)) {
-        // 兼容旧格式，直接使用 response.data
-        const formattedOrders = response.data.map(order => ({
-          id: order.id,
-          status: order.status,
-          title: `${order.content.substring(0, 20)}${order.content.length > 20 ? '...' : ''}`,
-          content: order.content,
-          reward: order.reward,
-          game: order.game,
-          publisher: {
-            name: order.userName,
-            avatar: order.userAvatar
-          },
-          createdAt: order.createdAt,
-          paymentMethod: order.paymentMethod,
-          tags: order.tags
-        }))
-        
-        if (isLoadMore) {
-          rewardOrders.value = [...rewardOrders.value, ...formattedOrders]
-        } else {
-          rewardOrders.value = formattedOrders
-        }
-        
-        console.log('转换后的订单数据:', rewardOrders.value)
       } else {
         error.value = '获取订单失败: 响应数据格式错误'
-        console.error('响应数据格式错误:', response.data)
+        console.error('响应数据格式错误:', responseData)
       }
     } else {
       error.value = '获取订单失败: ' + (response.message || '未知错误')

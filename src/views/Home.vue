@@ -12,7 +12,7 @@
     <!-- TopAppBar -->
     <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4 w-full">
       <div class="flex items-center gap-4">
-        <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out cursor-pointer" data-icon="menu">menu</span>
+        <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out cursor-pointer" data-icon="menu" @click="goToMenu">menu</span>
         <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-400">发现大神</h1>
       </div>
       <div class="flex items-center gap-4">
@@ -26,8 +26,8 @@
             {{ unreadCount }}
           </span>
         </span>
-        <span class="material-symbols-outlined text-zinc-500" data-icon="search">search</span>
-        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+        <span class="material-symbols-outlined text-zinc-500 cursor-pointer" data-icon="search" @click="goToSearch">search</span>
+        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform" @click="goToProfile">
           <img alt="User Avatar" class="w-full h-full object-cover" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoBTc_5bZuXQ8l_u2UKFazkITvVt5UY-tB83GE9qFMKnbb7Gz7DBuHH11MCcfExFpNociu2AurEP9Lt2NRc9nvSntdZ9hgcWNL_d-0yyyC7bLbO0F8qFUi1FZ_0xgHBG5ZWEfyBs3f5BMl_rBN4SHJoDd3xp76P8kx7eQBwXzcI46GuMySscFwGrnXs_YK9_ArHQEUVcsZUe0o_yRl84Nf4j3WwXor_Xd2gFFDgNuPdbSQuyQiPQkAovGTm7Cek_vM2ZGapACwBM4"/>
         </div>
       </div>
@@ -36,7 +36,7 @@
     
     <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-8">
     <!-- Hero Banner: Honor of Kings Tournament -->
-    <section class="relative w-full h-48 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/10 bg-black">
+    <section class="relative w-full h-48 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/10 bg-black cursor-pointer active:scale-[0.98] transition-transform" @click="goToTournament">
       <img alt="Honor of Kings Tournament" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" data-alt="Epic cinematic background of a competitive gaming arena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChoKqMjV8Zopn6t52b1X_D1IHpomYuX0uMCtUOdsEjdUbzmVSeBr-5ZKxEhOUlx1mPSxANNKH4sghnW_76nSPFe5RQDcs0D0146L6oIlgGmuRs6DcX59vrx67krFal1DduP8vpSj5o2giMgdNHYP2pIzqcKEuJfnSxyvoN_fgqJahQCNwzPm37cGoeZUvBWw_zifeh-pvUxLyRR7_8puuGkKr-5w05-1orNhrAYXS-S8PDY6s1vdzatJ05jaJSvNTo7dS88EwkP2M"/>
       <div class="absolute inset-0 flex flex-col justify-center p-6 space-y-2">
         <span class="inline-flex items-center px-3 py-1 bg-surface-container-lowest/20 backdrop-blur-md rounded-full text-[10px] font-bold text-white uppercase tracking-widest w-fit mb-2">
@@ -44,7 +44,7 @@
         </span>
         <h2 class="text-3xl font-headline font-extrabold text-white leading-tight tracking-tighter mb-4">王者荣耀<br/>巅峰挑战赛</h2>
         <div class="flex items-center gap-4">
-          <button class="bg-white text-primary px-8 py-2.5 rounded-full font-bold text-sm shadow-lg active:scale-95 transition-all">
+          <button class="bg-white text-primary px-8 py-2.5 rounded-full font-bold text-sm shadow-lg active:scale-95 transition-all" @click.stop="goToTournament">
             立即报名
           </button>
           <p class="text-white/80 text-xs font-medium">1.2w 人已参与</p>
@@ -66,7 +66,7 @@
       class="transition-all duration-1000 transform opacity-100 translate-y-0"
     >
       <section class="space-y-4">
-        <div class="flex justify-between items-end">
+        <div class="flex justify-between items-end cursor-pointer" @click="goToGameCategories">
           <h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">热门游戏</h3>
           <span class="text-xs font-semibold text-primary underline decoration-2 underline-offset-4">查看全部</span>
         </div>
@@ -121,9 +121,8 @@
         <button @click="loadPlaymates" class="mt-2 text-primary underline hover:text-primary/80 transition-colors">重试</button>
       </div>
       <div v-else class="grid grid-cols-2 gap-4">
-        <!-- Playmate Cards -->
-        <template v-for="(playmate, index) in playmates.slice(0, 2)" :key="playmate.id">
-          <div class="bg-surface-container-lowest rounded-[2rem] p-4 space-y-4 shadow-sm relative overflow-hidden flex flex-col">
+          <template v-for="(playmate, index) in playmates.slice(0, 2)" :key="playmate.id">
+            <div class="bg-surface-container-lowest rounded-[2rem] p-4 space-y-4 shadow-sm relative overflow-hidden flex flex-col cursor-pointer active:scale-[0.98] transition-transform" @click="navigateToExpertDetail(playmate.id)">
             <div class="absolute top-3 left-3">
               <div class="flex items-center gap-1">
                 <span class="material-symbols-outlined text-yellow-500 text-[10px]" data-icon="star" style="font-variation-settings: 'FILL' 1;">star</span>
@@ -195,7 +194,7 @@
       class="space-y-4 transition-all duration-1000 transform"
       :class="{ 'opacity-100 translate-y-0': communityVisible, 'opacity-0 translate-y-10': !communityVisible }"
     >
-      <div class="flex justify-between items-end">
+      <div class="flex justify-between items-end cursor-pointer" @click="goToCommunity">
         <h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">社区热帖</h3>
         <span class="text-xs font-semibold text-primary underline decoration-2 underline-offset-4">查看全部</span>
       </div>
@@ -210,7 +209,8 @@
         <div 
           v-for="post in communityPosts" 
           :key="post.id"
-          class="bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm"
+          class="bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
+          @click="goToPostDetail(post.id)"
         >
           <div class="flex items-center gap-3 mb-3">
             <img 
@@ -256,7 +256,7 @@
       class="space-y-4 transition-all duration-1000 transform"
       :class="{ 'opacity-100 translate-y-0': rewardOrdersVisible, 'opacity-0 translate-y-10': !rewardOrdersVisible }"
     >
-      <div class="flex justify-between items-end">
+      <div class="flex justify-between items-end cursor-pointer" @click="goToRewardOrders">
         <h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">悬赏订单</h3>
         <span class="text-xs font-semibold text-primary underline decoration-2 underline-offset-4">查看全部</span>
       </div>
@@ -271,7 +271,8 @@
         <div 
           v-for="order in rewardOrders" 
           :key="order.id"
-          class="bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm"
+          class="bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
+          @click="goToOrderDetail(order.id)"
         >
           <div class="flex items-center gap-3 mb-3">
             <img 
@@ -298,7 +299,7 @@
               {{ tag }}
             </span>
           </div>
-          <button class="w-full bg-primary text-white py-2 rounded-full text-sm font-bold hover:bg-primary/90 transition-colors">
+          <button class="w-full bg-primary text-white py-2 rounded-full text-sm font-bold hover:bg-primary/90 transition-colors" @click.stop="goToGrabOrder(order.id)">
             立即接单
           </button>
         </div>
@@ -325,6 +326,42 @@ const goToRewardOrders = () => {
 
 const goToNotifications = () => {
   router.push('/notifications')
+}
+
+const goToMenu = () => {
+  router.push('/profile')
+}
+
+const goToSearch = () => {
+  router.push('/search')
+}
+
+const goToProfile = () => {
+  router.push('/profile')
+}
+
+const goToTournament = () => {
+  router.push('/tournament/1')
+}
+
+const goToGameCategories = () => {
+  router.push('/game-categories')
+}
+
+const goToCommunity = () => {
+  router.push('/community')
+}
+
+const goToPostDetail = (postId) => {
+  router.push(`/post/${postId}`)
+}
+
+const goToOrderDetail = (orderId) => {
+  router.push(`/order/${orderId}`)
+}
+
+const goToGrabOrder = (orderId) => {
+  router.push(`/grab-order/${orderId}`)
 }
 
 const unreadCount = ref(0)

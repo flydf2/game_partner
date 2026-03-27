@@ -181,16 +181,16 @@ export const api = {
   getRewardOrders: async (params = {}) => {
     if (USE_MOCK) {
       const response = await mockGetRewardOrders(params)
-      // Mock返回格式: {code: 0, data: {data: [...], pagination: {...}}}
-      if (response.code === 0) {
-        return { success: true, data: response.data.data }
+      // Mock返回格式: {success: true, data: {data: [...], pagination: {...}}}
+      if (response.success && response.data) {
+        return { success: true, data: response.data.data, pagination: response.data.pagination }
       }
       return { success: false, data: [] }
     }
     const response = await request('/reward-orders', { params })
     // 真实API返回: {success: true, data: {data: [...], pagination: {...}}}
     if (response.success && response.data) {
-      return { success: true, data: response.data.data || response.data }
+      return { success: true, data: response.data.data || response.data, pagination: response.data.pagination }
     }
     return { success: false, data: [] }
   }

@@ -45,8 +45,20 @@ const fetchPosts = async () => {
             imagesArray = post.images.split(',')
           }
         }
+        
+        let rewardInfo = null
+        if (post.extJson) {
+          try {
+            rewardInfo = typeof post.extJson === 'string' ? JSON.parse(post.extJson) : post.extJson
+          } catch (e) {
+            console.error('解析 extJson 失败:', e)
+          }
+        }
+        
         return {
           ...post,
+          type: post.type || 'normal',
+          rewardInfo: rewardInfo,
           user: post.user || {
             id: post.userId || post.user_id || '1',
             name: post.user?.name || `用户${post.userId || post.user_id || '1'}`,
@@ -99,8 +111,20 @@ const handleSearch = async () => {
             imagesArray = post.images.split(',')
           }
         }
+        
+        let rewardInfo = null
+        if (post.extJson) {
+          try {
+            rewardInfo = typeof post.extJson === 'string' ? JSON.parse(post.extJson) : post.extJson
+          } catch (e) {
+            console.error('解析 extJson 失败:', e)
+          }
+        }
+        
         return {
           ...post,
+          type: post.type || 'normal',
+          rewardInfo: rewardInfo,
           user: post.user || {
             id: post.userId || post.user_id || '1',
             name: post.user?.name || `用户${post.userId || post.user_id || '1'}`,
@@ -326,8 +350,19 @@ onMounted(() => {
           v-for="post in posts"
           :key="post.id"
           class="bg-surface-container-lowest rounded-3xl p-5 border-none cursor-pointer hover:shadow-md transition-shadow"
+          :class="{ 'border border-primary-container/20': post.type === 'reward' }"
           @click="handlePostClick(post.id)"
         >
+          <!-- 悬赏订单标签 -->
+          <div v-if="post.type === 'reward'" class="flex items-center gap-2 mb-3">
+            <span class="px-3 py-1 bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full">
+              💰 悬赏订单
+            </span>
+            <span class="text-xs text-on-surface-variant">
+              {{ post.rewardInfo?.rewardAmount }} {{ post.rewardInfo?.rewardType }} · 截止：{{ post.rewardInfo?.deadline }}
+            </span>
+          </div>
+
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-3" @click.stop="handleUserClick(post.user?.id || post.user?.userId)">
               <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container cursor-pointer hover:opacity-80 transition-opacity">
@@ -340,7 +375,12 @@ onMounted(() => {
               </div>
               <div class="cursor-pointer">
                 <h3 class="font-bold text-on-surface hover:text-primary transition-colors">{{ post.user?.name || '用户' }}</h3>
-                <p class="text-[0.6875rem] text-outline">{{ post.time }} · {{ post.user?.game || '未知游戏' }}</p>
+                <div class="flex items-center gap-2">
+                  <p class="text-[0.6875rem] text-outline">{{ post.time }} · {{ post.user?.game || '未知游戏' }}</p>
+                  <span v-if="post.category" class="px-2 py-0.5 bg-secondary-container/20 text-secondary text-[0.625rem] font-bold rounded">
+                    {{ categories.find(c => c.id === post.category)?.label || post.category }}
+                  </span>
+                </div>
               </div>
             </div>
             <button
@@ -356,6 +396,29 @@ onMounted(() => {
           </div>
 
           <p class="text-on-surface mb-4 leading-relaxed whitespace-pre-line">{{ post.content }}</p>
+
+          <!-- 悬赏订单信息展示 -->
+          <div v-if="post.type === 'reward' && post.rewardInfo" class="bg-surface-container-high rounded-2xl p-4 mb-4 border border-primary-container/10">
+            <div class="flex items-start justify-between mb-3">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-2xl font-bold text-primary">{{ post.rewardInfo.rewardAmount }}</span>
+                  <span class="text-sm text-on-surface-variant">{{ post.rewardInfo.rewardType }}</span>
+                </div>
+                <div class="text-xs text-on-surface-variant">
+                  <span>游戏：{{ post.rewardInfo.game }}</span>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs text-on-surface-variant mb-1">截止时间</div>
+                <div class="text-sm font-semibold text-amber-600 dark:text-amber-400">{{ post.rewardInfo.deadline }}</div>
+              </div>
+            </div>
+            <div class="border-t border-surface-container-low/50 pt-3">
+              <div class="text-xs font-semibold text-on-surface mb-1">需求要求：</div>
+              <p class="text-xs text-on-surface-variant leading-relaxed">{{ post.rewardInfo.requirements }}</p>
+            </div>
+          </div>
 
           <div v-if="post.images && post.images.length > 0" class="rounded-2xl overflow-hidden mb-4" :class="{
             'grid gap-2': post.images.length > 1,
