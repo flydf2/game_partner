@@ -2,6 +2,7 @@
   <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
     <div class="flex items-center gap-4">
       <span
+        v-if="showBack"
         @click="goBack"
         class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
       >
@@ -28,13 +29,19 @@ const props = defineProps({
   title: {
     type: String,
     default: ''
+  },
+  showBack: {
+    type: Boolean,
+    default: true
   }
 })
 
 const router = useRouter()
 
 const goBack = () => {
-  router.back()
+  if (props.showBack) {
+    router.back()
+  }
 }
 </script>
 

@@ -32,7 +32,14 @@ const routes = [
   { path: '/messages', name: 'Messages', component: () => import('../views/Messages.vue'), meta: { title: '消息', requireAuth: true, keepAlive: true } },
   { path: '/chat/:id', name: 'Chat', component: () => import('../views/Chat.vue'), meta: { title: '聊天', requireAuth: true, noBottomNav: true } },
   { path: '/create-post', name: 'CreatePost', component: () => import('../views/CreatePost.vue'), meta: { title: '发布动态', requireAuth: true, noBottomNav: true } },
-  { path: '/reward-orders', name: 'RewardOrders', component: () => import('../views/RewardOrders.vue'), meta: { title: '悬赏订单', requireAuth: true } },
+  { path: '/reward', name: 'RewardSquare', component: () => import('../views/RewardSquare.vue'), meta: { title: '悬赏广场', requireAuth: true } },
+  { path: '/reward-orders', name: 'RewardOrders', component: () => import('../views/RewardOrderList.vue'), meta: { title: '悬赏订单', requireAuth: true } },
+  { path: '/reward/:id', name: 'RewardOrderDetail', component: () => import('../views/RewardOrderDetail.vue'), meta: { title: '悬赏详情', requireAuth: true } },
+  { path: '/reward/:id/confirm', name: 'RewardOrderConfirm', component: () => import('../views/RewardOrderConfirm.vue'), meta: { title: '确认订单', requireAuth: true } },
+  { path: '/reward/:id/payment', name: 'RewardOrderPayment', component: () => import('../views/RewardOrderPayment.vue'), meta: { title: '支付托管金', requireAuth: true } },
+  { path: '/reward/:id/review', name: 'RewardOrderReview', component: () => import('../views/RewardOrderReview.vue'), meta: { title: '评价服务', requireAuth: true } },
+  { path: '/reward/:id/status', name: 'RewardOrderStatus', component: () => import('../views/RewardOrderStatus.vue'), meta: { title: '抢单状态', requireAuth: true } },
+  { path: '/reward/publish', name: 'RewardOrderPublish', component: () => import('../views/RewardOrderPublish.vue'), meta: { title: '发布悬赏', requireAuth: true } },
   { path: '/grab-order/:id', name: 'GrabOrder', component: () => import('../views/GrabOrder.vue'), meta: { title: '抢单确认', requireAuth: true } },
   {
     path: '/filter',
@@ -165,6 +172,14 @@ const routes = [
     meta: {
       title: '收益提现',
       requireAuth: true
+    }
+  },
+  {
+    path: '/community-feed',
+    name: 'CommunityFeed',
+    component: () => import('../views/CommunityFeed.vue'),
+    meta: {
+      title: '社区动态'
     }
   },
   {

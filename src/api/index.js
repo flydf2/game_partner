@@ -1476,6 +1476,14 @@ export const rewardOrderApi = {
     }
   },
   
+  async getMyRewardOrders(params = {}) {
+    if (USE_MOCK) {
+      return await mockGetRewardOrders(params)
+    } else {
+      return await withRetry(() => get('/my-reward-orders', { params }))
+    }
+  },
+  
   async getRewardOrderDetail(orderId) {
     if (USE_MOCK) {
       return await mockGetRewardOrderDetail(orderId)
@@ -1484,11 +1492,147 @@ export const rewardOrderApi = {
     }
   },
   
+  async getApplicants(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 1,
+                name: '逐风猎手',
+                avatar: 'https://via.placeholder.com/56',
+                level: 24,
+                rating: 4.9,
+                specialty: '擅长：玄策、韩信、李白 | 效率极高',
+                badges: [
+                  { type: 'verified', text: '实名认证' },
+                  { type: 'deposit', text: '保证金已缴' }
+                ]
+              },
+              {
+                id: 2,
+                name: '沐沐酱ovo',
+                avatar: 'https://via.placeholder.com/56',
+                level: 32,
+                rating: 5.0,
+                specialty: '国服辅助，意识流选手，全程语音',
+                badges: [
+                  { type: 'recommended', text: '推荐' },
+                  { type: 'experienced', text: '千场老练' }
+                ],
+                selected: true
+              },
+              {
+                id: 3,
+                name: '冷面刺客',
+                avatar: 'https://via.placeholder.com/56',
+                level: 18,
+                rating: 4.7,
+                specialty: '专注高端局，不说话只带飞',
+                badges: [
+                  { type: 'verified', text: '实名认证' }
+                ]
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/reward-orders/${orderId}/applicants`))
+    }
+  },
+  
+  async selectApplicant(orderId, applicantId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '选择成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/reward-orders/${orderId}/select-applicant`, { applicantId }))
+    }
+  },
+  
   async grabRewardOrder(orderId) {
     if (USE_MOCK) {
       return await mockGrabRewardOrder(orderId)
     } else {
       return await withRetry(() => post(`/reward-orders/${orderId}/grab`))
+    }
+  },
+  
+  async publishRewardOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '发布成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/reward-orders/${orderId}/publish`))
+    }
+  },
+  
+  async publishReward(publishData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              orderId: Date.now()
+            },
+            message: '发布成功'
+          })
+        }, 1000)
+      })
+    } else {
+      return await withRetry(() => post('/reward-orders', publishData))
+    }
+  },
+  
+  async payRewardOrder(orderId, paymentData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              transactionId: Date.now()
+            },
+            message: '支付成功'
+          })
+        }, 1000)
+      })
+    } else {
+      return await withRetry(() => post(`/reward-orders/${orderId}/pay`, paymentData))
+    }
+  },
+  
+  async confirmService(orderId, reviewData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              settlementAmount: reviewData.rating * 30
+            },
+            message: '服务确认成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/reward-orders/${orderId}/confirm`, reviewData))
     }
   }
 }

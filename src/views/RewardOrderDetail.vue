@@ -11,6 +11,7 @@ const order = ref(null)
 const applicants = ref([])
 const loading = ref(true)
 const error = ref('')
+const status = ref('active')
 
 const loadOrderDetail = async () => {
   try {
@@ -20,6 +21,7 @@ const loadOrderDetail = async () => {
     const response = await api.rewardOrder.getRewardOrderDetail(orderId.value)
     if (response.success || response.code === 0) {
       order.value = response.data
+      status.value = response.data.status || 'active'
       loadApplicants()
     } else {
       throw new Error(response.message || response.msg || '获取订单详情失败')
@@ -69,6 +71,14 @@ const handlePublish = async () => {
   }
 }
 
+const handlePay = () => {
+  router.push(`/reward/${orderId.value}/payment`)
+}
+
+const handleConfirm = () => {
+  router.push(`/reward/${orderId.value}/review`)
+}
+
 onMounted(() => {
   loadOrderDetail()
 })
@@ -113,8 +123,14 @@ onMounted(() => {
         <section class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm">
           <div class="flex justify-between items-start mb-4">
             <div class="space-y-1">
-              <span class="bg-tertiary-container text-on-tertiary-container text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                {{ order.status === 'active' ? 'Active Bounty' : order.status === 'completed' ? 'Completed' : 'Pending' }}
+              <span :class="[
+                'text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider',
+                order.status === 'active' ? 'bg-tertiary-container text-on-tertiary-container' : 
+                order.status === 'completed' ? 'bg-secondary-container text-on-secondary-container' :
+                order.status === 'draft' ? 'bg-surface-container-high text-on-surface-variant' :
+                'bg-primary-container text-on-primary-container'
+              ]">
+                {{ order.status === 'active' ? '进行中' : order.status === 'completed' ? '已完成' : order.status === 'draft' ? '草稿' : '已结束' }}
               </span>
               <h2 class="text-2xl font-headline font-extrabold text-on-surface tracking-tight">{{ order.title }}</h2>
             </div>
@@ -233,19 +249,40 @@ onMounted(() => {
             </button>
             <button 
               v-else-if="order.status === 'active' && applicants.length > 0"
-              @click="router.push(`/reward/${orderId}/payment`)"
+              @click="handlePay"
               class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
               <span class="material-symbols-outlined">security</span>
               安全支付 ¥{{ order.reward }}
             </button>
             <button 
+              v-else-if="order.status === 'active' && applicants.length === 0"
+              class="w-full bg-surface-container-high text-on-surface-variant font-headline font-bold py-4 rounded-full"
+              disabled
+            >
+              等待抢单...
+            </button>
+            <button 
               v-else-if="order.status === 'completed'"
-              @click="router.push(`/reward/${orderId}/review`)"
+              @click="handleConfirm"
               class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
               <span class="material-symbols-outlined">check_circle</span>
               确认完成
+            </button>
+            <button 
+              v-else-if="order.status === 'cancelled'"
+              class="w-full bg-error-container text-on-error-container font-headline font-bold py-4 rounded-full"
+              disabled
+            >
+              订单已取消
+            </button>
+            <button 
+              v-else-if="order.status === 'expired'"
+              class="w-full bg-surface-container-high text-on-surface-variant font-headline font-bold py-4 rounded-full"
+              disabled
+            >
+              订单已过期
             </button>
           </div>
         </section>

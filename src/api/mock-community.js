@@ -93,6 +93,16 @@ export function mockGetCommunityPosts(params = {}) {
         filteredPosts = mockCommunityPosts.filter(post => post.type === 'reward')
       }
       
+      if (params.category) {
+        if (params.category === 'reward') {
+          filteredPosts = mockCommunityPosts.filter(post => post.type === 'reward')
+        } else if (params.category === 'all') {
+          filteredPosts = mockCommunityPosts
+        } else {
+          filteredPosts = mockCommunityPosts.filter(post => post.type === 'normal')
+        }
+      }
+      
       resolve({
         code: 0,
         data: {
