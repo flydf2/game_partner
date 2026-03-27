@@ -1,13 +1,5 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <!-- 广告通栏 -->
-    <div class="fixed top-16 left-0 right-0 h-10 z-40 bg-gradient-to-r from-yellow-500 to-yellow-600 overflow-hidden shadow-md cursor-pointer active:scale-[0.98] transition-transform duration-200" @click="goToRewardOrders">
-      <div class="absolute inset-0 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-white text-[9px] font-bold">flash_on</span>
-        <span class="text-white text-[9px] font-bold tracking-wider">抢悬赏单</span>
-        <span class="material-symbols-outlined text-white text-[9px] font-bold">arrow_forward_ios</span>
-      </div>
-    </div>
     
     <!-- TopAppBar -->
     <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
@@ -23,7 +15,12 @@
     <main class="max-w-2xl mx-auto px-5 pt-20 pb-32 space-y-6 max-w-md mx-auto">
       <!-- Search and Title Section -->
       <header class="mb-8">
-        <h2 class="text-3xl font-extrabold header-font text-on-surface tracking-tight mb-6">寻找队友</h2>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-3xl font-extrabold header-font text-on-surface tracking-tight">寻找队友</h2>
+          <router-link to="/leaderboard" class="text-sm font-semibold text-primary active:scale-95 transition-transform">
+            排行榜 <span class="material-symbols-outlined text-lg">arrow_forward_ios</span>
+          </router-link>
+        </div>
         <div class="relative group">
           <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
             <span class="material-symbols-outlined text-outline" data-icon="search">search</span>

@@ -177,7 +177,7 @@ onMounted(() => {
                 进入语音房
               </button>
               <button 
-                @click="handleViewOrder"
+                @click="handleViewOrder(orders.find(o => o.status === 'ongoing')?.id)"
                 class="flex-1 bg-surface-container-low text-on-surface font-semibold py-3 rounded-full text-sm hover:bg-surface-container-high active:scale-95 transition-transform"
               >
                 查看详情

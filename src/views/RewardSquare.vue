@@ -75,6 +75,10 @@ const handleJoinBounty = (bountyId) => {
   router.push(`/reward/${bountyId}`)
 }
 
+const handleMyGrabOrders = () => {
+  router.push('/my-grab-orders')
+}
+
 onMounted(() => {
   loadBounties()
 })
@@ -99,9 +103,17 @@ onMounted(() => {
     <main class="max-w-md mx-auto px-5 pt-20 space-y-8">
       <!-- Hero Section -->
       <section class="space-y-4">
-        <h1 class="font-headline font-extrabold text-4xl leading-tight text-on-surface">
-          悬赏<span class="text-primary">广场</span>
-        </h1>
+        <div class="flex items-center justify-between">
+          <h1 class="font-headline font-extrabold text-4xl leading-tight text-on-surface">
+            悬赏<span class="text-primary">广场</span>
+          </h1>
+          <button
+            @click="handleMyGrabOrders"
+            class="text-sm font-semibold text-primary active:scale-95 transition-transform flex items-center gap-1"
+          >
+            我的抢单 <span class="material-symbols-outlined text-lg">arrow_forward_ios</span>
+          </button>
+        </div>
         <p class="text-on-surface-variant leading-relaxed pr-8">
           寻找志同道合的游戏搭子，或是通过你的技术赚取丰厚赏金。
         </p>
