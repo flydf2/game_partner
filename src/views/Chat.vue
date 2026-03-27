@@ -23,6 +23,8 @@ const chatPartner = ref({
   skill: ''
 })
 
+const appointment = ref(null)
+
 const messageContainer = ref(null)
 const pollingInterval = ref(null)
 const lastMessageId = ref(null)
