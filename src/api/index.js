@@ -1472,7 +1472,7 @@ export const rewardOrderApi = {
     if (USE_MOCK) {
       return await mockGetRewardOrders(params)
     } else {
-      return await withRetry(() => get('/reward-orders', { params }))
+      return await withRetry(() => get('/reward', { params }))
     }
   },
   
@@ -1480,7 +1480,7 @@ export const rewardOrderApi = {
     if (USE_MOCK) {
       return await mockGetRewardOrders(params)
     } else {
-      return await withRetry(() => get('/my-reward-orders', { params }))
+      return await withRetry(() => get('/my-reward', { params }))
     }
   },
   
@@ -1488,7 +1488,7 @@ export const rewardOrderApi = {
     if (USE_MOCK) {
       return await mockGetRewardOrderDetail(orderId)
     } else {
-      return await withRetry(() => get(`/reward-orders/${orderId}`))
+      return await withRetry(() => get(`/reward/${orderId}`))
     }
   },
   
@@ -1506,6 +1506,7 @@ export const rewardOrderApi = {
                 level: 24,
                 rating: 4.9,
                 specialty: '擅长：玄策、韩信、李白 | 效率极高',
+                orderCount: 2400,
                 badges: [
                   { type: 'verified', text: '实名认证' },
                   { type: 'deposit', text: '保证金已缴' }
@@ -1518,6 +1519,7 @@ export const rewardOrderApi = {
                 level: 32,
                 rating: 5.0,
                 specialty: '国服辅助，意识流选手，全程语音',
+                orderCount: 1200,
                 badges: [
                   { type: 'recommended', text: '推荐' },
                   { type: 'experienced', text: '千场老练' }
@@ -1531,6 +1533,7 @@ export const rewardOrderApi = {
                 level: 18,
                 rating: 4.7,
                 specialty: '专注高端局，不说话只带飞',
+                orderCount: 856,
                 badges: [
                   { type: 'verified', text: '实名认证' }
                 ]
@@ -1540,7 +1543,7 @@ export const rewardOrderApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => get(`/reward-orders/${orderId}/applicants`))
+      return await withRetry(() => get(`/reward/${orderId}/applicants`))
     }
   },
   
@@ -1555,7 +1558,7 @@ export const rewardOrderApi = {
         }, 500)
       })
     } else {
-      return await withRetry(() => post(`/reward-orders/${orderId}/select-applicant`, { applicantId }))
+      return await withRetry(() => post(`/reward/${orderId}/select-applicant`, { applicantId }))
     }
   },
   
@@ -1563,7 +1566,7 @@ export const rewardOrderApi = {
     if (USE_MOCK) {
       return await mockGrabRewardOrder(orderId)
     } else {
-      return await withRetry(() => post(`/reward-orders/${orderId}/grab`))
+      return await withRetry(() => post(`/reward/${orderId}/grab`))
     }
   },
   
@@ -1578,7 +1581,7 @@ export const rewardOrderApi = {
         }, 500)
       })
     } else {
-      return await withRetry(() => post(`/reward-orders/${orderId}/publish`))
+      return await withRetry(() => post(`/reward/${orderId}/publish`))
     }
   },
   
@@ -1596,7 +1599,7 @@ export const rewardOrderApi = {
         }, 1000)
       })
     } else {
-      return await withRetry(() => post('/reward-orders', publishData))
+      return await withRetry(() => post('/reward', publishData))
     }
   },
   
@@ -1614,7 +1617,7 @@ export const rewardOrderApi = {
         }, 1000)
       })
     } else {
-      return await withRetry(() => post(`/reward-orders/${orderId}/pay`, paymentData))
+      return await withRetry(() => post(`/reward/${orderId}/pay`, paymentData))
     }
   },
   
@@ -1632,7 +1635,7 @@ export const rewardOrderApi = {
         }, 500)
       })
     } else {
-      return await withRetry(() => post(`/reward-orders/${orderId}/confirm`, reviewData))
+      return await withRetry(() => post(`/reward/${orderId}/confirm`, reviewData))
     }
   }
 }

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .headline-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary": "#805100",
+                        "secondary": "#8c4a00",
+                        "error-dim": "#b92902",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "primary": "#6c5a00",
+                        "on-error": "#ffefec",
+                        "on-primary-container": "#5b4b00",
+                        "outline": "#767777",
+                        "surface-container": "#e7e8e8",
+                        "on-tertiary-fixed": "#3a2300",
+                        "secondary-fixed-dim": "#ffb375",
+                        "primary-dim": "#5e4e00",
+                        "on-primary": "#fff2cd",
+                        "surface-container-high": "#e1e3e3",
+                        "secondary-fixed": "#ffc69a",
+                        "on-background": "#2d2f2f",
+                        "primary-fixed-dim": "#efc900",
+                        "error-container": "#f95630",
+                        "on-surface": "#2d2f2f",
+                        "surface-container-highest": "#dbdddd",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-surface-variant": "#5a5c5c",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f6f6f6",
+                        "on-primary-fixed": "#453900",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-dim": "#d3d5d5",
+                        "surface-variant": "#dbdddd",
+                        "outline-variant": "#acadad",
+                        "inverse-surface": "#0c0f0f",
+                        "surface-bright": "#f6f6f6",
+                        "secondary-dim": "#7b4000",
+                        "primary-container": "#ffd709",
+                        "background": "#f6f6f6",
+                        "on-primary-fixed-variant": "#665500",
+                        "error": "#b02500",
+                        "on-secondary-fixed": "#532a00",
+                        "inverse-primary": "#ffd709",
+                        "on-error-container": "#520c00",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "on-secondary-container": "#6f3a00",
+                        "tertiary-dim": "#704700",
+                        "tertiary-container": "#feb246",
+                        "tertiary-fixed": "#feb246",
+                        "on-secondary": "#fff0e7",
+                        "primary-fixed": "#ffd709",
+                        "on-tertiary": "#fff0e3",
+                        "on-tertiary-container": "#563500",
+                        "surface-tint": "#6c5a00",
+                        "surface-container-low": "#f0f1f1",
+                        "secondary-container": "#ffc69a"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-background min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-50 bg-[#f6f6f6] dark:bg-stone-900 flex items-center px-4 h-16">
+<button class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] p-2 hover:opacity-80 Active: scale-95 duration-200">
+            arrow_back
+        </button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700] flex-1 text-center pr-10">抢单详情</h1>
+</header>
+<main class="px-5 mt-4 space-y-6">
+<!-- Hero Section: Order Info -->
+<section class="bg-primary-container rounded-[1.5rem] p-6 relative overflow-hidden">
+<div class="relative z-10">
+<div class="flex justify-between items-start">
+<span class="bg-on-primary-container/10 text-on-primary-container text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                        进行中
+                    </span>
+<div class="text-right">
+<p class="text-on-primary-container/60 text-xs font-medium">总赏金</p>
+<p class="headline-font text-3xl font-extrabold text-on-primary-container">¥188.00</p>
+</div>
+</div>
+<h2 class="headline-font text-2xl font-extrabold text-on-primary-container mt-4 leading-tight">王者荣耀：巅峰赛上分</h2>
+<div class="flex items-center gap-2 mt-2">
+<span class="material-symbols-outlined text-sm">stadia_controller</span>
+<span class="text-sm font-medium">MOBA 竞技</span>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-on-primary-container/5 rounded-full blur-2xl"></div>
+</section>
+<!-- Task Details: Bento Grid Style -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between min-h-[110px]">
+<span class="material-symbols-outlined text-secondary text-2xl">military_tech</span>
+<div>
+<p class="text-on-surface-variant text-[11px] font-medium">段位要求</p>
+<p class="font-bold text-on-surface">最强王者 20星+</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between min-h-[110px]">
+<span class="material-symbols-outlined text-secondary text-2xl">schedule</span>
+<div>
+<p class="text-on-surface-variant text-[11px] font-medium">预计时长</p>
+<p class="font-bold text-on-surface">约 3 小时</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between min-h-[110px]">
+<span class="material-symbols-outlined text-secondary text-2xl">calendar_today</span>
+<div>
+<p class="text-on-surface-variant text-[11px] font-medium">开始时间</p>
+<p class="font-bold text-on-surface">今日 20:00</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-5 rounded-xl flex flex-col justify-between min-h-[110px]">
+<span class="material-symbols-outlined text-secondary text-2xl">videogame_asset</span>
+<div>
+<p class="text-on-surface-variant text-[11px] font-medium">游戏模式</p>
+<p class="font-bold text-on-surface">巅峰赛 5V5</p>
+</div>
+</div>
+</section>
+<!-- Room Owner Info -->
+<section class="bg-surface-container-low p-5 rounded-xl flex items-center gap-4">
+<img alt="Room owner profile" class="w-14 h-14 rounded-full object-cover border-2 border-surface-container-lowest" data-alt="Close-up portrait of a friendly young man with a warm smile, outdoor natural lighting, soft focus background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4ASiRNiu3YUxy8nEvHaUTPT7n_2BC7yKj2CC_E8nCVFHNTaO8nF-1LzqUtFsIpj-wZJlV201KBarKLCdl1I_hpP7WqGTMO640YE0vbq25xrEc-Gf_9ftvls9JWm8Lcguag9GI12vT7IPUOIkDQOX2tiA7JeGgKSkR3b9XZdllevS-0KpQz8aYC-9BxAJLqF5m7XiQ6KusY3oMmKgQYw8UoRbkxgQ9pQ2k8PYfGpDZ4Ie3Nz7jhX29jNvAzZc90uIiOMxWTJbEaAI"/>
+<div class="flex-1">
+<div class="flex items-center gap-2">
+<h3 class="font-bold text-on-surface">晴天小浪君</h3>
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-bold">房主</span>
+</div>
+<div class="flex items-center gap-1 mt-1 text-on-surface-variant text-xs">
+<span class="material-symbols-outlined text-sm text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span>信誉等级: 极高 (S)</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/40">chevron_right</span>
+</section>
+<!-- Application Timeline -->
+<section class="bg-surface-container-lowest p-6 rounded-xl">
+<h4 class="font-bold text-on-surface mb-6 flex items-center gap-2">
+<span class="w-1.5 h-4 bg-primary rounded-full"></span>
+                抢单进度
+            </h4>
+<div class="space-y-8 relative before:content-[''] before:absolute before:left-[11px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container">
+<div class="flex gap-4 relative">
+<div class="z-10 w-[24px] h-[24px] bg-primary rounded-full flex items-center justify-center ring-4 ring-surface-container-lowest">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">已提交申请</p>
+<p class="text-xs text-on-surface-variant mt-0.5">2023-10-24 14:30</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="z-10 w-[24px] h-[24px] bg-primary rounded-full flex items-center justify-center ring-4 ring-surface-container-lowest">
+<span class="material-symbols-outlined text-white text-sm" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">房主查看中</p>
+<p class="text-xs text-on-surface-variant mt-0.5">2023-10-24 15:12</p>
+</div>
+</div>
+<div class="flex gap-4 relative">
+<div class="z-10 w-[24px] h-[24px] bg-surface-container rounded-full flex items-center justify-center ring-4 ring-surface-container-lowest">
+<div class="w-2 h-2 bg-on-surface-variant rounded-full"></div>
+</div>
+<div>
+<p class="text-sm font-medium text-on-surface-variant">待确认</p>
+<p class="text-xs text-on-surface-variant/60 mt-0.5">等待房主最终确认</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Recommendation Review -->
+<section class="bg-surface-container-lowest p-6 rounded-xl">
+<h4 class="font-bold text-on-surface mb-4 flex items-center gap-2">
+<span class="w-1.5 h-4 bg-primary rounded-full"></span>
+                我的推荐
+            </h4>
+<div class="bg-surface-container-low p-4 rounded-lg italic text-sm text-on-surface-variant leading-relaxed">
+                “全能选手，擅长打野和对抗路。当前段位百星，可以高效带飞。时间充裕，随时可以开始，信誉保障！”
+            </div>
+</section>
+</main>
+<!-- Bottom Action Bar (BottomNavBar styled as actions) -->
+<nav class="fixed bottom-0 left-0 w-full h-20 bg-white/80 dark:bg-stone-950/80 backdrop-blur-xl flex justify-around items-center px-6 pb-safe z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
+<!-- 撤回申请 -->
+<button class="flex flex-col items-center justify-center text-[#2D2F2F] px-6 py-2 hover:bg-[#FFD700]/10 Active: scale-98 transition-transform">
+<span class="material-symbols-outlined text-2xl mb-1">cancel</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[12px]">撤回申请</span>
+</button>
+<!-- 联系房主 -->
+<button class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-8 py-2 hover:opacity-80 Active: scale-98 transition-transform">
+<span class="material-symbols-outlined text-2xl mb-1">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-[12px]">联系房主</span>
+</button>
+</nav>
+</body></html>

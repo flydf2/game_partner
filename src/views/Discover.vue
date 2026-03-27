@@ -63,7 +63,7 @@ const playmateStore = usePlaymateStore()
 const { success, error: showError } = useToast()
 
 const goToRewardOrders = () => {
-  router.push('/reward-orders')
+  router.push('/reward')
 }
 
 const searchInput = ref('')

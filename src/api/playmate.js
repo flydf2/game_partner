@@ -83,7 +83,7 @@ export const playmateAPI = {
     if (params.keyword) queryParams.append('keyword', params.keyword)
 
     const queryString = queryParams.toString()
-    return request(`/reward-orders${queryString ? `?${queryString}` : ''}`)
+    return request(`/reward${queryString ? `?${queryString}` : ''}`)
   },
 
   /**
@@ -92,7 +92,7 @@ export const playmateAPI = {
    * @returns {Promise} 订单详情
    */
   async getRewardOrderDetail(orderId) {
-    return request(`/reward-orders/${orderId}`)
+    return request(`/reward/${orderId}`)
   },
 
   /**
@@ -106,7 +106,7 @@ export const playmateAPI = {
    * @returns {Promise} 创建的订单
    */
   async createRewardOrder(data) {
-    return request('/reward-orders', {
+    return request('/reward', {
       method: 'POST',
       body: JSON.stringify(data)
     })
@@ -125,7 +125,7 @@ export const playmateAPI = {
    * @returns {Promise} 更新后的订单
    */
   async updateRewardOrder(orderId, data) {
-    return request(`/reward-orders/${orderId}`, {
+    return request(`/reward/${orderId}`, {
       method: 'PUT',
       body: JSON.stringify(data)
     })
@@ -137,7 +137,7 @@ export const playmateAPI = {
    * @returns {Promise} 删除结果
    */
   async deleteRewardOrder(orderId) {
-    return request(`/reward-orders/${orderId}`, {
+    return request(`/reward/${orderId}`, {
       method: 'DELETE'
     })
   },
@@ -148,7 +148,7 @@ export const playmateAPI = {
    * @returns {Promise} 抢单结果
    */
   async grabRewardOrder(orderId) {
-    return request(`/reward-orders/${orderId}/grab`, {
+    return request(`/reward/${orderId}/grab`, {
       method: 'POST'
     })
   }

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>我的抢单 - SunnyPlay Gaming</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#6c5a00",
+                        "on-error": "#ffefec",
+                        "on-tertiary-fixed-variant": "#623d00",
+                        "tertiary": "#805100",
+                        "secondary": "#8c4a00",
+                        "error-dim": "#b92902",
+                        "surface-container-high": "#e1e3e3",
+                        "secondary-fixed": "#ffc69a",
+                        "on-background": "#2d2f2f",
+                        "on-tertiary-fixed": "#3a2300",
+                        "secondary-fixed-dim": "#ffb375",
+                        "primary-dim": "#5e4e00",
+                        "on-primary": "#fff2cd",
+                        "outline": "#767777",
+                        "surface-container": "#e7e8e8",
+                        "on-primary-container": "#5b4b00",
+                        "on-surface": "#2d2f2f",
+                        "primary-fixed-dim": "#efc900",
+                        "error-container": "#f95630",
+                        "on-primary-fixed": "#453900",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#f6f6f6",
+                        "tertiary-fixed-dim": "#eea439",
+                        "on-surface-variant": "#5a5c5c",
+                        "surface-container-highest": "#dbdddd",
+                        "secondary-dim": "#7b4000",
+                        "primary-container": "#ffd709",
+                        "background": "#f6f6f6",
+                        "surface-bright": "#f6f6f6",
+                        "surface-variant": "#dbdddd",
+                        "outline-variant": "#acadad",
+                        "inverse-surface": "#0c0f0f",
+                        "inverse-on-surface": "#9c9d9d",
+                        "surface-dim": "#d3d5d5",
+                        "on-error-container": "#520c00",
+                        "on-secondary-fixed": "#532a00",
+                        "inverse-primary": "#ffd709",
+                        "on-primary-fixed-variant": "#665500",
+                        "error": "#b02500",
+                        "tertiary-fixed": "#feb246",
+                        "on-secondary": "#fff0e7",
+                        "tertiary-container": "#feb246",
+                        "on-secondary-container": "#6f3a00",
+                        "tertiary-dim": "#704700",
+                        "on-secondary-fixed-variant": "#7c4100",
+                        "secondary-container": "#ffc69a",
+                        "surface-container-low": "#f0f1f1",
+                        "on-tertiary": "#fff0e3",
+                        "on-tertiary-container": "#563500",
+                        "surface-tint": "#6c5a00",
+                        "primary-fixed": "#ffd709"
+                    },
+                    fontFamily: {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Be Vietnam Pro"],
+                        "label": ["Be Vietnam Pro"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f6f6f6;
+            color: #2d2f2f;
+        }
+        .headline-font {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface selection:bg-primary-container selection:text-primary min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+<div class="flex items-center justify-between px-5 h-16 w-full">
+<button class="active:scale-95 transition-transform hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">我的抢单</h1>
+<div class="w-6"></div> <!-- Spacer for centering -->
+</div>
+<div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
+</header>
+<main class="max-w-xl mx-auto px-5 py-6 space-y-8">
+<!-- Status Navigation Tab Bar -->
+<nav class="flex items-center space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+<button class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high text-on-surface-variant">全部</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high text-on-surface-variant">待选中</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all bg-primary-container text-primary shadow-sm">进行中</button>
+<button class="px-5 py-2.5 rounded-full text-sm font-semibold transition-all hover:bg-surface-container-high text-on-surface-variant">已结束</button>
+</nav>
+<!-- Order List Section -->
+<section class="space-y-6">
+<!-- Card One: 进行中 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5 border-l-4 border-primary-container transition-transform active:scale-[0.99]">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="text-[10px] font-bold tracking-wider text-primary uppercase bg-primary-container/20 px-2 py-0.5 rounded-sm">正在进行</span>
+<h3 class="text-lg font-bold headline-font leading-tight">王者荣耀：巅峰赛上分</h3>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="close-up avatar of a cool male gamer with futuristic headphones and neon lighting accents" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6pTTFu28KQVR6fyByWrZlbu8eiLyrmVqvfT5TjL6jt-5EVjYH9w_oF7bn456-s6oPpTPNYMIjM1YVQEBM5bAfDO6kKmeeKR3q0sauEGjm5oCf7uJ4UYddJcjcUc43mRmbW5badueZPvbhg0IbKK-W8PGkJbgNBPhCkcGV5uYhZEHN1J1rylcVZqw6hWls3zDwQRuLn00s_iPp_p1kLhM1eNCnGcDupmHT4O9yzRhJRpnxgwpsBqNZU6bDgVWXCMXTprBf16ENI4"/>
+</div>
+<span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">超级大魔王</span></span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-2xl font-extrabold headline-font text-primary">¥188.00</span>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 bg-primary-container text-primary font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-lg" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+                        进入语音房
+                    </button>
+<button class="flex-1 bg-surface-container-low text-on-surface font-semibold py-3 rounded-full text-sm hover:bg-surface-container-high active:scale-95 transition-transform">
+                        查看详情
+                    </button>
+</div>
+</div>
+<!-- Card Two: 待选中 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 opacity-90">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-xs font-medium text-secondary">等待房主选择</span>
+</div>
+<h3 class="text-lg font-bold headline-font leading-tight">原神：探索协助</h3>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="kawaii anime style avatar of a cheerful young woman with bright eyes and soft pastel hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGdZG0j9ss-YwbObwdG58pijUcqoMgm0x4YfL6KyX5idPsqyVjaqg6KiRWLvtYudZvAAsT6T9ynvsOplUtghVkXEDm7jxLMwcOyjsKWrj9E0QY0DdGLuBwWcI6kXhhFQNygqhVbYqqhffgIPHUMP7mxJGk_bcvf47O8pgscDIAhi2iV2s7_ccqBTvYFe3eju0606f1jUhq7xaisDgpN8LBh56IFK8AX-hsKtLiltSvNQXAAhJEiHEyMvhrJbzGYSzO4mCZzVszbz4"/>
+</div>
+<span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">派蒙的厨师</span></span>
+</div>
+</div>
+<div class="bg-surface-container-low px-3 py-1.5 rounded-lg text-[10px] font-bold text-on-surface-variant headline-font uppercase">
+                        Pending
+                    </div>
+</div>
+<div class="bg-surface-container-low/50 rounded-xl px-4 py-3 flex items-center justify-between">
+<span class="text-sm text-on-surface-variant">已于 14:20 提交申请</span>
+<button class="text-secondary text-sm font-bold">撤回</button>
+</div>
+</div>
+<!-- Card Three: 已结束 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-surface-container-high rotate-45 flex items-end justify-center pb-2">
+<span class="material-symbols-outlined text-on-surface-variant/30 text-3xl -rotate-45" data-icon="task_alt">task_alt</span>
+</div>
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<span class="text-xs font-medium text-on-surface-variant/60">已结算</span>
+<h3 class="text-lg font-bold headline-font leading-tight text-on-surface-variant">和平精英：双人组队</h3>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-6 h-6 rounded-full overflow-hidden grayscale">
+<img class="w-full h-full object-cover" data-alt="minimalist avatar of a competitive gamer wearing a tactical headset in muted tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCkehyRkbvvwe5wXbPMBlygTfY0697on6M1x0otvTqoQGir-tf5jx5_-NjeojTRAIwcovLGHIDqgxe29Buf-q4kqeT-U5vfQEb7PTLWtGC082QAAqC-jLASB36PTrHEznDzmbx0A4eRGsBBMgzSzddcEQvbsyJ8fN4u8V57h6lwKXwSQrlS_7Ai5Q01g8pc8jwELVAM2gxwT5QwQ8Dzt9THcP2kSbiNDPDfT_TQP-011cOx8vbbVhtbwBj56AM2afw0f37ueqAUD-s"/>
+</div>
+<span class="text-sm text-on-surface-variant/60">房主：战神A</span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-xl font-bold headline-font text-on-surface-variant">¥65.00</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Empty State Suggestion (Optional but adds flair) -->
+<div class="pt-8 text-center opacity-40">
+<span class="material-symbols-outlined text-4xl mb-2" data-icon="history">history</span>
+<p class="text-xs font-medium uppercase tracking-widest">Only your recent 30-day activity is shown</p>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 py-3 pb-safe bg-white/80 dark:bg-neutral-900/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-[1.5rem]">
+<a class="flex flex-col items-center justify-center text-neutral-400 hover:text-[#6c5a00] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">首页</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-full px-4 py-1.5 active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="Confirmation_Number" style="font-variation-settings: 'FILL' 1;">confirmation_number</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">抢单</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 hover:text-[#6c5a00] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">消息</span>
+</a>
+<a class="flex flex-col items-center justify-center text-neutral-400 hover:text-[#6c5a00] transition-colors active:scale-90 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">我的</span>
+</a>
+</nav>
+</body></html>

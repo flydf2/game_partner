@@ -33,7 +33,6 @@ const routes = [
   { path: '/chat/:id', name: 'Chat', component: () => import('../views/Chat.vue'), meta: { title: '聊天', requireAuth: true, noBottomNav: true } },
   { path: '/create-post', name: 'CreatePost', component: () => import('../views/CreatePost.vue'), meta: { title: '发布动态', requireAuth: true, noBottomNav: true } },
   { path: '/reward', name: 'RewardSquare', component: () => import('../views/RewardSquare.vue'), meta: { title: '悬赏广场', requireAuth: true } },
-  { path: '/reward-orders', name: 'RewardOrders', component: () => import('../views/RewardOrderList.vue'), meta: { title: '悬赏订单', requireAuth: true } },
   { path: '/reward/:id', name: 'RewardOrderDetail', component: () => import('../views/RewardOrderDetail.vue'), meta: { title: '悬赏详情', requireAuth: true } },
   { path: '/reward/:id/confirm', name: 'RewardOrderConfirm', component: () => import('../views/RewardOrderConfirm.vue'), meta: { title: '确认订单', requireAuth: true } },
   { path: '/reward/:id/payment', name: 'RewardOrderPayment', component: () => import('../views/RewardOrderPayment.vue'), meta: { title: '支付托管金', requireAuth: true } },
@@ -41,6 +40,9 @@ const routes = [
   { path: '/reward/:id/status', name: 'RewardOrderStatus', component: () => import('../views/RewardOrderStatus.vue'), meta: { title: '抢单状态', requireAuth: true } },
   { path: '/reward/publish', name: 'RewardOrderPublish', component: () => import('../views/RewardOrderPublish.vue'), meta: { title: '发布悬赏', requireAuth: true } },
   { path: '/grab-order/:id', name: 'GrabOrder', component: () => import('../views/GrabOrder.vue'), meta: { title: '抢单确认', requireAuth: true } },
+  { path: '/grab-order/:id/success', name: 'GrabOrderSuccess', component: () => import('../views/GrabOrderSuccess.vue'), meta: { title: '抢单成功', requireAuth: true } },
+  { path: '/grab-order/:id/detail', name: 'GrabOrderDetail', component: () => import('../views/GrabOrderDetail.vue'), meta: { title: '抢单详情', requireAuth: true } },
+  { path: '/my-grab-orders', name: 'MyGrabOrders', component: () => import('../views/MyGrabOrders.vue'), meta: { title: '我的抢单', requireAuth: true } },
   {
     path: '/filter',
     name: 'Filter',

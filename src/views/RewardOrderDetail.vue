@@ -12,7 +12,6 @@ const applicants = ref([])
 const loading = ref(true)
 const error = ref('')
 const status = ref('active')
-
 const loadOrderDetail = async () => {
   try {
     loading.value = true
@@ -64,7 +63,7 @@ const handlePublish = async () => {
   try {
     const response = await api.rewardOrder.publishRewardOrder(orderId.value)
     if (response.success || response.code === 0) {
-      router.push('/reward-orders')
+      router.push('/reward')
     }
   } catch (err) {
     console.error('发布悬赏失败:', err)
@@ -125,12 +124,15 @@ onMounted(() => {
             <div class="space-y-1">
               <span :class="[
                 'text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider',
-                order.status === 'active' ? 'bg-tertiary-container text-on-tertiary-container' : 
+                order.status === 'available' ? 'bg-primary-container text-on-primary-container' :
+                order.status === 'ongoing' ? 'bg-tertiary-container text-on-tertiary-container' :
                 order.status === 'completed' ? 'bg-secondary-container text-on-secondary-container' :
                 order.status === 'draft' ? 'bg-surface-container-high text-on-surface-variant' :
+                order.status === 'cancelled' ? 'bg-error-container text-on-error-container' :
+                order.status === 'expired' ? 'bg-surface-container-high text-on-surface-variant' :
                 'bg-primary-container text-on-primary-container'
               ]">
-                {{ order.status === 'active' ? '进行中' : order.status === 'completed' ? '已完成' : order.status === 'draft' ? '草稿' : '已结束' }}
+                {{ order.status === 'available' ? '可抢单' : order.status === 'ongoing' ? '进行中' : order.status === 'completed' ? '已完成' : order.status === 'draft' ? '草稿' : order.status === 'cancelled' ? '已取消' : order.status === 'expired' ? '已过期' : '已结束' }}
               </span>
               <h2 class="text-2xl font-headline font-extrabold text-on-surface tracking-tight">{{ order.title }}</h2>
             </div>
@@ -167,30 +169,107 @@ onMounted(() => {
           </div>
         </section>
 
+        <!-- 可抢单状态：立即抢单按钮 -->
+        <section v-if="!loading && order && order.status === 'available'" class="px-1 mb-4">
+          <button 
+            @click="() => router.push(`/grab-order/${orderId}`)"
+            class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-2xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+          >
+            <span class="material-symbols-outlined">campaign</span>
+            立即抢单
+          </button>
+        </section>
+
         <!-- 抢单列表 -->
-        <section class="space-y-4">
-          <div class="flex items-center justify-between">
-            <h3 class="text-lg font-headline font-bold text-on-surface">
-              抢单列表 
-              <span class="text-on-surface-variant text-sm font-normal ml-2">
-                ({{ order.applicantCount || applicants.length }}人已抢)
-              </span>
+        <section v-if="order.status === 'ongoing' || order.status === 'completed'" class="space-y-4">
+          <div class="flex items-center justify-between px-1">
+            <h3 class="font-headline font-extrabold text-lg flex items-center gap-2">
+              大神抢单列表
+              <span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded-full">{{ order.applicantCount || applicants.length }}</span>
             </h3>
-            <button class="text-xs font-bold text-primary flex items-center gap-1">
-              综合排序 <span class="material-symbols-outlined text-xs">unfold_more</span>
-            </button>
+            <span class="text-xs text-on-surface-variant">按评分排序</span>
           </div>
 
-          <div class="space-y-3">
+          <div class="space-y-4">
             <template v-for="applicant in applicants" :key="applicant.id">
               <div 
                 :class="[
-                  'bg-surface-container-lowest p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]',
-                  applicant.selected ? 'border-2 border-primary-container ring-4 ring-primary-container/20' : ''
+                  'bg-surface-container-lowest p-4 rounded-3xl flex items-center gap-4 transition-all',
+                  applicant.selected ? 'border-2 border-primary-container' : 'hover:bg-white'
                 ]"
               >
                 <div class="relative">
-                  <div class="w-14 h-14 rounded-2xl overflow-hidden shadow-sm">
+                  <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md">
+                    <img :alt="applicant.name" class="w-full h-full object-cover" :src="applicant.avatar" />
+                  </div>
+                  <div v-if="applicant.selected" class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[8px] font-bold px-1.5 py-0.5 rounded-md border-2 border-white">
+                    TOP 1
+                  </div>
+                  <div v-else class="absolute -bottom-1 -right-1 bg-primary text-on-primary-container text-[8px] font-black px-1.5 py-0.5 rounded-md border-2 border-white">
+                    LV.{{ applicant.level }}
+                  </div>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2">
+                    <h4 class="font-bold text-on-surface truncate">{{ applicant.name }}</h4>
+                    <span :class="[
+                      'text-[10px] px-1.5 py-0.5 rounded-md font-bold',
+                      applicant.selected ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary-container'
+                    ]">
+                      LV.{{ applicant.level }}
+                    </span>
+                  </div>
+                  <div class="flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="text-xs font-bold text-on-surface">{{ applicant.rating }}</span>
+                    <span class="text-[10px] text-on-surface-variant ml-1">{{ applicant.orderCount || '0' }} 接单</span>
+                  </div>
+                  <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">{{ applicant.specialty }}</p>
+                  <div class="flex gap-1 mt-2">
+                    <span v-for="badge in applicant.badges" :key="badge.type" :class="[
+                      'text-[9px] px-2 py-0.5 rounded-full',
+                      badge.type === 'recommended' ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container text-on-surface-variant'
+                    ]">{{ badge.text }}</span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-2">
+                  <button 
+                    class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary active:scale-90 transition-all"
+                  >
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+                  </button>
+                  <button 
+                    v-if="applicant.selected"
+                    class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"
+                  >
+                    <span class="material-symbols-outlined">check_circle</span>
+                  </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </section>
+
+        <section v-else class="space-y-4">
+          <div class="flex items-center justify-between px-1">
+            <h3 class="font-headline font-extrabold text-lg flex items-center gap-2">
+              大神抢单列表
+              <span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded-full">{{ order.applicantCount || applicants.length }}</span>
+            </h3>
+            <span class="text-xs text-on-surface-variant">按评分排序</span>
+          </div>
+
+          <div class="space-y-4">
+            <template v-for="applicant in applicants" :key="applicant.id">
+              <div 
+                :class="[
+                  'bg-surface-container-lowest p-4 rounded-3xl flex items-center gap-4 transition-all'
+                ]"
+              >
+                <div class="relative">
+                  <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md">
                     <img :alt="applicant.name" class="w-full h-full object-cover" :src="applicant.avatar" />
                   </div>
                   <div class="absolute -bottom-1 -right-1 bg-primary text-on-primary-container text-[8px] font-black px-1.5 py-0.5 rounded-md border-2 border-white">
@@ -201,36 +280,31 @@ onMounted(() => {
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2">
                     <h4 class="font-bold text-on-surface truncate">{{ applicant.name }}</h4>
-                    <span class="flex items-center text-[10px] text-tertiary font-bold">
-                      <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span> 
-                      {{ applicant.rating }}
+                    <span class="text-[10px] px-1.5 py-0.5 rounded-md bg-secondary-container text-on-secondary-container">
+                      LV.{{ applicant.level }}
                     </span>
                   </div>
-                  <p class="text-[10px] text-on-surface-variant truncate">{{ applicant.specialty || '暂无详情' }}</p>
-                  <div class="flex gap-1 mt-1">
-                    <span v-for="badge in applicant.badges" :key="badge" :class="[
-                      'bg-surface-container text-[8px] text-on-surface-variant px-1.5 py-0.5 rounded',
-                      badge.type === 'recommended' ? 'bg-secondary-container text-on-secondary-container' : ''
+                  <div class="flex items-center gap-1 mt-1">
+                    <span class="material-symbols-outlined text-primary text-xs" style="font-variation-settings: 'FILL' 1;">star</span>
+                    <span class="text-xs font-bold text-on-surface">{{ applicant.rating }}</span>
+                    <span class="text-[10px] text-on-surface-variant ml-1">{{ applicant.orderCount || '0' }} 接单</span>
+                  </div>
+                  <p class="text-sm text-on-surface-variant mt-2 leading-relaxed">{{ applicant.specialty }}</p>
+                  <div class="flex gap-1 mt-2">
+                    <span v-for="badge in applicant.badges" :key="badge.type" :class="[
+                      'text-[9px] px-2 py-0.5 rounded-full',
+                      badge.type === 'recommended' ? 'bg-secondary-container text-on-secondary-container' : 'bg-surface-container text-on-surface-variant'
                     ]">{{ badge.text }}</span>
                   </div>
                 </div>
 
-                <button 
-                  v-if="!applicant.selected && order.status === 'active'"
-                  @click="handleSelectApplicant(applicant.id)"
-                  class="bg-surface-container-high text-on-surface-variant text-[10px] font-bold px-4 py-2 rounded-full whitespace-nowrap active:bg-primary-container active:text-on-primary-container transition-colors"
-                >
-                  选择他
-                </button>
-                <button 
-                  v-else
-                  :class="[
-                    'text-[10px] font-bold px-4 py-2 rounded-full whitespace-nowrap',
-                    applicant.selected ? 'bg-primary-container text-on-primary-container shadow-sm' : 'bg-surface-container text-on-surface-variant'
-                  ]"
-                >
-                  {{ applicant.selected ? '已选择' : '已入选' }}
-                </button>
+                <div class="flex flex-col gap-2">
+                  <button 
+                    class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-primary active:scale-90 transition-all"
+                  >
+                    <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
+                  </button>
+                </div>
               </div>
             </template>
           </div>
@@ -248,19 +322,12 @@ onMounted(() => {
               <span class="material-symbols-outlined font-bold">rocket_launch</span>
             </button>
             <button 
-              v-else-if="order.status === 'active' && applicants.length > 0"
-              @click="handlePay"
-              class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+              v-else-if="order.status === 'available'"
+              @click="() => router.push(`/grab-order/${orderId.value}`)"
+              class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
             >
-              <span class="material-symbols-outlined">security</span>
-              安全支付 ¥{{ order.reward }}
-            </button>
-            <button 
-              v-else-if="order.status === 'active' && applicants.length === 0"
-              class="w-full bg-surface-container-high text-on-surface-variant font-headline font-bold py-4 rounded-full"
-              disabled
-            >
-              等待抢单...
+              <span class="material-symbols-outlined">campaign</span>
+              立即抢单
             </button>
             <button 
               v-else-if="order.status === 'completed'"

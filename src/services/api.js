@@ -187,7 +187,7 @@ export const api = {
       }
       return { success: false, data: [] }
     }
-    const response = await request('/reward-orders', { params })
+    const response = await request('/reward', { params })
     // 真实API返回: {success: true, data: {data: [...], pagination: {...}}}
     if (response.success && response.data) {
       return { success: true, data: response.data.data || response.data, pagination: response.data.pagination }

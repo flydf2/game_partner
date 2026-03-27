@@ -74,6 +74,10 @@ const handleConfirm = (orderId) => {
   router.push(`/reward/${orderId}/review`)
 }
 
+const handleGoToService = (orderId) => {
+  router.push(`/reward/${orderId}/confirm`)
+}
+
 onMounted(() => {
   loadRewardOrders()
 })
@@ -81,19 +85,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20">
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 max-w-md mx-auto border-b border-outline-variant/20">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container">
+        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
           <img alt="User Avatar" class="w-full h-full object-cover" src="https://via.placeholder.com/40" />
         </div>
-        <h1 class="font-headline font-bold text-lg text-primary tracking-tight">抢单状态</h1>
+        <h1 class="font-headline font-bold text-lg text-primary tracking-tight">SunnyPlay</h1>
       </div>
       <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-all active:scale-95">
         <span class="material-symbols-outlined text-primary">notifications</span>
       </button>
     </header>
 
-    <main class="pt-24 px-6 space-y-8">
+    <main class="pt-24 px-6 space-y-8 max-w-md mx-auto">
       <header class="space-y-2">
         <h1 class="font-headline font-extrabold text-2xl leading-tight text-on-surface tracking-tight">抢单状态</h1>
         <p class="text-on-surface-variant font-medium text-sm">管理您的实时赏金任务与服务进度</p>
@@ -135,29 +139,29 @@ onMounted(() => {
       </div>
 
       <div v-else class="space-y-5">
-        <!-- Active Bounty: Selected -->
+        <!-- Active Bounty: Selected - Go to Service -->
         <section v-if="activeTab === 'selected'" class="bg-surface-container-lowest rounded-2xl p-6 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 right-0 p-4">
             <span class="bg-primary-container text-on-primary-container text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">进行中</span>
           </div>
           <div class="flex flex-col gap-4">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center">
+              <div class="w-12 h-12 rounded-2xl bg-secondary-container flex items-center justify-center">
                 <span class="material-symbols-outlined text-on-secondary-container" style="font-variation-settings: 'FILL' 1;">sports_esports</span>
               </div>
               <div>
                 <h3 class="font-headline font-bold text-lg text-on-surface">王者荣耀：巅峰上分</h3>
-                <p class="text-label-sm text-outline font-medium">来自：超级大魔王</p>
+                <p class="text-sm text-on-surface-variant font-medium">来自：超级大魔王</p>
               </div>
             </div>
             <div class="bg-surface-container-low rounded-2xl p-4 space-y-3">
               <div class="flex justify-between items-center">
                 <span class="text-sm text-on-surface-variant">赏金金额</span>
-                <span class="font-headline font-extrabold text-primary text-xl">¥{{ order.reward || 188.00 }}</span>
+                <span class="font-headline font-extrabold text-primary text-xl">¥{{ rewardOrders.find(o => o.status === 'selected')?.reward || 188.00 }}</span>
               </div>
               <div class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary text-sm">schedule</span>
-                <span class="text-xs font-medium text-on-surface-variant">预计服务时长：{{ order.duration || 120 }}分钟</span>
+                <span class="text-xs font-medium text-on-surface-variant">预计服务时长：120分钟</span>
               </div>
             </div>
             <div class="flex flex-col gap-3 mt-2">
@@ -166,7 +170,7 @@ onMounted(() => {
                 <span>已入选 - 请前往服务</span>
               </div>
               <button 
-                @click="handleConfirm(order.id)"
+                @click="handleGoToService(rewardOrders.find(o => o.status === 'selected')?.id)"
                 class="w-full bg-primary-container hover:bg-primary-fixed-dim text-on-primary-container font-headline font-bold py-4 rounded-full transition-all active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-primary-container/20"
               >
                 确认完成并结算
@@ -176,17 +180,17 @@ onMounted(() => {
           </div>
         </section>
 
-        <!-- Pending Bounty -->
+        <!-- Pending Bounty: Waiting for Creator's Pick -->
         <section v-if="activeTab === 'pending'" class="bg-surface-container-lowest/60 rounded-2xl p-6 border-2 border-dashed border-outline-variant/20">
           <div class="flex flex-col gap-4">
             <div class="flex justify-between items-start">
               <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-xl bg-tertiary-container/30 flex items-center justify-center">
+                <div class="w-12 h-12 rounded-2xl bg-tertiary-container/30 flex items-center justify-center">
                   <span class="material-symbols-outlined text-tertiary" data-icon="pending">pending</span>
                 </div>
                 <div>
                   <h3 class="font-headline font-bold text-lg text-on-surface/60">原神：探索协助</h3>
-                  <p class="text-label-sm text-outline/60 font-medium">来自：派蒙的厨师</p>
+                  <p class="text-sm text-on-surface-variant/60 font-medium">来自：派蒙的厨师</p>
                 </div>
               </div>
               <span class="text-primary font-bold text-xs bg-primary-container/20 px-3 py-1 rounded-full">等待房主选择</span>
@@ -195,7 +199,7 @@ onMounted(() => {
           </div>
         </section>
 
-        <!-- Completed Bounty -->
+        <!-- Completed Bounty: Settlement Pending -->
         <section v-if="activeTab === 'completed'" class="bg-surface-container-low rounded-2xl p-6 relative">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -204,17 +208,17 @@ onMounted(() => {
               </div>
               <div>
                 <h4 class="font-bold text-on-surface">和平精英：双人组队</h4>
-                <p class="text-[10px] text-outline-variant font-medium">订单号：SP8829103</p>
+                <p class="text-[10px] text-on-surface-variant font-medium">订单号：SP8829103</p>
               </div>
             </div>
             <div class="text-right">
               <div class="text-sm font-bold text-secondary">待结算</div>
-              <div class="text-[10px] text-outline">预计 2小时内</div>
+              <div class="text-[10px] text-on-surface-variant">预计 2小时内</div>
             </div>
           </div>
           <div class="mt-4 pt-4 border-t border-outline-variant/10 flex justify-between items-center">
             <span class="text-xs text-on-surface-variant">赏金已锁定在平台托管</span>
-            <span class="font-headline font-bold text-on-surface">¥{{ order.reward || 65.00 }}</span>
+            <span class="font-headline font-bold text-on-surface">¥{{ rewardOrders.find(o => o.status === 'completed')?.reward || 65.00 }}</span>
           </div>
         </section>
 

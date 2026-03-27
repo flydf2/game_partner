@@ -321,7 +321,7 @@ import { notificationApi } from '../api/index.js'
 const router = useRouter()
 
 const goToRewardOrders = () => {
-  router.push('/reward-orders')
+  router.push('/reward')
 }
 
 const goToNotifications = () => {

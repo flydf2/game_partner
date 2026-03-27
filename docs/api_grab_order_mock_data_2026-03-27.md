@@ -147,7 +147,7 @@ const order = mockRewardOrders.find(o => String(o.id) === String(orderId))
 
 ### 获取订单详情
 
-**接口路径**: `GET /reward-orders/:id`
+**接口路径**: `GET /reward/:id`
 
 **Mock 实现**: `mockGetRewardOrderDetail(orderId)`
 
@@ -180,7 +180,7 @@ const order = mockRewardOrders.find(o => String(o.id) === String(orderId))
 
 ### 抢单
 
-**接口路径**: `POST /reward-orders/:id/grab`
+**接口路径**: `POST /reward/:id/grab`
 
 **Mock 实现**: `mockGrabRewardOrder(orderId)`
 

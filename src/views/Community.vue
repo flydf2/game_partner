@@ -237,7 +237,7 @@ const handleCreatePost = () => {
 
 const handleViewRewardOrders = () => {
   // 跳转到悬赏订单页面
-  router.push('/reward-orders')
+  router.push('/reward')
 }
 
 const handleBack = () => {

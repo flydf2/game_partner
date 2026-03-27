@@ -66,7 +66,7 @@ const handleCreatePost = () => {
 }
 
 const handleViewRewardOrders = () => {
-  router.push('/reward-orders')
+  router.push('/reward')
 }
 
 onMounted(() => {

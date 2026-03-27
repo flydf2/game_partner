@@ -59,7 +59,7 @@ const handlePublish = async () => {
     })
     
     if (response.success) {
-      router.push('/reward-orders')
+      router.push('/reward')
     }
   } catch (err) {
     console.error('发布悬赏失败:', err)
