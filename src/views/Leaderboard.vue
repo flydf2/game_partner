@@ -72,7 +72,7 @@
         <!-- Rank 3 -->
         <div v-if="leaderboard[2]" class="flex flex-col items-center mb-2">
           <div class="relative">
-            <div class="w-18 h-18 rounded-full border-4 border-amber-600/30 overflow-hidden bg-white">
+            <div class="w-20 h-20 rounded-full border-4 border-slate-300 overflow-hidden bg-white">
               <img :alt="leaderboard[2].nickname" class="w-full h-full object-cover" :src="leaderboard[2].avatar" />
             </div>
             <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-[#CD7F32] text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shadow-lg">3</div>
@@ -106,7 +106,12 @@
               </div>
             </div>
           </div>
-          <button class="bg-primary-container text-on-primary-container text-xs font-bold px-4 py-2 rounded-full active:scale-95 transition-transform">约TA</button>
+          <button 
+            class="bg-primary-container text-on-primary-container text-xs font-bold px-4 py-2 rounded-full active:scale-95 transition-transform"
+            @click="goToDetail(player.id)"
+          >
+            查看战绩
+          </button>
         </div>
       </div>
       
@@ -130,7 +135,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
-import { api } from '../api/index.js'
+import api from '../api/index.js'
 
 const router = useRouter()
 
@@ -156,6 +161,10 @@ const formatScore = (score) => {
     return (score / 1000).toFixed(1) + 'k'
   }
   return score
+}
+
+const goToDetail = (playerId) => {
+  router.push(`/leaderboard/${playerId}`)
 }
 
 const loadLeaderboard = async () => {

@@ -198,7 +198,8 @@ export function mockGetLeaderboard(params = {}) {
       const formattedData = paginatedData.map((playmate, index) => ({
         ...playmate,
         rank: startIndex + index + 1,
-        score: Math.floor(playmate.rating * 1000 + Math.random() * 100)
+        score: Math.floor(playmate.rating * 1000 + Math.random() * 100),
+        tags: Array.isArray(playmate.tags) ? playmate.tags.join(',') : playmate.tags
       }))
       
       resolve({

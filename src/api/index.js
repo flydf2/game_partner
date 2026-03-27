@@ -1150,6 +1150,130 @@ export const communityApi = {
     } else {
       return await withRetry(() => post('/community/posts', postData))
     }
+  },
+  
+  async getTopicDetail(topicId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              id: topicId,
+              title: '#王者荣耀',
+              description: '集结最强召唤师！这里是《王者荣耀》官方讨论社区，分享你的高光时刻、上分心得，寻找志同道合的开黑队友。',
+              cover: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJCdVR4SWlVmZS2MfQxv4neWDHVSFi46iFu7fIlPuVcLUzoMaMncSZHdLUkeV6uno5pL3MvmUa7m5q3jQFEiIa1tlYhxIxW43ul0iN37eeYHJZEAZD_Nonsn3SrL3j3htSrp0l3GDtWDA4dsGL-GTGfRJU5k7W99I3RnHFfw_bieodydRDntxEspPO8D_yu3K5n-8DSp_x_AKb77wFMUJe9DzUntWS-mfd2UsJzyUft_2rZPiJ1jRBVJQqDMGpVHTdG6aRdOaK2tU',
+              participantCount: 125000,
+              postCount: 482000,
+              createdAt: '2026-01-01T00:00:00Z'
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/community/topics/${topicId}`))
+    }
+  },
+  
+  async getTopicPosts(topicId, params = {}) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 1,
+                userId: 1,
+                user: {
+                  name: '剑指苍穹',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAJ10qRqENmIAi_-MMiEshdFkX-aSmnRkudsddZR4FW7WhCzqrQdMH2KIXPgJCVXr8b7fX944RPjutGvQ4shGnSlYLsaBhFDad-_fyxZnMb1--5xyMvw4juS3jfolDyFbsFC5dU7Y3l1gw30SLuut1Z9Ac7QmypCRQdmwEvYTASnbWS79TnL0ZmotYOpCHS54rF8d0QCXy5Xw3S1sp8C5EsZeXLuu0KAlhrcc_ZaC43mNj6qQYO6ZIInFIrN5yxWjaL0Z2n3TZdPMM',
+                  game: '王者荣耀',
+                  level: 5
+                },
+                content: '终于打到了百星王者！这一路走来不容易，分享一下这赛季李白的铭文和出装思路，希望能帮到想上分的兄弟们。评论区见！👇',
+                images: [
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDo6fNVwJI7_c7sD2VVTgI7AB85QnkMmhWv10RAbgHqib8nVo5DGcBJ7Wk11nZ_eYWPEdl1BOB2H7TSQKfSREnnwo8spOmKlEixjn0Gu5HQ3jiOv8hoMqaenhPX16yK6mun40pIzPgUoaQ-qj0YVM_iB5MbFgsn2t8Oqtyxal2J8wlrPCKUN-dWzpCYEEPbf4yH7pElZFaX_Fh3wjDiMSlVUH9M33szsPKbweicDOTmwW-NgrTplVAuzCjRoENxW-7aJ4DpmW_oApI',
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDtwx6rZ9yE1G6JZuZcGmjHfXOWVOt5LimXa4U2cBwmp-bCxeyGjBtkeRU0CFxx4PgMDP8tQJc4eFd9_HnqzHiwhzAry1NZWss7uUKEORUCs7qm_uu7PamGPegP8qtOl-DNOnJTd5sXrSDMwhDetC3-9Z0GHAxU91OYT5hGfdsdVO2cyDaPoLo4tre6zZVArvB7HVx2CHlfDh2oM8lrIuKXamy52ZMPecWQrQGG8w8qd6Q9BccrQUHzQQF9ywnGfQT2UmoG-p9IhyI'
+                ],
+                likes: 1200,
+                comments: 342,
+                time: '15分钟前',
+                isLiked: false,
+                isFollowing: false
+              },
+              {
+                id: 2,
+                userId: 2,
+                user: {
+                  name: '猫猫爱辅助',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAlSH3ku74n6Kf_cMbfhCnPPakqK4B4geWUpkDacG_6qp1eyfvbLHERspFefSKEUgQ_wEpsalIRM0rnQM_qiwoHDvKz6Hc5bUjeb1dH4vYMNWRYcKmreiyDWfusvWgsHTgs3QvlgXMUrbSRMHeW6vQ0c3KGb_BJCVE7hxW5-X5TtvmDc4-sgWfAVAVQ-43UCnIa1-sXFoeZU-gzka9c_HEh3Ud-NZQfaVWX_i9dBr6S79zMRRCufus9Il3cjvXj0Oq1ncnScCitXlg',
+                  game: '王者荣耀'
+                },
+                content: '坐标QQ区，段位至尊星耀，常玩大乔、瑶、蔡文姬。有大神带带吗？心态超好不压力。',
+                images: [],
+                likes: 89,
+                comments: 12,
+                time: '1小时前',
+                isLiked: false,
+                isFollowing: false
+              },
+              {
+                id: 3,
+                userId: 3,
+                user: {
+                  name: '电竞资讯站',
+                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDCFfFMrDH5WFM9aHI3-TTQKOyskV3OoSEuuDpfyjNkOSKQkdSCOQSY3DeOX_s1zFyBE1DqvvPJBMv89sEFVIQMzy30l4Mu8LUG5pwJ4BmKzQ7yFKNpL72idSFHO3ZntJI5P85_1SoAB1kH9HRNx9200MTdLNJiDITz_pzu0Qwdb1DCyXQP5kH4l2Qz3NDhcICjXn2j_OyZ_F8JeulPbtEgltDEfyjo1XSpB1PowDoQzISPiGTPzc9_pal7MoYTzC1yeVw_PFr6jWU',
+                  game: '王者荣耀',
+                  level: 4
+                },
+                content: '新赛季爆料：全新法师英雄"星璇"即将上线，技能机制深度解析！',
+                images: [
+                  'https://lh3.googleusercontent.com/aida-public/AB6AXuACWk7OafZcwmU6-0wrtmRSpMtI2lxy3pI4u8VeecG5RokzdajLvTU8nSA5A46kHoepSUkF-z5G87kCmu3_o8xcDic4cOX71GQmq-0lBKwFgVralus5q7GX_DNRNiQx5E_qwqFv7glL1JvCv1AhV0ZGGdK-4X2Q9iVEmOkl4sLZKCjhpKOMGhP6mDmCRNEsVeWIkZ8w582_qcsLPtDGlG4RoeAhOGzprMkrD3kIyuLCgwWK1Ia_xtcCXRkF9lmuR2gWA5ntWFgp8m8'
+                ],
+                likes: 3500,
+                comments: 892,
+                time: '2小时前',
+                isLiked: false,
+                isFollowing: false
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/community/topics/${topicId}/posts`, { params }))
+    }
+  },
+  
+  async followTopic(topicId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '关注话题成功'
+          })
+        }, 200)
+      })
+    } else {
+      return await withRetry(() => post(`/community/topics/${topicId}/follow`))
+    }
+  },
+  
+  async unfollowTopic(topicId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '取消关注话题成功'
+          })
+        }, 200)
+      })
+    } else {
+      return await withRetry(() => del(`/community/topics/${topicId}/follow`))
+    }
   }
 }
 
@@ -1537,7 +1661,7 @@ export async function fetchPlaymates(params = {}) {
     
     const processedPlaymateData = playmateData.map(playmate => ({
       ...playmate,
-      tags: playmate.tags ? playmate.tags.split(',') : [],
+      tags: playmate.tags ? (Array.isArray(playmate.tags) ? playmate.tags : playmate.tags.split(',')) : [],
     }))
     if (params.page > 1) {
       store.appendPlaymates(processedPlaymateData)
@@ -1578,8 +1702,8 @@ export async function fetchLeaderboard(params = {}) {
     let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
     
     if (USE_MOCK) {
-      if (response.code === 0) {
-        playmateData = response.data?.data || []
+      if (response.success) {
+        playmateData = response.data?.data || response.data || []
         pagination = response.data?.pagination || pagination
       }
     } else {

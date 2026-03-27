@@ -133,6 +133,15 @@ const routes = [
     }
   },
   {
+    path: '/profile/level',
+    name: 'ProfileLevel',
+    component: () => import('../views/ProfileLevel.vue'),
+    meta: {
+      title: '我的段位',
+      requireAuth: true
+    }
+  },
+  {
     path: '/appeals',
     name: 'Appeals',
     component: () => import('../views/Appeals.vue'),
@@ -164,6 +173,14 @@ const routes = [
     component: () => import('../views/Community.vue'),
     meta: {
       title: '社区动态'
+    }
+  },
+  {
+    path: '/topic/:id',
+    name: 'TopicDetail',
+    component: () => import('../views/TopicDetail.vue'),
+    meta: {
+      title: '话题详情'
     }
   },
   {
@@ -216,7 +233,16 @@ const routes = [
   { path: '/profile/favorites', name: 'Favorites', component: () => import('../views/Favorites.vue'), meta: { title: '我的收藏', requireAuth: true } },
   { path: '/profile/following', name: 'Following', component: () => import('../views/Following.vue'), meta: { title: '我的关注', requireAuth: true } },
   { path: '/profile/history', name: 'BrowseHistory', component: () => import('../views/BrowseHistory.vue'), meta: { title: '浏览历史', requireAuth: true } },
-  { path: '/profile/skills', name: 'Skills', component: () => import('../views/Skills.vue'), meta: { title: '我的技能', requireAuth: true } },
+  {
+    path: '/profile/skills',
+    name: 'Skills',
+    component: () => import('../views/Skills.vue'),
+    meta: {
+      title: '我的技能',
+      requireAuth: true
+    }
+  },
+  { path: '/order-settings', name: 'OrderSettings', component: () => import('../views/OrderSettings.vue'), meta: { title: '接单设置中心', requireAuth: true } },
   { path: '/profile/security', name: 'Security', component: () => import('../views/Security.vue'), meta: { title: '账号安全', requireAuth: true } },
   { path: '/profile/security/password', name: 'PasswordChange', component: () => import('../views/PasswordChange.vue'), meta: { title: '修改密码', requireAuth: true } },
   { path: '/profile/security/phone', name: 'PhoneBind', component: () => import('../views/PhoneBind.vue'), meta: { title: '手机绑定', requireAuth: true } },
@@ -242,6 +268,22 @@ const routes = [
     component: () => import('../views/Leaderboard.vue'),
     meta: {
       title: '大神排行'
+    }
+  },
+  {
+    path: '/leaderboard/:id',
+    name: 'LeaderboardDetail',
+    component: () => import('../views/LeaderboardDetail.vue'),
+    meta: {
+      title: '排行详情'
+    }
+  },
+  {
+    path: '/match-history',
+    name: 'MatchHistory',
+    component: () => import('../views/MatchHistory.vue'),
+    meta: {
+      title: '历史战绩'
     }
   },
   {

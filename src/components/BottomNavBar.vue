@@ -109,20 +109,64 @@
         </router-link>
 
         <!-- 订单 -->
-        <router-link
-          to="/orders"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
-          :class="getNavItemClass('/orders')"
-          @click="handleNavClick"
-        >
-          <span
-            class="material-symbols-outlined"
-            :style="currentRoute === '/orders' ? { fontVariationSettings: 'FILL 1' } : {}"
+        <div class="relative" @click.stop>
+          <router-link
+            to="/orders"
+            class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+            :class="getNavItemClass('/orders')"
+            @click="handleOrderClick"
           >
-            receipt_long
-          </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">订单</span>
-        </router-link>
+            <span
+              class="material-symbols-outlined"
+              :style="currentRoute === '/orders' ? { fontVariationSettings: 'FILL 1' } : {}"
+            >
+              receipt_long
+            </span>
+            <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">订单</span>
+          </router-link>
+          
+          <!-- 订单子菜单 -->
+          <div 
+            v-if="isOrderMenuOpen"
+            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 flex flex-col gap-2 bg-white dark:bg-zinc-800 rounded-2xl shadow-xl p-2 min-w-[160px] animate-in fade-in slide-in-from-bottom-4 duration-200"
+          >
+            <button
+              @click="handleOrderClick('all')"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+            >
+              <span class="material-symbols-outlined text-primary text-lg">receipt_long</span>
+              <span class="font-medium text-on-surface">全部订单</span>
+            </button>
+            <button
+              @click="handleOrderClick('pending')"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+            >
+              <span class="material-symbols-outlined text-amber-500 text-lg">schedule</span>
+              <span class="font-medium text-on-surface">待确认</span>
+            </button>
+            <button
+              @click="handleOrderClick('ongoing')"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+            >
+              <span class="material-symbols-outlined text-primary text-lg">play_circle</span>
+              <span class="font-medium text-on-surface">进行中</span>
+            </button>
+            <button
+              @click="handleOrderClick('completed')"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+            >
+              <span class="material-symbols-outlined text-success text-lg">check_circle</span>
+              <span class="font-medium text-on-surface">已完成</span>
+            </button>
+            <button
+              @click="handleOrderClick('cancelled')"
+              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+            >
+              <span class="material-symbols-outlined text-error text-lg">cancel</span>
+              <span class="font-medium text-on-surface">已取消</span>
+            </button>
+          </div>
+        </div>
 
         <!-- 我的 -->
         <router-link
@@ -145,10 +189,11 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { computed, ref, watch, onMounted, onUnmounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 
 // 当前路由
 const currentRoute = computed(() => route.path)
@@ -169,20 +214,49 @@ const isCollapsedPage = computed(() => {
 // 展开/收起状态
 const isExpanded = ref(false)
 
+// 订单菜单展开状态
+const isOrderMenuOpen = ref(false)
+
 // 监听路由变化，重置展开状态
 watch(currentRoute, () => {
   // 如果是收缩页面，默认收起
   if (isCollapsedPage.value) {
     isExpanded.value = false
+    isOrderMenuOpen.value = false
   } else {
     // 其他页面默认展开
     isExpanded.value = true
   }
 }, { immediate: true })
 
+// 点击外部关闭订单菜单
+const handleClickOutside = (event) => {
+  if (!event.target.closest('.relative')) {
+    isOrderMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
 // 切换展开/收起状态
 const toggleExpand = () => {
   isExpanded.value = !isExpanded.value
+}
+
+// 处理订单点击
+const handleOrderClick = (filterType) => {
+  if (filterType) {
+    isOrderMenuOpen.value = false
+    router.push(`/orders?status=${filterType}`)
+  } else {
+    isOrderMenuOpen.value = !isOrderMenuOpen.value
+  }
 }
 
 // 处理导航点击

@@ -1,97 +1,124 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { notificationApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
-const notifications = ref([])
-const loading = ref(false)
-const error = ref('')
-const showClearDialog = ref(false)
+const selectedMonth = ref('2023年10月')
 
-const unreadCount = ref(0)
+const months = [
+  '2023年10月', '2023年09月', '2023年08月', '2023年07月',
+  '2023年06月', '2023年05月', '2023年04月', '2023年03月',
+  '2023年02月', '2023年01月', '2022年12月', '2022年11月'
+]
 
-const loadNotifications = async () => {
-  loading.value = true
-  error.value = ''
-  
-  try {
-    const response = await notificationApi.getNotifications()
-    if (response.success || response.code === 0) {
-      notifications.value = (response.data?.data || response.data || []).map(notification => ({
-        id: notification.id,
-        type: notification.type || 'system',
-        title: notification.title,
-        message: notification.content || notification.message,
-        time: notification.createdAt || notification.time,
-        read: notification.readStatus || notification.read
-      }))
-      calculateUnreadCount()
-    } else {
-      throw new Error(response.message || response.msg || '获取通知失败')
-    }
-  } catch (err) {
-    const result = handleApiError(err)
-    error.value = result.error
-    console.error('获取通知失败:', err)
-  } finally {
-    loading.value = false
-  }
+const transactionTypes = [
+  { label: '全部类型', active: true },
+  { label: '充值记录', active: false },
+  { label: '订单消费', active: false },
+  { label: '提现记录', active: false },
+  { label: '系统奖励', active: false }
+]
+
+const selectType = (index) => {
+  transactionTypes.value.forEach((type, i) => {
+    type.active = i === index
+  })
 }
 
-const calculateUnreadCount = () => {
-  unreadCount.value = notifications.value.filter(n => !n.read).length
+const transactions = [
+  {
+    id: 1,
+    title: '系统奖励 - 活跃之星',
+    time: '今天 14:20',
+    amount: '+88.00',
+    status: 'success',
+    type: 'tertiary',
+    icon: 'military_tech'
+  },
+  {
+    id: 2,
+    title: '订单消费 - 英雄联盟陪玩',
+    time: '昨天 22:15',
+    amount: '-120.00',
+    status: 'success',
+    type: 'secondary',
+    icon: 'receipt_long'
+  },
+  {
+    id: 3,
+    title: '微信充值',
+    time: '10-24 10:05',
+    amount: '+500.00',
+    status: 'failed',
+    type: 'primary',
+    icon: 'account_balance_wallet'
+  },
+  {
+    id: 4,
+    title: '余额提现',
+    time: '10-23 18:30',
+    amount: '-1,000.00',
+    status: 'processing',
+    type: 'on-surface-variant',
+    icon: 'payments'
+  },
+  {
+    id: 5,
+    title: '订单消费 - 王者荣耀组队',
+    time: '10-22 20:00',
+    amount: '-60.00',
+    status: 'success',
+    type: 'secondary',
+    icon: 'receipt_long'
+  }
+]
+
+const formatAmount = (amount) => {
+  if (amount.startsWith('+')) {
+    return amount
+  }
+  return amount
 }
 
-const handleNotificationClick = async (notification) => {
-  // 标记为已读
-  notification.read = true
-  calculateUnreadCount()
-  
-  try {
-    await notificationApi.markAsRead(notification.id)
-  } catch (err) {
-    console.error('标记已读失败:', err)
-  }
-  
-  // 根据通知类型跳转到不同页面
-  switch (notification.type) {
-    case 'order':
-      router.push('/orders')
-      break
-    case 'expert':
-      router.push('/expert/1')
-      break
+const getStatusColor = (status) => {
+  switch (status) {
+    case 'success':
+      return 'bg-surface-container/50 text-on-surface-variant'
+    case 'failed':
+      return 'bg-error-container/20 text-error'
+    case 'processing':
+      return 'bg-surface-container/50 text-on-surface-variant'
     default:
-      break
+      return 'bg-surface-container/50 text-on-surface-variant'
   }
 }
 
-const handleMarkAllRead = async () => {
-  try {
-    const response = await notificationApi.markAllAsRead()
-    if (response.success || response.code === 0) {
-      notifications.value.forEach(notification => {
-        notification.read = true
-      })
-      calculateUnreadCount()
-    }
-  } catch (err) {
-    console.error('标记全部已读失败:', err)
+const getStatusText = (status) => {
+  switch (status) {
+    case 'success':
+      return '成功'
+    case 'failed':
+      return '失败'
+    case 'processing':
+      return '处理中'
+    default:
+      return status
   }
 }
 
-const handleClearAll = async () => {
-  try {
-    const response = await notificationApi.clearAll()
-    if (response.success || response.code === 0) {
-      notifications.value = []
-      calculateUnreadCount()
-      showClearDialog.value = false
-    }
-  } catch (err) {
-    console.error('清空通知失败:', err)
+const getIconColor = (type) => {
+  switch (type) {
+    case 'primary':
+      return 'text-primary'
+    case 'secondary':
+      return 'text-secondary'
+    case 'tertiary':
+      return 'text-tertiary'
+    case 'on-surface-variant':
+      return 'text-on-surface-variant'
+    default:
+      return 'text-on-surface'
   }
 }
 
@@ -99,164 +126,133 @@ const handleBack = () => {
   router.back()
 }
 
-const formatNotificationTime = (time) => {
-  const date = new Date(time)
-  const now = new Date()
-  const diff = now - date
-  
-  if (diff < 60000) {
-    return '刚刚'
-  } else if (diff < 3600000) {
-    return `${Math.floor(diff / 60000)}分钟前`
-  } else if (diff < 86400000) {
-    return `${Math.floor(diff / 3600000)}小时前`
-  } else if (diff < 604800000) {
-    return `${Math.floor(diff / 86400000)}天前`
-  } else {
-    return date.toLocaleDateString('zh-CN')
-  }
+const toggleMonthDropdown = (event) => {
+  event.stopPropagation()
 }
-
-const getNotificationIcon = (type) => {
-  switch (type) {
-    case 'order':
-      return 'receipt'
-    case 'system':
-      return 'info'
-    case 'expert':
-      return 'person'
-    default:
-      return 'notifications'
-  }
-}
-
-const getNotificationColor = (type) => {
-  switch (type) {
-    case 'order':
-      return 'bg-primary-container/20 text-primary'
-    case 'system':
-      return 'bg-secondary-container/20 text-secondary'
-    case 'expert':
-      return 'bg-tertiary-container/20 text-tertiary'
-    default:
-      return 'bg-surface-container/20 text-on-surface'
-  }
-}
-
-onMounted(() => {
-  loadNotifications()
-})
 </script>
 
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">通知</h1>
-      </div>
-      <div class="flex items-center gap-3">
-        <button
-          v-if="unreadCount > 0"
-          @click="handleMarkAllRead"
-          class="text-sm text-primary font-medium active:scale-95 transition-transform"
-        >
-          全部已读
-        </button>
-        <button
-          v-if="notifications.length > 0"
-          @click="showClearDialog = true"
-          class="text-sm text-outline font-medium active:scale-95 transition-transform"
-        >
-          清空
+  <div class="min-h-screen bg-surface text-on-surface pb-24">
+    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
+      <div class="flex items-center justify-between px-5 h-16 w-full">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+            <img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdQMgHqcda7stVFsDzmAMsOknIpHRpzSNCL51g-W8W-Rb1f3PYqgLDA00rrh0Sn-Xb3rXPWpWSBNmPDjh4mJp7-46rT8DY_lUANDXIU-twu37zC60yeqTnzf4j6JChdbQOMb8N-g0nmFgQwr7UyvrS0fiR0x3bLPTu4VLBM3_u386eudM9W6SFsJd7EEdXO_P4iBFrtRfnkMeXyIU_UMKcLzRMjTie4gy1DZQcipQZoVZJXA3_RIlyQrWNvjMZ_hdr9OkdCFI83cg"/>
+          </div>
+          <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">交易明细</h1>
+        </div>
+        <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
+          <span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">notifications</span>
         </button>
       </div>
+      <div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
-      <!-- 加载状态 -->
-      <div v-if="loading" class="flex items-center justify-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-
-      <!-- 错误状态 -->
-      <div v-else-if="error" class="bg-error/10 border border-error/20 rounded-3xl p-8 text-center">
-        <span class="material-symbols-outlined text-error text-4xl mb-4">error_outline</span>
-        <p class="text-sm text-error mb-4">{{ error }}</p>
-        <button
-          @click="loading = false; error = ''"
-          class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
-        >
-          重试
-        </button>
-      </div>
-
-      <!-- 空状态 -->
-      <div v-else-if="notifications.length === 0" class="text-center py-16">
-        <div class="w-24 h-24 mx-auto bg-surface-container rounded-full flex items-center justify-center mb-6">
-          <span class="material-symbols-outlined text-outline text-5xl">notifications_off</span>
+    <main class="pb-24 px-5 pt-4 max-w-2xl mx-auto">
+      <section class="mb-8 relative overflow-hidden bg-primary-container rounded-3xl p-6 shadow-sm">
+        <div class="relative z-10">
+          <p class="text-on-primary-container/70 text-sm font-medium mb-1">当前余额 (元)</p>
+          <h2 class="font-headline text-4xl font-extrabold text-on-primary-container tracking-tight">2,840.50</h2>
+          <div class="flex gap-4 mt-6">
+            <button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-transform flex items-center gap-2">
+              <span class="material-symbols-outlined text-sm">add_circle</span>
+              快速充值
+            </button>
+            <button class="bg-surface-container-lowest/30 backdrop-blur-md text-on-primary-container px-6 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-transform">
+              提现申请
+            </button>
+          </div>
         </div>
-        <h2 class="text-xl font-bold text-on-surface mb-2">暂无通知</h2>
-        <p class="text-sm text-on-surface-variant">当有新消息时，会显示在这里</p>
-      </div>
+        <div class="absolute -right-4 -top-4 w-32 h-32 bg-on-primary-container/10 rounded-full blur-2xl"></div>
+        <div class="absolute -left-8 -bottom-8 w-40 h-40 bg-secondary-container/20 rounded-full blur-3xl"></div>
+      </section>
 
-      <!-- 通知列表 -->
-      <div v-else class="space-y-3">
-        <div
-          v-for="notification in notifications"
-          :key="notification.id"
-          @click="handleNotificationClick(notification)"
-          class="bg-surface-container-lowest rounded-3xl p-5 transition-all duration-300 hover:shadow-md cursor-pointer"
-          :class="!notification.read ? 'border-l-4 border-primary' : ''"
+      <section class="mb-6 space-y-4">
+        <div class="flex items-center justify-between">
+          <button class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-2xl shadow-sm hover:bg-surface-container-low transition-colors group" @click="toggleMonthDropdown">
+            <span class="material-symbols-outlined text-primary text-xl">calendar_today</span>
+            <span class="text-sm font-bold text-on-surface">{{ selectedMonth }}</span>
+            <span class="material-symbols-outlined text-outline text-sm group-hover:rotate-180 transition-transform">expand_more</span>
+          </button>
+          <div class="h-10 w-10 flex items-center justify-center bg-surface-container-lowest rounded-2xl shadow-sm">
+            <span class="material-symbols-outlined text-primary">filter_list</span>
+          </div>
+        </div>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          <button 
+            v-for="(type, index) in transactionTypes" 
+            :key="type.label"
+            @click="selectType(index)"
+            class="whitespace-nowrap px-5 py-2 rounded-full font-bold text-sm transition-colors"
+            :class="type.active ? 'bg-primary text-on-primary' : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-low'"
+          >
+            {{ type.label }}
+          </button>
+        </div>
+      </section>
+
+      <div class="space-y-3">
+        <div 
+          v-for="transaction in transactions" 
+          :key="transaction.id"
+          class="bg-surface-container-lowest p-5 rounded-3xl flex items-center justify-between group hover:bg-primary-container/5 transition-colors"
         >
-          <div class="flex items-start gap-4">
-            <div class="w-10 h-10 rounded-full flex items-center justify-center" :class="getNotificationColor(notification.type)">
-              <span class="material-symbols-outlined">{{ getNotificationIcon(notification.type) }}</span>
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-2xl" :class="`${transaction.type === 'on-surface-variant' ? 'bg-on-surface-variant/10' : `bg-${transaction.type}-container/20`} flex items-center justify-center`">
+              <span class="material-symbols-outlined" :class="getIconColor(transaction.type)" style="font-variation-settings: 'FILL' 1;">
+                {{ transaction.icon }}
+              </span>
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-start justify-between mb-1">
-                <h3 class="font-bold text-on-surface truncate">{{ notification.title }}</h3>
-                <span class="text-xs text-on-surface-variant flex-shrink-0 ml-2">
-                  {{ formatNotificationTime(notification.time) }}
-                </span>
-              </div>
-              <p class="text-sm text-on-surface-variant line-clamp-2">{{ notification.message }}</p>
+            <div>
+              <h4 class="font-bold text-on-surface">{{ transaction.title }}</h4>
+              <p class="text-xs text-on-surface-variant mt-0.5">{{ transaction.time }}</p>
             </div>
+          </div>
+          <div class="text-right">
+            <p class="font-headline font-bold text-lg" :class="transaction.amount.startsWith('+') ? 'text-primary' : 'text-on-surface'">
+              {{ transaction.amount }}
+            </p>
+            <span class="inline-block px-2 py-0.5 rounded-lg" :class="getStatusColor(transaction.status)">
+              {{ getStatusText(transaction.status) }}
+            </span>
           </div>
         </div>
       </div>
+
+      <div class="mt-8 text-center">
+        <button class="text-on-surface-variant text-sm font-bold flex items-center gap-1 mx-auto hover:text-primary transition-colors">
+          加载更多历史明细
+          <span class="material-symbols-outlined text-sm">keyboard_double_arrow_down</span>
+        </button>
+      </div>
     </main>
 
-    <!-- 清空确认对话框 -->
-    <div v-if="showClearDialog" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-5">
-      <div class="bg-surface-container-lowest rounded-3xl p-6 w-full max-w-sm animate-in fade-in-90 slide-in-from-bottom-5">
-        <h3 class="text-lg font-bold text-on-surface font-headline mb-2">清空通知</h3>
-        <p class="text-sm text-on-surface-variant mb-6">确定要清空所有通知吗？此操作不可恢复。</p>
-        
-        <div class="flex gap-3">
-          <button
-            @click="showClearDialog = false"
-            class="flex-1 py-3 rounded-full bg-surface-container text-on-surface font-bold text-sm transition-all active:scale-95 hover:bg-surface-container-low"
-          >
-            取消
-          </button>
-          <button
-            @click="handleClearAll"
-            class="flex-1 py-3 rounded-full bg-error-container text-on-error-container font-bold text-sm transition-all active:scale-95"
-          >
-            确认清空
-          </button>
-        </div>
-      </div>
-    </div>
+    <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)]">
+      <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+        <span class="material-symbols-outlined mb-1">home</span>
+        <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">首页</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+        <span class="material-symbols-outlined mb-1">group</span>
+        <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">社区</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+        <span class="material-symbols-outlined mb-1">receipt_long</span>
+        <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">订单</span>
+      </a>
+      <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">
+        <span class="material-symbols-outlined mb-1">military_tech</span>
+        <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">成就</span>
+      </a>
+      <a class="flex flex-col items-center justify-center bg-[#FFD700] text-[#6c5a00] rounded-2xl px-4 py-1.5 animate-spring" href="#">
+        <span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+        <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-medium">我的</span>
+      </a>
+    </nav>
   </div>
 </template>
 
 <style scoped>
-/* 组件样式 */
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>

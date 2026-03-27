@@ -94,18 +94,56 @@ const handleBack = () => {
       <div class="space-y-6">
         <div class="space-y-3">
           <label class="text-sm font-bold text-on-surface flex items-center gap-2">
-            游戏截图
+            申请游戏
             <span class="text-error text-xs">*</span>
           </label>
-          <p class="text-xs text-on-surface-variant">
-            请上传{{ gameName }}的游戏段位截图，最多{{ maxScreenshots }}张
-          </p>
+          <div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between cursor-pointer hover:bg-surface-container-high transition-colors">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center overflow-hidden">
+                <img :alt="gameName" class="w-full h-full object-cover" :src="`https://lh3.googleusercontent.com/aida-public/AB6AXuD3aRMW0SKYz9bJRCZHdeySAm3YNW6BkLha-t04SCoPtPGNaiKk5pI_RLZm-Xx3xeTb8jaXE5utdU1Iw-C3HTzuGEZ-OT6Vd6YdJS1nJPuLjPIsuQf33z_SaWN2pKdsYlGwJ7_f4BAph1IowakAlgW1S7P5TdxVgMV6NhX54Sd9VbxJ_pqRaUbNPEfxExFQlz3aDU3vw00yIi2VB_2rwANtR8LSjZfOzoDtnnn_IYo9B4DtzOt6TVzzj6jRiMNlSyXIOBJUglCuuJk`" />
+              </div>
+              <span class="font-bold text-on-surface">{{ gameName }}</span>
+            </div>
+            <span class="material-symbols-outlined text-outline">expand_more</span>
+          </div>
+        </div>
 
-          <div class="grid grid-cols-3 gap-3">
+        <div class="space-y-3">
+          <label class="text-sm font-bold text-on-surface flex items-center gap-2">
+            当前段位
+            <span class="text-error text-xs">*</span>
+          </label>
+          <input
+            class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary-container transition-all"
+            placeholder="例如：至尊星耀 I"
+            type="text"
+          />
+        </div>
+
+        <div class="space-y-3">
+          <label class="text-sm font-bold text-on-surface flex items-center gap-2">
+            擅长位置
+            <span class="text-on-surface-variant text-xs font-normal">（可多选）</span>
+          </label>
+          <div class="flex flex-wrap gap-3">
+            <button class="px-5 py-2.5 rounded-full bg-primary-container text-primary font-bold text-sm border-none transition-all active:scale-95">上单</button>
+            <button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">中单</button>
+            <button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">打野</button>
+            <button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">ADC</button>
+            <button class="px-5 py-2.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium text-sm border-none transition-all active:scale-95">辅助</button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <label class="text-sm font-bold text-on-surface flex items-center gap-2">
+            段位截图认证
+            <span class="text-error text-xs">*</span>
+          </label>
+          <div class="grid grid-cols-2 gap-4">
             <div
               v-for="(screenshot, index) in screenshots"
               :key="screenshot.id"
-              class="relative aspect-square rounded-xl overflow-hidden bg-surface-container-low"
+              class="aspect-video rounded-xl overflow-hidden relative bg-surface-container-low"
             >
               <img :alt="screenshot.name" class="w-full h-full object-cover" :src="screenshot.url" />
               <button
@@ -117,8 +155,8 @@ const handleBack = () => {
             </div>
 
             <div
-              v-if="screenshots.length < maxScreenshots"
-              class="aspect-square rounded-xl border-2 border-dashed border-surface-container-high flex flex-col items-center justify-center cursor-pointer hover:border-primary-container hover:bg-surface-container-low transition-all"
+              v-if="screenshots.length < 2"
+              class="aspect-video rounded-xl border-2 border-dashed border-outline-variant bg-surface-container-low flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-surface-container-high transition-all"
               @click="$refs.fileInput.click()"
             >
               <input
@@ -129,24 +167,20 @@ const handleBack = () => {
                 class="hidden"
                 @change="handleFileUpload"
               />
-              <span class="material-symbols-outlined text-3xl text-outline-variant mb-1">add_photo_alternate</span>
-              <span class="text-xs text-on-surface-variant">点击上传</span>
+              <span class="material-symbols-outlined text-outline text-3xl">add_a_photo</span>
+              <span class="text-[10px] text-outline-variant font-medium">点击上传截图</span>
             </div>
-          </div>
-        </div>
 
-        <div class="bg-primary-container/10 p-4 rounded-xl">
-          <div class="flex gap-3 items-start">
-            <span class="material-symbols-outlined text-primary text-lg">info</span>
-            <div class="space-y-1">
-              <p class="text-xs font-bold text-on-primary-container">上传要求</p>
-              <ul class="text-[10px] text-on-primary-container/70 leading-relaxed space-y-1">
-                <li>• 截图需清晰显示游戏段位信息</li>
-                <li>• 请确保截图真实有效</li>
-                <li>• 支持JPG、PNG格式，大小不超过5MB</li>
-              </ul>
+            <div class="aspect-video rounded-xl overflow-hidden relative group">
+              <img class="w-full h-full object-cover opacity-60 grayscale" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-ShCe8WK-qMVPRbujcRQq43lUbbBNa0JJd4P8dB3ic8wkLkYsQN1A7xEJucccO9GJEr4-LK6aHPG2b4fwEViMkpw1-MIsoeTcS3p5r6cah9ryKmMV7sqZdIzEy14bYrtTow01e7MzyFoKUURQyaU3TDeWS_7bCxOLFfZuXiPvwih9Q17ZfSeuENZloxLoEHbsilZddlhCm_mj_eKo5y91GtOhY4hM1m6wUJph2vWdcD9MWj6RZPQnkKwP3mk4ZqI58gjh9w7CtFw" />
+              <div class="absolute inset-0 flex items-center justify-center bg-black/20">
+                <span class="bg-black/60 text-white text-[10px] px-2 py-1 rounded-md">示例图片</span>
+              </div>
             </div>
           </div>
+          <p class="text-[11px] text-on-surface-variant leading-relaxed px-1">
+            请上传包含角色ID及当前段位的游戏主页截图，确保信息清晰可见。
+          </p>
         </div>
       </div>
 

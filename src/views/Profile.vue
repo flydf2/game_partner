@@ -28,7 +28,10 @@
 
       <!-- 主内容 -->
       <template v-else>
-        <section class="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-6 flex items-center gap-5 transition-all duration-300 hover:shadow-md">
+        <section 
+          class="relative overflow-hidden rounded-3xl bg-surface-container-lowest p-6 flex items-center gap-5 transition-all duration-300 hover:shadow-md cursor-pointer"
+          @click="handleLevelClick"
+        >
           <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-bl-full -mr-8 -mt-8"></div>
           <div class="relative w-20 h-20 rounded-2xl overflow-hidden ring-4 ring-primary-container/30">
             <img alt="Avatar" class="w-full h-full object-cover" :src="userInfo.avatar" />
@@ -44,7 +47,10 @@
         </section>
 
         <section class="grid grid-cols-2 gap-4">
-          <div class="bg-primary-container rounded-3xl p-5 space-y-2 transition-all duration-300 hover:shadow-md">
+          <div 
+            class="bg-primary-container rounded-3xl p-5 space-y-2 transition-all duration-300 hover:shadow-md cursor-pointer active:scale-95"
+            @click="handleWalletClick"
+          >
             <div class="flex items-center justify-between text-on-primary-container">
               <span class="text-sm font-semibold">账户余额</span>
               <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
@@ -302,6 +308,22 @@ const menuItems = ref([
     badge: null 
   },
   { 
+    key: 'order-settings', 
+    label: '接单设置', 
+    icon: 'settings_applications', 
+    iconBg: 'bg-indigo-50', 
+    iconColor: 'text-indigo-600',
+    badge: null 
+  },
+  { 
+    key: 'match-history', 
+    label: '历史战绩', 
+    icon: 'sports_esports', 
+    iconBg: 'bg-orange-50', 
+    iconColor: 'text-orange-600',
+    badge: null 
+  },
+  { 
     key: 'security', 
     label: '账号安全', 
     icon: 'security', 
@@ -498,6 +520,12 @@ const handleMenuClick = (key) => {
     case 'skills':
       router.push('/profile/skills')
       break
+    case 'order-settings':
+      router.push('/order-settings')
+      break
+    case 'match-history':
+      router.push('/match-history')
+      break
     case 'security':
       router.push('/profile/security')
       break
@@ -526,6 +554,14 @@ const handleMenuClick = (key) => {
       router.push('/profile/settings')
       break
   }
+}
+
+const handleWalletClick = () => {
+  router.push('/profile/wallet')
+}
+
+const handleLevelClick = () => {
+  router.push('/profile/level')
 }
 
 const handleLogout = async () => {
