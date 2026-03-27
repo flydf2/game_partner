@@ -23,7 +23,7 @@
       <button
         v-if="!isCollapsedPage"
         @click="toggleExpand"
-        class="absolute -top-3 left-1/2 transform -translate-x-1/2 w-8 h-8 bg-yellow-400 rounded-full shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-110"
+        class="absolute -top-3 left-4 w-8 h-8 bg-yellow-400 rounded-full shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-110"
       >
         <span
           class="material-symbols-outlined text-lg transition-transform duration-300"

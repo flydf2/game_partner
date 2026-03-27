@@ -67,6 +67,11 @@ addRequestInterceptor(async (config) => {
 
 // 响应拦截器 - 统一处理后端响应格式
 addResponseInterceptor(async ({ response, data }) => {
+  // 如果已经是标准化格式，直接返回
+  if (data && data.success !== undefined) {
+    return data
+  }
+  
   // 后端返回格式: { code: 0, data: {...}, msg: "获取成功" }
   if (data.code === 0) {
     // 成功响应，返回标准化格式
@@ -727,7 +732,7 @@ export const messageApi = {
     if (USE_MOCK) {
       return await mockGetMessages()
     } else {
-      return await withRetry(() => get('/conversations'))
+      return await withRetry(() => get('/messages'))
     }
   },
 
