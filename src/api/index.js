@@ -24,6 +24,7 @@ import {
   mockUpdateSettings,
   mockMarkNotificationRead,
   mockMarkAllNotificationsRead,
+  mockGetUnreadCount,
   mockSubmitReview,
   mockSubmitWithdrawal,
   mockGetWithdrawalRecords,
@@ -717,6 +718,14 @@ export const notificationApi = {
       return await mockMarkAllNotificationsRead()
     } else {
       return await withRetry(() => put('/notifications/read-all'))
+    }
+  },
+  
+  async getUnreadCount() {
+    if (USE_MOCK) {
+      return await mockGetUnreadCount()
+    } else {
+      return await withRetry(() => get('/notifications/unread-count'))
     }
   }
 }

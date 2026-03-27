@@ -508,6 +508,19 @@ export function mockGetNotifications() {
   })
 }
 
+export function mockGetUnreadCount() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        success: true,
+        data: {
+          unreadCount: 2
+        }
+      })
+    }, 200)
+  })
+}
+
 export function mockGetMessages() {
   return new Promise((resolve) => {
     setTimeout(() => {

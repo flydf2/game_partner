@@ -7,6 +7,16 @@
         <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-400">发现大神</h1>
       </div>
       <div class="flex items-center gap-4">
+        <span
+          class="material-symbols-outlined text-zinc-500 relative cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+          data-icon="notifications"
+          @click="goToNotifications"
+        >
+          notifications
+          <span v-if="unreadCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] font-bold">
+            {{ unreadCount }}
+          </span>
+        </span>
         <span class="material-symbols-outlined text-zinc-500" data-icon="search">search</span>
         <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
           <img alt="User Avatar" class="w-full h-full object-cover" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoBTc_5bZuXQ8l_u2UKFazkITvVt5UY-tB83GE9qFMKnbb7Gz7DBuHH11MCcfExFpNociu2AurEP9Lt2NRc9nvSntdZ9hgcWNL_d-0yyyC7bLbO0F8qFUi1FZ_0xgHBG5ZWEfyBs3f5BMl_rBN4SHJoDd3xp76P8kx7eQBwXzcI46GuMySscFwGrnXs_YK9_ArHQEUVcsZUe0o_yRl84Nf4j3WwXor_Xd2gFFDgNuPdbSQuyQiPQkAovGTm7Cek_vM2ZGapACwBM4"/>
@@ -294,11 +304,28 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
-import LazyImage from '../components/common/LazyImage.vue'
 import { api } from '../services/api.js'
 import { useScrollAnimation } from '../composables/useScrollAnimation.js'
+import { notificationApi } from '../api/index.js'
 
 const router = useRouter()
+
+const goToNotifications = () => {
+  router.push('/notifications')
+}
+
+const unreadCount = ref(0)
+
+const loadUnreadCount = async () => {
+  try {
+    const response = await notificationApi.getUnreadCount()
+    if (response.success || response.code === 0) {
+      unreadCount.value = response.data?.unreadCount || response.data || 0
+    }
+  } catch (err) {
+    console.error('获取未读通知失败:', err)
+  }
+}
 
 const navigateToExpertDetail = (id) => {
   router.push(`/expert/${id}`)
@@ -442,6 +469,7 @@ onMounted(() => {
   loadPlaymates()
   loadCommunityPosts()
   loadRewardOrders()
+  loadUnreadCount()
   
   // 观察元素进入视口
   setTimeout(() => {
