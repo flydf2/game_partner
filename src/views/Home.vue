@@ -1,11 +1,11 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     <!-- 广告通栏 -->
-    <div class="relative w-full h-12 bg-gradient-to-r from-primary to-primary-dark overflow-hidden shadow-sm cursor-pointer active:scale-[0.98] transition-transform" @click="goToRewardOrders">
+    <div class="fixed top-16 left-0 right-0 h-10 z-40 bg-gradient-to-r from-yellow-500 to-yellow-600 overflow-hidden shadow-md cursor-pointer active:scale-[0.98] transition-transform duration-200" @click="goToRewardOrders">
       <div class="absolute inset-0 flex items-center justify-center gap-2">
-        <span class="material-symbols-outlined text-white text-[10px] font-bold">flash_on</span>
-        <span class="text-white text-[10px] font-bold tracking-wider">抢悬赏单</span>
-        <span class="material-symbols-outlined text-white text-[10px] font-bold">arrow_forward_ios</span>
+        <span class="material-symbols-outlined text-white text-[9px] font-bold">flash_on</span>
+        <span class="text-white text-[9px] font-bold tracking-wider">抢悬赏单</span>
+        <span class="material-symbols-outlined text-white text-[9px] font-bold">arrow_forward_ios</span>
       </div>
     </div>
     
@@ -318,6 +318,10 @@ import { useScrollAnimation } from '../composables/useScrollAnimation.js'
 import { notificationApi } from '../api/index.js'
 
 const router = useRouter()
+
+const goToRewardOrders = () => {
+  router.push('/reward-orders')
+}
 
 const goToNotifications = () => {
   router.push('/notifications')
