@@ -65,6 +65,10 @@ const handleWithdraw = () => {
   router.push('/withdrawal')
 }
 
+const handleRecharge = () => {
+  router.push('/profile/recharge')
+}
+
 const handleBack = () => {
   router.back()
 }
@@ -127,7 +131,16 @@ onMounted(() => {
       </section>
 
       <!-- 操作按钮 -->
-      <section class="grid grid-cols-2 gap-4">
+      <section class="grid grid-cols-3 gap-4">
+        <button
+          @click="handleRecharge"
+          class="bg-surface-container-lowest rounded-3xl p-5 flex flex-col items-center gap-3 hover:bg-surface-container-low transition-all active:scale-95"
+        >
+          <div class="w-12 h-12 bg-success-container/20 rounded-full flex items-center justify-center">
+            <span class="material-symbols-outlined text-success text-xl">add_circle</span>
+          </div>
+          <span class="font-bold text-on-surface">充值</span>
+        </button>
         <button
           @click="handleWithdraw"
           class="bg-surface-container-lowest rounded-3xl p-5 flex flex-col items-center gap-3 hover:bg-surface-container-low transition-all active:scale-95"

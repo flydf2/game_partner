@@ -212,6 +212,7 @@ const routes = [
   { path: '/profile/edit', name: 'ProfileEdit', component: () => import('../views/ProfileEdit.vue'), meta: { title: '编辑资料', requireAuth: true } },
   { path: '/profile/settings', name: 'Settings', component: () => import('../views/Settings.vue'), meta: { title: '设置', requireAuth: true } },
   { path: '/profile/wallet', name: 'Wallet', component: () => import('../views/Wallet.vue'), meta: { title: '我的钱包', requireAuth: true } },
+  { path: '/profile/recharge', name: 'Recharge', component: () => import('../views/Recharge.vue'), meta: { title: '立即充值', requireAuth: true } },
   { path: '/profile/favorites', name: 'Favorites', component: () => import('../views/Favorites.vue'), meta: { title: '我的收藏', requireAuth: true } },
   { path: '/profile/following', name: 'Following', component: () => import('../views/Following.vue'), meta: { title: '我的关注', requireAuth: true } },
   { path: '/profile/history', name: 'BrowseHistory', component: () => import('../views/BrowseHistory.vue'), meta: { title: '浏览历史', requireAuth: true } },
@@ -233,6 +234,14 @@ const routes = [
     component: () => import('../views/ApiTest.vue'),
     meta: {
       title: 'API 调试'
+    }
+  },
+  {
+    path: '/leaderboard',
+    name: 'Leaderboard',
+    component: () => import('../views/Leaderboard.vue'),
+    meta: {
+      title: '大神排行'
     }
   },
   {

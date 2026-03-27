@@ -10,7 +10,6 @@ const router = useRouter()
 const userId = ref(route.query.userId || '1')
 const skillId = ref(route.query.skillId)
 const serviceTime = ref(route.query.serviceTime || '')
-const amount = ref(parseFloat(route.query.amount || '0'))
 const quantity = ref(parseInt(route.query.quantity) || 1)
 
 const expert = ref(null)

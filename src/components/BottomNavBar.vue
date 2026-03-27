@@ -76,6 +76,22 @@
           <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">发现</span>
         </router-link>
 
+        <!-- 排行榜 -->
+        <router-link
+          to="/leaderboard"
+          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          :class="getNavItemClass('/leaderboard')"
+          @click="handleNavClick"
+        >
+          <span
+            class="material-symbols-outlined"
+            :style="currentRoute === '/leaderboard' ? { fontVariationSettings: 'FILL 1' } : {}"
+          >
+            emoji_events
+          </span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">排行</span>
+        </router-link>
+
         <!-- 聊天 -->
         <router-link
           to="/messages"

@@ -350,6 +350,14 @@ const menuItems = ref([
     badge: null 
   },
   { 
+    key: 'notifications', 
+    label: '通知', 
+    icon: 'notifications', 
+    iconBg: 'bg-purple-50', 
+    iconColor: 'text-purple-600',
+    badge: null 
+  },
+  { 
     key: 'help', 
     label: '帮助与客服', 
     icon: 'support_agent', 
@@ -510,6 +518,9 @@ const handleMenuClick = (key) => {
       break
     case 'help':
       router.push('/profile/help')
+      break
+    case 'notifications':
+      router.push('/notifications')
       break
     case 'settings':
       router.push('/profile/settings')

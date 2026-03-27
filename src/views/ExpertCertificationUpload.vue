@@ -119,6 +119,7 @@ const handleBack = () => {
             <div
               v-if="screenshots.length < maxScreenshots"
               class="aspect-square rounded-xl border-2 border-dashed border-surface-container-high flex flex-col items-center justify-center cursor-pointer hover:border-primary-container hover:bg-surface-container-low transition-all"
+              @click="$refs.fileInput.click()"
             >
               <input
                 ref="fileInput"

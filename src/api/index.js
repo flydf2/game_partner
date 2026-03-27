@@ -5,6 +5,7 @@ import { API_BASE_URL } from './config.js'
 import { 
   mockGetPlaymates, 
   mockGetSearchSuggestions,
+  mockGetLeaderboard,
   mockGetExpertDetail,
   mockGetGames,
   mockGetActivities,
@@ -691,6 +692,26 @@ export const userApi = {
       return await mockGetWallet()
     } else {
       return await withRetry(() => get('/user/wallet'))
+    }
+  },
+  
+  async recharge(rechargeData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '充值成功',
+            data: {
+              transactionId: Date.now(),
+              coinsAdded: rechargeData.coins,
+              balance: 1280 + rechargeData.coins
+            }
+          })
+        }, 1000)
+      })
+    } else {
+      return await withRetry(() => post('/user/recharge', rechargeData))
     }
   }
 }
@@ -1539,6 +1560,60 @@ export async function fetchPlaymates(params = {}) {
   }
 }
 
+export async function fetchLeaderboard(params = {}) {
+  const store = usePlaymateStore()
+  
+  try {
+    store.setLoading(true)
+    store.setError(null)
+
+    let response
+    if (USE_MOCK) {
+      response = await mockGetLeaderboard(params)
+    } else {
+      response = await withRetry(() => get('/playmates/leaderboard', { params }))
+    }
+    
+    let playmateData = []
+    let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
+    
+    if (USE_MOCK) {
+      if (response.code === 0) {
+        playmateData = response.data?.data || []
+        pagination = response.data?.pagination || pagination
+      }
+    } else {
+      if (response.success) {
+        playmateData = response.data?.data || response.data || []
+        pagination = response.data?.pagination || pagination
+      }
+    }
+    
+    const processedPlaymateData = playmateData.map(playmate => ({
+      ...playmate,
+      tags: playmate.tags ? playmate.tags.split(',') : [],
+    }))
+    if (params.page > 1) {
+      store.appendPlaymates(processedPlaymateData)
+    } else {
+      store.setPlaymates(processedPlaymateData)
+    }
+
+    store.setPagination(
+      pagination.currentPage,
+      pagination.totalPages,
+      pagination.totalCount
+    )
+
+    return response
+  } catch (error) {
+    store.setError(error.message || '获取排行榜数据失败')
+    throw error
+  } finally {
+    store.setLoading(false)
+  }
+}
+
 export async function searchPlaymates(keyword, params = {}) {
   const store = usePlaymateStore()
   
@@ -1636,6 +1711,7 @@ export default {
   skill: skillApi,
   upload: uploadApi,
   fetchPlaymates,
+  fetchLeaderboard,
   searchPlaymates,
   getSearchSuggestions,
   handleApiError,

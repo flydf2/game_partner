@@ -176,6 +176,46 @@ export const mockSearchSuggestions = [
   '国服第一'
 ]
 
+export function mockGetLeaderboard(params = {}) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const period = params.period || 'weekly'
+      const game = params.game
+      let leaderboard = [...mockPlaymates]
+      
+      if (game) {
+        leaderboard = leaderboard.filter(p => p.game === game)
+      }
+      
+      leaderboard.sort((a, b) => b.rating - a.rating)
+      
+      const page = params.page || 1
+      const pageSize = params.pageSize || 20
+      const startIndex = (page - 1) * pageSize
+      const endIndex = startIndex + pageSize
+      const paginatedData = leaderboard.slice(startIndex, endIndex)
+      
+      const formattedData = paginatedData.map((playmate, index) => ({
+        ...playmate,
+        rank: startIndex + index + 1,
+        score: Math.floor(playmate.rating * 1000 + Math.random() * 100)
+      }))
+      
+      resolve({
+        success: true,
+        data: {
+          data: formattedData,
+          pagination: {
+            currentPage: page,
+            totalPages: Math.ceil(leaderboard.length / pageSize),
+            totalCount: leaderboard.length
+          }
+        }
+      })
+    }, 300)
+  })
+}
+
 export function mockGetPlaymates(params = {}) {
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -556,32 +596,41 @@ export function mockGetChatMessages(userId) {
     setTimeout(() => {
       resolve({
         success: true,
-        data: [
-          {
+        data: {
+          messages: [
+            {
+              id: 1,
+              from: 'other',
+              content: '哈喽，刚结束一局游戏。准备好开始我们的《绝地求生》了吗？',
+              time: '2026-03-27 14:30'
+            },
+            {
+              id: 2,
+              from: 'self',
+              content: '好哒，我也刚上线！这次一定要带我上分哦～',
+              time: '2026-03-27 14:31'
+            },
+            {
+              id: 3,
+              from: 'other',
+              content: '订单已经开好啦，付完款我们就发车 🚗',
+              time: '2026-03-27 14:35'
+            }
+          ],
+          chatPartner: {
+            id: userId,
+            name: '星野Kyo',
+            avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC0rMSxxOfIFRKLK4fBL1gncTazgYO2RQGvS4t3yEQFNX7vGdSliuaSgQmP_SvAsxLZMQDhpvheEGfD8glXv94KmOUDlVZ04JHJUwmXBw3sUiPwFQfPZcSCCu7tTQdgfMO8CbiTGGDyU8SkLKLiVfdnu6WMeHSBX1J0dxB2z5F1xhqPepxmt0Y-kBdqMHuc6tqfRU62A-ybUp1_wQu7n8i0MmwohHAW0NrGk3aXhVcMJakGyPirIDE-hGsZUgv6-dnVemmf-XVVL-E',
+            game: '绝地求生',
+            skill: '技术陪练'
+          },
+          appointment: {
             id: 1,
-            from: 'other',
-            content: '你好，可以接单吗？',
-            time: '2026-03-23 14:00'
-          },
-          {
-            id: 2,
-            from: 'self',
-            content: '可以的，什么时间？',
-            time: '2026-03-23 14:05'
-          },
-          {
-            id: 3,
-            from: 'other',
-            content: '晚上7点可以吗？',
-            time: '2026-03-23 14:10'
-          },
-          {
-            id: 4,
-            from: 'self',
-            content: '好的，晚上见！',
-            time: '2026-03-23 15:30'
+            gameName: '绝地求生陪玩',
+            description: '时长: 2小时 / 技术陪练',
+            price: 158
           }
-        ]
+        }
       })
     }, 200)
   })

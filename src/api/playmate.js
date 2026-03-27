@@ -1,6 +1,18 @@
 import { request } from './config.js'
 
 export const playmateAPI = {
+  async getLeaderboard(params = {}) {
+    const queryParams = new URLSearchParams()
+    
+    queryParams.append('page', params.page || 1)
+    queryParams.append('pageSize', params.pageSize || 20)
+    if (params.period) queryParams.append('period', params.period)
+    if (params.game) queryParams.append('game', params.game)
+    
+    const queryString = queryParams.toString()
+    return request(`/playmates/leaderboard${queryString ? `?${queryString}` : ''}`)
+  },
+
   async getPlaymates(params = {}) {
     // 确保分页参数存在
     const queryParams = new URLSearchParams()
