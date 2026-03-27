@@ -39,8 +39,15 @@ import {
   mockGetRewardOrders,
   mockGrabRewardOrder,
   mockGetRewardOrderDetail,
-  mockGetOrderDetail
-} from './mock.js'
+  mockGetOrderDetail,
+  mockGetSkills,
+  mockAddSkill,
+  mockUpdateSkill,
+  mockDeleteSkill,
+  mockGetAppeals,
+  mockCreateAppeal,
+  mockGetAppealDetail
+} from './mock-index.js'
 
 // 拦截器配置
 const interceptors = {
@@ -1382,51 +1389,7 @@ export const rewardOrderApi = {
 export const appealApi = {
   async getAppeals(params = {}) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            data: [
-              {
-                id: 'SP202310240092',
-                type: '违规言论/引战',
-                status: 'processing',
-                statusText: '处理中',
-                statusClass: 'bg-primary-container/20 text-primary',
-                target: {
-                  name: '夜火狂潮',
-                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDbFFFTOLXk3uh3QYfT5K_O_xwli3756CWmaRPqDURn9hQdMMVr69OFKFYEukdPgpij-8M4aF0yOB8_9gnq9msePksq2gNyksu7Hkg7P-D35FvPBA2Twqv76_3GXssW6kh69xJayXRj3FCsOiIYAaPAlkp5YLofI2Wslskx-FnkMhpF6MMJlsszgOF44PrEgT5KnzAF1JGKBQvsLyc-BpgyvqRjkfkJTD6-ugewCJITW4SZdjMZ_eNFAL71PG_4uVmFZoTbVoilpW0'
-                },
-                submitTime: '2023.10.24 14:20'
-              },
-              {
-                id: 'SP202310220145',
-                type: '消极比赛/挂机',
-                status: 'completed',
-                statusText: '已完成',
-                statusClass: 'bg-emerald-100 text-emerald-700',
-                target: {
-                  name: '小甜心软软',
-                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBh9xMrg68oicE9e-VAIhkrdgB1TkNcEtOcvR3FySiy-94rXsb84VQ4BrXjM2LNCCZbLlFep70TkMaAG8UPDOhjF2rolCEzNfjo2qxKZ5OVTvk9p0VjQooN9hnjHyviPZDE_C8I1mwk0p_3a7zwtRplZx3bi-LaJ5iSDXBeasRWzS7qap6X_QquQkk4wj3lYqsRWzKW_AMARsM0VMQxUylN0AGwq_3Bx5yVh7htFKk6AKYjs7hUVfnCLnXsj4Ftbf4HEdzH7_bHfCE'
-                },
-                submitTime: '2023.10.22 09:15'
-              },
-              {
-                id: 'SP202310210887',
-                type: '代练嫌疑',
-                status: 'pending',
-                statusText: '待处理',
-                statusClass: 'bg-neutral-200 text-neutral-500',
-                target: {
-                  name: '野王带你飞',
-                  avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBgCfdtE87j_277mqHdGOrVB5ODdk3PB9qPrI4KHjwEwSoOCXY0PeDGmnjvQOV4amb7ApX9KpPnJdC_O441R5hJqPFtRFp53BwPBmmq_OdGBWQlxjL4KuGZcflFM3yGX98CoBIX2NP7o698CcpxL-c5ojRrLjgGZu-Nu3phfR801amAJqexlBDP66TlaB2FgQdLiURLe3N5rsHVf4WI86UXNKfO-rHzaRM2REmbRbUiHP737OFWo18X-rfw-c0iVZCVRILangWQY0A'
-                },
-                submitTime: '2023.10.21 21:00'
-              }
-            ]
-          })
-        }, 300)
-      })
+      return await mockGetAppeals(params)
     } else {
       return await withRetry(() => get('/appeals', { params }))
     }
@@ -1434,16 +1397,17 @@ export const appealApi = {
 
   async createAppeal(appealData) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '申诉提交成功'
-          })
-        }, 500)
-      })
+      return await mockCreateAppeal(appealData)
     } else {
       return await withRetry(() => post('/appeals', appealData))
+    }
+  },
+
+  async getAppealDetail(appealId) {
+    if (USE_MOCK) {
+      return await mockGetAppealDetail(appealId)
+    } else {
+      return await withRetry(() => get(`/appeals/${appealId}`))
     }
   }
 }
@@ -1452,45 +1416,7 @@ export const appealApi = {
 export const skillApi = {
   async getSkills(params = {}) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            data: [
-              {
-                id: 1,
-                game: 'LOL',
-                skill: '钻石段位',
-                level: 'advanced',
-                levelText: '高级',
-                certificationStatus: '已认证',
-                serviceCount: 45,
-                rating: 4.8
-              },
-              {
-                id: 2,
-                game: 'CS:GO',
-                skill: '大师陪玩',
-                level: 'expert',
-                levelText: '专家',
-                certificationStatus: '已认证',
-                serviceCount: 32,
-                rating: 4.9
-              },
-              {
-                id: 3,
-                game: 'PUBG',
-                skill: '吃鸡大神',
-                level: 'intermediate',
-                levelText: '中级',
-                certificationStatus: '待认证',
-                serviceCount: 15,
-                rating: 4.5
-              }
-            ]
-          })
-        }, 300)
-      })
+      return await mockGetSkills(params)
     } else {
       return await withRetry(() => get('/skills', { params }))
     }
@@ -1498,14 +1424,7 @@ export const skillApi = {
 
   async addSkill(skillData) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '添加技能成功'
-          })
-        }, 500)
-      })
+      return await mockAddSkill(skillData)
     } else {
       return await withRetry(() => post('/skills', skillData))
     }
@@ -1513,14 +1432,7 @@ export const skillApi = {
 
   async updateSkill(skillId, skillData) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '更新技能成功'
-          })
-        }, 500)
-      })
+      return await mockUpdateSkill(skillId, skillData)
     } else {
       return await withRetry(() => put(`/skills/${skillId}`, skillData))
     }
@@ -1528,14 +1440,7 @@ export const skillApi = {
 
   async deleteSkill(skillId) {
     if (USE_MOCK) {
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve({
-            success: true,
-            message: '删除技能成功'
-          })
-        }, 300)
-      })
+      return await mockDeleteSkill(skillId)
     } else {
       return await withRetry(() => del(`/skills/${skillId}`))
     }
@@ -1757,9 +1662,9 @@ export async function searchPlaymates(keyword, params = {}) {
     let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
     
     if (USE_MOCK) {
-      if (response.success) {
-        playmateData = response.data || []
-        pagination = response.pagination || pagination
+      if (response.code === 0) {
+        playmateData = response.data?.data || []
+        pagination = response.data?.pagination || pagination
       }
     } else {
       if (response.success) {

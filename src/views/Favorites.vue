@@ -16,10 +16,14 @@ const loadFavorites = async () => {
   try {
     const response = await userApi.getFavorites()
     if (response.success || response.code === 0) {
-      // 清理avatar字段中的多余空格和反引号
-      favorites.value = (response.data || []).map(favorite => ({
+      const favoritesData = response.data?.data || response.data || []
+      favorites.value = favoritesData.map(favorite => ({
         ...favorite,
-        avatar: favorite.avatar ? favorite.avatar.trim().replace(/^`|`$/g, '') : ''
+        avatar: favorite.expertAvatar || favorite.avatar ? (favorite.expertAvatar || favorite.avatar).trim().replace(/^`|`$/g, '') : '',
+        id: favorite.id || favorite.expertId,
+        name: favorite.expertName || favorite.name,
+        nickname: favorite.expertName || favorite.nickname || favorite.name,
+        rank: favorite.rank || favorite.skill
       }))
     } else {
       throw new Error(response.message || response.msg || '获取收藏列表失败')
@@ -124,10 +128,10 @@ onMounted(() => {
         >
           <div class="flex items-start gap-4">
             <div
-              @click="handleExpertDetail(favorite.expertId || favorite.userId)"
+              @click="handleExpertDetail(favorite.expertId || favorite.id)"
               class="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0 cursor-pointer relative"
             >
-              <img :alt="favorite.nickname || favorite.name" class="w-full h-full object-cover" :src="favorite.avatar" />
+              <img :alt="favorite.nickname || favorite.name" class="w-full h-full object-cover" :src="favorite.expertAvatar || favorite.avatar" />
               <!-- 在线状态 -->
               <div 
                 v-if="favorite.isOnline" 
@@ -137,14 +141,14 @@ onMounted(() => {
             <div class="flex-1 min-w-0">
               <div class="flex items-start justify-between mb-2">
                 <div
-                  @click="handleExpertDetail(favorite.expertId || favorite.userId)"
-                  class="flex-1 min-w-0 cursor-pointer"
-                >
-                  <div class="flex items-center gap-2">
-                    <h3 class="font-bold text-on-surface truncate">{{ favorite.nickname || favorite.name }}</h3>
-                    <span v-if="favorite.title" class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">{{ favorite.title }}</span>
-                  </div>
-                  <p class="text-xs text-on-surface-variant mt-1 truncate">{{ favorite.description }}</p>
+                    @click="handleExpertDetail(favorite.expertId || favorite.id)"
+                    class="flex-1 min-w-0 cursor-pointer"
+                  >
+                    <div class="flex items-center gap-2">
+                      <h3 class="font-bold text-on-surface truncate">{{ favorite.expertName || favorite.nickname || favorite.name }}</h3>
+                      <span v-if="favorite.title" class="text-xs text-primary font-medium bg-primary/10 px-2 py-0.5 rounded-full">{{ favorite.title }}</span>
+                    </div>
+                    <p class="text-xs text-on-surface-variant mt-1 truncate">{{ favorite.description }}</p>
                   <div class="flex items-center gap-1 mt-1">
                     <span class="material-symbols-outlined text-primary text-sm">star</span>
                     <span class="text-sm font-medium text-primary">{{ favorite.rating }}</span>

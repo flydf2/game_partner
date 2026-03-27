@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
+    <!-- 广告通栏 -->
+    <div class="relative w-full h-12 bg-gradient-to-r from-primary to-primary-dark overflow-hidden shadow-sm cursor-pointer active:scale-[0.98] transition-transform" @click="goToRewardOrders">
+      <div class="absolute inset-0 flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-white text-[10px] font-bold">flash_on</span>
+        <span class="text-white text-[10px] font-bold tracking-wider">抢悬赏单</span>
+        <span class="material-symbols-outlined text-white text-[10px] font-bold">arrow_forward_ios</span>
+      </div>
+    </div>
+    
     <!-- TopAppBar -->
     <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4 w-full">
       <div class="flex items-center gap-4">

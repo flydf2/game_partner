@@ -12,13 +12,13 @@ const months = [
   '2023年02月', '2023年01月', '2022年12月', '2022年11月'
 ]
 
-const transactionTypes = [
+const transactionTypes = ref([
   { label: '全部类型', active: true },
   { label: '充值记录', active: false },
   { label: '订单消费', active: false },
   { label: '提现记录', active: false },
   { label: '系统奖励', active: false }
-]
+])
 
 const selectType = (index) => {
   transactionTypes.value.forEach((type, i) => {

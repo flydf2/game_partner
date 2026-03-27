@@ -1,7 +1,7 @@
 // API服务层
 import { handleApiError } from '../utils/errorHandler'
 import { API_BASE_URL } from '../api/config.js'
-import { mockGetGames, mockGetPlaymates, mockGetCommunityPosts, mockGetRewardOrders } from '../api/mock.js'
+import { mockGetGames, mockGetPlaymates, mockGetCommunityPosts, mockGetRewardOrders } from '../api/mock-index.js'
 
 // 是否使用 Mock 数据
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true'
