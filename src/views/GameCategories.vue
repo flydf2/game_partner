@@ -102,7 +102,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
     
-    <main class="pt-24 px-6 pb-24">
+    <main class="page-content pt-24 pb-24">
       <!-- Search Bar Section -->
       <div class="mb-6 mt-4">
         <div class="relative flex items-center bg-surface-container-high rounded-full px-5 py-3.5 transition-all focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container">

@@ -10,7 +10,7 @@
       @profile="handleProfile"
     />
     
-    <main class="max-w-2xl mx-auto px-5 pt-20 pb-32 space-y-6 max-w-md mx-auto">
+    <main class="page-content pt-20 pb-32 space-y-6">
       <!-- Search and Title Section -->
       <header class="mb-8">
         <div class="flex items-center justify-between mb-6">

@@ -114,8 +114,8 @@ const toggleConfirmPasswordVisibility = () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface flex flex-col">
-    <main class="flex-grow flex flex-col justify-center px-6 py-12">
-      <div class="max-w-md mx-auto w-full space-y-8">
+    <main class="page-content flex-grow flex flex-col justify-center py-12">
+      <div class="space-y-8">
         <!-- 返回按钮 -->
         <button
           @click="handleBack"

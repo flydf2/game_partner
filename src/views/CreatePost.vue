@@ -138,7 +138,7 @@ const handleCancel = () => {
       </button>
     </header>
 
-    <main class="pt-20 px-5 max-w-2xl mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 内容输入 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <textarea

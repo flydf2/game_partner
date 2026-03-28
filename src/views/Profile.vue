@@ -10,7 +10,7 @@
       @profile="handleProfile"
     />
     
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main class="page-content pt-24 pb-32 space-y-6">
       <!-- 加载状态 -->
       <section v-if="loading" class="bg-surface-container-lowest rounded-3xl p-6 flex items-center justify-center">
         <div class="flex flex-col items-center gap-3">

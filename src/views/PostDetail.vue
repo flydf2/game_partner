@@ -282,14 +282,14 @@ onMounted(() => {
       <div class="w-6"></div>
     </nav>
 
-    <main v-if="loading" class="pt-20 px-5 max-w-2xl mx-auto">
-      <div class="flex items-center justify-center py-12">
+    <main v-if="loading" class="page-content pt-20 py-12">
+      <div class="flex items-center justify-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     </main>
 
-    <main v-else-if="error" class="pt-20 px-5 max-w-2xl mx-auto">
-      <div class="flex flex-col items-center justify-center py-12 space-y-4">
+    <main v-else-if="error" class="page-content pt-20 py-12">
+      <div class="flex flex-col items-center justify-center space-y-4">
         <span class="material-symbols-outlined text-4xl text-error">error_outline</span>
         <p class="text-error text-center">{{ error }}</p>
         <button 
@@ -301,7 +301,7 @@ onMounted(() => {
       </div>
     </main>
 
-    <main v-else-if="post" class="pt-20 px-5 max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main v-else-if="post" class="page-content pt-24 pb-32 space-y-6">
       <!-- 帖子内容 -->
       <article class="bg-surface-container-lowest rounded-3xl p-5">
         <div class="flex items-center justify-between mb-4">

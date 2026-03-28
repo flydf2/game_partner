@@ -12,3 +12,11 @@
 body {
   min-height: max(884px, 100dvh);
 }
+
+.page-content {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}

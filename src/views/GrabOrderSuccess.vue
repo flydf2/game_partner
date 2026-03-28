@@ -68,7 +68,7 @@ onMounted(() => {
       </div>
     </header>
 
-    <main class="pt-20 px-5 max-w-md mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 成功反馈 -->
       <div class="flex flex-col items-center mb-10">
         <div class="relative mb-6">

@@ -10,7 +10,7 @@
     />
 
     <!-- 主内容区域 -->
-    <main class="px-5 pt-20 space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 赛季总结 Bento Grid -->
       <section class="grid grid-cols-12 gap-3">
         <div class="col-span-12 hero-gradient rounded-xl p-6 relative overflow-hidden flex flex-col justify-between min-h-[160px] shadow-sm">
