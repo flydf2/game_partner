@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -64,6 +66,18 @@ const handleSubmit = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const handleNextStep = () => {
   if (currentStep.value < 3) {
     currentStep.value++
@@ -79,21 +93,17 @@ const handlePrevStep = () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-background pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">大神认证</h1>
-      </div>
-      <div class="w-6"></div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
-    </header>
+    <AppHeader
+      title="大神认证"
+      :show-back="false"
+      :show-menu="true"
+      @menu="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="px-5 pt-20 space-y-8 max-w-2xl mx-auto">
+    <main class="px-5 pt-16 space-y-8 max-w-2xl mx-auto">
       <!-- Step Indicator -->
       <div class="flex items-center justify-between px-2">
         <div class="flex flex-col items-center gap-2">
@@ -253,6 +263,8 @@ const handlePrevStep = () => {
         </div>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- Bottom Action Button -->
     <div class="fixed bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-xl z-40">

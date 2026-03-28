@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -98,6 +99,8 @@ const handleAgree = () => {
         <p class="text-[10px] text-on-surface-variant mt-2 italic">阳光、竞技、社交，尽在 SunnyPlay</p>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <div class="fixed bottom-0 left-0 right-0 w-full px-6 py-6 flex flex-col gap-3 items-center bg-white/80 backdrop-blur-xl z-50 rounded-t-[2rem] shadow-[0_-8px_30px_rgb(0,0,0,0.06)] max-w-md mx-auto">
       <button @click="handleAgree" class="w-full h-14 bg-primary-container text-on-primary-container font-headline font-bold rounded-full active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20">

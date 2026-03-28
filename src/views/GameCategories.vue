@@ -1,8 +1,9 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 import { api } from '../services/api.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -92,8 +93,9 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <ListPageHeader
+    <AppHeader
       title="游戏分类"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearchHeader"
@@ -180,6 +182,8 @@ onMounted(() => {
         </section>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- Bottom Navigation Bar Shell -->
     <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-xl z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">

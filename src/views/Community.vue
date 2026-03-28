@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import { communityApi, userApi } from '../api/index.js'
 import LazyImage from '../components/common/LazyImage.vue'
@@ -200,8 +200,9 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <ListPageHeader
+    <AppHeader
       title="社区动态"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearchHeader"

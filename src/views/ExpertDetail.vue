@@ -1,22 +1,14 @@
 <template>
   <div class="min-h-screen bg-surface">
-    <!-- 顶部导航栏 -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex items-center justify-between px-6 py-4">
-      <div class="flex items-center gap-4">
-        <button @click="handleBack" class="flex items-center active:scale-95 transition-transform">
-          <span class="material-symbols-outlined text-2xl text-zinc-900">arrow_back</span>
-        </button>
-        <h1 class="font-headline font-bold text-lg tracking-tight text-zinc-900">大神主页</h1>
-      </div>
-      <div class="flex items-center gap-4">
-        <button @click="handleShare" class="flex items-center justify-center active:scale-95 transition-transform">
-          <span class="material-symbols-outlined text-2xl text-zinc-900">share</span>
-        </button>
-        <button @click="handleMore" class="flex items-center justify-center active:scale-95 transition-transform">
-          <span class="material-symbols-outlined text-2xl text-zinc-900">more_horiz</span>
-        </button>
-      </div>
-    </header>
+    <AppHeader
+      title="大神主页"
+      :show-back="false"
+      :show-menu="true"
+      @menu="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <!-- 主内容区域 -->
     <main class="pt-16 pb-24">
@@ -283,8 +275,9 @@
           </button>
         </div>
       </section>
-      </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- 固定底部下单栏 -->
     <footer class="fixed bottom-0 left-0 w-full bg-white/90 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] px-6 pt-5 pb-10">
@@ -372,6 +365,8 @@ import { expertService } from '../services/expert.js'
 import { orderApi, handleApiError } from '../api/index.js'
 import { cache } from '../utils/cache.js'
 import Toast from '../components/common/Toast.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const route = router.currentRoute.value
@@ -868,8 +863,12 @@ const handleSearch = () => {
   router.push('/search')
 }
 
-const handleNotification = () => {
+const handleNotifications = () => {
   router.push('/notifications')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 // 私聊功能

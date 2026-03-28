@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -114,8 +115,9 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <ListPageHeader
+    <AppHeader
       title="我的抢单"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -269,6 +271,8 @@ onMounted(() => {
         </div>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- 底部导航栏 -->
     <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 py-3 pb-safe bg-white/80 backdrop-blur-xl shadow-[0_-4px_20px_0_rgba(0,0,0,0.04)] rounded-t-[1.5rem]">

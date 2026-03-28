@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -141,6 +142,8 @@ onMounted(() => {
         </button>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <nav class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)] z-50 flex justify-around items-center px-4 pb-6 pt-3">
       <a class="flex flex-col items-center justify-center text-neutral-400 px-5 py-2 hover:bg-neutral-100 rounded-2xl transition-all active:scale-90" href="#">

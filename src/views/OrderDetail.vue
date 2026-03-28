@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 import { orderApi, expertApi, handleApiError } from '../api/index.js'
 
 const route = useRoute()
@@ -55,6 +56,18 @@ const handleBack = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadOrderDetail()
 })
@@ -62,20 +75,17 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <nav data-v-3b8a03f8="" class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">订单详情</h1>
-      </div>
-      <div class="w-6"></div>
-    </nav>
+    <AppHeader
+      title="订单详情"
+      :show-back="false"
+      :show-menu="true"
+      @menu="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main v-if="loading" class="pt-20 px-5 max-w-2xl mx-auto">
+    <main v-if="loading" class="pt-16 px-5 max-w-2xl mx-auto">
       <div class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

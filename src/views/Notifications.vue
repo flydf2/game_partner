@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -146,8 +147,9 @@ const toggleMonthDropdown = (event) => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <ListPageHeader
+    <AppHeader
       title="交易明细"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -232,6 +234,8 @@ const toggleMonthDropdown = (event) => {
         </button>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-6 pt-3 bg-white/80 dark:bg-neutral-950/80 backdrop-blur-xl rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)]">
       <a class="flex flex-col items-center justify-center text-neutral-400 dark:text-neutral-500 px-4 py-1.5 hover:opacity-80 transition-all duration-300" href="#">

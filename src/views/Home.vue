@@ -1,9 +1,10 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     
-    <ListPageHeader
+    <AppHeader
       title="发现大神"
       :unread-count="unreadCount"
+      is-primary-page
       @menu="goToMenu"
       @notifications="goToNotifications"
       @search="goToSearch"
@@ -290,7 +291,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 import { api } from '../services/api.js'
 import { useScrollAnimation } from '../composables/useScrollAnimation.js'
 import { notificationApi } from '../api/index.js'

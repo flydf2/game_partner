@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { usePlaymateStore } from '../stores/playmate'
 import { searchPlaymates, getSearchSuggestions } from '../api'
 import PlaymateListCard from '../components/PlaymateListCard.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -238,6 +239,8 @@ onMounted(() => {
         />
       </div>
     </main>
+
+    <BottomNavBar />
 
     <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[24px] z-50">
       <div

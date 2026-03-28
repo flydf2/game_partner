@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <ListPageHeader
+    <AppHeader
       title="接单设置中心"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -361,10 +362,9 @@ import { ref, computed, nextTick } from 'vue'
 import { defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from '../composables/useToast.js'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
-const TopAppBar = defineAsyncComponent(() => import('../components/TopAppBar.vue'))
 const BottomNavBar = defineAsyncComponent(() => import('../components/BottomNavBar.vue'))
 
 const { showToast } = useToast()

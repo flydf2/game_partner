@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 import { withdrawalApi } from '../api'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -41,6 +43,18 @@ const isSubmitDisabled = computed(() => {
 
 const handleBack = () => {
   router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const handleWithdrawalRecord = () => {
@@ -112,21 +126,17 @@ const handleConfirmWithdrawal = async () => {
 
 <template>
   <div class="min-h-screen bg-background text-on-background font-body pb-24">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">收益提现</h1>
-      </div>
-      <div class="w-6"></div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
-    </header>
+    <AppHeader
+      title="收益提现"
+      :show-back="false"
+      :show-menu="true"
+      @menu="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="max-w-md mx-auto px-5 pt-24 space-y-8">
+    <main class="max-w-md mx-auto px-5 pt-16 space-y-8">
       <!-- Balance Section -->
       <section class="relative overflow-hidden bg-primary-container rounded-[2rem] p-8 flex flex-col items-center justify-center text-on-primary-container">
         <!-- Decorative Element -->
@@ -212,6 +222,8 @@ const handleConfirmWithdrawal = async () => {
         </ul>
       </section>
     </main>
+
+    <BottomNavBar />
 
     <!-- Confirm Button (Fixed Bottom) -->
     <div class="fixed bottom-0 left-0 right-0 w-full max-w-md mx-auto p-5 bg-background/80 backdrop-blur-lg z-40">

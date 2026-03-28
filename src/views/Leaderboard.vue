@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <ListPageHeader
+    <AppHeader
       title="大神排行"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -129,7 +130,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import api from '../api/index.js'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 

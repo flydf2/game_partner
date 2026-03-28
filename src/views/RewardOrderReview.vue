@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 import api from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -73,6 +75,18 @@ const handleCancel = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadOrderDetail()
 })
@@ -80,22 +94,18 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleCancel"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">服务结束</h1>
-      </div>
-      <div class="w-10 h-10 rounded-full overflow-hidden">
-        <img alt="User Avatar" class="w-full h-full object-cover" src="https://via.placeholder.com/40" />
-      </div>
-    </header>
+    <AppHeader
+      title="服务结束"
+      :show-back="false"
+      :show-menu="true"
+      :show-avatar="false"
+      @menu="handleCancel"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="pt-20 px-6 pb-32 max-w-md mx-auto space-y-8">
+    <main class="pt-16 px-6 pb-32 max-w-md mx-auto space-y-8">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
@@ -220,6 +230,8 @@ onMounted(() => {
           </div>
         </section>
       </div>
+
+      <BottomNavBar />
 
       <!-- Fixed Bottom Action Area -->
       <div class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-xl z-50">

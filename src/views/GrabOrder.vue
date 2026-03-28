@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -193,6 +194,8 @@ onMounted(() => {
         </p>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- 底部操作栏 -->
     <div class="fixed bottom-0 left-0 w-full bg-white/80 backdrop-blur-xl px-6 pb-10 pt-4 z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_0_rgba(0,0,0,0.05)]">

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 import api from '../api/index.js'
 
 const router = useRouter()
@@ -103,8 +103,9 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-background text-on-background pb-24">
-    <ListPageHeader
+    <AppHeader
       title="悬赏广场"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"

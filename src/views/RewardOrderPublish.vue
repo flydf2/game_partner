@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 import api from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
@@ -70,6 +72,18 @@ const handlePublish = async () => {
 
 const handleCancel = () => {
   router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 onMounted(() => {
@@ -191,6 +205,8 @@ onMounted(() => {
         </p>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <!-- Bottom Action Area -->
     <div class="fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl p-6 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] z-50">

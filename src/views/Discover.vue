@@ -1,8 +1,9 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     
-    <ListPageHeader
+    <AppHeader
       title="发现大神"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -51,7 +52,7 @@ import { fetchPlaymates } from '../api/index.js'
 import { useToast } from '../composables/useToast.js'
 import PlaymateList from '../components/discover/PlaymateList.vue'
 import PullToRefresh from '../components/common/PullToRefresh.vue'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const playmateStore = usePlaymateStore()

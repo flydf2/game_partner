@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-background text-on-background pb-24">
-    <ListPageHeader
+    <AppHeader
       title="历史战绩"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -96,6 +97,8 @@
       </div>
     </main>
 
+    <BottomNavBar />
+
     <!-- BottomNavBar -->
     <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-6 pb-6 pt-3 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-2xl rounded-t-[1.5rem] z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
       <div class="flex flex-col items-center justify-center text-neutral-400 p-2 hover:text-[#6c5a00] active:scale-90 transition-all duration-300 ease-out cursor-pointer">
@@ -121,7 +124,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -175,5 +176,7 @@ const handleBack = () => {
         </div>
       </div>
     </main>
+
+    <BottomNavBar />
   </div>
 </template>

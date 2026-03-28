@@ -1,7 +1,9 @@
 <script setup>
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 import { messageApi, handleApiError } from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -151,6 +153,22 @@ const handleBack = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
+const handleSettings = () => {
+  router.push('/settings')
+}
+
 const handleRetryMessage = async (message) => {
   message.status = 'sending'
   
@@ -270,28 +288,28 @@ watch(() => route.params.id, (newUserId) => {
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-24">
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
+    <AppHeader
+      :title="chatPartner.name || '聊天'"
+      :show-back="false"
+      :show-menu="true"
+      :show-search="false"
+      :show-avatar="false"
+      @menu="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    >
+      <template #right-actions>
         <button 
-          class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full"
-          @click="handleBack"
+          class="text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full active:scale-95 transition-all"
+          @click="handleSettings"
         >
-          <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+          <span class="material-symbols-outlined" data-icon="settings">settings</span>
         </button>
-        <div class="flex flex-col">
-          <h1 class="font-headline font-bold text-lg text-[#6c5a00]">{{ chatPartner.name }}</h1>
-          <span class="text-[10px] text-primary flex items-center gap-1">
-            <span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
-            在线
-          </span>
-        </div>
-      </div>
-      <button class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full">
-        <span class="material-symbols-outlined" data-icon="settings">settings</span>
-      </button>
-    </header>
+      </template>
+    </AppHeader>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main class="pt-16 max-w-2xl mx-auto px-5 pb-32 space-y-6">
       <div ref="messageContainer" class="h-[calc(100vh-12rem)] overflow-y-auto pb-4">
         <div v-for="(message, index) in messages" :key="message.id">
           <div v-if="shouldShowTime(index)" class="flex justify-center mb-4">
@@ -353,6 +371,8 @@ watch(() => route.params.id, (newUserId) => {
         </div>
       </div>
     </main>
+
+    <BottomNavBar />
 
     <footer class="fixed bottom-0 w-full z-50 bg-white/80 backdrop-blur-xl rounded-t-[2.5rem] shadow-[0_-8px_30px_rgba(0,0,0,0.04)] pb-safe">
       <div class="flex items-center gap-3 px-6 py-4">

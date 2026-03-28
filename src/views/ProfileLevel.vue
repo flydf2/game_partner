@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <ListPageHeader
+    <AppHeader
       title="我的段位"
+      is-primary-page
       @menu="handleMenu"
       @notifications="handleNotifications"
       @search="handleSearch"
@@ -223,11 +224,10 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import TopAppBar from '../components/TopAppBar.vue'
 import { useUserStore } from '../stores/user.js'
 import { useToast } from '../composables/useToast.js'
 import { userApi, orderApi, handleApiError } from '../api/index.js'
-import ListPageHeader from '../components/ListPageHeader.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const userStore = useUserStore()

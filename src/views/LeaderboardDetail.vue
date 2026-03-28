@@ -183,6 +183,8 @@
       </section>
     </main>
 
+    <BottomNavBar />
+
     <!-- 底部操作栏 -->
     <div class="fixed bottom-0 left-0 w-full z-50 p-6 bg-white/80 backdrop-blur-xl flex gap-4 items-center">
       <button @click="handleChat" class="flex-1 h-14 bg-surface-container-lowest border-2 border-primary-container text-primary font-bold rounded-full flex items-center justify-center gap-2 active:scale-95 transition-transform">
@@ -201,6 +203,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../api/index.js'
+import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 const route = useRoute()
