@@ -22,8 +22,7 @@
       <!-- 收起按钮 - 在一级页面和非一级页面展开时都显示 -->
       <button
         @click="toggleExpand"
-        class="absolute w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
-        :class="isPrimaryPage ? '-top-3 left-4' : '-top-3 right-4'"
+        class="absolute -top-3 left-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
         <span
           class="material-symbols-outlined text-lg transition-transform duration-300"

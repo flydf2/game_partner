@@ -156,7 +156,7 @@ const toggleMonthDropdown = (event) => {
       @profile="handleProfile"
     />
 
-    <main class="pb-24 px-5 pt-4 max-w-2xl mx-auto">
+    <main class="page-content pt-4 pb-24">
       <section class="mb-8 relative overflow-hidden bg-primary-container rounded-3xl p-6 shadow-sm">
         <div class="relative z-10">
           <p class="text-on-primary-container/70 text-sm font-medium mb-1">当前余额 (元)</p>

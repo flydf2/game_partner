@@ -115,7 +115,7 @@ const handleBack = () => {
       </button>
     </header>
 
-    <main class="pt-24 pb-32 px-6 max-w-md mx-auto min-h-screen">
+    <main class="page-content pt-24 pb-32 min-h-screen">
       <section class="space-y-8">
         <div class="space-y-4">
           <h3 class="font-headline font-bold text-lg text-on-surface">游戏类型</h3>

@@ -14,7 +14,7 @@
       <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
+    <main class="page-content pt-20 pb-32 space-y-6">
       <!-- 常见问题 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <h2 class="text-sm font-bold text-on-surface mb-4">常见问题</h2>

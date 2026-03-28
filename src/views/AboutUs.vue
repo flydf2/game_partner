@@ -47,7 +47,7 @@ const handleBack = () => {
       <div class="w-6"></div>
     </nav>
 
-    <main class="pt-20 px-5 max-w-2xl mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 应用信息 -->
       <section class="bg-surface-container-lowest rounded-3xl p-6 text-center">
         <div class="w-20 h-20 bg-primary-container rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">

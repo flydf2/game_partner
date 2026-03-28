@@ -257,7 +257,7 @@ onMounted(() => {
       <div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
     </nav>
 
-    <main class="max-w-screen-md mx-auto px-5 pt-24 space-y-8">
+    <main class="page-content pt-24 space-y-8">
       <section class="relative">
         <div class="flex flex-col md:flex-row gap-6 items-start">
           <div class="relative w-32 h-32 md:w-40 md:h-40 shrink-0 rounded-[2rem] overflow-hidden bg-primary-container shadow-sm rotate-3">

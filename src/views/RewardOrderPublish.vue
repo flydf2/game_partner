@@ -108,7 +108,7 @@ onMounted(() => {
       </div>
     </header>
 
-    <main class="pt-20 px-6 space-y-8">
+    <main class="page-content pt-20 space-y-8">
       <!-- Section: Game Selection -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">

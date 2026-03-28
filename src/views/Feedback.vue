@@ -64,7 +64,7 @@ const handleBack = () => {
       <div class="w-6"></div>
     </nav>
 
-    <main class="pt-20 px-5 max-w-2xl mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 提交成功提示 -->
       <div v-if="submitSuccess" class="bg-success-container rounded-3xl p-6 text-center">
         <div class="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">

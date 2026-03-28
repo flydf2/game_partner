@@ -101,7 +101,7 @@ onMounted(() => {
       <div class="w-6"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 space-y-6">
+    <main class="page-content pt-24 pb-32 space-y-6 space-y-6">
       <!-- 钱包卡片 -->
       <section class="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-6 shadow-xl shadow-primary/20 text-white">
         <div class="space-y-4">

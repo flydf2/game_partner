@@ -84,7 +84,7 @@ const handlePayment = () => {
       <div class="absolute bottom-0 left-0 bg-zinc-100 h-[1px] w-full"></div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-2xl mx-auto space-y-6">
+    <main class="page-content pt-24 pb-32 space-y-6">
       <!-- Service Summary Section (Asymmetric Editorial Style) -->
       <section class="bg-surface-container-lowest rounded-3xl p-6 relative overflow-hidden">
         <div class="flex gap-5 items-start relative z-10">

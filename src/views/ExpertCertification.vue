@@ -42,7 +42,7 @@ const handleBack = () => {
       </div>
     </header>
 
-    <main class="px-5 pt-6 space-y-8 max-w-2xl mx-auto">
+    <main class="page-content pt-6 space-y-8">
       <div class="flex items-center justify-between px-2">
         <div class="flex flex-col items-center gap-2">
           <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-primary font-bold text-sm">1</div>

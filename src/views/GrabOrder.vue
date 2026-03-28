@@ -90,7 +90,7 @@ onMounted(() => {
       </div>
     </header>
 
-    <main class="pt-20 px-5 max-w-md mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <!-- 悬赏任务简述 -->
       <section class="space-y-3">
         <h2 class="font-headline font-bold text-xl px-1">悬赏任务简述</h2>

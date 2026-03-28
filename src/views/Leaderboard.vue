@@ -9,7 +9,7 @@
       @profile="handleProfile"
     />
     
-    <main class="max-w-md mx-auto px-5 pt-24 pb-32">
+    <main class="page-content pt-24 pb-32">
       <!-- Tab Switcher -->
       <div class="bg-surface-container-low rounded-full p-1.5 flex mb-8">
         <button 

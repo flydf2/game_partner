@@ -97,7 +97,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
 
-    <main class="pt-20 px-5">
+    <main class="page-content pt-20">
       <div class="relative mb-6">
         <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
           <span class="material-symbols-outlined text-outline text-lg" data-icon="search">search</span>

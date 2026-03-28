@@ -136,7 +136,7 @@ const handleConfirmWithdrawal = async () => {
       @profile="handleProfile"
     />
 
-    <main class="max-w-md mx-auto px-5 pt-16 space-y-8">
+    <main class="page-content pt-16 space-y-8">
       <!-- Balance Section -->
       <section class="relative overflow-hidden bg-primary-container rounded-[2rem] p-8 flex flex-col items-center justify-center text-on-primary-container">
         <!-- Decorative Element -->

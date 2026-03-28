@@ -141,7 +141,7 @@ onMounted(() => {
       <div class="w-6"></div>
     </header>
 
-    <main class="pt-20 px-5 max-w-md mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
         <button
           v-for="tab in tabs"

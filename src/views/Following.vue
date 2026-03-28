@@ -106,7 +106,7 @@ onMounted(() => {
       <div class="text-sm text-on-surface-variant">{{ following.length }}人</div>
     </header>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
+    <main class="page-content pt-20 pb-32 space-y-6">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

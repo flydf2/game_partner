@@ -130,7 +130,7 @@ onMounted(() => {
       </div>
     </nav>
 
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 max-w-md mx-auto">
+    <main class="page-content pt-24 pb-32 space-y-6">
       <header class="mb-8">
         <h2 class="text-3xl font-extrabold font-headline text-on-surface tracking-tight mb-6">寻找队友</h2>
         

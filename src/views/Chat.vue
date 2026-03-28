@@ -309,7 +309,7 @@ watch(() => route.params.id, (newUserId) => {
       </template>
     </AppHeader>
 
-    <main class="pt-16 max-w-2xl mx-auto px-5 pb-32 space-y-6">
+    <main class="page-content pt-16 pb-32 space-y-6">
       <div ref="messageContainer" class="h-[calc(100vh-12rem)] overflow-y-auto pb-4">
         <div v-for="(message, index) in messages" :key="message.id">
           <div v-if="shouldShowTime(index)" class="flex justify-center mb-4">

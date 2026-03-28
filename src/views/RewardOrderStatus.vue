@@ -97,7 +97,7 @@ onMounted(() => {
       </button>
     </header>
 
-    <main class="pt-24 px-6 space-y-8 max-w-md mx-auto">
+    <main class="page-content pt-24 space-y-8">
       <header class="space-y-2">
         <h1 class="font-headline font-extrabold text-2xl leading-tight text-on-surface tracking-tight">抢单状态</h1>
         <p class="text-on-surface-variant font-medium text-sm">管理您的实时赏金任务与服务进度</p>

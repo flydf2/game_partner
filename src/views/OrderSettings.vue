@@ -9,7 +9,7 @@
       @profile="handleProfile"
     />
     
-    <main class="max-w-4xl mx-auto px-5 pt-24 space-y-8">
+    <main class="page-content pt-24 space-y-8">
       <!-- Status & One-click Sleep Section (Asymmetric Bento) -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-[2rem] shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] flex flex-col justify-between">

@@ -54,7 +54,7 @@ onMounted(() => {
       <div class="w-6"></div>
     </header>
 
-    <main class="pt-20 px-5 max-w-md mx-auto space-y-6">
+    <main class="page-content pt-20 space-y-6">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

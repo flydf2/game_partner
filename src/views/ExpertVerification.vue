@@ -103,7 +103,7 @@ const handlePrevStep = () => {
       @profile="handleProfile"
     />
 
-    <main class="px-5 pt-16 space-y-8 max-w-2xl mx-auto">
+    <main class="page-content pt-16 space-y-8">
       <!-- Step Indicator -->
       <div class="flex items-center justify-between px-2">
         <div class="flex flex-col items-center gap-2">

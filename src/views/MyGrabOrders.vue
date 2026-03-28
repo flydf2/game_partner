@@ -124,7 +124,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
     
-    <main class="pt-24 px-5 max-w-xl mx-auto space-y-8">
+    <main class="page-content pt-24 space-y-8">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

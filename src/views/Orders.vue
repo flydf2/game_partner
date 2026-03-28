@@ -240,7 +240,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
     
-    <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main class="page-content pt-24 pb-32 space-y-6">
       <div class="px-5 py-4 sticky top-16 bg-background z-40">
         <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
           <button
