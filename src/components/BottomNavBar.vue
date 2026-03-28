@@ -15,15 +15,15 @@
 
     <!-- 展开状态 - 完整导航栏 -->
     <nav
-      v-else
+      v-if="isPrimaryPage || isExpanded"
       class="w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[24px] transition-all duration-300"
       :class="{ 'fixed bottom-0 left-0': isPrimaryPage || isExpanded }"
     >
-      <!-- 收起按钮 - 只在一级页面显示 -->
+      <!-- 收起按钮 - 在一级页面和非一级页面展开时都显示 -->
       <button
-        v-if="isPrimaryPage"
         @click="toggleExpand"
-        class="absolute -top-3 left-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
+        class="absolute w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
+        :class="isPrimaryPage ? '-top-3 left-4' : '-top-3 right-4'"
       >
         <span
           class="material-symbols-outlined text-lg transition-transform duration-300"
@@ -31,15 +31,6 @@
         >
           expand_more
         </span>
-      </button>
-
-      <!-- 关闭按钮 - 只在非一级页面展开时显示 -->
-      <button
-        v-if="!isPrimaryPage && isExpanded"
-        @click="toggleExpand"
-        class="absolute -top-3 right-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
-      >
-        <span class="material-symbols-outlined text-lg">close</span>
       </button>
 
       <!-- 导航项容器 -->
@@ -198,7 +189,7 @@ const router = useRouter()
 const currentRoute = computed(() => route.path)
 
 // 一级页面路径
-const primaryPages = ['/', '/discover', '/messages', '/community', '/orders', '/profile']
+const primaryPages = ['/', '/discover', '/messages', '/community', '/orders', '/profile', '/game-categories']
 
 // 判断当前页面是否为一级页面
 const isPrimaryPage = computed(() => {
@@ -206,7 +197,7 @@ const isPrimaryPage = computed(() => {
 })
 
 // 展开/收起状态
-const isExpanded = ref(true)
+const isExpanded = ref(false)
 
 // 订单菜单展开状态
 const isOrderMenuOpen = ref(false)

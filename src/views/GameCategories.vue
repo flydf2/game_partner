@@ -184,30 +184,6 @@ onMounted(() => {
     </main>
 
     <BottomNavBar />
-
-    <!-- Bottom Navigation Bar Shell -->
-    <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/80 backdrop-blur-xl z-50 rounded-t-[1.5rem] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-      <div @click="router.push('/')" class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 transition-transform active:scale-90 duration-200 cursor-pointer">
-        <span class="material-symbols-outlined mb-1">home</span>
-        <span class="font-headline text-[10px] font-medium">首页</span>
-      </div>
-      <div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl px-4 py-1.5 transition-all active:scale-90 duration-200 shadow-sm cursor-pointer">
-        <span class="material-symbols-outlined mb-1">emoji_events</span>
-        <span class="font-headline text-[10px] font-medium">排行榜</span>
-      </div>
-      <div @click="router.push('/game-categories')" class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 transition-transform active:scale-90 duration-200 cursor-pointer">
-        <span class="material-symbols-outlined mb-1">extension</span>
-        <span class="font-headline text-[10px] font-medium">技能</span>
-      </div>
-      <div @click="router.push('/profile/wallet')" class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 transition-transform active:scale-90 duration-200 cursor-pointer">
-        <span class="material-symbols-outlined mb-1">account_balance_wallet</span>
-        <span class="font-headline text-[10px] font-medium">钱包</span>
-      </div>
-      <div @click="router.push('/profile')" class="flex flex-col items-center justify-center text-neutral-400 px-4 py-1.5 transition-transform active:scale-90 duration-200 cursor-pointer">
-        <span class="material-symbols-outlined mb-1">person</span>
-        <span class="font-headline text-[10px] font-medium">我的</span>
-      </div>
-    </nav>
   </div>
 </template>
 

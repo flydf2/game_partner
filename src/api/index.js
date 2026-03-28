@@ -272,7 +272,7 @@ export const expertApi = {
     if (USE_MOCK) {
       data = await mockGetExpertDetail(expertId)
     } else {
-      data = await withRetry(() => request(`/playmate/experts/${expertId}`))
+      data = await withRetry(() => request(`/experts/${expertId}`))
     }
     
     // 存入缓存，缓存10分钟
@@ -296,7 +296,7 @@ export const expertApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => post(`/playmate/experts/${expertId}/follow`))
+      return await withRetry(() => post(`/experts/${expertId}/follow`))
     }
   },
   
@@ -315,7 +315,7 @@ export const expertApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => del(`/playmate/experts/${expertId}/follow`))
+      return await withRetry(() => del(`/experts/${expertId}/follow`))
     }
   },
   
@@ -360,7 +360,7 @@ export const expertApi = {
         }, 400)
       })
     } else {
-      return await withRetry(() => get(`/playmate/experts/${expertId}/reviews`, {
+      return await withRetry(() => get(`/experts/${expertId}/reviews`, {
         params: { page, pageSize }
       }))
     }
@@ -381,7 +381,7 @@ export const expertApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => get(`/playmate/experts/${expertId}/voice`))
+      return await withRetry(() => get(`/experts/${expertId}/voice`))
     }
   }
 }
@@ -392,7 +392,7 @@ export const reviewApi = {
     if (USE_MOCK) {
       return await mockSubmitReview(reviewData)
     } else {
-      return await withRetry(() => post('/playmate/reviews', reviewData))
+      return await withRetry(() => post('/reviews', reviewData))
     }
   }
 }
@@ -403,7 +403,7 @@ export const withdrawalApi = {
     if (USE_MOCK) {
       return await mockSubmitWithdrawal(withdrawalData)
     } else {
-      return await withRetry(() => post('/playmate/withdrawals', withdrawalData))
+      return await withRetry(() => post('/withdrawals', withdrawalData))
     }
   },
   
@@ -411,7 +411,7 @@ export const withdrawalApi = {
     if (USE_MOCK) {
       return await mockGetWithdrawalRecords()
     } else {
-      return await withRetry(() => get('/playmate/withdrawals'))
+      return await withRetry(() => get('/withdrawals'))
     }
   }
 }
@@ -429,7 +429,7 @@ export const userApi = {
         }, 500)
       })
     } else {
-      return await withRetry(() => post('/playmate/auth/send-code', { phone }))
+      return await withRetry(() => post('/auth/send-code', { phone }))
     }
   },
 
@@ -448,7 +448,7 @@ export const userApi = {
       if (USE_MOCK) {
         data = await mockGetUserInfo()
       } else {
-        data = await withRetry(() => get('/playmate/user/info'))
+        data = await withRetry(() => get('/user/info'))
       }
       
       // 存入缓存，缓存5分钟
@@ -470,7 +470,7 @@ export const userApi = {
         cache.remove(cache.generateKey('user_info'))
         return response
       } else {
-        const response = await withRetry(() => post('/playmate/auth/login', { username, password }))
+        const response = await withRetry(() => post('/auth/login', { username, password }))
         // 存储token
         if (response.success && response.data.token) {
           localStorage.setItem('token', response.data.token)
@@ -494,7 +494,7 @@ export const userApi = {
         cache.remove(cache.generateKey('user_info'))
         return response
       } else {
-        const response = await withRetry(() => post('/playmate/auth/register', userData))
+        const response = await withRetry(() => post('/auth/register', userData))
         // 存储token
         if (response.success && response.data.token) {
           localStorage.setItem('token', response.data.token)
@@ -514,7 +514,7 @@ export const userApi = {
         cache.remove(cache.generateKey('user_info'))
         return response
       } else {
-        const response = await withRetry(() => put('/playmate/user/profile', profileData))
+        const response = await withRetry(() => put('/user/profile', profileData))
         // 清除用户信息缓存
         cache.remove(cache.generateKey('user_info'))
         return response
@@ -537,7 +537,7 @@ export const userApi = {
       if (USE_MOCK) {
         data = await mockGetSettings()
       } else {
-        data = await withRetry(() => get('/playmate/user/settings'))
+        data = await withRetry(() => get('/user/settings'))
       }
       
       // 存入缓存，缓存30分钟
@@ -555,7 +555,7 @@ export const userApi = {
         cache.remove(cache.generateKey('user_settings'))
         return response
       } else {
-        const response = await withRetry(() => put('/playmate/user/settings', settings))
+        const response = await withRetry(() => put('/user/settings', settings))
         // 清除设置缓存
         cache.remove(cache.generateKey('user_settings'))
         return response
@@ -580,7 +580,7 @@ export const userApi = {
         cache.remove(cache.generateKey('user_info'))
         return response
       } else {
-        const response = await withRetry(() => post('/playmate/auth/logout'))
+        const response = await withRetry(() => post('/auth/logout'))
         // 清除token
         localStorage.removeItem('token')
         // 清除用户信息缓存
@@ -600,7 +600,7 @@ export const userApi = {
         }
         return response
       } else {
-        const response = await withRetry(() => post('/playmate/auth/refresh'))
+        const response = await withRetry(() => post('/auth/refresh'))
         // 存储新token
         if (response.success && response.data.token) {
           localStorage.setItem('token', response.data.token)
@@ -614,7 +614,7 @@ export const userApi = {
     if (USE_MOCK) {
       return await mockGetFollowing()
     } else {
-      return await withRetry(() => get('/playmate/user/following'))
+      return await withRetry(() => get('/user/following'))
     }
   },
   
@@ -629,7 +629,7 @@ export const userApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => post(`/playmate/user/following/${userId}`))
+      return await withRetry(() => post(`/user/following/${userId}`))
     }
   },
   
@@ -644,7 +644,7 @@ export const userApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => del(`/playmate/user/following/${userId}`))
+      return await withRetry(() => del(`/user/following/${userId}`))
     }
   },
   
@@ -652,7 +652,7 @@ export const userApi = {
     if (USE_MOCK) {
       return await mockGetFavorites()
     } else {
-      return await withRetry(() => get('/playmate/user/favorites'))
+      return await withRetry(() => get('/user/favorites'))
     }
   },
   
@@ -667,7 +667,7 @@ export const userApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => del(`/playmate/user/favorites/${favoriteId}`))
+      return await withRetry(() => del(`/user/favorites/${favoriteId}`))
     }
   },
   
@@ -675,7 +675,7 @@ export const userApi = {
     if (USE_MOCK) {
       return await mockGetBrowseHistory()
     } else {
-      return await withRetry(() => get('/playmate/user/history'))
+      return await withRetry(() => get('/user/history'))
     }
   },
   
@@ -690,7 +690,7 @@ export const userApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => del('/playmate/user/history'))
+      return await withRetry(() => del('/user/history'))
     }
   },
   
@@ -698,7 +698,7 @@ export const userApi = {
     if (USE_MOCK) {
       return await mockGetWallet()
     } else {
-      return await withRetry(() => get('/playmate/user/wallet'))
+      return await withRetry(() => get('/user/wallet'))
     }
   },
   
@@ -718,7 +718,7 @@ export const userApi = {
         }, 1000)
       })
     } else {
-      return await withRetry(() => post('/playmate/user/recharge', rechargeData))
+      return await withRetry(() => post('/user/recharge', rechargeData))
     }
   }
 }

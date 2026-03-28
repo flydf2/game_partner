@@ -275,6 +275,7 @@
           </button>
         </div>
       </section>
+      </div>
     </main>
 
     <BottomNavBar />

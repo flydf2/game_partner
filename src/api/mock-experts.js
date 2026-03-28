@@ -1,3 +1,5 @@
+import { mockPlaymates } from './mock-playmates'
+
 export function mockGetExpertDetail(id) {
   return new Promise((resolve) => {
     setTimeout(() => {
