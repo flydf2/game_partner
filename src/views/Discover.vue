@@ -1,16 +1,13 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     
-    <!-- TopAppBar -->
-    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out" data-icon="menu">menu</span>
-        <h1 class="font-headline font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-500 font-black tracking-tighter">SunnyPlay 日光陪玩</h1>
-      </div>
-      <div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden border-2 border-primary-container">
-        <img class="w-full h-full object-cover" data-alt="User profile avatar of a young gamer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNN7pNKogoJYe4wsv3o-FDAyvSBuhTul48i-mZ8WsuTaiMYduHla1_zSjL2SVhNTYWcl8KXkzkFWu37CDNXR17T-IqRbkRE3YSkz9RDnoBDmP-PV4kccs__KEv3e8g6ZgTTBbhrzVg7gEB1CRLgL8Gw62MMBPFzUD9Iqe68g2fv4HYlswHzjHItNgFjyODx_dufgH7IzM8JT7PIHeVxMyHtCYvaRKAjhGPpwmk79mWP-Se0BHWL9iJ2xgSD4kBoikIe8dxtqe1tRc"/>
-      </div>
-    </nav>
+    <ListPageHeader
+      title="发现大神"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
     
     <main class="max-w-2xl mx-auto px-5 pt-20 pb-32 space-y-6 max-w-md mx-auto">
       <!-- Search and Title Section -->
@@ -54,6 +51,7 @@ import { fetchPlaymates } from '../api/index.js'
 import { useToast } from '../composables/useToast.js'
 import PlaymateList from '../components/discover/PlaymateList.vue'
 import PullToRefresh from '../components/common/PullToRefresh.vue'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 const playmateStore = usePlaymateStore()
@@ -64,6 +62,22 @@ const goToRewardOrders = () => {
 }
 
 const searchInput = ref('')
+
+function handleMenu() {
+  router.push('/profile')
+}
+
+function handleNotifications() {
+  router.push('/notifications')
+}
+
+function handleSearch() {
+  router.push('/search')
+}
+
+function handleProfile() {
+  router.push('/profile')
+}
 
 async function loadData() {
   playmateStore.resetState()

@@ -1,22 +1,12 @@
 <template>
   <div class="min-h-screen bg-background text-on-background pb-24">
-    <!-- TopAppBar -->
-    <header class="fixed top-0 w-full z-50 bg-surface-container-highest/50 backdrop-blur-xl bg-[#f6f6f6] dark:bg-neutral-900 flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <button @click="handleBack" class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] hover:opacity-80 transition-opacity active:scale-95 transition-transform duration-200 cursor-pointer">
-          arrow_back
-        </button>
-        <h1 class="font-plus-jakarta-sans font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">历史战绩</h1>
-      </div>
-      <div class="flex items-center gap-3">
-        <button class="material-symbols-outlined text-neutral-500 hover:opacity-80 transition-opacity cursor-pointer">
-          filter_list
-        </button>
-        <button class="material-symbols-outlined text-neutral-500 hover:opacity-80 transition-opacity cursor-pointer">
-          search
-        </button>
-      </div>
-    </header>
+    <ListPageHeader
+      title="历史战绩"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <!-- 主内容区域 -->
     <main class="px-5 pt-20 space-y-6">
@@ -131,6 +121,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 
@@ -197,6 +188,22 @@ const formatNumber = (num) => {
 
 const handleBack = () => {
   router.back()
+}
+
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 </script>
 

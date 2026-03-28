@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 
@@ -122,8 +123,20 @@ const getIconColor = (type) => {
   }
 }
 
-const handleBack = () => {
-  router.back()
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const toggleMonthDropdown = (event) => {
@@ -133,20 +146,13 @@ const toggleMonthDropdown = (event) => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
-      <div class="flex items-center justify-between px-5 h-16 w-full">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
-            <img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdQMgHqcda7stVFsDzmAMsOknIpHRpzSNCL51g-W8W-Rb1f3PYqgLDA00rrh0Sn-Xb3rXPWpWSBNmPDjh4mJp7-46rT8DY_lUANDXIU-twu37zC60yeqTnzf4j6JChdbQOMb8N-g0nmFgQwr7UyvrS0fiR0x3bLPTu4VLBM3_u386eudM9W6SFsJd7EEdXO_P4iBFrtRfnkMeXyIU_UMKcLzRMjTie4gy1DZQcipQZoVZJXA3_RIlyQrWNvjMZ_hdr9OkdCFI83cg"/>
-          </div>
-          <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">交易明细</h1>
-        </div>
-        <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
-          <span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">notifications</span>
-        </button>
-      </div>
-      <div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
-    </header>
+    <ListPageHeader
+      title="交易明细"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <main class="pb-24 px-5 pt-4 max-w-2xl mx-auto">
       <section class="mb-8 relative overflow-hidden bg-primary-container rounded-3xl p-6 shadow-sm">

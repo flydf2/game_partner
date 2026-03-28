@@ -6,7 +6,6 @@ const router = useRouter()
 
 const currentStep = ref(1)
 const selectedGame = ref(null)
-const selectedPosition = ref([])
 
 const games = ref([
   { id: 'lol', name: '英雄联盟 (LOL)', icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD3aRMW0SKYz9bJRCZHdeySAm3YNW6BkLha-t04SCoPtPGNaiKk5pI_RLZm-Xx3xeTb8jaXE5utdU1Iw-C3HTzuGEZ-OT6Vd6YdJS1nJPuLjPIsuQf33z_SaWN2pKdsYlGwJ7_f4BAph1IowakAlgW1S7P5TdxVgMV6NhX54Sd9VbxJ_pqRaUbNPEfxExFQlz3aDU3vw00yIi2VB_2rwANtR8LSjZfOzoDtnnn_IYo9B4DtzOt6TVzzj6jRiMNlSyXIOBJUglCuuJk' },
@@ -17,8 +16,6 @@ const games = ref([
   { id: 'csgo', name: 'CS:GO', icon: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAkokFDlJJU2ut7ADXOxXgokfLf-nFbve3PmdniZPK8ZjoxO1reJWexxqbxEwDy4thsHQWxI68ySeYsam7yLDI2EWIKoa7no1yZya_-OvKHcnsOU5ukziXluccC3dUHzW8BMFTNlh6bLkgI8bMSDhUTMaTR2jWDsFNRzAKs9RzZ11om4Ki5c9Xj92fIm685lMzUrq9Bk1QuG6y3TXwjzpc6HZVTEFv-aZfUUXt5s020g03CNeOFTD-_F8HtoWP1VEGiCAo5k4gC9o' }
 ])
 
-const positions = ref(['上单', '中单', '打野', 'ADC', '辅助'])
-
 const handleGameSelect = (game) => {
   selectedGame.value = game
   router.push({
@@ -27,28 +24,8 @@ const handleGameSelect = (game) => {
   })
 }
 
-const togglePosition = (position) => {
-  const index = selectedPosition.value.indexOf(position)
-  if (index > -1) {
-    selectedPosition.value.splice(index, 1)
-  } else {
-    selectedPosition.value.push(position)
-  }
-}
-
 const handleBack = () => {
   router.back()
-}
-
-const handleSubmit = () => {
-  router.push({
-    path: '/expert-certification/voice',
-    query: {
-      gameId: selectedGame.value?.id,
-      gameName: selectedGame.value?.name,
-      position: selectedPosition.value.join(',')
-    }
-  })
 }
 </script>
 
@@ -106,47 +83,7 @@ const handleSubmit = () => {
             </div>
           </div>
         </div>
-
-        <div class="space-y-3" v-if="selectedGame">
-          <label class="text-sm font-bold text-on-surface flex items-center gap-2">
-            当前段位
-            <span class="text-error text-xs">*</span>
-          </label>
-          <input
-            class="w-full bg-surface-container-low border-none rounded-xl py-4 px-4 text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary-container transition-all"
-            placeholder="例如：至尊星耀 I"
-            type="text"
-          />
-        </div>
-
-        <div class="space-y-3" v-if="selectedGame">
-          <label class="text-sm font-bold text-on-surface flex items-center gap-2">
-            擅长位置
-            <span class="text-on-surface-variant text-xs font-normal">（可多选）</span>
-          </label>
-          <div class="flex flex-wrap gap-3">
-            <button
-              v-for="position in positions"
-              :key="position"
-              @click="togglePosition(position)"
-              class="px-5 py-2.5 rounded-full font-bold text-sm border-none transition-all active:scale-95"
-              :class="selectedPosition.includes(position) ? 'bg-primary-container text-primary' : 'bg-surface-container-high text-on-surface-variant'"
-            >
-              {{ position }}
-            </button>
-          </div>
-        </div>
       </div>
     </main>
-
-    <div class="fixed bottom-0 left-0 w-full p-6 bg-white/80 backdrop-blur-xl z-40">
-      <button
-        v-if="selectedGame"
-        @click="handleSubmit"
-        class="w-full bg-primary-container hover:bg-primary-container/90 text-on-primary-container font-headline font-bold py-4 rounded-full text-base shadow-lg shadow-primary-container/25 transition-all active:scale-[0.98]"
-      >
-        提交申请
-      </button>
-    </div>
   </div>
 </template>

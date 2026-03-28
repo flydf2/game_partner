@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import { messageApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
@@ -42,8 +43,20 @@ const handleConversationClick = (conversation) => {
   router.push(`/chat/${conversation.userId}`)
 }
 
-const handleBack = () => {
-  router.back()
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const formatTime = (time) => {
@@ -75,22 +88,13 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-24">
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] flex items-center justify-between px-5 h-16">
-      <div class="flex items-center transition-all duration-200 active:scale-95 text-[#6c5a00]">
-        <button 
-          class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full"
-          @click="handleBack"
-        >
-          <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
-        </button>
-      </div>
-      <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00]">消息</h1>
-      <div class="flex items-center transition-all duration-200 active:scale-95 text-[#6c5a00]">
-        <button class="transition-all duration-200 active:scale-95 text-[#6c5a00] hover:bg-yellow-50 p-2 rounded-full">
-          <span class="material-symbols-outlined" data-icon="settings">settings</span>
-        </button>
-      </div>
-    </header>
+    <ListPageHeader
+      title="消息"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <main class="pt-20 px-5">
       <div class="relative mb-6">

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 
@@ -90,6 +91,22 @@ const handleEnterVoiceRoom = (orderId) => {
   alert('进入语音房功能开发中')
 }
 
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadOrders()
 })
@@ -97,18 +114,15 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20">
-      <button
-        @click="() => router.back()"
-        class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 active:scale-95 transition-all"
-      >
-        arrow_back_ios
-      </button>
-      <h1 class="font-headline font-bold text-lg text-primary">我的抢单</h1>
-      <div class="w-6"></div>
-    </header>
-
-    <main class="pt-20 px-5 max-w-xl mx-auto space-y-8">
+    <ListPageHeader
+      title="我的抢单"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
+    
+    <main class="pt-24 px-5 max-w-xl mx-auto space-y-8">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

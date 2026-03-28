@@ -158,65 +158,26 @@ export function mockGetFavorites() {
             {
               id: 1,
               expertId: '1',
-              expertAvatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+              expertAvatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPWd42wRhAneFPqDBu00-X6zV_3VmT3LwRUFe1rO4eEyOa-IDEPhh1HH7x2WWdyarjgr_4WzatpsdpqaJXJlMRwo9dtnaBbaYDQBj0-oao709scndaRZifLRuzJRgNVcSzd8XsuGJ-4uBbEUbdAlWFQz_6HkFw-AT6QvtHY4sIV4zpurtJ13FIBZJw5DYnKUc0lTPGLItY507UIdcj7nBxJ2WZ7zMMYQN6FvTlEsX9vRQQ51tpjD9-9ylRac-P1jqyPFi7WtKf__I',
               expertName: '林间小鹿',
               game: 'honor_of_kings',
               rank: 'challenger',
-              title: '荣耀王者',
-              description: '5年游戏经验，擅长打野和上单',
-              rating: 4.9,
-              orders: 128,
-              level: 45,
-              price: 48,
-              unit: '局',
-              tags: '技术好,耐心,讲解清晰',
-              likes: 256,
-              isOnline: true,
               addedAt: '2026-03-23 14:30'
             },
             {
               id: 2,
               expertId: '2',
-              expertAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+              expertAvatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAkokFDlJJU2ut7ADXOxXgokfLf-nFbve3PmdniZPK8ZjoxO1reJWexxqbxEwDy4thsHQWxI68ySeYsam7yLDI2EWIKoa7no1yZya_-OvKHcnsOU5ukziXluccC3dUHzW8BMFTNlh6bLkgI8bMSDhUTMaTR2jWDsFNRzAKs9RzZ11om4Ki5c9Xj92fIm685lMzUrq9Bk1QuG6y3TXwjzpc6HZVTEFv-aZfUUXt5s020g03CNeOFTD-_F8HtoWP1VEGiCAo5k4gC9o',
               expertName: '影子猎手',
               game: 'lol',
               rank: 'challenger',
-              title: '大师段位',
-              description: '职业电竞选手，擅长中单和辅助',
-              rating: 4.8,
-              orders: 89,
-              level: 42,
-              price: 55,
-              unit: '局',
-              tags: '操作犀利,思路清晰,语聊',
-              likes: 180,
-              isOnline: false,
               addedAt: '2026-03-22 10:00'
-            },
-            {
-              id: 3,
-              expertId: '3',
-              expertAvatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-              expertName: '游戏大师',
-              game: 'csgo',
-              rank: 'master',
-              title: '精英段位',
-              description: '多年CSGO经验，擅长排位加分',
-              rating: 4.7,
-              orders: 200,
-              level: 48,
-              price: 60,
-              unit: '局',
-              tags: '稳定,靠谱,带打排位',
-              likes: 320,
-              isOnline: true,
-              addedAt: '2026-03-21 08:00'
             }
           ],
           pagination: {
             currentPage: 1,
             totalPages: 1,
-            totalCount: 3
+            totalCount: 2
           }
         },
         msg: '获取成功'
@@ -246,64 +207,25 @@ export function mockGetBrowseHistory() {
           data: [
             {
               id: '1',
-              expertId: '101',
-              name: '林间小鹿',
-              avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-              rating: 4.9,
-              skill: '荣耀王者',
-              game: '王者荣耀',
-              price: 48,
-              viewTime: '2026-03-25 14:30:00'
+              type: 'playmate',
+              title: '林间小鹿',
+              avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAPWd42wRhAneFPqDBu00-X6zV_3VmT3LwRUFe1rO4eEyOa-IDEPhh1HH7x2WWdyarjgr_4WzatpsdpqaJXJlMRwo9dtnaBbaYDQBj0-oao709scndaRZifLRuzJRgNVcSzd8XsuGJ-4uBbEUbdAlWFQz_6HkFw-AT6QvtHY4sIV4zpurtJ13FIBZJw5DYnKUc0lTPGLItY507UIdcj7nBxJ2WZ7zMMYQN6FvTlEsX9vRQQ51tpjD9-9ylRac-P1jqyPFi7WtKf__I',
+              time: '2026-03-23 14:30',
+              game: 'honor_of_kings'
             },
             {
               id: '2',
-              expertId: '102',
-              name: '影子猎手',
-              avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-              rating: 4.8,
-              skill: '大师段位',
-              game: 'LOL',
-              price: 55,
-              viewTime: '2026-03-25 10:00:00'
-            },
-            {
-              id: '3',
-              expertId: '103',
-              name: '电竞少女',
-              avatar: 'https://randomuser.me/api/portraits/women/33.jpg',
-              rating: 4.95,
-              skill: '钻石段位',
-              game: '绝地求生',
-              price: 50,
-              viewTime: '2026-03-24 18:20:00'
-            },
-            {
-              id: '4',
-              expertId: '104',
-              name: '游戏大师',
-              avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-              rating: 4.7,
-              skill: '精英段位',
-              game: 'CS:GO',
-              price: 60,
-              viewTime: '2026-03-24 15:45:00'
-            },
-            {
-              id: '5',
-              expertId: '105',
-              name: '星河漫步',
-              avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
-              rating: 4.98,
-              skill: '最强王者',
-              game: '王者荣耀',
-              price: 88,
-              viewTime: '2026-03-23 20:10:00'
+              type: 'playmate',
+              title: '影子猎手',
+              avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDAkokFDlJJU2ut7ADXOxXgokfLf-nFbve3PmdniZPK8ZjoxO1reJWexxqbxEwDy4thsHQWxI68ySeYsam7yLDI2EWIKoa7no1yZya_-OvKHcnsOU5ukziXluccC3dUHzW8BMFTNlh6bLkgI8bMSDhUTMaTR2jWDsFNRzAKs9RzZ11om4Ki5c9Xj92fIm685lMzUrq9Bk1QuG6y3TXwjzpc6HZVTEFv-aZfUUXt5s020g03CNeOFTD-_F8HtoWP1VEGiCAo5k4gC9o',
+              time: '2026-03-23 10:00',
+              game: 'lol'
             }
           ],
           pagination: {
             currentPage: 1,
             totalPages: 1,
-            totalCount: 5
+            totalCount: 2
           }
         },
         msg: '获取成功'

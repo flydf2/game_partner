@@ -1,13 +1,14 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { communityApi } from '../api/index.js'
 import LazyImage from '../components/common/LazyImage.vue'
+import { mockGames } from '../api/mock-category.js'
 
 const route = useRoute()
 const router = useRouter()
 
-const topicId = ref(route.params.id || '1')
+const topicName = ref(decodeURIComponent(route.params.id || '英雄联盟'))
 const topic = ref(null)
 const posts = ref([])
 const activeTab = ref('hot')
@@ -16,6 +17,18 @@ const error = ref(null)
 const toast = ref({
   show: false,
   message: ''
+})
+
+const gameMap = computed(() => {
+  const map = {}
+  mockGames.forEach(game => {
+    map[game.name] = game
+  })
+  return map
+})
+
+const currentGame = computed(() => {
+  return gameMap.value[topicName.value] || null
 })
 
 const tabs = [
@@ -30,15 +43,16 @@ const fetchTopicDetail = async () => {
   error.value = null
   
   try {
-    const response = await communityApi.getTopicDetail(topicId.value)
+    const response = await communityApi.getTopicDetail(topicName.value)
     
     if (response.success || response.code === 0) {
       const topicData = response.data?.data || response.data
+      const game = currentGame.value
       topic.value = {
         ...topicData,
-        cover: topicData.cover || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJCdVR4SWlVmZS2MfQxv4neWDHVSFi46iFu7fIlPuVcLUzoMaMncSZHdLUkeV6uno5pL3MvmUa7m5q3jQFEiIa1tlYhxIxW43ul0iN37eeYHJZEAZD_Nonsn3SrL3j3htSrp0l3GDtWDA4dsGL-GTGfRJU5k7W99I3RnHFfw_bieodydRDntxEspPO8D_yu3K5n-8DSp_x_AKb77wFMUJe9DzUntWS-mfd2UsJzyUft_2rZPiJ1jRBVJQqDMGpVHTdG6aRdOaK2tU',
-        title: topicData.title || '#王者荣耀',
-        description: topicData.description || '集结最强召唤师！这里是《王者荣耀》官方讨论社区，分享你的高光时刻、上分心得，寻找志同道合的开黑队友。',
+        cover: topicData.cover || (game ? `https://via.placeholder.com/400/6c5a00/ffffff?text=${encodeURIComponent(game.name)}` : 'https://lh3.googleusercontent.com/aida-public/AB6AXuCJCdVR4SWlVmZS2MfQxv4neWDHVSFi46iFu7fIlPuVcLUzoMaMncSZHdLUkeV6uno5pL3MvmUa7m5q3jQFEiIa1tlYhxIxW43ul0iN37eeYHJZEAZD_Nonsn3SrL3j3htSrp0l3GDtWDA4dsGL-GTGfRJU5k7W99I3RnHFfw_bieodydRDntxEspPO8D_yu3K5n-8DSp_x_AKb77wFMUJe9DzUntWS-mfd2UsJzyUft_2rZPiJ1jRBVJQqDMGpVHTdG6aRdOaK2tU'),
+        title: topicData.title || (game ? `#${game.name}` : '#王者荣耀'),
+        description: topicData.description || (game ? `这里是《${game.name}》官方讨论社区，分享你的高光时刻、上分心得，寻找志同道合的开黑队友。` : '集结最强召唤师！这里是《王者荣耀》官方讨论社区，分享你的高光时刻、上分心得，寻找志同道合的开黑队友。'),
         participantCount: topicData.participantCount || 125000,
         postCount: topicData.postCount || 482000
       }
@@ -211,6 +225,10 @@ const handleBack = () => {
   router.back()
 }
 
+const handleClaimExpert = () => {
+  router.push('/expert-verification')
+}
+
 onMounted(() => {
   fetchTopicDetail()
   fetchPosts()
@@ -251,17 +269,27 @@ onMounted(() => {
               class="w-full h-full object-cover -rotate-3 scale-110"
             />
           </div>
-          <div class="space-y-4 pt-2">
-            <div class="inline-flex items-center px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-[10px] font-bold tracking-wider">
-              HOT TOPIC
+          <div class="flex-grow space-y-4">
+            <div class="flex justify-between items-start">
+              <div class="space-y-4">
+                <div class="inline-flex items-center px-3 py-1 bg-tertiary-container text-on-tertiary-container rounded-full text-[10px] font-bold tracking-wider">
+                  HOT TOPIC
+                </div>
+                <h1 class="text-4xl md:text-5xl font-headline font-extrabold text-on-surface leading-none tracking-tight">
+                  {{ topic?.title || '#王者荣耀' }}
+                </h1>
+              </div>
+              <button
+                @click="handleClaimExpert"
+                class="px-5 py-2 bg-primary-container text-primary rounded-full text-sm font-bold hover:bg-primary/90 transition-colors active:scale-95"
+              >
+                认领大神
+              </button>
             </div>
-            <h1 class="text-4xl md:text-5xl font-headline font-extrabold text-on-surface leading-none tracking-tight">
-              {{ topic?.title || '#王者荣耀' }}
-            </h1>
             <p class="text-on-surface-variant text-sm max-w-md leading-relaxed">
               {{ topic?.description || '集结最强召唤师！这里是《王者荣耀》官方讨论社区，分享你的高光时刻、上分心得，寻找志同道合的开黑队友。' }}
             </p>
-            <div class="flex gap-8 pt-2">
+            <div class="flex gap-8">
               <div>
                 <span class="block text-2xl font-headline font-bold text-primary">{{ topic?.participantCount ? (topic.participantCount / 10000).toFixed(1) + 'w' : '12.5w' }}</span>
                 <span class="text-xs text-on-surface-variant">参与人数</span>

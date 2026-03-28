@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { appealApi, handleApiError } from '../api/index.js'
 
@@ -23,12 +23,7 @@ const loadAppeals = async () => {
   error.value = ''
   
   try {
-    const params = {}
-    if (activeTab.value !== 'all') {
-      params.status = activeTab.value
-    }
-    
-    const response = await appealApi.getAppeals(params)
+    const response = await appealApi.getAppeals()
     if (response.success || response.code === 0) {
       appeals.value = response.data || []
     } else {
@@ -59,15 +54,7 @@ const handleAppeal = () => {
   console.log('去申诉')
 }
 
-const filteredAppeals = ref([])
-
-watch([appeals, activeTab], () => {
-  if (activeTab.value === 'all') {
-    filteredAppeals.value = appeals.value
-  } else {
-    filteredAppeals.value = appeals.value.filter(a => a.status === activeTab.value)
-  }
-}, { immediate: true })
+const filteredAppeals = ref(appeals.value)
 
 onMounted(() => {
   loadAppeals()

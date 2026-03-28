@@ -1,9 +1,14 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <!-- TopAppBar -->
-    <TopAppBar title="接单设置中心" />
+    <ListPageHeader
+      title="接单设置中心"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
     
-    <main class="max-w-4xl mx-auto px-5 pt-8 space-y-8">
+    <main class="max-w-4xl mx-auto px-5 pt-24 space-y-8">
       <!-- Status & One-click Sleep Section (Asymmetric Bento) -->
       <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="md:col-span-2 bg-surface-container-lowest p-8 rounded-[2rem] shadow-[0_4px_20px_0_rgba(0,0,0,0.02)] flex flex-col justify-between">
@@ -354,8 +359,11 @@
 <script setup>
 import { ref, computed, nextTick } from 'vue'
 import { defineAsyncComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import { useToast } from '../composables/useToast.js'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
+const router = useRouter()
 const TopAppBar = defineAsyncComponent(() => import('../components/TopAppBar.vue'))
 const BottomNavBar = defineAsyncComponent(() => import('../components/BottomNavBar.vue'))
 
@@ -442,5 +450,21 @@ const saveReply = () => {
   } else {
     showToast('请输入回复内容', 'warning')
   }
+}
+
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 </script>

@@ -23,8 +23,6 @@ const chatPartner = ref({
   skill: ''
 })
 
-const appointment = ref(null)
-
 const messageContainer = ref(null)
 const pollingInterval = ref(null)
 const lastMessageId = ref(null)
@@ -53,8 +51,6 @@ const loadMessages = async () => {
         game: '未知游戏',
         skill: '未知'
       }
-      
-      appointment.value = response.data?.appointment || null
       
       if (messages.value.length > 0) {
         lastMessageId.value = messages.value[messages.value.length - 1].id
@@ -155,12 +151,6 @@ const handleBack = () => {
   router.back()
 }
 
-const handleGoToPayment = () => {
-  if (appointment.value?.id) {
-    router.push(`/confirm-order?appointmentId=${appointment.value.id}`)
-  }
-}
-
 const handleRetryMessage = async (message) => {
   message.status = 'sending'
   
@@ -224,10 +214,6 @@ const startPolling = () => {
               console.error('标记会话已读失败:', err)
             }
           }
-        }
-        
-        if (response.data?.appointment) {
-          appointment.value = response.data.appointment
         }
       }
     } catch (err) {
@@ -337,43 +323,6 @@ watch(() => route.params.id, (newUserId) => {
                 class="w-full h-full object-cover" 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuyVY8He6CZYlr392HOlzoxwVpZM2EuGoAMT1iFq8ioj_Wx-T6ky9SWEnKCc_HoriWlL95Sv2Wp3v-NxA1C6FUoFy_W3QG1uLIHGXFhTJhCl2hLljVR8JPYvnQq_tPE9BgJfkbIRn5DEVrNgfElxjQAS7BfalyFk8vmvUs3zefwsQx6hhEbPjowAFOtT5CrPrfUwngkgmY2ojlbzdNcooq138ZFYfh0D-pHapFs0O2u7zuE1nKEwIbkBhkT3imXvbG4MztaaQVY1M" 
               />
-            </div>
-          </div>
-        </div>
-
-        <div v-if="appointment" class="flex items-start gap-3 max-w-[90%] mb-4">
-          <div class="w-10 h-10 rounded-2xl overflow-hidden flex-shrink-0 shadow-sm">
-            <img 
-              :alt="chatPartner.name" 
-              class="w-full h-full object-cover" 
-              :src="chatPartner.avatar" 
-            />
-          </div>
-          <div class="flex flex-col gap-2">
-            <span class="text-[11px] text-outline ml-2">对方发来一个预约邀请</span>
-            <div class="bg-surface-container-lowest p-0 overflow-hidden rounded-[2rem] shadow-sm border border-white">
-              <div class="p-5 bg-gradient-to-br from-tertiary-container/20 to-transparent">
-                <div class="flex items-center gap-3 mb-4">
-                  <div class="p-3 bg-primary-container rounded-2xl">
-                    <span class="material-symbols-outlined text-on-primary-container" data-icon="sports_esports">sports_esports</span>
-                  </div>
-                  <div>
-                    <h3 class="font-headline font-bold text-on-surface">{{ appointment.gameName || '游戏陪玩' }}</h3>
-                    <p class="text-xs text-outline">{{ appointment.description || '时长: 2小时 / 技术陪练' }}</p>
-                  </div>
-                </div>
-                <div class="flex items-baseline gap-1 mb-5">
-                  <span class="text-xs font-bold text-secondary">¥</span>
-                  <span class="text-3xl font-extrabold text-secondary tracking-tight">{{ appointment.price || '158' }}</span>
-                </div>
-                <button 
-                  class="w-full bg-primary-container py-3.5 rounded-full font-bold text-on-primary-container text-sm flex items-center justify-center gap-2 transition-transform active:scale-95 shadow-lg shadow-primary-container/20"
-                  @click="handleGoToPayment"
-                >
-                  去支付
-                  <span class="material-symbols-outlined text-base" data-icon="chevron_right">chevron_right</span>
-                </button>
-              </div>
             </div>
           </div>
         </div>

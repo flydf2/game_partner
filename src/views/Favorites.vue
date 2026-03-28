@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi, handleApiError } from '../api/index.js'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 
@@ -56,6 +57,22 @@ const handleRemoveFavorite = async (favoriteId) => {
   }
 }
 
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const handleBack = () => {
   router.back()
 }
@@ -73,18 +90,13 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">我的收藏</h1>
-      </div>
-      <div class="text-sm text-on-surface-variant">{{ favorites.length }}人</div>
-    </header>
+    <ListPageHeader
+      title="我的收藏"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6 pt-20">
       <!-- 加载状态 -->

@@ -2,12 +2,12 @@
   <div class="fixed bottom-0 left-0 z-50">
     <!-- 收缩状态 - 左下角浮动按钮 -->
     <div
-      v-if="isCollapsedPage && !isExpanded"
+      v-if="!isPrimaryPage && !isExpanded"
       class="fixed bottom-6 left-6"
     >
       <button
         @click="toggleExpand"
-        class="w-14 h-14 bg-yellow-400 rounded-full shadow-2xl flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-110"
+        class="w-14 h-14 bg-yellow-400 rounded-2xl shadow-2xl flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
         <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">menu</span>
       </button>
@@ -17,13 +17,13 @@
     <nav
       v-else
       class="w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[24px] transition-all duration-300"
-      :class="{ 'fixed bottom-0 left-0': !isCollapsedPage || isExpanded }"
+      :class="{ 'fixed bottom-0 left-0': isPrimaryPage || isExpanded }"
     >
-      <!-- 收起按钮 - 只在非收缩页面显示 -->
+      <!-- 收起按钮 - 只在一级页面显示 -->
       <button
-        v-if="!isCollapsedPage"
+        v-if="isPrimaryPage"
         @click="toggleExpand"
-        class="absolute -top-3 left-4 w-8 h-8 bg-yellow-400 rounded-full shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-110"
+        class="absolute -top-3 left-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
         <span
           class="material-symbols-outlined text-lg transition-transform duration-300"
@@ -33,17 +33,17 @@
         </span>
       </button>
 
-      <!-- 关闭按钮 - 只在收缩页面展开时显示 -->
+      <!-- 关闭按钮 - 只在非一级页面展开时显示 -->
       <button
-        v-if="isCollapsedPage && isExpanded"
+        v-if="!isPrimaryPage && isExpanded"
         @click="toggleExpand"
-        class="absolute -top-3 right-4 w-8 h-8 bg-zinc-200 dark:bg-zinc-700 rounded-full shadow-lg flex items-center justify-center text-zinc-600 dark:text-zinc-300 active:scale-90 transition-transform hover:scale-110"
+        class="absolute -top-3 right-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
         <span class="material-symbols-outlined text-lg">close</span>
       </button>
 
       <!-- 导航项容器 -->
-      <div class="flex justify-around items-center w-full" :class="{ 'pt-2': !isCollapsedPage }">
+      <div class="flex justify-around items-center w-full" :class="{ 'pt-2': isPrimaryPage }">
         <!-- 首页 -->
         <router-link
           to="/"
@@ -93,13 +93,19 @@
         </router-link>
 
         <!-- 社区 -->
-        <a
-          href="http://localhost:5173/community"
+        <router-link
+          to="/community"
           class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          :class="getNavItemClass('/community')"
         >
-          <span class="material-symbols-outlined text-zinc-400 hover:text-yellow-500">forum</span>
+          <span
+            class="material-symbols-outlined"
+            :style="currentRoute === '/community' ? { fontVariationSettings: 'FILL 1' } : {}"
+          >
+            forum
+          </span>
           <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">社区</span>
-        </a>
+        </router-link>
 
         <!-- 订单 -->
         <div class="relative" @click.stop>
@@ -191,34 +197,29 @@ const router = useRouter()
 // 当前路由
 const currentRoute = computed(() => route.path)
 
-// 需要收缩导航栏的页面路径
-const collapsedPages = [
-  '/chat/',
-  '/create-post',
-  '/expert/',
-  '/withdrawal'
-]
+// 一级页面路径
+const primaryPages = ['/', '/discover', '/messages', '/community', '/orders', '/profile']
 
-// 判断当前页面是否需要收缩导航栏
-const isCollapsedPage = computed(() => {
-  return collapsedPages.some(page => currentRoute.value.startsWith(page))
+// 判断当前页面是否为一级页面
+const isPrimaryPage = computed(() => {
+  return primaryPages.some(page => currentRoute.value === page)
 })
 
 // 展开/收起状态
-const isExpanded = ref(false)
+const isExpanded = ref(true)
 
 // 订单菜单展开状态
 const isOrderMenuOpen = ref(false)
 
 // 监听路由变化，重置展开状态
 watch(currentRoute, () => {
-  // 如果是收缩页面，默认收起
-  if (isCollapsedPage.value) {
-    isExpanded.value = false
+  // 一级页面默认展开
+  if (isPrimaryPage.value) {
+    isExpanded.value = true
     isOrderMenuOpen.value = false
   } else {
-    // 其他页面默认展开
-    isExpanded.value = true
+    // 其他页面默认收起
+    isExpanded.value = false
   }
 }, { immediate: true })
 
@@ -247,6 +248,9 @@ const handleOrderClick = (filterType) => {
   if (filterType) {
     isOrderMenuOpen.value = false
     router.push(`/orders?status=${filterType}`)
+    if (!isPrimaryPage.value) {
+      isExpanded.value = false
+    }
   } else {
     isOrderMenuOpen.value = !isOrderMenuOpen.value
   }
@@ -254,8 +258,8 @@ const handleOrderClick = (filterType) => {
 
 // 处理导航点击
 const handleNavClick = () => {
-  // 在收缩页面点击导航后自动收起
-  if (isCollapsedPage.value) {
+  // 在非一级页面点击导航后自动收起
+  if (!isPrimaryPage.value) {
     isExpanded.value = false
   }
 }

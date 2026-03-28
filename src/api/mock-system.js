@@ -1,21 +1,3 @@
-export function mockGetGames() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        success: true,
-        data: [
-          { id: 'honor_of_kings', name: '王者荣耀', icon: 'shield' },
-          { id: 'lol', name: 'LOL', icon: 'videogame_asset' },
-          { id: 'valorant', name: 'Valorant', icon: 'target' },
-          { id: 'genshin', name: '原神', icon: 'auto_awesome' },
-          { id: 'pubg', name: '绝地求生', icon: 'sports_esports' },
-          { id: 'csgo', name: 'CS:GO', icon: 'fitness_center' }
-        ]
-      })
-    }, 200)
-  })
-}
-
 export function mockGetActivities() {
   return new Promise((resolve) => {
     setTimeout(() => {

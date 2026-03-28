@@ -1,7 +1,13 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <!-- TopAppBar -->
-    <TopAppBar title="个人中心" />
+    
+    <ListPageHeader
+      title="个人中心"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
     
     <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
       <!-- 加载状态 -->
@@ -218,7 +224,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import TopAppBar from '../components/TopAppBar.vue'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import { useUserStore } from '../stores/user.js'
 import { useToast } from '../composables/useToast.js'
 import { userApi, orderApi, handleApiError } from '../api/index.js'
@@ -574,6 +580,22 @@ const handleLogout = async () => {
     console.error('退出登录失败:', err)
     showToast('退出登录失败，请重试', 'error')
   }
+}
+
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 onMounted(() => {

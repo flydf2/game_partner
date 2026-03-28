@@ -1,5 +1,3 @@
-import { mockPlaymates } from './mock-playmates.js'
-
 export function mockGetUserInfo() {
   return new Promise((resolve) => {
     setTimeout(() => {

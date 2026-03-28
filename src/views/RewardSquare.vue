@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import api from '../api/index.js'
 
 const router = useRouter()
@@ -79,6 +80,22 @@ const handleMyGrabOrders = () => {
   router.push('/my-grab-orders')
 }
 
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadBounties()
 })
@@ -86,21 +103,15 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-background text-on-background pb-24">
-    <header class="fixed top-0 w-full z-50 bg-surface-container-highest/50 backdrop-blur-xl">
-      <div class="flex justify-between items-center px-5 h-16 max-w-md mx-auto">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden">
-            <img alt="User Avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjJoGEHYas94ht05GyoLbeysVYa6GfSk1cLIIeT_u1ukaxnbpE7EBB_hr-HDJOlDiLcan_5n8K6FDxzwG9Neqns1KbREVofYOQt7zeOr1cnFkqGmeVRGfsOSdLNzMko2dx56PM2CtyZiMIkVHR6l83vKUCuix3EC6yv2T1SMJnkuugVORy9WcVoOVUN_jCHg79O1BnwuJEvZ3uvsP5W-5fEFjJe-cXAQ-zP1FqxtQ3Et5p2eb9XGHx8-v1J68YdNRlzR0N-VLzIBQ" />
-          </div>
-          <span class="text-primary font-black tracking-tight font-headline text-lg">SunnyPlay</span>
-        </div>
-        <button class="text-primary hover:bg-black/5 p-2 rounded-full transition-colors active:scale-95 duration-200">
-          <span class="material-symbols-outlined">notifications</span>
-        </button>
-      </div>
-    </header>
-
-    <main class="max-w-md mx-auto px-5 pt-20 space-y-8">
+    <ListPageHeader
+      title="悬赏广场"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
+    
+    <main class="max-w-md mx-auto px-5 pt-24 space-y-8">
       <!-- Hero Section -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">

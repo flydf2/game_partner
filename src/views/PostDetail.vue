@@ -359,7 +359,7 @@ onMounted(() => {
             💰 悬赏订单
           </span>
           <span class="text-xs text-on-surface-variant">
-            {{ post.rewardInfo.rewardAmount }} {{ post.rewardInfo.rewardType }} · {{ post.rewardInfo.hours }}小时 · 截止：{{ post.rewardInfo.deadline }}
+            {{ post.rewardInfo.rewardAmount }} {{ post.rewardInfo.rewardType }} · 截止：{{ post.rewardInfo.deadline }}
           </span>
         </div>
 
@@ -370,9 +370,8 @@ onMounted(() => {
                 <span class="text-2xl font-bold text-primary">{{ post.rewardInfo.rewardAmount }}</span>
                 <span class="text-sm text-on-surface-variant">{{ post.rewardInfo.rewardType }}</span>
               </div>
-              <div class="text-xs text-on-surface-variant space-y-1">
-                <div><span>游戏：{{ post.rewardInfo.game }}</span></div>
-                <div><span>预计耗时：{{ post.rewardInfo.hours }} 小时</span></div>
+              <div class="text-xs text-on-surface-variant">
+                <span>游戏：{{ post.rewardInfo.game }}</span>
               </div>
             </div>
             <div class="text-right">

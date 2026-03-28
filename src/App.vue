@@ -1,6 +1,5 @@
 <template>
   <div class="min-h-screen bg-surface font-body text-on-surface selection:bg-primary-container">
-    <!-- 路由内容 -->
     <router-view v-slot="{ Component, route }">
       <transition name="fade" mode="out-in">
         <component :is="Component" />

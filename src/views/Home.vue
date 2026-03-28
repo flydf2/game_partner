@@ -1,30 +1,14 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
     
-    <!-- TopAppBar -->
-    <header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4 w-full">
-      <div class="flex items-center gap-4">
-        <span class="material-symbols-outlined text-yellow-600 dark:text-yellow-400 active:scale-95 duration-200 ease-out cursor-pointer" data-icon="menu" @click="goToMenu">menu</span>
-        <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg tracking-tight text-yellow-600 dark:text-yellow-400">发现大神</h1>
-      </div>
-      <div class="flex items-center gap-4">
-        <span
-          class="material-symbols-outlined text-zinc-500 relative cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-          data-icon="notifications"
-          @click="goToNotifications"
-        >
-          notifications
-          <span v-if="unreadCount > 0" class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] font-bold">
-            {{ unreadCount }}
-          </span>
-        </span>
-        <span class="material-symbols-outlined text-zinc-500 cursor-pointer" data-icon="search" @click="goToSearch">search</span>
-        <div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform" @click="goToProfile">
-          <img alt="User Avatar" class="w-full h-full object-cover" data-alt="User profile avatar circle" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBoBTc_5bZuXQ8l_u2UKFazkITvVt5UY-tB83GE9qFMKnbb7Gz7DBuHH11MCcfExFpNociu2AurEP9Lt2NRc9nvSntdZ9hgcWNL_d-0yyyC7bLbO0F8qFUi1FZ_0xgHBG5ZWEfyBs3f5BMl_rBN4SHJoDd3xp76P8kx7eQBwXzcI46GuMySscFwGrnXs_YK9_ArHQEUVcsZUe0o_yRl84Nf4j3WwXor_Xd2gFFDgNuPdbSQuyQiPQkAovGTm7Cek_vM2ZGapACwBM4"/>
-        </div>
-      </div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
-    </header>
+    <ListPageHeader
+      title="发现大神"
+      :unread-count="unreadCount"
+      @menu="goToMenu"
+      @notifications="goToNotifications"
+      @search="goToSearch"
+      @profile="goToProfile"
+    />
     
     <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-8">
     <!-- Hero Banner: Honor of Kings Tournament -->
@@ -306,6 +290,7 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import { api } from '../services/api.js'
 import { useScrollAnimation } from '../composables/useScrollAnimation.js'
 import { notificationApi } from '../api/index.js'
@@ -378,7 +363,10 @@ const navigateToGameCategories = () => {
 }
 
 const navigateToDiscoverWithGame = (gameId) => {
-  router.push({ path: '/discover', query: { gameId } })
+  const game = games.value.find(g => g.id === gameId)
+  if (game) {
+    router.push(`/topic/${encodeURIComponent(game.name)}`)
+  }
 }
 
 // 状态管理

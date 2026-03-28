@@ -1,19 +1,12 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <!-- TopAppBar -->
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900 docked full-width top-0 flex justify-between items-center px-6 py-4 w-full">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full bg-surface-container overflow-hidden">
-          <img alt="User Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAsCWYdTEOK1mYXdsgZAxgLysbpLSZbmUOf4Pt6GqBcL7WQ3qXWTnqGgY0YtlAvzuqaSqkNfuhnM31QoOoDp-KZP-ZRyOSSvSwRaM0GvgBNqpvvgAlx5vF_LUQbY6-VuEK41Z2GDbosGuoW1dQbuevNHdchBU565tD0ss-Pt_nGNUkJnwdudi0C6ha3dx3ovStoTK3SQ7C_3hWsL5Jhas8R8cFRDPEzYVH7czm4LnsORJQ7L1uoaXmQTEcJPXUsXdwgk2Es-SABTM" />
-        </div>
-        <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">大神排行</h1>
-      </div>
-      <div class="flex items-center gap-4">
-        <button class="text-[#6c5a00] dark:text-[#FFD700] hover:opacity-80 transition-opacity active:scale-95 transition-transform">
-          <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
-        </button>
-      </div>
-    </header>
+    <ListPageHeader
+      title="大神排行"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
     
     <main class="max-w-md mx-auto px-5 pt-24 pb-32">
       <!-- Tab Switcher -->
@@ -136,6 +129,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import api from '../api/index.js'
+import ListPageHeader from '../components/ListPageHeader.vue'
 
 const router = useRouter()
 
@@ -185,6 +179,22 @@ const loadLeaderboard = async () => {
   } finally {
     loading.value = false
   }
+}
+
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 onMounted(() => {

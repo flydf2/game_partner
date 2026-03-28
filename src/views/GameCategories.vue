@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import { api } from '../services/api.js'
 
 const router = useRouter()
@@ -63,44 +64,43 @@ const loadGames = async () => {
   }
 }
 
-onMounted(() => {
-  loadGames()
-})
+const handleGameSelect = (game) => {
+  console.log('选择游戏:', game)
+  router.push(`/topic/${game.name}`)
+}
 
-const handleGameSelect = (gameId) => {
-  console.log('选择游戏:', gameId)
-  // 这里可以跳转到游戏详情页面或技能认证页面
-  router.push('/expert-verification')
+const handleMenu = () => {
+  router.push('/profile')
 }
 
 const handleNotifications = () => {
-  console.log('通知')
+  router.push('/notifications')
+}
+
+const handleSearchHeader = () => {
+  router.push('/search')
 }
 
 const handleProfile = () => {
   router.push('/profile')
 }
+
+onMounted(() => {
+  loadGames()
+})
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <!-- Top Navigation Anchor -->
-    <header class="bg-surface fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4">
-      <div class="flex items-center gap-3">
-        <span class="material-symbols-outlined text-primary">grid_view</span>
-        <h1 class="text-primary font-headline font-bold text-lg">游戏分类</h1>
-      </div>
-      <div class="flex items-center gap-4">
-        <button @click="handleNotifications" class="text-neutral-500 hover:opacity-80 transition-opacity active:scale-95 transition-transform">
-          <span class="material-symbols-outlined">notifications</span>
-        </button>
-        <button @click="handleProfile" class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
-          <img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwUt6pQRLLdeu_Bmf1d44qJCNduKIPqoONJ7qtflO4D81igagDtYxqWPFsBktIND10YcC0518JxX5wd4M2EnZL1n4pyU7CDrnAR-xTFAO588L7YCKHF0Wzs8pOXQbK3Fe8s7QI6uHzCCSeIWpV4l3Hb3EoJdtr_Y1oaL4vhBnSSwxIsQRz-7FyhYEh9Rzf6nUPVqP8LutLAckx2N6AR4lt9dWUnQXRaXmQchSR0KuRCJBPqEar-nOLIuTHBfIcqBlaBajY3D87lVQ" />
-        </button>
-      </div>
-    </header>
-
-    <main class="pt-20 px-6 pb-24">
+    <ListPageHeader
+      title="游戏分类"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearchHeader"
+      @profile="handleProfile"
+    />
+    
+    <main class="pt-24 px-6 pb-24">
       <!-- Search Bar Section -->
       <div class="mb-6 mt-4">
         <div class="relative flex items-center bg-surface-container-high rounded-full px-5 py-3.5 transition-all focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container">
@@ -168,7 +168,7 @@ const handleProfile = () => {
             <div
               v-for="game in filteredGames"
               :key="game.id"
-              @click="handleGameSelect(game.id)"
+              @click="handleGameSelect(game)"
               class="flex flex-col items-center gap-2 group active:scale-95 transition-transform cursor-pointer"
             >
               <div class="w-full aspect-square rounded-2xl bg-surface-container-lowest shadow-sm overflow-hidden flex items-center justify-center">

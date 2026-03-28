@@ -1,12 +1,29 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import ListPageHeader from '../components/ListPageHeader.vue'
 import { orderApi, handleApiError } from '../api/index.js'
 
 const router = useRouter()
 
 const handleBack = () => {
   router.back()
+}
+
+const handleMenu = () => {
+  router.push('/profile')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const activeTab = ref('all')
@@ -30,6 +47,44 @@ const filteredOrders = computed(() => {
   }
 })
 
+const getStatusText = (status) => {
+  const statusMap = {
+    pending: '待确认',
+    ongoing: '进行中',
+    completed: '已完成',
+    cancelled: '已取消'
+  }
+  return statusMap[status] || status
+}
+
+const getStatusClass = (status) => {
+  const classMap = {
+    pending: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+    ongoing: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+    completed: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
+    cancelled: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+  }
+  return classMap[status] || ''
+}
+
+const formatTime = (time) => {
+  const date = new Date(time)
+  const now = new Date()
+  const diff = now - date
+  
+  if (diff < 60000) return '刚刚'
+  if (diff < 3600000) return `${Math.floor(diff / 60000)}分钟前`
+  if (diff < 86400000) return `${Math.floor(diff / 3600000)}小时前`
+  if (diff < 604800000) return `${Math.floor(diff / 86400000)}天前`
+  return date.toLocaleDateString()
+}
+
+const getDurationText = (status) => {
+  if (status === 'completed') return '服务完成'
+  if (status === 'cancelled') return '已取消'
+  return '进行中'
+}
+
 const loadOrders = async () => {
   loading.value = true
   error.value = null
@@ -37,7 +92,6 @@ const loadOrders = async () => {
   try {
     const response = await orderApi.getOrders(activeTab.value === 'all' ? 'all' : activeTab.value)
     if (response.success || response.code === 0) {
-      // 转换订单数据格式
       orders.value = (response.data?.data || response.data || []).map(order => ({
         ...order,
         id: order.id,
@@ -58,82 +112,24 @@ const loadOrders = async () => {
       throw new Error(response.message || response.msg || '获取订单失败')
     }
   } catch (err) {
-    const result = handleApiError(err)
-    error.value = result.error
+    error.value = err.message || '获取订单失败'
     console.error('获取订单失败:', err)
   } finally {
     loading.value = false
   }
 }
 
-const getStatusText = (status) => {
-  const statusMap = {
-    pending: '待确认',
-    ongoing: '进行中',
-    completed: '已完成',
-    cancelled: '已取消'
-  }
-  return statusMap[status] || '未知状态'
-}
-
-const getStatusClass = (status) => {
-  const classMap = {
-    pending: 'bg-primary-container text-on-primary-container',
-    ongoing: 'bg-tertiary-container/20 text-on-tertiary-container',
-    completed: 'bg-surface-container-high text-on-surface-variant',
-    cancelled: 'bg-error-container/10 text-error'
-  }
-  return classMap[status] || 'bg-surface-container text-on-surface'
-}
-
-const getDurationText = (status) => {
-  switch (status) {
-    case 'ongoing':
-      return '2小时 • 1局'
-    case 'completed':
-      return '1小时 • 娱乐上分'
-    case 'pending':
-      return '等待确认中...'
-    case 'cancelled':
-      return '用户已取消申请'
-    default:
-      return ''
-  }
-}
-
-const formatTime = (dateString) => {
-  if (!dateString) return '未知时间'
-  
-  const date = new Date(dateString)
-  const now = new Date()
-  const diff = now - date
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
-  
-  if (days === 0) {
-    return `今天, ${date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`
-  } else if (days === 1) {
-    return `昨天, ${date.toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })}`
-  } else if (days < 7) {
-    return `${days}天前`
-  } else {
-    return date.toLocaleDateString('zh-CN')
-  }
-}
-
-const handleTabChange = async (tabId) => {
+const handleTabChange = (tabId) => {
   activeTab.value = tabId
-  await loadOrders()
+  loadOrders()
 }
 
-const handleContact = (orderId) => {
-  console.log('联系Ta:', orderId)
-  // 跳转到聊天页面
+const handleChat = (orderId) => {
   router.push(`/chat/${orderId}`)
 }
 
 const handleEnterRoom = (orderId) => {
   console.log('进入房间:', orderId)
-  // 这里可以添加进入房间的逻辑
   alert('进入房间功能已开发')
 }
 
@@ -225,7 +221,6 @@ const handleRejectOrder = async (orderId) => {
 
 const handleViewDetails = (orderId) => {
   console.log('查看详情:', orderId)
-  // 跳转到订单详情页面
   router.push(`/order/${orderId}`)
 }
 
@@ -236,22 +231,15 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">我的订单</h1>
-      </div>
-      <div class="w-6"></div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 dark:bg-zinc-800 h-[1px] w-full self-end opacity-20"></div>
-    </header>
-
+    <ListPageHeader
+      title="我的订单"
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
+    
     <main class="max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
-      <!-- Status Tabs -->
       <div class="px-5 py-4 sticky top-16 bg-background z-40">
         <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1">
           <button
@@ -270,110 +258,143 @@ onMounted(() => {
         </div>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-20">
-        <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div v-if="loading" class="flex justify-center py-12">
+        <div class="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
 
-      <!-- Error State -->
-      <div v-else-if="error" class="flex flex-col items-center justify-center py-20 px-5">
-        <span class="material-symbols-outlined text-4xl text-error mb-4">error_outline</span>
-        <p class="text-center text-error mb-4">{{ error }}</p>
+      <div v-else-if="error" class="text-center py-12">
+        <span class="material-symbols-outlined text-4xl text-outline mb-4">error_outline</span>
+        <p class="text-sm text-on-surface-variant mb-4">{{ error }}</p>
         <button
           @click="loadOrders"
-          class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold active:scale-95 transition-transform"
+          class="px-6 py-2 bg-primary text-on-primary rounded-full text-sm font-bold active:scale-95 transition-all"
         >
           重试
         </button>
       </div>
 
-      <!-- Empty State -->
-      <div v-else-if="filteredOrders.length === 0" class="flex flex-col items-center justify-center py-20 px-5">
-        <span class="material-symbols-outlined text-4xl text-outline mb-4">receipt_long</span>
-        <p class="text-center text-on-surface-variant mb-4">暂无订单</p>
-        <button
-          @click="router.push('/discover')"
-          class="px-6 py-2.5 bg-primary text-on-primary rounded-full font-bold active:scale-95 transition-transform"
-        >
-          去下单
-        </button>
+      <div v-else-if="filteredOrders.length === 0" class="text-center py-16">
+        <div class="w-24 h-24 mx-auto bg-surface-container rounded-full flex items-center justify-center mb-6">
+          <span class="material-symbols-outlined text-outline text-5xl">assignment</span>
+        </div>
+        <h2 class="text-xl font-bold text-on-surface mb-2">暂无订单</h2>
+        <p class="text-sm text-on-surface-variant">开始预约陪玩，订单会显示在这里</p>
       </div>
 
-      <!-- Orders List -->
-      <div v-else class="px-5 space-y-4">
-        <div
-          v-for="order in filteredOrders"
-          :key="order.id"
-          :class="[
-            'bg-surface-container-lowest rounded-xl p-5 shadow-sm space-y-4 relative overflow-hidden',
-            order.status === 'cancelled' ? 'opacity-70 grayscale-[0.5]' : ''
-          ]"
-        >
-          <div class="absolute top-0 right-0">
-            <div :class="['text-[10px] font-bold px-3 py-1 rounded-bl-xl uppercase tracking-wider', order.statusClass]">
-              {{ order.statusText }}
-            </div>
-          </div>
-
-          <div class="flex items-center gap-4">
-            <div class="w-14 h-14 rounded-xl overflow-hidden bg-primary-container/10 flex items-center justify-center">
-              <img :alt="order.playmate.name" class="w-full h-full object-cover" :src="order.playmate.avatar" />
-            </div>
-            <div>
-              <h3 class="font-headline font-bold text-on-surface text-base">{{ order.playmate.name }}</h3>
-              <p class="text-on-surface-variant text-xs font-medium">{{ order.playmate.game }} • {{ order.playmate.service }}</p>
-            </div>
-          </div>
-
-          <div v-if="order.status !== 'cancelled'" class="bg-surface-container-low rounded-xl p-3 flex justify-between items-center">
-            <div class="space-y-1">
-              <div class="flex items-center gap-1.5 text-on-surface-variant">
-                <span class="material-symbols-outlined text-sm">
-                  {{ order.status === 'ongoing' ? 'schedule' : order.status === 'completed' ? 'event_available' : 'hourglass_empty' }}
-                </span>
-                <span class="text-xs">{{ order.time }}</span>
+      <div v-for="order in filteredOrders" :key="order.id" class="bg-surface-container-lowest rounded-3xl p-5 shadow-sm">
+        <div class="flex items-start gap-4 mb-4">
+          <img
+            :src="order.playmate.avatar"
+            :alt="order.playmate.name"
+            class="w-14 h-14 rounded-2xl object-cover"
+          />
+          <div class="flex-1 min-w-0">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h3 class="font-bold text-on-surface mb-1">{{ order.playmate.name }}</h3>
+                <div class="flex items-center gap-2 text-xs text-on-surface-variant">
+                  <span>{{ order.playmate.game }}</span>
+                  <span>•</span>
+                  <span>{{ order.playmate.service }}</span>
+                </div>
               </div>
-              <div class="flex items-center gap-1.5 text-on-surface-variant">
-                <span class="material-symbols-outlined text-sm">timelapse</span>
-                <span class="text-xs">{{ order.duration }}</span>
-              </div>
+              <span
+                :class="[
+                  'px-3 py-1 rounded-full text-xs font-bold',
+                  order.statusClass
+                ]"
+              >
+                {{ order.statusText }}
+              </span>
             </div>
-            <div class="text-right">
-              <p class="text-[10px] text-on-surface-variant uppercase font-bold tracking-tighter">总价</p>
-              <p class="text-xl font-headline font-extrabold" :class="order.status === 'completed' ? 'text-on-surface-variant' : 'text-primary'">
-                ${{ order.price.toFixed(2) }}
-              </p>
+            <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">schedule</span>
+                {{ order.time }}
+              </span>
+              <span class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px]">access_time</span>
+                {{ order.duration }}
+              </span>
             </div>
           </div>
+        </div>
 
-          <div v-if="order.status === 'cancelled'" class="flex justify-between items-center text-on-surface-variant">
-            <span class="text-xs italic">{{ order.duration }}</span>
-            <button @click="handleViewDetails(order.id)" class="text-xs font-bold text-primary underline active:scale-95 transition-transform">查看详情</button>
+        <div class="flex items-center justify-between pt-4 border-t border-outline/10">
+          <div class="flex items-center gap-2">
+            <span class="text-lg font-bold text-primary">¥{{ order.price }}</span>
+            <span class="text-xs text-on-surface-variant">/ {{ order.duration }}</span>
           </div>
 
-          <div v-if="order.status === 'ongoing'" class="flex gap-3 pt-1">
-            <button @click="handleContact(order.id)" class="flex-1 py-2.5 rounded-full bg-surface-container-high text-primary font-headline font-bold text-sm active:scale-95 transition-transform">
-              联系Ta
+          <div class="flex items-center gap-2">
+            <button
+              v-if="order.status === 'pending'"
+              @click.stop="handleAcceptOrder(order.id)"
+              class="px-4 py-2 bg-primary text-on-primary rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              接单
             </button>
-            <button @click="handleEnterRoom(order.id)" class="flex-1 py-2.5 rounded-full bg-primary text-on-primary-fixed font-headline font-bold text-sm shadow-md active:scale-95 transition-transform">
+            <button
+              v-if="order.status === 'pending'"
+              @click.stop="handleRejectOrder(order.id)"
+              class="px-4 py-2 bg-error text-on-error rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              拒绝
+            </button>
+            <button
+              v-if="order.status === 'ongoing'"
+              @click.stop="handleConfirmOrder(order.id)"
+              class="px-4 py-2 bg-success text-on-success rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              确认完成
+            </button>
+            <button
+              v-if="order.status === 'pending'"
+              @click.stop="handleCancelOrder(order.id)"
+              class="px-4 py-2 bg-error text-on-error rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              取消
+            </button>
+            <button
+              v-if="order.status === 'completed'"
+              @click.stop="handleOrderAgain(order.id)"
+              class="px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              再来一单
+            </button>
+            <button
+              v-if="order.status === 'completed'"
+              @click.stop="handleReview(order.id)"
+              class="px-4 py-2 bg-primary text-on-primary rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              评价
+            </button>
+            <button
+              @click.stop="handleViewDetails(order.id)"
+              class="px-4 py-2 bg-surface-container-high text-on-surface rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              查看详情
+            </button>
+            <button
+              @click.stop="handleChat(order.id)"
+              class="px-4 py-2 bg-primary text-on-primary rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
+              聊天
+            </button>
+            <button
+              v-if="order.status === 'ongoing'"
+              @click.stop="handleEnterRoom(order.id)"
+              class="px-4 py-2 bg-success text-on-success rounded-full text-xs font-bold active:scale-95 transition-all"
+            >
               进入房间
             </button>
           </div>
+        </div>
+      </div>
 
-          <div v-if="order.status === 'completed'" class="flex gap-3 pt-1">
-            <button @click="handleOrderAgain(order.id)" class="flex-1 py-2.5 rounded-full border border-outline-variant/20 text-on-surface-variant font-headline font-bold text-sm active:scale-95 transition-transform">
-              再来一单
-            </button>
-            <button @click="handleReview(order.id)" class="flex-1 py-2.5 rounded-full bg-tertiary-container text-on-tertiary-container font-headline font-bold text-sm shadow-md active:scale-95 transition-transform">
-              去评价
-            </button>
-          </div>
-
-          <div v-if="order.status === 'pending'" class="flex gap-3 pt-1">
-            <button @click="handleCancelOrder(order.id)" class="w-full py-2.5 rounded-full bg-surface-container-high text-error font-headline font-bold text-sm active:scale-95 transition-transform">
-              取消订单
-            </button>
-          </div>
+      <div v-if="filteredOrders.length > 0 && !loading && !error" class="py-8">
+        <div class="text-center">
+          <p class="text-sm text-on-surface-variant">没有更多订单了</p>
         </div>
       </div>
     </main>
