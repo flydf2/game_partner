@@ -1,7 +1,7 @@
 <template>
   <div class="reward-publish">
     <div class="container">
-      <h1>发布悬赏</h1>
+      <h1>{{ isEditMode ? '编辑悬赏' : '发布悬赏' }}</h1>
       
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
@@ -39,7 +39,7 @@
         </div>
         
         <div class="form-actions">
-          <button type="submit" class="btn-primary">发布</button>
+          <button type="submit" class="btn-primary">{{ isEditMode ? '保存修改' : '发布' }}</button>
           <button type="button" class="btn-secondary" @click="goBack">取消</button>
         </div>
       </form>
@@ -48,11 +48,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { rewardOrderApi } from '../api/index.js'
 
 const router = useRouter()
+const route = useRoute()
 
+const isEditMode = ref(false)
 const formData = ref({
   rank: '',
   startTime: '',
@@ -61,8 +64,37 @@ const formData = ref({
   location: ''
 })
 
+onMounted(async () => {
+  const id = route.query.id
+  if (id) {
+    isEditMode.value = true
+    await loadRewardData(id)
+  }
+})
+
+const loadRewardData = async (id) => {
+  try {
+    const response = await rewardOrderApi.getRewardOrderDetail(id)
+    if (response.code === 0 || response.success) {
+      const data = response.data || response.data?.data
+      if (data) {
+        // 填充表单数据（适配mock数据结构）
+        formData.value = {
+          rank: data.tags?.[0] || '', // 使用第一个标签作为段位
+          startTime: data.createdAt || '',
+          duration: 1, // 默认时长
+          timeLeft: data.timeLeft || '',
+          location: '默认位置' // 默认位置
+        }
+      }
+    }
+  } catch (error) {
+    console.error('加载奖励数据失败:', error)
+  }
+}
+
 const handleSubmit = () => {
-  console.log('发布悬赏:', formData.value)
+  console.log('提交数据:', formData.value)
   // 这里可以添加提交逻辑
   router.push('/reward')
 }

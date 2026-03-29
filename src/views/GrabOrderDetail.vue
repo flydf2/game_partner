@@ -20,6 +20,7 @@ const loadOrderDetail = async () => {
     // 模拟数据
     order.value = {
       id: orderId.value,
+      rewardId: orderId.value, // 添加悬赏单ID，与订单ID相同
       title: '王者荣耀：巅峰赛上分',
       game: '王者荣耀',
       category: 'MOBA 竞技',
@@ -59,6 +60,12 @@ const handleCancel = () => {
 
 const handleGoToChat = () => {
   router.push(`/chat/${orderId.value}`)
+}
+
+const handleGoToRewardDetail = () => {
+  // 假设订单数据中包含悬赏单ID，如果没有则使用当前订单ID
+  const rewardId = order.value?.rewardId || orderId.value
+  router.push(`/reward/${rewardId}`)
 }
 
 const handleWithdraw = async () => {
@@ -270,6 +277,13 @@ onMounted(() => {
       >
         <span class="material-symbols-outlined text-2xl mb-1">cancel</span>
         <span class="font-headline font-semibold text-[12px]">撤回申请</span>
+      </button>
+      <button 
+        @click="handleGoToRewardDetail"
+        class="flex flex-col items-center justify-center text-on-surface px-6 py-2 hover:bg-surface-container-high active:scale-98 transition-transform"
+      >
+        <span class="material-symbols-outlined text-2xl mb-1">receipt_long</span>
+        <span class="font-headline font-semibold text-[12px]">悬赏详情</span>
       </button>
       <button 
         @click="handleGoToChat"

@@ -346,7 +346,7 @@ onMounted(() => {
         </section>
 
         <!-- 抢单列表 -->
-        <section v-if="(order.status === 'ongoing' || order.status === 'completed') && applicants.length > 0" class="space-y-4">
+        <section v-if="(order.status === 'available' || order.status === 'ongoing' || order.status === 'completed') && applicants.length > 0" class="space-y-4">
           <div class="flex items-center justify-between px-1">
             <h3 class="font-headline font-extrabold text-lg flex items-center gap-2">
               大神抢单列表
@@ -360,15 +360,18 @@ onMounted(() => {
               <div 
                 :class="[
                   'bg-surface-container-lowest p-5 rounded-3xl flex items-center gap-4 transition-all duration-300',
-                  applicant.selected ? 'border-2 border-primary-container shadow-md' : 'hover:bg-white hover:shadow-sm'
+                  applicant.status === 'approved' ? 'border-2 border-primary-container shadow-md' : 'hover:bg-white hover:shadow-sm'
                 ]"
               >
                 <div class="relative">
                   <div class="w-16 h-16 rounded-2xl overflow-hidden shadow-md border-2 border-surface-container">
                     <img :alt="applicant.name" class="w-full h-full object-cover" :src="applicant.avatar" />
                   </div>
-                  <div v-if="applicant.selected" class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[8px] font-bold px-1.5 py-0.5 rounded-md border-2 border-white">
-                    TOP 1
+                  <div v-if="applicant.status === 'approved'" class="absolute -bottom-1 -right-1 bg-primary text-on-primary text-[8px] font-bold px-1.5 py-0.5 rounded-md border-2 border-white">
+                    已通过
+                  </div>
+                  <div v-else-if="applicant.status === 'rejected'" class="absolute -bottom-1 -right-1 bg-error-container text-on-error-container text-[8px] font-bold px-1.5 py-0.5 rounded-md border-2 border-white">
+                    已拒绝
                   </div>
                   <div v-else class="absolute -bottom-1 -right-1 bg-primary text-on-primary-container text-[8px] font-black px-1.5 py-0.5 rounded-md border-2 border-white">
                     LV.{{ applicant.level }}
@@ -380,9 +383,18 @@ onMounted(() => {
                     <h4 class="font-bold text-on-surface truncate">{{ applicant.name }}</h4>
                     <span :class="[
                       'text-[10px] px-1.5 py-0.5 rounded-md font-bold',
-                      applicant.selected ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary-container'
+                      applicant.status === 'approved' ? 'bg-primary-container text-on-primary-container' : 'bg-secondary-container text-on-secondary-container'
                     ]">
                       LV.{{ applicant.level }}
+                    </span>
+                    <span :class="[
+                      'text-[10px] px-1.5 py-0.5 rounded-md font-bold',
+                      applicant.status === 'pending' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                      applicant.status === 'approved' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                      applicant.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                      'bg-surface-container text-on-surface-variant'
+                    ]">
+                      {{ applicant.status === 'pending' ? '待处理' : applicant.status === 'approved' ? '已通过' : applicant.status === 'rejected' ? '已拒绝' : applicant.status }}
                     </span>
                   </div>
                   <div class="flex items-center gap-1 mt-1">
@@ -391,6 +403,7 @@ onMounted(() => {
                     <span class="text-[10px] text-on-surface-variant ml-1">{{ applicant.orderCount || '0' }} 接单</span>
                   </div>
                   <p class="text-sm text-on-surface-variant mt-2 leading-relaxed line-clamp-2">{{ applicant.specialty }}</p>
+                  <p v-if="applicant.recommendation" class="text-xs text-on-surface-variant mt-1 leading-relaxed line-clamp-1">推荐理由：{{ applicant.recommendation }}</p>
                   <div class="flex gap-1 mt-2">
                     <span v-for="badge in applicant.badges" :key="badge.type" :class="[
                       'text-[9px] px-2 py-0.5 rounded-full',
@@ -406,18 +419,74 @@ onMounted(() => {
                     <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">chat_bubble</span>
                   </button>
                   <button 
-                    v-if="applicant.selected"
+                    v-if="applicant.status === 'approved'"
                     class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container"
                   >
                     <span class="material-symbols-outlined">check_circle</span>
                   </button>
                   <button 
-                    v-else-if="isPublisher && order.status === 'available'"
+                    v-else-if="isPublisher && order.status === 'available' && applicant.status === 'pending'"
                     @click="handleSelectApplicant(applicant.id)"
                     class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary active:scale-90 transition-all hover:shadow-md hover:shadow-primary/20"
                   >
                     <span class="material-symbols-outlined">check</span>
                   </button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </section>
+
+        <!-- 发布列表 -->
+        <section v-if="publishedOrders.length > 0" class="space-y-4">
+          <div class="flex items-center justify-between px-1">
+            <h3 class="font-headline font-extrabold text-lg flex items-center gap-2">
+              最新发布
+              <span class="bg-primary-container text-on-primary-container text-xs px-2 py-0.5 rounded-full">{{ publishedOrders.length }}</span>
+            </h3>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <template v-for="publishedOrder in publishedOrders.slice(0, 4)" :key="publishedOrder.id">
+              <div 
+                @click="router.push(`/reward/${publishedOrder.id}`)"
+                class="bg-surface-container-lowest p-4 rounded-3xl transition-all duration-300 hover:bg-white hover:shadow-md cursor-pointer"
+              >
+                <div class="flex justify-between items-start mb-3">
+                  <span :class="[
+                    'text-[10px] font-bold px-3 py-1.5 rounded-full uppercase tracking-wider',
+                    publishedOrder.status === 'available' ? 'bg-primary-container text-on-primary-container' :
+                    publishedOrder.status === 'ongoing' ? 'bg-tertiary-container text-on-tertiary-container' :
+                    publishedOrder.status === 'completed' ? 'bg-secondary-container text-on-secondary-container' :
+                    publishedOrder.status === 'draft' ? 'bg-surface-container-high text-on-surface-variant' :
+                    publishedOrder.status === 'cancelled' ? 'bg-error-container text-on-error-container' :
+                    publishedOrder.status === 'expired' ? 'bg-surface-container-high text-on-surface-variant' :
+                    'bg-primary-container text-on-primary-container'
+                  ]">
+                    {{ publishedOrder.status === 'available' ? '可抢单' : publishedOrder.status === 'ongoing' ? '进行中' : publishedOrder.status === 'completed' ? '已完成' : publishedOrder.status === 'draft' ? '草稿' : publishedOrder.status === 'cancelled' ? '已取消' : publishedOrder.status === 'expired' ? '已过期' : '已结束' }}
+                  </span>
+                  <div class="text-right">
+                    <span class="text-xs text-on-surface-variant font-medium">赏金</span>
+                    <div class="text-lg font-headline font-black text-primary">¥{{ publishedOrder.reward }}</div>
+                  </div>
+                </div>
+                
+                <h4 class="font-bold text-on-surface text-sm mb-2 line-clamp-2">{{ publishedOrder.title || publishedOrder.content || '任务标题' }}</h4>
+                
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="material-symbols-outlined text-sm text-on-surface-variant">videogame_asset</span>
+                  <span class="text-xs text-on-surface-variant">{{ publishedOrder.game || '未知游戏' }}</span>
+                </div>
+                
+                <div class="flex items-center gap-2 mb-3">
+                  <span class="material-symbols-outlined text-sm text-on-surface-variant">schedule</span>
+                  <span class="text-xs text-on-surface-variant">{{ publishedOrder.timeLeft || publishedOrder.deadline || '不限' }}</span>
+                </div>
+                
+                <div class="flex flex-wrap gap-1">
+                  <span v-for="(tag, index) in (Array.isArray(publishedOrder.tags) ? publishedOrder.tags : [publishedOrder.tags])" :key="index" class="px-2 py-1 bg-surface-container text-on-surface-variant text-[9px] font-medium rounded-full">
+                    {{ tag }}
+                  </span>
                 </div>
               </div>
             </template>

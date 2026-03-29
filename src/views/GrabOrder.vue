@@ -12,7 +12,7 @@ const order = ref(null)
 const loading = ref(true)
 const isSubmitting = ref(false)
 const error = ref('')
-const selfRecommendation = ref('')
+const recommendation = ref('')
 const departureTime = ref('immediate')
 const selectedFiles = ref({ voice: null, record: null })
 
@@ -43,7 +43,7 @@ const handleGrabOrder = async () => {
   isSubmitting.value = true
   try {
     const grabData = {
-      selfRecommendation: selfRecommendation.value,
+      recommendation: recommendation.value,
       departureTime: departureTime.value,
       voiceFile: selectedFiles.value.voice,
       recordFile: selectedFiles.value.record
@@ -92,7 +92,7 @@ const handleFileSelect = (type) => {
 }
 
 const fillTemplate = () => {
-  selfRecommendation.value = '国服韩信，胜率85%，声音好听会聊天，带飞全场...'
+  recommendation.value = '国服韩信，胜率85%，声音好听会聊天，带飞全场...'
 }
 
 onMounted(() => {
@@ -180,7 +180,7 @@ onMounted(() => {
           </div>
           <div class="relative">
             <textarea
-              v-model="selfRecommendation"
+              v-model="recommendation"
               class="w-full bg-surface-container-high border-none rounded-2xl p-4 text-sm focus:ring-2 focus:ring-primary-container focus:bg-surface-container-lowest min-h-[120px] transition-all resize-none"
               placeholder="例如：国服韩信，胜率85%，声音好听会聊天，带飞全场..."
             ></textarea>

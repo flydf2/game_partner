@@ -1539,48 +1539,61 @@ export const rewardOrderApi = {
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
-            success: true,
+            code: 0,
             data: [
               {
-                id: 1,
-                name: '逐风猎手',
-                avatar: 'https://via.placeholder.com/56',
-                level: 24,
-                rating: 4.9,
-                specialty: '擅长：玄策、韩信、李白 | 效率极高',
-                orderCount: 2400,
+                appliedAt: '2026-03-29T21:37:00.826+08:00',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 badges: [
-                  { type: 'verified', text: '实名认证' },
-                  { type: 'deposit', text: '保证金已缴' }
-                ]
-              },
-              {
-                id: 2,
-                name: '沐沐酱ovo',
-                avatar: 'https://via.placeholder.com/56',
-                level: 32,
-                rating: 5.0,
-                specialty: '国服辅助，意识流选手，全程语音',
-                orderCount: 1200,
-                badges: [
-                  { type: 'recommended', text: '推荐' },
-                  { type: 'experienced', text: '千场老练' }
+                  { text: '实名认证', type: 'verified' },
+                  { text: '保证金已缴', type: 'deposit' }
                 ],
-                selected: true
+                id: 7,
+                level: 24,
+                name: '用户1',
+                orderCount: 100,
+                rating: 4.9,
+                recommendation: '',
+                specialty: '擅长各种游戏',
+                status: 'approved',
+                userId: 1
               },
               {
-                id: 3,
-                name: '冷面刺客',
-                avatar: 'https://via.placeholder.com/56',
-                level: 18,
-                rating: 4.7,
-                specialty: '专注高端局，不说话只带飞',
-                orderCount: 856,
+                appliedAt: '2026-03-29T21:38:00.123+08:00',
+                avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
                 badges: [
-                  { type: 'verified', text: '实名认证' }
-                ]
+                  { text: '实名认证', type: 'verified' }
+                ],
+                id: 8,
+                level: 32,
+                name: '用户2',
+                orderCount: 150,
+                rating: 4.8,
+                recommendation: '我有丰富的游戏经验',
+                specialty: '擅长MOBA类游戏',
+                status: 'pending',
+                userId: 2
+              },
+              {
+                appliedAt: '2026-03-29T21:39:00.456+08:00',
+                avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
+                badges: [
+                  { text: '实名认证', type: 'verified' },
+                  { text: '保证金已缴', type: 'deposit' },
+                  { text: '推荐', type: 'recommended' }
+                ],
+                id: 9,
+                level: 28,
+                name: '用户3',
+                orderCount: 200,
+                rating: 4.95,
+                recommendation: '专业游戏玩家，保证服务质量',
+                specialty: '擅长射击类游戏',
+                status: 'rejected',
+                userId: 3
               }
-            ]
+            ],
+            msg: '获取成功'
           })
         }, 300)
       })
