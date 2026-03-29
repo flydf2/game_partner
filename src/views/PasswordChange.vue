@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { securityApi, handleApiError } from '../api/index.js'
+import { useToast } from '../composables/useToast.js'
 
 const router = useRouter()
+const { showToast } = useToast()
 
 const currentPassword = ref('')
 const newPassword = ref('')
@@ -33,24 +36,26 @@ const validateForm = () => {
 
 const handleSubmit = async () => {
   if (!validateForm()) return
-  
+
   loading.value = true
   try {
-    // 模拟API调用
-    console.log('修改密码:', {
+    const response = await securityApi.changePassword({
       currentPassword: currentPassword.value,
       newPassword: newPassword.value
     })
-    
-    // 模拟成功
-    setTimeout(() => {
-      loading.value = false
-      alert('密码修改成功')
+
+    if (response.success) {
+      showToast('密码修改成功', 'success')
       router.back()
-    }, 1000)
+    } else {
+      error.value = response.message || '密码修改失败'
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error || '密码修改失败，请重试'
+    console.error('密码修改失败:', err)
+  } finally {
     loading.value = false
-    error.value = '密码修改失败，请重试'
   }
 }
 
@@ -86,7 +91,7 @@ const handleBack = () => {
               placeholder="请输入当前密码"
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold text-on-surface mb-2">新密码</label>
             <input
@@ -96,7 +101,7 @@ const handleBack = () => {
               placeholder="请输入新密码（至少6位）"
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold text-on-surface mb-2">确认新密码</label>
             <input
@@ -106,11 +111,11 @@ const handleBack = () => {
               placeholder="请再次输入新密码"
             />
           </div>
-          
+
           <div v-if="error" class="bg-error/10 border border-error/20 rounded-xl p-4">
             <p class="text-sm text-error">{{ error }}</p>
           </div>
-          
+
           <button
             @click="handleSubmit"
             :disabled="loading"
@@ -121,7 +126,7 @@ const handleBack = () => {
           </button>
         </div>
       </div>
-      
+
       <div class="bg-primary-container/10 p-4 rounded-xl">
         <div class="flex gap-3 items-start">
           <span class="material-symbols-outlined text-primary text-lg">info</span>

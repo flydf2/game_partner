@@ -58,7 +58,9 @@ export default {
         "primary-container": "#ffd709",
         "primary": "#6c5a00",
         "surface-container": "#e7e8e8",
-        "outline": "#767777"
+        "outline": "#767777",
+        "success": "#006d32",
+        "success-container": "#4ade80"
       },
       fontFamily: {
         "headline": ["Plus Jakarta Sans"],

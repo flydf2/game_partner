@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { securityApi, handleApiError } from '../api/index.js'
+import { useToast } from '../composables/useToast.js'
 
 const router = useRouter()
+const { showToast } = useToast()
 
 const email = ref('')
 const verificationCode = ref('')
@@ -15,23 +18,31 @@ const validateEmail = () => {
   return emailRegex.test(email.value)
 }
 
-const sendVerificationCode = () => {
+const sendVerificationCode = async () => {
   if (!validateEmail()) {
     error.value = '请输入正确的邮箱地址'
     return
   }
-  
+
   error.value = ''
   loading.value = true
-  
-  // 模拟发送验证码
-  console.log('发送验证码到:', email.value)
-  
-  setTimeout(() => {
+
+  try {
+    const response = await securityApi.sendEmailCode(email.value)
+
+    if (response.success) {
+      showToast('验证码已发送到您的邮箱', 'success')
+      startCountdown()
+    } else {
+      error.value = response.message || '验证码发送失败'
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error || '验证码发送失败，请重试'
+    console.error('发送验证码失败:', err)
+  } finally {
     loading.value = false
-    alert('验证码已发送到您的邮箱')
-    startCountdown()
-  }, 1000)
+  }
 }
 
 const startCountdown = () => {
@@ -53,24 +64,26 @@ const handleSubmit = async () => {
     error.value = '请输入验证码'
     return
   }
-  
+
   loading.value = true
   try {
-    // 模拟API调用
-    console.log('绑定邮箱:', {
+    const response = await securityApi.bindEmail({
       email: email.value,
-      verificationCode: verificationCode.value
+      code: verificationCode.value
     })
-    
-    // 模拟成功
-    setTimeout(() => {
-      loading.value = false
-      alert('邮箱绑定成功')
+
+    if (response.success) {
+      showToast('邮箱绑定成功', 'success')
       router.back()
-    }, 1000)
+    } else {
+      error.value = response.message || '绑定失败'
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error || '绑定失败，请重试'
+    console.error('邮箱绑定失败:', err)
+  } finally {
     loading.value = false
-    error.value = '绑定失败，请重试'
   }
 }
 
@@ -106,7 +119,7 @@ const handleBack = () => {
               placeholder="请输入邮箱地址"
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold text-on-surface mb-2">验证码</label>
             <div class="flex gap-3">
@@ -128,11 +141,11 @@ const handleBack = () => {
               </button>
             </div>
           </div>
-          
+
           <div v-if="error" class="bg-error/10 border border-error/20 rounded-xl p-4">
             <p class="text-sm text-error">{{ error }}</p>
           </div>
-          
+
           <button
             @click="handleSubmit"
             :disabled="loading"
@@ -143,7 +156,7 @@ const handleBack = () => {
           </button>
         </div>
       </div>
-      
+
       <div class="bg-primary-container/10 p-4 rounded-xl">
         <div class="flex gap-3 items-start">
           <span class="material-symbols-outlined text-primary text-lg">info</span>

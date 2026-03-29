@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import { mockUploadFile } from '../api/mock-upload.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -11,8 +12,11 @@ const gameName = ref(route.query.gameName || '')
 
 const screenshots = ref([])
 const maxScreenshots = 3
+const maxFileSize = 5 * 1024 * 1024 // 5MB
+const isUploading = ref(false)
+const uploadProgress = ref(0)
 
-const handleFileUpload = (event) => {
+const handleFileUpload = async (event) => {
   const files = event.target.files
   if (screenshots.value.length + files.length > maxScreenshots) {
     alert(`最多只能上传${maxScreenshots}张截图`)
@@ -26,15 +30,48 @@ const handleFileUpload = (event) => {
       continue
     }
 
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      screenshots.value.push({
-        id: Date.now() + i,
-        url: e.target.result,
-        name: file.name
-      })
+    if (file.size > maxFileSize) {
+      alert('图片大小不能超过5MB')
+      continue
     }
-    reader.readAsDataURL(file)
+
+    try {
+      isUploading.value = true
+      uploadProgress.value = 0
+
+      // 模拟上传进度
+      const progressInterval = setInterval(() => {
+        if (uploadProgress.value < 90) {
+          uploadProgress.value += Math.floor(Math.random() * 10)
+        }
+      }, 200)
+
+      // 调用上传API
+      const response = await mockUploadFile(file, 'screenshot')
+      clearInterval(progressInterval)
+      uploadProgress.value = 100
+
+      // 延迟一下让用户看到100%的进度
+      setTimeout(() => {
+        uploadProgress.value = 0
+        isUploading.value = false
+      }, 500)
+
+      if (response.success) {
+        screenshots.value.push({
+          id: Date.now() + i,
+          url: response.data.url,
+          name: file.name
+        })
+      } else {
+        alert('上传失败，请重试')
+      }
+    } catch (error) {
+      isUploading.value = false
+      uploadProgress.value = 0
+      alert('上传失败，请重试')
+      console.error('上传错误:', error)
+    }
   }
 }
 
@@ -120,6 +157,7 @@ const handleBack = () => {
             <div
               v-if="screenshots.length < maxScreenshots"
               class="aspect-square rounded-xl border-2 border-dashed border-surface-container-high flex flex-col items-center justify-center cursor-pointer hover:border-primary-container hover:bg-surface-container-low transition-all"
+              @click="$refs.fileInput.click()"
             >
               <input
                 ref="fileInput"
@@ -131,6 +169,17 @@ const handleBack = () => {
               />
               <span class="material-symbols-outlined text-3xl text-outline-variant mb-1">add_photo_alternate</span>
               <span class="text-xs text-on-surface-variant">点击上传</span>
+            </div>
+          </div>
+
+          <!-- 上传进度指示器 -->
+          <div v-if="isUploading" class="mt-4">
+            <div class="text-xs text-on-surface-variant mb-1">上传中... {{ uploadProgress }}%</div>
+            <div class="w-full h-1.5 bg-surface-container-low rounded-full overflow-hidden">
+              <div 
+                class="h-full bg-primary-container rounded-full transition-all duration-300" 
+                :style="{ width: uploadProgress + '%' }"
+              ></div>
             </div>
           </div>
         </div>
@@ -154,6 +203,8 @@ const handleBack = () => {
         <button
           @click="handleNext"
           class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/30 active:scale-95 transition-all duration-200"
+          :disabled="isUploading"
+          :class="{ 'opacity-60 cursor-not-allowed': isUploading }"
         >
           下一步
         </button>

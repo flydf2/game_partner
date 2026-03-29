@@ -30,7 +30,7 @@ const loadBounties = async () => {
         
         if (bountiesData.length > 0) {
           bounties.value = bountiesData.map(bounty => ({
-            id: bounty.id,
+            id: bounty.id || bounty.orderId || bounty.ID,
             title: bounty.title || `${bounty.game}悬赏单`,
             content: bounty.content || '',
             reward: bounty.reward,
@@ -73,6 +73,10 @@ const handlePublishBounty = () => {
 }
 
 const handleJoinBounty = (bountyId) => {
+  if (!bountyId) {
+    console.error('悬赏单ID无效')
+    return
+  }
   router.push(`/reward/${bountyId}`)
 }
 

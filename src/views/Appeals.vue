@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { appealApi, handleApiError } from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
@@ -55,7 +55,12 @@ const handleAppeal = () => {
   console.log('去申诉')
 }
 
-const filteredAppeals = ref(appeals.value)
+const filteredAppeals = computed(() => {
+  if (activeTab.value === 'all') {
+    return appeals.value
+  }
+  return appeals.value.filter(appeal => appeal.status === activeTab.value)
+})
 
 onMounted(() => {
   loadAppeals()

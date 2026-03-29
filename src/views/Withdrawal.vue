@@ -1,17 +1,33 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
-import { withdrawalApi } from '../api'
+import { withdrawalApi, userApi } from '../api'
 import BottomNavBar from '../components/BottomNavBar.vue'
 
 const router = useRouter()
 
-const balance = ref('12,850.00')
+const balance = ref('0.00')
 const withdrawalAmount = ref('')
 const selectedPaymentMethod = ref('wechat')
 const submitting = ref(false)
+const loading = ref(true)
 const errorMessage = ref('')
+
+onMounted(async () => {
+  try {
+    loading.value = true
+    const response = await userApi.getWallet()
+    if (response.success && response.data) {
+      balance.value = response.data.balance ? response.data.balance.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'
+    }
+  } catch (error) {
+    console.error('获取钱包数据失败:', error)
+    errorMessage.value = '获取余额失败，请重试'
+  } finally {
+    loading.value = false
+  }
+})
 
 const paymentMethods = [
   {
@@ -144,7 +160,8 @@ const handleConfirmWithdrawal = async () => {
         <p class="text-sm font-medium opacity-80 mb-2">当前可提现余额 (元)</p>
         <div class="flex items-baseline gap-1">
           <span class="text-2xl font-headline font-bold">¥</span>
-          <span class="text-5xl font-headline font-black tracking-tight">{{ balance }}</span>
+          <span v-if="loading" class="text-5xl font-headline font-black tracking-tight">加载中...</span>
+          <span v-else class="text-5xl font-headline font-black tracking-tight">{{ balance }}</span>
         </div>
         <div class="mt-6 px-4 py-1.5 bg-on-primary-container/10 rounded-full flex items-center gap-2">
           <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified_user</span>

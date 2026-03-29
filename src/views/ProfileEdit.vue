@@ -1,8 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { userApi, uploadApi } from '../api/index.js'
 
 const router = useRouter()
+
+onMounted(() => {
+  loadUserInfo()
+})
 
 const userInfo = ref({
   avatar: '',
@@ -27,19 +32,24 @@ const genderOptions = [
 const loadUserInfo = async () => {
   loading.value = true
   try {
-    // 模拟获取用户信息
-    await new Promise(resolve => setTimeout(resolve, 500))
+    // 使用真实API获取用户信息
+    const response = await userApi.getUserInfo()
     
-    userInfo.value = {
-      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      nickname: '游戏达人',
-      gender: 'male',
-      birthday: '1995-06-15',
-      bio: '热爱游戏，享受生活',
-      location: '北京'
+    if (response.success) {
+      userInfo.value = {
+        avatar: response.data.avatar || '',
+        nickname: response.data.nickname || '',
+        gender: response.data.gender || '',
+        birthday: response.data.birthday || '',
+        bio: response.data.bio || '',
+        location: response.data.location || ''
+      }
+    } else {
+      error.value = response.message || '获取用户信息失败'
     }
   } catch (err) {
     error.value = '获取用户信息失败'
+    console.error('获取用户信息失败:', err)
   } finally {
     loading.value = false
   }
@@ -55,32 +65,43 @@ const handleSave = async () => {
   error.value = ''
   
   try {
-    // 模拟保存请求
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // 使用真实API保存用户信息
+    const response = await userApi.updateProfile(userInfo.value)
     
-    // 模拟保存成功
-    success.value = true
-    
-    setTimeout(() => {
-      success.value = false
-      router.back()
-    }, 1500)
+    if (response.success) {
+      success.value = true
+      
+      setTimeout(() => {
+        success.value = false
+        router.back()
+      }, 1500)
+    } else {
+      error.value = response.message || '保存失败，请稍后重试'
+    }
   } catch (err) {
     error.value = '保存失败，请稍后重试'
+    console.error('保存用户信息失败:', err)
   } finally {
     saving.value = false
   }
 }
 
-const handleAvatarChange = (event) => {
+const handleAvatarChange = async (event) => {
   const file = event.target.files[0]
   if (file) {
-    // 模拟上传头像
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      userInfo.value.avatar = e.target.result
+    try {
+      // 使用真实API上传头像
+      const response = await uploadApi.uploadFile(file, 'avatar')
+      
+      if (response.success) {
+        userInfo.value.avatar = response.data.url
+      } else {
+        error.value = '头像上传失败'
+      }
+    } catch (err) {
+      error.value = '头像上传失败'
+      console.error('头像上传失败:', err)
     }
-    reader.readAsDataURL(file)
   }
 }
 
@@ -119,9 +140,9 @@ const handleBack = () => {
       <!-- 编辑表单 -->
       <div v-else class="space-y-6">
         <!-- 错误提示 -->
-        <div v-if="error" class="bg-error/10 border border-error/20 rounded-2xl p-4 flex items-center gap-3">
-          <span class="material-symbols-outlined text-error">error_outline</span>
-          <span class="text-sm text-error">{{ error }}</span>
+        <div v-if="error" class="bg-error-container/10 border border-error-container/20 rounded-2xl p-4 flex items-center gap-3">
+          <span class="material-symbols-outlined text-error-container">error_outline</span>
+          <span class="text-sm text-error-container">{{ error }}</span>
         </div>
 
         <!-- 成功提示 -->

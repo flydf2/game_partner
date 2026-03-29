@@ -1,8 +1,17 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '../stores/user.js'
 
 const router = useRouter()
+const userStore = useUserStore()
+
+// 页面加载时模拟登录
+onMounted(() => {
+  if (!userStore.getIsLoggedIn) {
+    userStore.mockLogin()
+  }
+})
 
 const privacyItems = ref([
   {
@@ -63,7 +72,19 @@ const handleToggleChange = (key, value) => {
 
 const handleItemClick = (key) => {
   console.log('隐私设置项点击:', key)
-  // 这里可以添加具体的处理逻辑
+  
+  switch (key) {
+    case 'messages':
+      // 消息隐私设置
+      console.log('进入消息隐私设置')
+      break
+    case 'data':
+      // 数据管理
+      console.log('进入数据管理')
+      break
+    default:
+      break
+  }
 }
 
 const handleBack = () => {

@@ -131,6 +131,9 @@
                 <button @click="handleChat" class="bg-primary-container text-on-primary-container px-5 py-2.5 rounded-full font-bold text-sm active:scale-95 transition-all">
                   私聊
                 </button>
+                <button @click="handleLike" class="w-10 h-10 bg-surface-container-low text-zinc-600 rounded-full flex items-center justify-center active:scale-95 transition-all">
+                  <span class="material-symbols-outlined text-[20px]" :class="isLiked ? 'text-primary' : ''">favorite</span>
+                </button>
                 <button @click="handleShare" class="w-10 h-10 bg-surface-container-low text-zinc-600 rounded-full flex items-center justify-center active:scale-95 transition-all">
                   <span class="material-symbols-outlined text-[20px]">share</span>
                 </button>
@@ -149,7 +152,7 @@
           </div>
           
           <!-- 统计数据 Bento -->
-          <div class="grid grid-cols-3 gap-3 mt-8">
+          <div class="grid grid-cols-4 gap-3 mt-8">
             <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
               <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.winRate }}%</span>
               <span class="text-[11px] text-zinc-500 font-medium">胜率</span>
@@ -157,6 +160,10 @@
             <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
               <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.followers.toLocaleString() }}</span>
               <span class="text-[11px] text-zinc-500 font-medium">粉丝</span>
+            </div>
+            <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
+              <span class="text-xl font-headline font-black text-on-surface">{{ likeCount.toLocaleString() }}</span>
+              <span class="text-[11px] text-zinc-500 font-medium">点赞</span>
             </div>
             <div class="bg-surface-container-low p-4 rounded-2xl flex flex-col items-center justify-center">
               <span class="text-xl font-headline font-black text-on-surface">{{ expertData.stats.rating }}</span>
@@ -397,6 +404,8 @@ const error = ref('')
 const isLoading = ref(false)
 const isFollowing = ref(false)
 const isFavorite = ref(false)
+const isLiked = ref(false)
+const likeCount = ref(0)
 
 // Toast状态
 const toast = ref({
@@ -563,6 +572,22 @@ const prevImage = () => {
   }
 }
 
+const loadExpertStatus = async (expertId) => {
+  try {
+    const response = await expertService.getExpertStatus(expertId)
+    if (response.success) {
+      const statusData = response.data
+      isFollowing.value = statusData.isFollowing
+      isFavorite.value = statusData.isFavorite
+      isLiked.value = statusData.isLiked
+      likeCount.value = statusData.likeCount
+    }
+  } catch (err) {
+    console.error('加载专家状态失败:', err)
+    // 状态加载失败不影响主页面显示
+  }
+}
+
 const loadExpertData = async () => {
   loading.value = true
   error.value = ''
@@ -578,6 +603,8 @@ const loadExpertData = async () => {
       expertData.value = cachedData
       // 加载语音数据
       await loadVoiceData(expertId)
+      // 加载专家状态
+      await loadExpertStatus(expertId)
       // 添加到浏览历史
       addToHistory(expertData.value)
       // 加载评价列表
@@ -593,9 +620,8 @@ const loadExpertData = async () => {
     const response = await expertService.getExpertDetail(expertId)
     if (response.success) {
       expertData.value = response.data
-      // 检查是否已收藏
-      const favorites = getStorageData(STORAGE_KEYS.FAVORITES) || []
-      isFavorite.value = favorites.some(item => item.id === expertData.value.id)
+      // 加载专家状态
+      await loadExpertStatus(expertId)
       // 加载语音数据
       await loadVoiceData(expertId)
       // 缓存数据（5分钟）
@@ -659,16 +685,18 @@ const handleFollow = async () => {
     if (isFollowing.value) {
       const response = await expertService.unfollowExpert(expertId)
       if (response.success) {
-        isFollowing.value = false
         showToast('取消关注成功')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
         // 清除缓存
         clearExpertCache()
       }
     } else {
       const response = await expertService.followExpert(expertId)
       if (response.success) {
-        isFollowing.value = true
         showToast('关注成功')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
         // 清除缓存
         clearExpertCache()
       }
@@ -830,15 +858,32 @@ const handleOrder = async () => {
   })
 }
 
-const handleFavorite = () => {
-  const isAdded = addToFavorites(expertData.value)
-  if (isAdded) {
-    isFavorite.value = true
-    showToast('收藏成功', 'success')
-  } else {
-    removeFromFavorites(expertData.value.id)
-    isFavorite.value = false
-    showToast('已取消收藏', 'success')
+const handleFavorite = async () => {
+  try {
+    const expertId = expertData.value.id
+    if (isFavorite.value) {
+      // 取消收藏
+      const response = await userApi.removeFavorite(expertId)
+      if (response.success) {
+        showToast('已取消收藏', 'success')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
+      }
+    } else {
+      // 添加收藏
+      // 注意：这里需要根据实际API设计调整
+      // 假设使用userApi.addFavorite或类似方法
+      // 暂时使用本地存储作为备用
+      const isAdded = addToFavorites(expertData.value)
+      if (isAdded) {
+        showToast('收藏成功', 'success')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
+      }
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    showToast(result.error, 'error')
   }
 }
 
@@ -991,6 +1036,30 @@ const handleShare = () => {
 
 const handleMore = () => {
   showToast('更多功能开发中', 'info')
+}
+
+const handleLike = async () => {
+  try {
+    const expertId = expertData.value.id
+    if (isLiked.value) {
+      const response = await expertService.unlikeExpert(expertId)
+      if (response.success) {
+        showToast('取消点赞成功', 'success')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
+      }
+    } else {
+      const response = await expertService.likeExpert(expertId)
+      if (response.success) {
+        showToast('点赞成功', 'success')
+        // 重新加载专家状态
+        await loadExpertStatus(expertId)
+      }
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    showToast(result.error, 'error')
+  }
 }
 
 onMounted(() => {

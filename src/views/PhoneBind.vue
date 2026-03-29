@@ -1,8 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { securityApi, handleApiError } from '../api/index.js'
+import { useToast } from '../composables/useToast.js'
 
 const router = useRouter()
+const { showToast } = useToast()
 
 const phoneNumber = ref('')
 const verificationCode = ref('')
@@ -15,23 +18,31 @@ const validatePhone = () => {
   return phoneRegex.test(phoneNumber.value)
 }
 
-const sendVerificationCode = () => {
+const sendVerificationCode = async () => {
   if (!validatePhone()) {
     error.value = '请输入正确的手机号码'
     return
   }
-  
+
   error.value = ''
   loading.value = true
-  
-  // 模拟发送验证码
-  console.log('发送验证码到:', phoneNumber.value)
-  
-  setTimeout(() => {
+
+  try {
+    const response = await securityApi.sendPhoneCode(phoneNumber.value)
+
+    if (response.success) {
+      showToast('验证码已发送到您的手机', 'success')
+      startCountdown()
+    } else {
+      error.value = response.message || '验证码发送失败'
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error || '验证码发送失败，请重试'
+    console.error('发送验证码失败:', err)
+  } finally {
     loading.value = false
-    alert('验证码已发送到您的手机')
-    startCountdown()
-  }, 1000)
+  }
 }
 
 const startCountdown = () => {
@@ -53,24 +64,26 @@ const handleSubmit = async () => {
     error.value = '请输入验证码'
     return
   }
-  
+
   loading.value = true
   try {
-    // 模拟API调用
-    console.log('绑定手机:', {
-      phoneNumber: phoneNumber.value,
-      verificationCode: verificationCode.value
+    const response = await securityApi.bindPhone({
+      phone: phoneNumber.value,
+      code: verificationCode.value
     })
-    
-    // 模拟成功
-    setTimeout(() => {
-      loading.value = false
-      alert('手机绑定成功')
+
+    if (response.success) {
+      showToast('手机绑定成功', 'success')
       router.back()
-    }, 1000)
+    } else {
+      error.value = response.message || '绑定失败'
+    }
   } catch (err) {
+    const result = handleApiError(err)
+    error.value = result.error || '绑定失败，请重试'
+    console.error('手机绑定失败:', err)
+  } finally {
     loading.value = false
-    error.value = '绑定失败，请重试'
   }
 }
 
@@ -107,7 +120,7 @@ const handleBack = () => {
               maxlength="11"
             />
           </div>
-          
+
           <div>
             <label class="block text-sm font-bold text-on-surface mb-2">验证码</label>
             <div class="flex gap-3">
@@ -129,11 +142,11 @@ const handleBack = () => {
               </button>
             </div>
           </div>
-          
+
           <div v-if="error" class="bg-error/10 border border-error/20 rounded-xl p-4">
             <p class="text-sm text-error">{{ error }}</p>
           </div>
-          
+
           <button
             @click="handleSubmit"
             :disabled="loading"
@@ -144,7 +157,7 @@ const handleBack = () => {
           </button>
         </div>
       </div>
-      
+
       <div class="bg-primary-container/10 p-4 rounded-xl">
         <div class="flex gap-3 items-start">
           <span class="material-symbols-outlined text-primary text-lg">info</span>

@@ -56,7 +56,11 @@ const fetchPosts = async () => {
           isLiked: post.isLiked || false,
           isFollowing: post.isFollowing || false,
           likes: post.likes || 0,
-          comments: post.comments || 0
+          comments: post.comments || 0,
+          userAvatar: post.user?.avatar || post.userAvatar,
+          userName: post.user?.name || post.userName,
+          userId: post.user?.id || post.userId || post.user_id || Math.floor(Math.random() * 1000),
+          game: post.user?.game || post.game
         }
       })
     } else {

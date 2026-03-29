@@ -68,37 +68,68 @@
           </button>
         </div>
 
-        <div v-else class="space-y-4">
+        <div class="space-y-4">
           <div 
             v-for="skill in filteredSkills"
             :key="skill.id"
             class="bg-surface-container-lowest rounded-3xl p-5 transition-all duration-300 hover:shadow-md"
           >
             <div class="flex justify-between items-start">
-              <div>
-                <h3 class="font-bold text-sm mb-1">{{ skill.game }}</h3>
-                <p class="text-xs text-on-surface-variant mb-2">{{ skill.skill }}</p>
-                <div class="flex items-center gap-2">
-                  <span :class="getSkillLevelClass(skill.level)" class="text-xs font-bold px-2 py-0.5 rounded-full">
-                    {{ skill.levelText }}
-                  </span>
-                  <span class="text-xs text-on-surface-variant">认证状态: {{ skill.certificationStatus }}</span>
-                </div>
+              <div class="flex-1">
+                <!-- Real API data structure -->
+                <template v-if="skill.name && skill.description && skill.price">
+                  <h3 class="font-bold text-sm mb-1">{{ skill.name }}</h3>
+                  <p class="text-xs text-on-surface-variant mb-2">{{ skill.description }}</p>
+                  <div class="flex items-center gap-2">
+                    <span class="bg-primary/10 text-primary text-xs font-bold px-2 py-0.5 rounded-full">
+                      {{ skill.level }}
+                    </span>
+                    <span class="text-sm font-bold text-primary">¥{{ skill.price }}/局</span>
+                  </div>
+                </template>
+                <!-- Mock data structure -->
+                <template v-else>
+                  <h3 class="font-bold text-sm mb-1">{{ skill.game }}</h3>
+                  <p class="text-xs text-on-surface-variant mb-2">{{ skill.skill }}</p>
+                  <div class="flex items-center gap-2">
+                    <span :class="getSkillLevelClass(skill.level)" class="text-xs font-bold px-2 py-0.5 rounded-full">
+                      {{ skill.levelText }}
+                    </span>
+                    <span class="text-xs text-on-surface-variant">认证状态: {{ skill.certificationStatus }}</span>
+                  </div>
+                  <div class="mt-4 flex justify-between items-center">
+                    <div class="flex items-center gap-1">
+                      <span class="text-xs text-on-surface-variant">服务次数</span>
+                      <span class="text-xs font-bold">{{ skill.serviceCount }}</span>
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <span class="text-xs text-on-surface-variant">评分</span>
+                      <span class="text-xs font-bold">{{ skill.rating }}</span>
+                    </div>
+                  </div>
+                </template>
               </div>
               <button @click="handleEditSkill(skill.id)" class="text-primary active:scale-95 duration-200">
                 <span class="material-symbols-outlined">edit</span>
               </button>
             </div>
-            <div class="mt-4 flex justify-between items-center">
-              <div class="flex items-center gap-1">
-                <span class="text-xs text-on-surface-variant">服务次数</span>
-                <span class="text-xs font-bold">{{ skill.serviceCount }}</span>
-              </div>
-              <div class="flex items-center gap-1">
-                <span class="text-xs text-on-surface-variant">评分</span>
-                <span class="text-xs font-bold">{{ skill.rating }}</span>
-              </div>
-            </div>
+          </div>
+          
+          <!-- 加载更多 -->
+          <div v-if="currentPage < totalPages" class="text-center py-6">
+            <button
+              @click="loadMore"
+              :disabled="loadingMore"
+              class="px-8 py-3 bg-surface-container text-on-surface-variant rounded-full text-sm font-bold active:scale-95 transition-all disabled:opacity-50"
+            >
+              <span v-if="loadingMore">加载中...</span>
+              <span v-else>加载更多</span>
+            </button>
+          </div>
+          
+          <!-- 没有更多数据 -->
+          <div v-else-if="skills.length > 0" class="text-center py-6 text-sm text-on-surface-variant">
+            没有更多数据了
           </div>
         </div>
       </section>
@@ -176,6 +207,10 @@ const activeCategory = ref('all')
 const loading = ref(false)
 const error = ref('')
 const showAddSkillDialog = ref(false)
+const currentPage = ref(1)
+const totalPages = ref(1)
+const totalCount = ref(0)
+const loadingMore = ref(false)
 
 const categories = ref([
   { id: 'all', name: '全部' },
@@ -215,13 +250,45 @@ const getSkillLevelClass = (level) => {
   }
 }
 
-const loadSkills = async () => {
-  loading.value = true
+const loadSkills = async (page = 1, append = false) => {
+  if (append) {
+    loadingMore.value = true
+  } else {
+    loading.value = true
+  }
   error.value = ''
   try {
-    const response = await skillApi.getSkills()
+    const response = await skillApi.getSkills({ page })
     if (response.success || response.code === 0) {
-      skills.value = response.data || []
+      // 处理不同的响应格式
+      let skillsData = []
+      let pagination = { currentPage: 1, totalPages: 1, totalCount: 0 }
+      
+      // 真实API响应格式：{code: 0, data: {data: [...], pagination: {...}}}
+      if (response.code === 0 && response.data?.data) {
+        skillsData = response.data.data
+        pagination = response.data.pagination || pagination
+      }
+      // 拦截器处理后的格式：{success: true, data: {...}}
+      else if (response.success && response.data?.data) {
+        skillsData = response.data.data
+        pagination = response.data.pagination || pagination
+      }
+      // 直接返回数据的情况
+      else if (response.data) {
+        skillsData = Array.isArray(response.data) ? response.data : []
+      }
+      
+      if (append) {
+        skills.value = [...skills.value, ...skillsData]
+      } else {
+        skills.value = skillsData
+      }
+      
+      // 更新分页信息
+      currentPage.value = pagination.currentPage
+      totalPages.value = pagination.totalPages
+      totalCount.value = pagination.totalCount
     } else {
       throw new Error(response.message || response.msg || '获取技能列表失败')
     }
@@ -231,6 +298,13 @@ const loadSkills = async () => {
     console.error('获取技能列表失败:', err)
   } finally {
     loading.value = false
+    loadingMore.value = false
+  }
+}
+
+const loadMore = async () => {
+  if (currentPage.value < totalPages.value && !loadingMore.value) {
+    await loadSkills(currentPage.value + 1, true)
   }
 }
 

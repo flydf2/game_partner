@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { communityApi } from '../api/index.js'
+import { communityApi, userApi } from '../api/index.js'
 
 const route = useRoute()
 const router = useRouter()
@@ -146,12 +146,20 @@ const handleShare = () => {
 const handleFollow = async () => {
   if (post.value && post.value.user) {
     try {
-      // 这里需要根据实际 API 设计调用关注接口
-      // 假设用户ID在 post.user.id 中
       if (post.value.user.id) {
-        // 这里应该调用关注用户的 API
-        // 暂时先更新本地状态
-        post.value.isFollowing = !post.value.isFollowing
+        if (post.value.isFollowing) {
+          // 取消关注
+          const response = await userApi.unfollowUser(post.value.user.id)
+          if (response.success) {
+            post.value.isFollowing = false
+          }
+        } else {
+          // 关注
+          const response = await userApi.followUser(post.value.user.id)
+          if (response.success) {
+            post.value.isFollowing = true
+          }
+        }
       }
     } catch (error) {
       console.error('关注失败:', error)
@@ -315,11 +323,11 @@ onMounted(() => {
             </div>
           </div>
           <button
-            v-if="!post.isFollowing && post.user?.id"
+            v-if="post.user?.id"
             @click="handleFollow"
-            class="text-primary font-bold px-4 py-1.5 bg-primary-container/10 rounded-full text-sm active:scale-95 transition-transform"
+            :class="post.isFollowing ? 'text-on-surface-variant font-medium px-4 py-1.5 bg-surface-container rounded-full text-sm active:scale-95 transition-transform' : 'text-primary font-bold px-4 py-1.5 bg-primary-container/10 rounded-full text-sm active:scale-95 transition-transform'"
           >
-            关注
+            {{ post.isFollowing ? '已关注' : '关注' }}
           </button>
         </div>
 

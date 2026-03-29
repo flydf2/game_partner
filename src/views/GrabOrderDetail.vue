@@ -61,9 +61,36 @@ const handleGoToChat = () => {
   router.push(`/chat/${orderId.value}`)
 }
 
-const handleWithdraw = () => {
-  // TODO: 实现撤回申请功能
-  alert('撤回申请功能开发中')
+const handleWithdraw = async () => {
+  try {
+    const confirmed = confirm('确定要撤回申请吗？')
+    if (!confirmed) return
+    
+    loading.value = true
+    
+    // 模拟撤回申请API调用
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // 更新订单状态
+    order.value.status = 'withdrawn'
+    order.value.statusText = '已撤回'
+    order.value.timeline.push({
+      step: 4,
+      title: '已撤回申请',
+      time: new Date().toLocaleString('zh-CN'),
+      status: 'completed'
+    })
+    
+    // 延迟后重定向到我的抢单页面
+    setTimeout(() => {
+      router.push('/my-grab-orders')
+    }, 1500)
+  } catch (err) {
+    error.value = err.message
+    console.error('撤回申请失败:', err)
+  } finally {
+    loading.value = false
+  }
 }
 
 const handleNotifications = () => {

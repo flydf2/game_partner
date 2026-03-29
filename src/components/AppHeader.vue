@@ -1,65 +1,67 @@
 <template>
-  <header
-    class="fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 transition-all duration-300"
-    :class="headerClass"
-  >
-    <div class="flex items-center gap-4">
-      <span
-        v-if="showMenu"
-        class="material-symbols-outlined active:scale-95 duration-200 ease-out cursor-pointer transition-transform"
-        :class="iconClass"
-        @click="handleMenuClick"
-      >
-        menu
-      </span>
-      <span
-        v-if="showBack && !showMenu"
-        @click="handleBackClick"
-        class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        :class="iconClass"
-      >
-        arrow_back_ios
-      </span>
-      <h1
-        class="font-bold text-lg tracking-tight transition-colors duration-300"
-        :class="titleClass"
-      >
-        {{ title }}
-      </h1>
-    </div>
-    <div class="flex items-center gap-3">
-      <slot name="left-actions" />
-      <button
-        v-if="showNotifications"
-        class="relative text-zinc-500 dark:text-zinc-400 hover:opacity-80 active:scale-95 transition-all"
-        @click="handleNotificationsClick"
-      >
-        <span class="material-symbols-outlined">notifications</span>
+  <div>
+    <header
+      class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-6 py-4 transition-all duration-300 h-24 bg-white dark:bg-zinc-900 shadow-sm"
+      :class="headerClass"
+    >
+      <div class="flex items-center gap-4">
         <span
-          v-if="unreadCount > 0"
-          class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] font-bold"
+          v-if="showMenu"
+          class="material-symbols-outlined active:scale-95 duration-200 ease-out cursor-pointer transition-transform"
+          :class="iconClass"
+          @click="handleMenuClick"
         >
-          {{ unreadCount }}
+          menu
         </span>
-      </button>
-      <span
-        v-if="showSearch"
-        class="material-symbols-outlined cursor-pointer hover:opacity-80 active:scale-95 transition-all"
-        :class="iconClass"
-        @click="handleSearchClick"
-      >
-        search
-      </span>
-      <div
-        v-if="showAvatar"
-        class="w-9 h-9 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform"
-        @click="handleProfileClick"
-      >
-        <img alt="User Avatar" class="w-full h-full object-cover" :src="avatarUrl" />
+        <span
+          v-if="showBack && !showMenu"
+          @click="handleBackClick"
+          class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+          :class="iconClass"
+        >
+          arrow_back_ios
+        </span>
+        <h1
+          class="font-bold text-lg tracking-tight transition-colors duration-300"
+          :class="titleClass"
+        >
+          {{ title }}
+        </h1>
       </div>
-      <slot name="right-actions" />
-    </div>
-  </header>
+      <div class="flex items-center gap-3">
+        <slot name="left-actions" />
+        <button
+          v-if="showNotifications"
+          class="relative text-zinc-500 dark:text-zinc-400 hover:opacity-80 active:scale-95 transition-all"
+          @click="handleNotificationsClick"
+        >
+          <span class="material-symbols-outlined">notifications</span>
+          <span
+            v-if="unreadCount > 0"
+            class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] font-bold"
+          >
+            {{ unreadCount }}
+          </span>
+        </button>
+        <span
+          v-if="showSearch"
+          class="material-symbols-outlined cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+          :class="iconClass"
+          @click="handleSearchClick"
+        >
+          search
+        </span>
+        <div
+          v-if="showAvatar"
+          class="w-9 h-9 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform"
+          @click="handleProfileClick"
+        >
+          <img alt="User Avatar" class="w-full h-full object-cover" :src="avatarUrl" />
+        </div>
+        <slot name="right-actions" />
+      </div>
+    </header>
+  </div>
 </template>
 
 <script setup>
@@ -146,4 +148,18 @@ const handleProfileClick = () => {
 </script>
 
 <style scoped>
+:root {
+  --header-height: 96px; /* 对应 Tailwind 的 h-24 */
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 </style>

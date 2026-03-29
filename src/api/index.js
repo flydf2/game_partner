@@ -383,6 +383,56 @@ export const expertApi = {
     } else {
       return await withRetry(() => get(`/experts/${expertId}/voice`))
     }
+  },
+
+  async getExpertStatus(expertId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              isFollowing: false,
+              isFavorite: false,
+              isLiked: false,
+              likeCount: 1280
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/experts/${expertId}/status`))
+    }
+  },
+
+  async likeExpert(expertId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '点赞成功'
+          })
+        }, 200)
+      })
+    } else {
+      return await withRetry(() => post(`/experts/${expertId}/like`))
+    }
+  },
+
+  async unlikeExpert(expertId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '取消点赞成功'
+          })
+        }, 200)
+      })
+    } else {
+      return await withRetry(() => del(`/experts/${expertId}/like`))
+    }
   }
 }
 
@@ -610,11 +660,13 @@ export const userApi = {
     })()
   },
 
-  async getFollowing() {
+  async getFollowing(page = 1, pageSize = 10) {
     if (USE_MOCK) {
-      return await mockGetFollowing()
+      return await mockGetFollowing(page, pageSize)
     } else {
-      return await withRetry(() => get('/user/following'))
+      return await withRetry(() => get('/user/following', {
+        params: { page, pageSize }
+      }))
     }
   },
   
@@ -648,11 +700,13 @@ export const userApi = {
     }
   },
   
-  async getFavorites() {
+  async getFavorites(page = 1, pageSize = 10) {
     if (USE_MOCK) {
-      return await mockGetFavorites()
+      return await mockGetFavorites(page, pageSize)
     } else {
-      return await withRetry(() => get('/user/favorites'))
+      return await withRetry(() => get('/user/favorites', {
+        params: { page, pageSize }
+      }))
     }
   },
   
@@ -671,11 +725,13 @@ export const userApi = {
     }
   },
   
-  async getBrowseHistory() {
+  async getBrowseHistory(page = 1, pageSize = 10) {
     if (USE_MOCK) {
-      return await mockGetBrowseHistory()
+      return await mockGetBrowseHistory(page, pageSize)
     } else {
-      return await withRetry(() => get('/user/history'))
+      return await withRetry(() => get('/user/history', {
+        params: { page, pageSize }
+      }))
     }
   },
   
@@ -1562,11 +1618,11 @@ export const rewardOrderApi = {
     }
   },
   
-  async grabRewardOrder(orderId) {
+  async grabRewardOrder(orderId, grabData) {
     if (USE_MOCK) {
-      return await mockGrabRewardOrder(orderId)
+      return await mockGrabRewardOrder(orderId, grabData)
     } else {
-      return await withRetry(() => post(`/reward/${orderId}/grab`))
+      return await withRetry(() => post(`/reward/${orderId}/grab`, grabData))
     }
   },
   
@@ -1711,6 +1767,111 @@ export const uploadApi = {
       return await withRetry(() => uploadFile('/upload', file, {
         data: { type }
       }))
+    }
+  }
+}
+
+// 安全相关API
+export const securityApi = {
+  // 修改密码
+  async changePassword(data) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '密码修改成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/user/change-password', data))
+    }
+  },
+
+  // 发送手机验证码
+  async sendPhoneCode(phone) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '验证码发送成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/auth/send-phone-code', { phone }))
+    }
+  },
+
+  // 绑定手机
+  async bindPhone(data) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '手机绑定成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/user/bind-phone', data))
+    }
+  },
+
+  // 发送邮箱验证码
+  async sendEmailCode(email) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '验证码发送成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/auth/send-email-code', { email }))
+    }
+  },
+
+  // 绑定邮箱
+  async bindEmail(data) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '邮箱绑定成功'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post('/user/bind-email', data))
+    }
+  },
+
+  // 获取安全信息（已绑定的手机、邮箱等）
+  async getSecurityInfo() {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              phoneBound: false,
+              emailBound: false,
+              twoFactorEnabled: false,
+              lastLoginTime: new Date().toISOString(),
+              lastLoginIp: '192.168.1.1'
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get('/user/security-info'))
     }
   }
 }
@@ -1994,6 +2155,7 @@ export default {
   appeal: appealApi,
   skill: skillApi,
   upload: uploadApi,
+  security: securityApi,
   fetchPlaymates,
   fetchLeaderboard,
   searchPlaymates,

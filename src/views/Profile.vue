@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32">
+  <div class="min-h-screen bg-surface text-on-surface pb-32" style="padding-top: var(--header-height);">
     
     <AppHeader
       title="个人中心"
@@ -10,7 +10,7 @@
       @profile="handleProfile"
     />
     
-    <main class="page-content pt-24 pb-32 space-y-6">
+    <main ref="contentRef" class="page-content pb-32 space-y-6">
       <!-- 加载状态 -->
       <section v-if="loading" class="bg-surface-container-lowest rounded-3xl p-6 flex items-center justify-center">
         <div class="flex flex-col items-center gap-3">
@@ -223,7 +223,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import { useUserStore } from '../stores/user.js'
@@ -233,6 +233,17 @@ import { userApi, orderApi, handleApiError } from '../api/index.js'
 const router = useRouter()
 const userStore = useUserStore()
 const { showToast } = useToast()
+const contentRef = ref(null)
+
+// 动态设置内容区域的 padding-top，确保不被导航栏遮挡
+const setContentPadding = async () => {
+  await nextTick()
+  const header = document.querySelector('header')
+  if (header && contentRef.value) {
+    const headerHeight = header.offsetHeight
+    contentRef.value.style.paddingTop = `${headerHeight + 20}px`
+  }
+}
 
 const userInfo = ref({
   avatar: '',
@@ -607,6 +618,7 @@ onMounted(() => {
   }
   loadData()
   loadOrders()
+  setContentPadding()
 })
 </script>
 

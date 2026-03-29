@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import api from '../api/index.js'
@@ -16,55 +16,105 @@ const games = [
   { id: 6, name: '绝地求生', image: 'https://via.placeholder.com/96x128', active: false }
 ]
 
+const predefinedTags = [
+  '上分', '排位', '教学', '娱乐', '语音', '高端局',
+  '新手友好', '快速上分', '稳赢', '带飞', '陪练', '代打'
+]
+
 const selectedGame = ref(null)
+const content = ref('')
 const rewardAmount = ref('')
-const duration = ref(1)
-const startTime = ref('今天 20:00')
-const requirements = ref('')
+const paymentMethod = ref('prepay')
+const selectedTags = ref([])
+const requirements = ref([''])
 const loading = ref(false)
 
-const durations = [
-  { value: 1, label: '1h' },
-  { value: 2, label: '2h' },
-  { value: 3, label: '3h' },
-  { value: 4, label: '4h+' },
-  { value: 8, label: '包天' }
+const paymentMethods = [
+  { value: 'prepay', label: '预付', description: '先付款后服务' },
+  { value: 'postpay', label: '现付', description: '先服务后付款' }
 ]
 
 const handleGameSelect = (game) => {
   selectedGame.value = game
 }
 
-const handleDurationSelect = (durationValue) => {
-  duration.value = durationValue
+const handleTagToggle = (tag) => {
+  const index = selectedTags.value.indexOf(tag)
+  if (index > -1) {
+    selectedTags.value.splice(index, 1)
+  } else {
+    selectedTags.value.push(tag)
+  }
 }
 
-const handlePublish = async () => {
-  if (!selectedGame.value) {
-    alert('请选择游戏')
-    return
+const addRequirement = () => {
+  requirements.value.push('')
+}
+
+const removeRequirement = (index) => {
+  if (requirements.value.length > 1) {
+    requirements.value.splice(index, 1)
   }
-  
-  if (!rewardAmount.value) {
-    alert('请输入赏金金额')
+}
+
+const updateRequirement = (index, value) => {
+  requirements.value[index] = value
+}
+
+const isValid = computed(() => {
+  return (
+    selectedGame.value &&
+    content.value.trim() &&
+    parseFloat(rewardAmount.value) > 0 &&
+    selectedTags.value.length > 0 &&
+    requirements.value.some(r => r.trim())
+  )
+})
+
+const handlePublish = async () => {
+  if (!isValid.value) {
+    if (!selectedGame.value) {
+      alert('请选择游戏')
+      return
+    }
+    if (!content.value.trim()) {
+      alert('请填写悬赏内容')
+      return
+    }
+    if (!rewardAmount.value || parseFloat(rewardAmount.value) <= 0) {
+      alert('请输入有效的赏金金额')
+      return
+    }
+    if (selectedTags.value.length === 0) {
+      alert('请至少选择一个标签')
+      return
+    }
+    if (!requirements.value.some(r => r.trim())) {
+      alert('请至少填写一个要求')
+      return
+    }
     return
   }
   
   loading.value = true
   try {
-    const response = await api.rewardOrder.publishReward({
-      gameId: selectedGame.value.id,
+    const requestData = {
+      game: selectedGame.value.name,
+      content: content.value.trim(),
       reward: parseFloat(rewardAmount.value),
-      duration: duration.value,
-      startTime: startTime.value,
-      requirements: requirements.value
-    })
+      paymentMethod: paymentMethod.value,
+      requirements: requirements.value.filter(r => r.trim()),
+      tags: selectedTags.value
+    }
+    
+    const response = await api.rewardOrder.publishReward(requestData)
     
     if (response.success) {
       router.push('/reward')
     }
   } catch (err) {
     console.error('发布悬赏失败:', err)
+    alert(err.message || '发布失败，请稍后重试')
   } finally {
     loading.value = false
   }
@@ -73,22 +123,6 @@ const handlePublish = async () => {
 const handleCancel = () => {
   router.back()
 }
-
-const handleNotifications = () => {
-  router.push('/notifications')
-}
-
-const handleSearch = () => {
-  router.push('/search')
-}
-
-const handleProfile = () => {
-  router.push('/profile')
-}
-
-onMounted(() => {
-  selectedGame.value = games[0]
-})
 </script>
 
 <template>
@@ -108,12 +142,11 @@ onMounted(() => {
       </div>
     </header>
 
-    <main class="page-content pt-20 space-y-8">
+    <main class="page-content pt-20 px-5 space-y-6">
       <!-- Section: Game Selection -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">
           <h2 class="text-on-surface font-headline font-bold text-lg">选择游戏</h2>
-          <span class="text-primary text-xs font-semibold">更多游戏</span>
         </div>
         <div class="flex gap-4 overflow-x-auto hide-scrollbar py-2">
           <div
@@ -136,72 +169,120 @@ onMounted(() => {
         </div>
       </section>
 
-      <!-- Section: Bounty Details -->
-      <section class="grid grid-cols-1 gap-6">
-        <!-- Amount Input -->
-        <div class="space-y-3">
-          <label class="block text-on-surface font-headline font-bold text-lg">赏金金额</label>
-          <div class="bg-surface-container-high rounded-2xl p-4 flex items-center gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
-            <span class="text-primary font-bold text-2xl">¥</span>
-            <input
-              v-model="rewardAmount"
-              class="bg-transparent border-none focus:ring-0 text-xl font-bold w-full placeholder:text-outline/50"
-              placeholder="0.00"
-              type="number"
-            />
-            <span class="text-on-surface-variant font-medium text-sm">/ 小时</span>
-          </div>
-        </div>
+      <!-- Section: Content -->
+      <section class="space-y-3">
+        <label class="block text-on-surface font-headline font-bold text-lg">悬赏内容</label>
+        <textarea
+          v-model="content"
+          class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50 resize-none"
+          placeholder="描述你的需求，例如：寻找荣耀王者陪玩，教我玩貂蝉..."
+          rows="3"
+        ></textarea>
+      </section>
 
-        <!-- Duration Selection -->
-        <div class="space-y-3">
-          <label class="block text-on-surface font-headline font-bold text-lg">预计时长</label>
-          <div class="flex flex-wrap gap-3">
-            <button
-              v-for="d in durations"
-              :key="d.value"
-              @click="handleDurationSelect(d.value)"
-              :class="[
-                'px-5 py-2.5 rounded-full font-bold text-sm transition-all',
-                duration === d.value
-                  ? 'bg-primary-container text-on-primary-container ring-1 ring-primary'
-                  : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
-              ]"
-            >
-              {{ d.label }}
-            </button>
-          </div>
-        </div>
-
-        <!-- Start Time -->
-        <div class="space-y-3">
-          <label class="block text-on-surface font-headline font-bold text-lg">开始时间</label>
-          <div class="bg-surface-container-high rounded-2xl p-4 flex items-center justify-between hover:bg-surface-container-highest transition-all cursor-pointer">
-            <div class="flex items-center gap-3 text-on-surface">
-              <span class="material-symbols-outlined text-primary">schedule</span>
-              <span class="font-medium">{{ startTime }}</span>
-            </div>
-            <span class="material-symbols-outlined text-outline">chevron_right</span>
-          </div>
-        </div>
-
-        <!-- Requirements -->
-        <div class="space-y-3">
-          <label class="block text-on-surface font-headline font-bold text-lg">详细要求</label>
-          <textarea
-            v-model="requirements"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50 resize-none"
-            placeholder="写下你的段位要求、位置偏好或其他个性化需求..."
-            rows="4"
-          ></textarea>
+      <!-- Section: Reward Amount -->
+      <section class="space-y-3">
+        <label class="block text-on-surface font-headline font-bold text-lg">赏金金额</label>
+        <div class="bg-surface-container-high rounded-2xl p-4 flex items-center gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+          <span class="text-primary font-bold text-2xl">¥</span>
+          <input
+            v-model="rewardAmount"
+            class="bg-transparent border-none focus:ring-0 text-xl font-bold w-full placeholder:text-outline/50"
+            placeholder="0.00"
+            type="number"
+            step="0.01"
+            min="0"
+          />
         </div>
       </section>
 
-      <!-- Identity/Status Info -->
+      <!-- Section: Payment Method -->
+      <section class="space-y-3">
+        <label class="block text-on-surface font-headline font-bold text-lg">支付方式</label>
+        <div class="grid grid-cols-2 gap-3">
+          <button
+            v-for="method in paymentMethods"
+            :key="method.value"
+            @click="paymentMethod = method.value"
+            :class="[
+              'p-4 rounded-2xl transition-all text-left',
+              paymentMethod === method.value
+                ? 'bg-primary-container ring-2 ring-primary'
+                : 'bg-surface-container-high hover:bg-surface-container-highest'
+            ]"
+          >
+            <div class="flex items-center gap-2 mb-1">
+              <span class="material-symbols-outlined text-primary">
+                {{ method.value === 'prepay' ? 'payments' : 'account_balance_wallet' }}
+              </span>
+              <span class="font-bold text-on-surface">{{ method.label }}</span>
+            </div>
+            <p class="text-xs text-on-surface-variant">{{ method.description }}</p>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section: Tags -->
+      <section class="space-y-3">
+        <label class="block text-on-surface font-headline font-bold text-lg">标签</label>
+        <p class="text-xs text-on-surface-variant">选择标签让大神更快找到你</p>
+        <div class="flex flex-wrap gap-2">
+          <button
+            v-for="tag in predefinedTags"
+            :key="tag"
+            @click="handleTagToggle(tag)"
+            :class="[
+              'px-4 py-2 rounded-full text-sm font-medium transition-all',
+              selectedTags.includes(tag)
+                ? 'bg-primary-container text-on-primary-container ring-1 ring-primary'
+                : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
+            ]"
+          >
+            {{ tag }}
+          </button>
+        </div>
+      </section>
+
+      <!-- Section: Requirements -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between">
+          <label class="block text-on-surface font-headline font-bold text-lg">要求</label>
+          <button
+            @click="addRequirement"
+            class="flex items-center gap-1 text-primary text-sm font-medium"
+          >
+            <span class="material-symbols-outlined text-lg">add</span>
+            添加要求
+          </button>
+        </div>
+        <div class="space-y-3">
+          <div
+            v-for="(requirement, index) in requirements"
+            :key="index"
+            class="flex items-center gap-2"
+          >
+            <input
+              :value="requirement"
+              @input="updateRequirement(index, $event.target.value)"
+              class="flex-1 bg-surface-container-high rounded-xl border-none px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50"
+              :placeholder="`要求 ${index + 1}`"
+            />
+            <button
+              v-if="requirements.length > 1"
+              @click="removeRequirement(index)"
+              class="p-2 text-error hover:bg-error-container rounded-full transition-colors"
+            >
+              <span class="material-symbols-outlined">delete</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Info Box -->
       <div class="p-4 rounded-2xl bg-tertiary-container/10 border border-tertiary-container/20 flex items-start gap-3">
         <span class="material-symbols-outlined text-tertiary text-lg">info</span>
         <p class="text-xs text-on-tertiary-container leading-relaxed">
-          您的当前等级为 <span class="font-bold">黄金猎人</span>，本次发布将享受优先展示权。悬赏金将在陪玩结束后自动结算至对方钱包。
+          发布悬赏后，大神们可以申请抢单。您可以从申请者中选择合适的大神进行服务。悬赏金将在服务完成后自动结算至对方钱包。
         </p>
       </div>
     </main>
@@ -213,12 +294,15 @@ onMounted(() => {
       <div class="max-w-md mx-auto">
         <button
           @click="handlePublish"
-          :disabled="loading"
+          :disabled="loading || !isValid"
           class="w-full bg-primary-container text-on-primary-container py-4 rounded-full font-headline font-extrabold text-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-all shadow-[0_8px_20px_rgba(255,215,0,0.25)]"
-          :class="loading ? 'opacity-50 cursor-not-allowed' : ''"
+          :class="(loading || !isValid) ? 'opacity-50 cursor-not-allowed' : ''"
         >
-          立即发布
-          <span class="material-symbols-outlined font-bold">rocket_launch</span>
+          <span v-if="loading">发布中...</span>
+          <template v-else>
+            立即发布
+            <span class="material-symbols-outlined font-bold">rocket_launch</span>
+          </template>
         </button>
       </div>
     </div>
@@ -233,5 +317,15 @@ onMounted(() => {
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 </style>
