@@ -21,6 +21,10 @@ const predefinedTags = [
   '新手友好', '快速上分', '稳赢', '带飞', '陪练', '代打'
 ]
 
+const gameRanks = [
+  'unranked', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'master', 'grandmaster'
+]
+
 const selectedGame = ref(null)
 const content = ref('')
 const rewardAmount = ref('')
@@ -28,6 +32,11 @@ const paymentMethod = ref('prepay')
 const selectedTags = ref([])
 const requirements = ref([''])
 const loading = ref(false)
+const timeLeft = ref('')
+const gameRank = ref('')
+const startTime = ref('')
+const duration = ref('')
+const location = ref('')
 
 const paymentMethods = [
   { value: 'prepay', label: '预付', description: '先付款后服务' },
@@ -67,7 +76,12 @@ const isValid = computed(() => {
     content.value.trim() &&
     parseFloat(rewardAmount.value) > 0 &&
     selectedTags.value.length > 0 &&
-    requirements.value.some(r => r.trim())
+    requirements.value.some(r => r.trim()) &&
+    timeLeft.value &&
+    gameRank.value &&
+    startTime.value &&
+    duration.value &&
+    location.value
   )
 })
 
@@ -93,6 +107,26 @@ const handlePublish = async () => {
       alert('请至少填写一个要求')
       return
     }
+    if (!timeLeft.value) {
+      alert('请选择截止时间')
+      return
+    }
+    if (!gameRank.value) {
+      alert('请选择游戏段位')
+      return
+    }
+    if (!startTime.value) {
+      alert('请选择开始时间')
+      return
+    }
+    if (!duration.value || parseInt(duration.value) <= 0) {
+      alert('请输入有效的时长')
+      return
+    }
+    if (!location.value) {
+      alert('请填写位置信息')
+      return
+    }
     return
   }
   
@@ -104,7 +138,12 @@ const handlePublish = async () => {
       reward: parseFloat(rewardAmount.value),
       paymentMethod: paymentMethod.value,
       requirements: requirements.value.filter(r => r.trim()),
-      tags: selectedTags.value
+      tags: selectedTags.value,
+      timeLeft: timeLeft.value,
+      gameRank: gameRank.value,
+      startTime: startTime.value,
+      duration: parseInt(duration.value),
+      location: location.value
     }
     
     const response = await api.rewardOrder.publishReward(requestData)
@@ -275,6 +314,70 @@ const handleCancel = () => {
               <span class="material-symbols-outlined">delete</span>
             </button>
           </div>
+        </div>
+      </section>
+
+      <!-- Section: Time and Rank -->
+      <section class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-on-surface font-headline font-bold text-lg">时间与段位</h2>
+        </div>
+        
+        <!-- Start Time -->
+        <div class="space-y-2">
+          <label class="block text-on-surface font-medium text-sm">开始时间</label>
+          <input
+            v-model="startTime"
+            type="datetime-local"
+            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+          />
+        </div>
+        
+        <!-- End Time -->
+        <div class="space-y-2">
+          <label class="block text-on-surface font-medium text-sm">截止时间</label>
+          <input
+            v-model="timeLeft"
+            type="datetime-local"
+            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+          />
+        </div>
+        
+        <!-- Duration -->
+        <div class="space-y-2">
+          <label class="block text-on-surface font-medium text-sm">时长 (小时)</label>
+          <input
+            v-model="duration"
+            type="number"
+            min="1"
+            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            placeholder="输入时长"
+          />
+        </div>
+        
+        <!-- Game Rank -->
+        <div class="space-y-2">
+          <label class="block text-on-surface font-medium text-sm">游戏段位</label>
+          <select
+            v-model="gameRank"
+            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+          >
+            <option value="">请选择段位</option>
+            <option v-for="rank in gameRanks" :key="rank" :value="rank">
+              {{ rank }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Location -->
+        <div class="space-y-2">
+          <label class="block text-on-surface font-medium text-sm">位置信息</label>
+          <input
+            v-model="location"
+            type="text"
+            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            placeholder="输入位置信息"
+          />
         </div>
       </section>
 

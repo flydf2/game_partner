@@ -53,7 +53,8 @@ const handleGrabOrder = async () => {
       // 抢单成功后跳转到详情页
       router.push(`/grab-order/${orderId.value}/detail`)
     } else {
-      if (response.code === 7 || response.message === '您已经抢过此订单' || response.msg === '您已经抢过此订单') {
+      console.info(response)
+      if (response.code === 10104 || response.message === '您已经抢过此订单' || response.msg === '您已经抢过此订单') {
         // 已抢过订单，跳转到详情页
         router.push(`/grab-order/${orderId.value}/detail`)
       } else {
@@ -61,8 +62,14 @@ const handleGrabOrder = async () => {
       }
     }
   } catch (err) {
-    error.value = err.message
-    console.error('抢单失败:', err)
+    // 处理特殊错误码
+    if (err.code === 10104) {
+      // 已抢过订单，跳转到详情页
+      router.push(`/grab-order/${orderId.value}/detail`)
+    } else {
+      error.value = err.message
+      console.error('抢单失败:', err)
+    }
   } finally {
     isSubmitting.value = false
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-surface text-on-surface pb-32" style="padding-top: var(--header-height);">
+  <div class="min-h-screen bg-surface text-on-surface pb-32" >
     
     <AppHeader
       title="个人中心"
@@ -333,13 +333,37 @@ const menuItems = ref([
     iconColor: 'text-indigo-600',
     badge: null 
   },
-  { 
-    key: 'match-history', 
-    label: '历史战绩', 
-    icon: 'sports_esports', 
-    iconBg: 'bg-orange-50', 
+  {
+    key: 'match-history',
+    label: '历史战绩',
+    icon: 'sports_esports',
+    iconBg: 'bg-orange-50',
     iconColor: 'text-orange-600',
-    badge: null 
+    badge: null
+  },
+  {
+    key: 'my-published',
+    label: '我的发布',
+    icon: 'published_with_changes',
+    iconBg: 'bg-blue-50',
+    iconColor: 'text-blue-600',
+    badge: null
+  },
+  {
+    key: 'my-reward-orders',
+    label: '我发布的悬赏',
+    icon: 'rewards',
+    iconBg: 'bg-yellow-50',
+    iconColor: 'text-yellow-600',
+    badge: null
+  },
+  {
+    key: 'my-posts',
+    label: '我的动态',
+    icon: 'post_add',
+    iconBg: 'bg-pink-50',
+    iconColor: 'text-pink-600',
+    badge: null
   },
   { 
     key: 'security', 
@@ -543,6 +567,15 @@ const handleMenuClick = (key) => {
       break
     case 'match-history':
       router.push('/match-history')
+      break
+    case 'my-published':
+      router.push('/profile/my-published')
+      break
+    case 'my-reward-orders':
+      router.push('/profile/my-reward-orders')
+      break
+    case 'my-posts':
+      router.push('/profile/my-posts')
       break
     case 'security':
       router.push('/profile/security')

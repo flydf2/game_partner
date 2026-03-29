@@ -1,61 +1,43 @@
-import { request } from './config.js'
+import { get, post, put, del } from './request.js'
 
 export const playmateAPI = {
   async getLeaderboard(params = {}) {
-    const queryParams = new URLSearchParams()
-    
-    queryParams.append('page', params.page || 1)
-    queryParams.append('pageSize', params.pageSize || 20)
-    if (params.period) queryParams.append('period', params.period)
-    if (params.game) queryParams.append('game', params.game)
-    
-    const queryString = queryParams.toString()
-    return request(`/playmates/leaderboard${queryString ? `?${queryString}` : ''}`)
+    // 确保分页参数存在
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      ...params
+    }
+    return get('/playmates/leaderboard', { params: queryParams })
   },
 
   async getPlaymates(params = {}) {
     // 确保分页参数存在
-    const queryParams = new URLSearchParams()
-    
-    queryParams.append('page', params.page || 1)
-    queryParams.append('pageSize', params.pageSize || 20)
-    
-    if (params.online) queryParams.append('online', params.online)
-    if (params.priceRange) queryParams.append('priceRange', params.priceRange)
-    if (params.rank) queryParams.append('rank', params.rank)
-    if (params.gender) queryParams.append('gender', params.gender)
-    if (params.game) queryParams.append('game', params.game)
-    if (params.keyword) queryParams.append('keyword', params.keyword)
-    if (params.sortBy) queryParams.append('sortBy', params.sortBy)
-
-    const queryString = queryParams.toString()
-    return request(`/playmates${queryString ? `?${queryString}` : ''}`)
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      ...params
+    }
+    return get('/playmates', { params: queryParams })
   },
 
   async getPlaymateDetail(id) {
-    return request(`/playmates/${id}`)
+    return get(`/playmates/${id}`)
   },
 
   async searchPlaymates(keyword, params = {}) {
     // 确保分页参数存在
-    const queryParams = new URLSearchParams()
-    
-    queryParams.append('keyword', keyword)
-    queryParams.append('page', params.page || 1)
-    queryParams.append('pageSize', params.pageSize || 20)
-    
-    if (params.online) queryParams.append('online', params.online)
-    if (params.priceRange) queryParams.append('priceRange', params.priceRange)
-    if (params.rank) queryParams.append('rank', params.rank)
-    if (params.gender) queryParams.append('gender', params.gender)
-    if (params.game) queryParams.append('game', params.game)
-    if (params.sortBy) queryParams.append('sortBy', params.sortBy)
-    
-    return request(`/playmates/search?${queryParams.toString()}`)
+    const queryParams = {
+      keyword,
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      ...params
+    }
+    return get('/playmates/search', { params: queryParams })
   },
 
   async getSearchSuggestions(keyword) {
-    return request(`/playmates/suggestions?keyword=${encodeURIComponent(keyword)}`)
+    return get('/playmates/suggestions', { params: { keyword } })
   },
 
   // ==================== Reward Orders CRUD ====================
@@ -72,18 +54,13 @@ export const playmateAPI = {
    * @returns {Promise} 奖励订单列表
    */
   async getRewardOrders(params = {}) {
-    const queryParams = new URLSearchParams()
-    
-    queryParams.append('page', params.page || 1)
-    queryParams.append('pageSize', params.pageSize || 20)
-    
-    if (params.game) queryParams.append('game', params.game)
-    if (params.status) queryParams.append('status', params.status)
-    if (params.paymentMethod) queryParams.append('paymentMethod', params.paymentMethod)
-    if (params.keyword) queryParams.append('keyword', params.keyword)
-
-    const queryString = queryParams.toString()
-    return request(`/reward${queryString ? `?${queryString}` : ''}`)
+    // 确保分页参数存在
+    const queryParams = {
+      page: params.page || 1,
+      pageSize: params.pageSize || 20,
+      ...params
+    }
+    return get('/reward', { params: queryParams })
   },
 
   /**
@@ -92,7 +69,7 @@ export const playmateAPI = {
    * @returns {Promise} 订单详情
    */
   async getRewardOrderDetail(orderId) {
-    return request(`/reward/${orderId}`)
+    return get(`/reward/${orderId}`)
   },
 
   /**
@@ -106,10 +83,7 @@ export const playmateAPI = {
    * @returns {Promise} 创建的订单
    */
   async createRewardOrder(data) {
-    return request('/reward', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    })
+    return post('/reward', data)
   },
 
   /**
@@ -125,10 +99,7 @@ export const playmateAPI = {
    * @returns {Promise} 更新后的订单
    */
   async updateRewardOrder(orderId, data) {
-    return request(`/reward/${orderId}`, {
-      method: 'PUT',
-      body: JSON.stringify(data)
-    })
+    return put(`/reward/${orderId}`, data)
   },
 
   /**
@@ -137,9 +108,7 @@ export const playmateAPI = {
    * @returns {Promise} 删除结果
    */
   async deleteRewardOrder(orderId) {
-    return request(`/reward/${orderId}`, {
-      method: 'DELETE'
-    })
+    return del(`/reward/${orderId}`)
   },
 
   /**
@@ -148,8 +117,6 @@ export const playmateAPI = {
    * @returns {Promise} 抢单结果
    */
   async grabRewardOrder(orderId) {
-    return request(`/reward/${orderId}/grab`, {
-      method: 'POST'
-    })
+    return post(`/reward/${orderId}/grab`)
   }
 }

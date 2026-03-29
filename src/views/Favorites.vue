@@ -9,24 +9,16 @@ const router = useRouter()
 const favorites = ref([])
 const loading = ref(false)
 const error = ref('')
-const currentPage = ref(1)
-const totalPages = ref(1)
-const totalCount = ref(0)
-const loadingMore = ref(false)
 
-const loadFavorites = async (page = 1, append = false) => {
-  if (append) {
-    loadingMore.value = true
-  } else {
-    loading.value = true
-  }
+const loadFavorites = async () => {
+  loading.value = true
   error.value = ''
   
   try {
-    const response = await userApi.getFavorites(page)
+    const response = await userApi.getFavorites()
     if (response.success || response.code === 0) {
       const favoritesData = response.data?.data || response.data || []
-      const processedData = favoritesData.map(favorite => ({
+      favorites.value = favoritesData.map(favorite => ({
         ...favorite,
         avatar: favorite.expertAvatar || favorite.avatar ? (favorite.expertAvatar || favorite.avatar).trim().replace(/^`|`$/g, '') : '',
         id: favorite.id || favorite.expertId,
@@ -34,19 +26,6 @@ const loadFavorites = async (page = 1, append = false) => {
         nickname: favorite.expertName || favorite.nickname || favorite.name,
         rank: favorite.rank || favorite.skill
       }))
-      
-      if (append) {
-        favorites.value = [...favorites.value, ...processedData]
-      } else {
-        favorites.value = processedData
-      }
-      
-      // 更新分页信息
-      if (response.data?.pagination) {
-        currentPage.value = response.data.pagination.currentPage
-        totalPages.value = response.data.pagination.totalPages
-        totalCount.value = response.data.pagination.totalCount
-      }
     } else {
       throw new Error(response.message || response.msg || '获取收藏列表失败')
     }
@@ -56,13 +35,6 @@ const loadFavorites = async (page = 1, append = false) => {
     console.error('获取收藏列表失败:', err)
   } finally {
     loading.value = false
-    loadingMore.value = false
-  }
-}
-
-const loadMore = async () => {
-  if (currentPage.value < totalPages.value && !loadingMore.value) {
-    await loadFavorites(currentPage.value + 1, true)
   }
 }
 
@@ -118,18 +90,14 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="router.back()"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">我的收藏</h1>
-      </div>
-      <div class="text-sm text-on-surface-variant">{{ totalCount }}个</div>
-    </header>
+    <AppHeader
+      title="我的收藏"
+      is-primary-page
+      @menu="handleMenu"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <main class="page-content pt-20 pb-32 space-y-6">
       <!-- 加载状态 -->
@@ -237,37 +205,14 @@ onMounted(() => {
                     <span>{{ favorite.likes || 0 }}赞</span>
                   </div>
                   <div class="flex items-center gap-1">
-                    <span class="material-symbols-outlined text-sm">attach_money</span>
-                    <span>¥{{ favorite.price }}/局</span>
-                  </div>
-                  <div class="flex items-center gap-1">
                     <span class="material-symbols-outlined text-sm">level</span>
-                    <span>Lv{{ favorite.level }}</span>
+                    <span>Lv{{ favorite.level || 1 }}</span>
                   </div>
                 </div>
-                <div class="text-xs text-on-surface-variant">
-                  {{ favorite.addedAt }}
-                </div>
+                <span class="text-lg font-bold text-primary">¥{{ favorite.price }}/{{ favorite.unit || '局' }}</span>
               </div>
             </div>
           </div>
-        </div>
-        
-        <!-- 加载更多 -->
-        <div v-if="currentPage < totalPages" class="text-center py-6">
-          <button
-            @click="loadMore"
-            :disabled="loadingMore"
-            class="px-8 py-3 bg-surface-container text-on-surface-variant rounded-full text-sm font-bold active:scale-95 transition-all disabled:opacity-50"
-          >
-            <span v-if="loadingMore">加载中...</span>
-            <span v-else>加载更多</span>
-          </button>
-        </div>
-        
-        <!-- 没有更多数据 -->
-        <div v-else-if="favorites.length > 0" class="text-center py-6 text-sm text-on-surface-variant">
-          没有更多数据了
         </div>
       </div>
     </main>

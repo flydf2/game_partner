@@ -84,6 +84,10 @@ const handleViewRewardOrders = () => {
   router.push('/reward')
 }
 
+const handleMyPosts = () => {
+  router.push('/profile/my-posts')
+}
+
 const handleToggleRewardFilter = () => {
   onlyRewardPosts.value = !onlyRewardPosts.value
   fetchPosts()
@@ -228,19 +232,34 @@ onMounted(() => {
         </div>
       </section>
 
-      <!-- Reward Orders Button -->
-      <section class="w-full">
+      <!-- Reward Orders & My Posts Buttons -->
+      <section class="w-full grid grid-cols-2 gap-3">
         <button
           @click="handleViewRewardOrders"
-          class="w-full bg-surface-container-lowest rounded-3xl p-4 flex items-center justify-between hover:bg-surface-container-high transition-colors active:scale-95"
+          class="bg-surface-container-lowest rounded-3xl p-4 flex items-center justify-between hover:bg-surface-container-high transition-colors active:scale-95"
         >
           <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-2xl bg-primary-container/10 flex items-center justify-center text-primary">
               <span class="material-symbols-outlined">attach_money</span>
             </div>
-            <div>
+            <div class="text-left">
               <h3 class="font-bold text-on-surface">悬赏订单</h3>
-              <p class="text-xs text-on-surface-variant">查看并抢单，赚取额外收益</p>
+              <p class="text-xs text-on-surface-variant">查看并抢单</p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-outline">chevron_right</span>
+        </button>
+        <button
+          @click="handleMyPosts"
+          class="bg-surface-container-lowest rounded-3xl p-4 flex items-center justify-between hover:bg-surface-container-high transition-colors active:scale-95"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-600">
+              <span class="material-symbols-outlined">post</span>
+            </div>
+            <div class="text-left">
+              <h3 class="font-bold text-on-surface">我的动态</h3>
+              <p class="text-xs text-on-surface-variant">查看我的发布</p>
             </div>
           </div>
           <span class="material-symbols-outlined text-outline">chevron_right</span>

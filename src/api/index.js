@@ -2,6 +2,7 @@ import { usePlaymateStore } from '../stores/playmate.js'
 import { useApiStore, withLoading } from '../stores/api.js'
 import { cache } from '../utils/cache.js'
 import { API_BASE_URL } from './config.js'
+import { get, post, put, del, addRequestInterceptor, addResponseInterceptor } from './request.js'
 import { 
   mockGetPlaymates, 
   mockGetSearchSuggestions,
@@ -49,161 +50,8 @@ import {
   mockGetAppealDetail
 } from './mock-index.js'
 
-// 拦截器配置
-const interceptors = {
-  request: [],
-  response: []
-}
-
-// 添加请求拦截器
-export function addRequestInterceptor(interceptor) {
-  interceptors.request.push(interceptor)
-}
-
-// 添加响应拦截器
-export function addResponseInterceptor(interceptor) {
-  interceptors.response.push(interceptor)
-}
-
-// 认证请求拦截器
-addRequestInterceptor(async (config) => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
-// 响应拦截器 - 统一处理后端响应格式
-addResponseInterceptor(async ({ response, data }) => {
-  // 后端返回格式: { code: 0, data: {...}, msg: "获取成功" }
-  if (data.code === 0) {
-    // 成功响应，返回标准化格式
-    return {
-      success: true,
-      data: data.data,
-      message: data.msg
-    }
-  } else {
-    // 错误响应
-    throw new Error(data.msg || `API error: code ${data.code}`)
-  }
-})
-
-// 基础请求函数
-async function request(url, options = {}) {
-  let config = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    ...options,
-    credentials: 'include' // 包含凭据，解决CORS问题
-  }
-
-  // 执行请求拦截器
-  for (const interceptor of interceptors.request) {
-    config = await interceptor(config) || config
-  }
-
-  try {
-    const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000) // 10秒超时
-
-    console.log('API Request:', `${API_BASE_URL}${url}`)
-    const response = await fetch(`${API_BASE_URL}${url}`, {
-      ...config,
-      signal: controller.signal
-    })
-    
-    clearTimeout(timeoutId)
-
-    let responseData
-    try {
-      responseData = await response.json()
-    } catch (error) {
-      responseData = {}
-    }
-
-    console.log('API Response:', responseData)
-
-    // 执行响应拦截器
-    for (const interceptor of interceptors.response) {
-      const result = await interceptor({ response, data: responseData })
-      if (result !== undefined) {
-        return result
-      }
-    }
-
-    if (!response.ok) {
-      throw new Error(responseData.message || `HTTP error! status: ${response.status}`)
-    }
-    
-    return responseData
-  } catch (error) {
-    console.error('API request failed:', error)
-    throw error
-  }
-}
-
 // HTTP方法
-export async function get(url, options = {}) {
-  // 处理查询参数
-  let finalUrl = url
-  if (options.params) {
-    const queryParams = new URLSearchParams()
-    for (const [key, value] of Object.entries(options.params)) {
-      if (value !== undefined && value !== null) {
-        queryParams.append(key, value)
-      }
-    }
-    const queryString = queryParams.toString()
-    if (queryString) {
-      finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryString}`
-    }
-  }
-  return request(finalUrl, {
-    method: 'GET',
-    ...options
-  })
-}
-
-export async function post(url, data, options = {}) {
-  return request(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-    ...options
-  })
-}
-
-export async function put(url, data, options = {}) {
-  return request(url, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-    ...options
-  })
-}
-
-export async function del(url, options = {}) {
-  // 处理查询参数
-  let finalUrl = url
-  if (options.params) {
-    const queryParams = new URLSearchParams()
-    for (const [key, value] of Object.entries(options.params)) {
-      if (value !== undefined && value !== null) {
-        queryParams.append(key, value)
-      }
-    }
-    const queryString = queryParams.toString()
-    if (queryString) {
-      finalUrl = `${url}${url.includes('?') ? '&' : '?'}${queryString}`
-    }
-  }
-  return request(finalUrl, {
-    method: 'DELETE',
-    ...options
-  })
-}
+export { get, post, put, del, addRequestInterceptor, addResponseInterceptor }
 
 // 上传文件
 export async function uploadFile(url, file, options = {}) {
@@ -776,6 +624,34 @@ export const userApi = {
     } else {
       return await withRetry(() => post('/user/recharge', rechargeData))
     }
+  },
+  
+  async getUserInfo(userId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              id: userId || 1,
+              nickname: '逐风猎手',
+              avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+              postCount: 128,
+              followerCount: 1250,
+              followingCount: 320,
+              isFollowing: false
+            }
+          })
+        }, 300)
+      })
+    } else {
+      if (userId) {
+        return await withRetry(() => get(`/users/${userId}`))
+      } else {
+        // 调用原有API获取当前用户信息
+        return await withRetry(() => get('/user/info'))
+      }
+    }
   }
 }
 
@@ -1011,6 +887,21 @@ export const orderApi = {
       })
     } else {
       return await withRetry(() => post(`/orders/${orderId}/reject`))
+    }
+  },
+  
+  async withdrawOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '申请已撤回'
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => post(`/orders/${orderId}/withdraw`))
     }
   }
 }
@@ -1445,6 +1336,101 @@ export const communityApi = {
     } else {
       return await withRetry(() => del(`/community/topics/${topicId}/follow`))
     }
+  },
+  
+  async getMyPosts(params = {}) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              data: [
+                {
+                  id: 1,
+                  avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                  nickname: '用户',
+                  content: '今天在峡谷遇到一个超级温柔的辅助，操作意识拉满！有人想一起组队排位吗？坐标艾欧尼亚，主玩AD。 ✨',
+                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBU8XrMhk3VFwj3Ceer0yCVb-HelGKX5ryLoHAYthnekinYCfvHoJ83xSPEZdrL2tht2CTf_d1atj0kQiKVMY41s8kFOBgY2l5a9dPvoP6yXh3HyA9pdom7W1PkI1l7drYVsVSEeg-BnjsOK2tD_lvHVqzF3VZCAhg6pbcyZj11rhzX6V52RT4jlbNYqEKBRxP818vVewrnT3E6phVAdGXO9zQIWGaIvWWk6pXEzjpNwOh3xDn8FNjv-sGQOhsOt1srbfvB0MFCo-A',
+                  likes: 1200,
+                  comments: 348,
+                  isLiked: false,
+                  createdAt: '2026-03-28T10:00:00Z'
+                },
+                {
+                  id: 2,
+                  avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                  nickname: '用户',
+                  content: '新赛季开始了，目标王者！有没有一起冲分的小伙伴？',
+                  image: '',
+                  likes: 56,
+                  comments: 12,
+                  isLiked: true,
+                  createdAt: '2026-03-27T15:30:00Z'
+                }
+              ]
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get('/community/my-posts', { params }))
+    }
+  },
+  
+  async getUserPosts(userId, params = {}) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              data: [
+                {
+                  id: 1,
+                  avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                  nickname: '逐风猎手',
+                  content: '今天在峡谷遇到一个超级温柔的辅助，操作意识拉满！有人想一起组队排位吗？坐标艾欧尼亚，主玩AD。 ✨',
+                  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBU8XrMhk3VFwj3Ceer0yCVb-HelGKX5ryLoHAYthnekinYCfvHoJ83xSPEZdrL2tht2CTf_d1atj0kQiKVMY41s8kFOBgY2l5a9dPvoP6yXh3HyA9pdom7W1PkI1l7drYVsVSEeg-BnjsOK2tD_lvHVqzF3VZCAhg6pbcyZj11rhzX6V52RT4jlbNYqEKBRxP818vVewrnT3E6phVAdGXO9zQIWGaIvWWk6pXEzjpNwOh3xDn8FNjv-sGQOhsOt1srbfvB0MFCo-A',
+                  likes: 1200,
+                  comments: 348,
+                  isLiked: false,
+                  createdAt: '2026-03-28T10:00:00Z'
+                },
+                {
+                  id: 2,
+                  avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                  nickname: '逐风猎手',
+                  content: '新赛季开始了，目标王者！有没有一起冲分的小伙伴？',
+                  image: '',
+                  likes: 56,
+                  comments: 12,
+                  isLiked: true,
+                  createdAt: '2026-03-27T15:30:00Z'
+                }
+              ]
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/community/users/${userId}/posts`, { params }))
+    }
+  },
+  
+  async deletePost(postId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '删除成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => del(`/community/posts/${postId}`))
+    }
   }
 }
 
@@ -1536,7 +1522,7 @@ export const rewardOrderApi = {
     if (USE_MOCK) {
       return await mockGetRewardOrders(params)
     } else {
-      return await withRetry(() => get('/my-reward', { params }))
+      return await withRetry(() => get('/reward/my', { params }))
     }
   },
   
@@ -1692,6 +1678,21 @@ export const rewardOrderApi = {
       })
     } else {
       return await withRetry(() => post(`/reward/${orderId}/confirm`, reviewData))
+    }
+  },
+  
+  async cancelRewardOrder(orderId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '订单已取消'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => post(`/reward/${orderId}/cancel`))
     }
   }
 }

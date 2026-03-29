@@ -28,20 +28,5 @@ export const expertService = {
   async getExpertVoice(expertId) {
     const response = await get(`${API_BASE_URL}/${expertId}/voice`)
     return response
-  },
-
-  async getExpertStatus(expertId) {
-    const response = await get(`${API_BASE_URL}/${expertId}/status`)
-    return response
-  },
-
-  async likeExpert(expertId) {
-    const response = await post(`${API_BASE_URL}/${expertId}/like`)
-    return response
-  },
-
-  async unlikeExpert(expertId) {
-    const response = await del(`${API_BASE_URL}/${expertId}/like`)
-    return response
   }
 }

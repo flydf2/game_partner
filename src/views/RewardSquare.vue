@@ -41,7 +41,11 @@ const loadBounties = async () => {
               level: bounty.userLevel || 24,
               specialty: bounty.userSpecialty || ''
             },
-            timeLeft: bounty.timeLeft || '24:59',
+            timeLeft: bounty.timeLeft || bounty.deadline || '24:59',
+            gameRank: bounty.gameRank || '',
+            startTime: bounty.startTime || '',
+            duration: bounty.duration || 0,
+            location: bounty.location || '',
             tags: bounty.tags || [],
             requirements: bounty.requirements || []
           }))
@@ -84,6 +88,10 @@ const handleMyGrabOrders = () => {
   router.push('/my-grab-orders')
 }
 
+const handleMyPublished = () => {
+  router.push('/profile/my-published')
+}
+
 const handleMenu = () => {
   router.push('/profile')
 }
@@ -98,6 +106,35 @@ const handleSearch = () => {
 
 const handleProfile = () => {
   router.push('/profile')
+}
+
+// 段位标签映射
+const rankMap = {
+  bronze: '青铜',
+  silver: '白银',
+  gold: '黄金',
+  platinum: '铂金',
+  diamond: '钻石',
+  master: '大师',
+  grandmaster: '宗师',
+  challenger: '王者'
+}
+
+// 获取段位标签
+const getRankLabel = (rank) => {
+  return rankMap[rank] || rank
+}
+
+// 格式化时间
+const formatTime = (dateString) => {
+  if (!dateString) return ''
+  const date = new Date(dateString)
+  return date.toLocaleString('zh-CN', {
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
 }
 
 onMounted(() => {
@@ -123,12 +160,20 @@ onMounted(() => {
           <h1 class="font-headline font-extrabold text-4xl leading-tight text-on-surface">
             悬赏<span class="text-primary">广场</span>
           </h1>
-          <button
-            @click="handleMyGrabOrders"
-            class="text-sm font-semibold text-primary active:scale-95 transition-transform flex items-center gap-1"
-          >
-            我的抢单 <span class="material-symbols-outlined text-lg">arrow_forward_ios</span>
-          </button>
+          <div class="flex items-center gap-4">
+            <button
+              @click="handleMyPublished"
+              class="text-sm font-semibold text-primary active:scale-95 transition-transform flex items-center gap-1"
+            >
+              我的发布 <span class="material-symbols-outlined text-lg">arrow_forward_ios</span>
+            </button>
+            <button
+              @click="handleMyGrabOrders"
+              class="text-sm font-semibold text-primary active:scale-95 transition-transform flex items-center gap-1"
+            >
+              我的抢单 <span class="material-symbols-outlined text-lg">arrow_forward_ios</span>
+            </button>
+          </div>
         </div>
         <p class="text-on-surface-variant leading-relaxed pr-8">
           寻找志同道合的游戏搭子，或是通过你的技术赚取丰厚赏金。
@@ -184,11 +229,26 @@ onMounted(() => {
           <div class="space-y-2">
             <div class="flex items-center gap-2">
               <span class="bg-secondary-container text-on-secondary-container px-2 py-1 rounded-lg text-xs font-bold">{{ bounty.game }}</span>
+              <span v-if="bounty.gameRank" class="bg-primary-container/10 text-primary px-2 py-1 rounded-lg text-xs font-bold">{{ getRankLabel(bounty.gameRank) }}</span>
               <span class="text-on-surface font-semibold text-sm">{{ bounty.title }}</span>
             </div>
             <p class="text-on-surface-variant text-sm leading-relaxed">
               {{ bounty.content }}
             </p>
+            <div class="flex flex-wrap gap-2 pt-1 text-xs text-on-surface-variant">
+              <div v-if="bounty.startTime" class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">schedule</span>
+                <span>{{ formatTime(bounty.startTime) }}</span>
+              </div>
+              <div v-if="bounty.duration" class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">access_time</span>
+                <span>{{ bounty.duration }}小时</span>
+              </div>
+              <div v-if="bounty.location" class="flex items-center gap-1">
+                <span class="material-symbols-outlined text-xs">location_on</span>
+                <span>{{ bounty.location }}</span>
+              </div>
+            </div>
             <div v-if="bounty.tags && bounty.tags.length > 0" class="flex flex-wrap gap-2 pt-1">
               <span
                 v-for="tag in bounty.tags"

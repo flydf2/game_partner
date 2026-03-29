@@ -21,8 +21,8 @@ body {
 .page-content {
   width: 100%;
   max-width: 680px;
-  margin: 0 auto;
-  padding: 0 16px;
+  margin: 96px auto;
+  padding: 20px 16px;
   box-sizing: border-box;
 }
 

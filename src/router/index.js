@@ -50,15 +50,7 @@ const routes = [
       headerType: 'detail'
     }
   },
-  {
-    path: '/match-history',
-    name: 'MatchHistory',
-    component: () => import('../views/MatchHistory.vue'),
-    meta: {
-      title: '历史战绩',
-      headerType: 'detail'
-    }
-  },
+
   {
     path: '/filter',
     name: 'Filter',
@@ -89,16 +81,7 @@ const routes = [
       headerType: 'list'
     }
   },
-  {
-    path: '/community-feed',
-    name: 'CommunityFeed',
-    component: () => import('../views/CommunityFeed.vue'),
-    meta: {
-      title: '社区动态',
-      keepAlive: true,
-      headerType: 'list'
-    }
-  },
+
   {
     path: '/topic/:id',
     name: 'TopicDetail',
@@ -425,16 +408,7 @@ const routes = [
       headerType: 'detail'
     }
   },
-  {
-    path: '/profile/recharge',
-    name: 'Recharge',
-    component: () => import('../views/Recharge.vue'),
-    meta: {
-      title: '立即充值',
-      requireAuth: true,
-      headerType: 'detail'
-    }
-  },
+
   {
     path: '/withdrawal',
     name: 'Withdrawal',
@@ -553,6 +527,49 @@ const routes = [
     }
   },
   {
+    path: '/profile/my-published',
+    name: 'MyPublished',
+    component: () => import('../views/MyPublished.vue'),
+    meta: {
+      title: '我的发布',
+      requireAuth: true,
+      keepAlive: true,
+      headerType: 'list'
+    }
+  },
+  {
+    path: '/profile/my-reward-orders',
+    name: 'MyRewardOrders',
+    component: () => import('../views/MyRewardOrders.vue'),
+    meta: {
+      title: '我发布的悬赏',
+      requireAuth: true,
+      keepAlive: true,
+      headerType: 'list'
+    }
+  },
+  {
+    path: '/profile/my-posts',
+    name: 'MyPosts',
+    component: () => import('../views/MyPosts.vue'),
+    meta: {
+      title: '我的动态',
+      requireAuth: true,
+      keepAlive: true,
+      headerType: 'list'
+    }
+  },
+  {
+    path: '/user/:id/posts',
+    name: 'UserPosts',
+    component: () => import('../views/UserPosts.vue'),
+    meta: {
+      title: '用户动态',
+      keepAlive: true,
+      headerType: 'list'
+    }
+  },
+  {
     path: '/appeals',
     name: 'Appeals',
     component: () => import('../views/Appeals.vue'),
@@ -563,17 +580,7 @@ const routes = [
       headerType: 'detail'
     }
   },
-  {
-    path: '/order-settings',
-    name: 'OrderSettings',
-    component: () => import('../views/OrderSettings.vue'),
-    meta: {
-      title: '接单设置中心',
-      requireAuth: true,
-      keepAlive: true,
-      headerType: 'detail'
-    }
-  },
+
   {
     path: '/user-agreement',
     name: 'UserAgreement',

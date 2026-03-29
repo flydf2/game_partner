@@ -1,4 +1,6 @@
 import { API_BASE_URL } from './config.js'
+import { globalToast } from '../composables/useToast.js'
+import { ErrorCodeMap } from '../utils/errorHandler.js'
 
 // 拦截器配置
 const interceptors = {
@@ -29,8 +31,18 @@ addResponseInterceptor(async ({ response, data }) => {
     // 另一种成功响应格式: { success: true, data: {...} }
     return data
   } else {
-    // 错误响应
-    throw new Error(data.msg || data.message || `API error: code ${data.code}`)
+    // 错误响应 - 显示 Toast 消息提示
+    const errorCode = data.code
+    const errorMessage = ErrorCodeMap[errorCode] || data.msg || data.message || `请求失败 (错误码: ${errorCode})`
+    
+    // 显示错误提示
+    globalToast.error(errorMessage)
+    
+    // 创建错误对象，包含错误码和错误信息
+    const error = new Error(errorMessage)
+    error.code = errorCode
+    error.response = { status: response.status, data }
+    throw error
   }
 })
 

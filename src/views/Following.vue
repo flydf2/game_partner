@@ -8,41 +8,20 @@ const router = useRouter()
 const following = ref([])
 const loading = ref(false)
 const error = ref('')
-const currentPage = ref(1)
-const totalPages = ref(1)
-const totalCount = ref(0)
-const loadingMore = ref(false)
 
-const loadFollowing = async (page = 1, append = false) => {
-  if (append) {
-    loadingMore.value = true
-  } else {
-    loading.value = true
-  }
+const loadFollowing = async () => {
+  loading.value = true
   error.value = ''
   
   try {
-    const response = await userApi.getFollowing(page)
+    const response = await userApi.getFollowing()
     if (response.success || response.code === 0) {
-      const followingData = response.data?.data || response.data || []
-      const processedData = followingData.map(user => ({
+      // 清理avatar字段中的多余空格和反引号
+      following.value = (response.data || []).map(user => ({
         ...user,
         avatar: user.avatar ? user.avatar.trim().replace(/^`|`$/g, '') : '',
         isFollowing: true // 默认所有返回的用户都是已关注状态
       }))
-      
-      if (append) {
-        following.value = [...following.value, ...processedData]
-      } else {
-        following.value = processedData
-      }
-      
-      // 更新分页信息
-      if (response.data?.pagination) {
-        currentPage.value = response.data.pagination.currentPage
-        totalPages.value = response.data.pagination.totalPages
-        totalCount.value = response.data.pagination.totalCount
-      }
     } else {
       throw new Error(response.message || response.msg || '获取关注列表失败')
     }
@@ -52,13 +31,6 @@ const loadFollowing = async (page = 1, append = false) => {
     console.error('获取关注列表失败:', err)
   } finally {
     loading.value = false
-    loadingMore.value = false
-  }
-}
-
-const loadMore = async () => {
-  if (currentPage.value < totalPages.value && !loadingMore.value) {
-    await loadFollowing(currentPage.value + 1, true)
   }
 }
 
@@ -131,7 +103,7 @@ onMounted(() => {
         </span>
         <h1 class="font-headline font-bold text-lg text-primary">我的关注</h1>
       </div>
-      <div class="text-sm text-on-surface-variant">{{ totalCount }}人</div>
+      <div class="text-sm text-on-surface-variant">{{ following.length }}人</div>
     </header>
 
     <main class="page-content pt-20 pb-32 space-y-6">
@@ -249,23 +221,6 @@ onMounted(() => {
               </div>
             </div>
           </div>
-        </div>
-        
-        <!-- 加载更多 -->
-        <div v-if="currentPage < totalPages" class="text-center py-6">
-          <button
-            @click="loadMore"
-            :disabled="loadingMore"
-            class="px-8 py-3 bg-surface-container text-on-surface-variant rounded-full text-sm font-bold active:scale-95 transition-all disabled:opacity-50"
-          >
-            <span v-if="loadingMore">加载中...</span>
-            <span v-else>加载更多</span>
-          </button>
-        </div>
-        
-        <!-- 没有更多数据 -->
-        <div v-else-if="following.length > 0" class="text-center py-6 text-sm text-on-surface-variant">
-          没有更多数据了
         </div>
       </div>
     </main>

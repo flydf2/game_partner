@@ -16,25 +16,12 @@ export function mockGetUserInfo() {
   })
 }
 
-export function mockGetFollowing(page = 1, pageSize = 10) {
+export function mockGetFollowing() {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // 计算分页
-      const startIndex = (page - 1) * pageSize
-      const endIndex = startIndex + pageSize
-      const paginatedData = mockPlaymates.slice(startIndex, endIndex)
-      
       resolve({
-        code: 0,
-        data: {
-          data: paginatedData,
-          pagination: {
-            currentPage: page,
-            totalPages: Math.ceil(mockPlaymates.length / pageSize),
-            totalCount: mockPlaymates.length
-          }
-        },
-        msg: '获取成功'
+        success: true,
+        data: mockPlaymates.slice(0, 4)
       })
     }, 200)
   })
