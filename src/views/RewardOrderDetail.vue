@@ -17,10 +17,34 @@ const publishedOrders = ref([])
 const loading = ref(true)
 const error = ref('')
 const status = ref('active')
+const currentUserGrabOrderId = ref('')
+
 
 const isPublisher = computed(() => {
   if (!order.value || !userStore.userInfo) return false
   return order.value.userId === userStore.userInfo.id
+})
+
+const currentUserApplication = computed(() => {
+  if (!userStore.userInfo || !applicants.value.length) return null
+  return applicants.value.find(app => String(app.userId) === String(userStore.userInfo.id))
+})
+
+const currentUserApplicationStatus = computed(() => {
+  const app = currentUserApplication.value
+  if (!app) return null
+  return app.status
+})
+
+const currentUserApplicationStatusText = computed(() => {
+  const status = currentUserApplicationStatus.value
+  if (!status) return ''
+  const statusMap = {
+    'pending': '待处理',
+    'approved': '已通过',
+    'rejected': '已拒绝'
+  }
+  return statusMap[status] || status
 })
 
 const parsedTags = computed(() => {
@@ -76,6 +100,13 @@ const loadApplicants = async () => {
     const response = await api.rewardOrder.getApplicants(orderId.value)
     if (response.success || response.code === 0) {
       applicants.value = response.data || []
+    }
+    // 找到我的抢单ID  赋值给 currentUserGrabOrderId
+    if (userStore.userInfo) {
+      const userGrabOrder = applicants.value.find(app => String(app.userId) === String(userStore.userInfo.id))
+      if (userGrabOrder) {
+        currentUserGrabOrderId.value = userGrabOrder.id
+      }
     }
   } catch (err) {
     console.error('加载抢单列表失败:', err)
@@ -332,10 +363,46 @@ onMounted(() => {
               {{ tag }}
             </span>
           </div>
+
+          <!-- 当前用户抢单状态 -->
+          <div v-if="currentUserApplication && !isPublisher" class="mt-6 p-4 bg-primary-container/30 rounded-2xl border border-primary-container">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-on-primary-container">person</span>
+                </div>
+                <div>
+                  <p class="text-sm font-bold text-on-surface">我的抢单</p>
+                  <p class="text-xs text-on-surface-variant">申请时间: {{ new Date(currentUserApplication.appliedAt).toLocaleString('zh-CN') }}</p>
+                </div>
+              </div>
+              <span :class="[
+                'px-4 py-2 rounded-full text-sm font-bold',
+                currentUserApplicationStatus === 'pending' ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400' :
+                currentUserApplicationStatus === 'approved' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                currentUserApplicationStatus === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                'bg-surface-container text-on-surface-variant'
+              ]">
+                {{ currentUserApplicationStatusText }}
+              </span>
+            </div>
+            <div v-if="currentUserApplication.recommendation" class="mt-3 pt-3 border-t border-primary-container/30">
+              <p class="text-xs text-on-surface-variant mb-1">我的推荐</p>
+              <p class="text-sm text-on-surface">{{ currentUserApplication.recommendation }}</p>
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button
+                @click="router.push(`/grab-order/${currentUserGrabOrderId}/detail`)"
+                class="flex-1 bg-primary text-on-primary py-2.5 rounded-xl text-sm font-bold active:scale-[0.98] transition-all"
+              >
+                查看抢单详情
+              </button>
+            </div>
+          </div>
         </section>
 
         <!-- 可抢单状态：立即抢单按钮 -->
-        <section v-if="!loading && order && order.status === 'available'" class="px-1 mb-4">
+        <section v-if="!loading && order && order.status === 'available' && !currentUserApplication && !isPublisher" class="px-1 mb-4">
           <button 
             @click="() => router.push(`/grab-order/${orderId}`)"
             class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-2xl shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary/30"
@@ -515,8 +582,16 @@ onMounted(() => {
                 等待抢单
               </button>
               <button 
+                v-else-if="currentUserApplication"
+                @click="router.push(`/grab-order/${currentUserGrabOrderId}/detail`)"
+                class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary-container/30"
+              >
+                <span class="material-symbols-outlined">visibility</span>
+                查看我的抢单
+              </button>
+              <button 
                 v-else
-                @click="() => router.push(`/grab-order/${orderId.value}`)"
+                @click="() => router.push(`/grab-order/${orderId}`)"
                 class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary/30"
               >
                 <span class="material-symbols-outlined">campaign</span>

@@ -1,252 +1,189 @@
-<template>
-  <div class="recharge">
-    <div class="page-header">
-      <div class="back-button" @click="goBack">
-        <img src="@/assets/icons/back.svg" alt="返回" />
-      </div>
-      <h1>{{ $route.meta.title }}</h1>
-      <div class="header-right"></div>
-    </div>
-    
-    <div class="recharge-content">
-      <div class="section">
-        <h2>充值金额</h2>
-        <div class="amount-options">
-          <div 
-            class="amount-item" 
-            v-for="amount in amountOptions" 
-            :key="amount.value"
-            :class="{ active: selectedAmount === amount.value }"
-            @click="selectAmount(amount.value)"
-          >
-            {{ amount.label }}
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
-        <h2>支付方式</h2>
-        <div class="payment-options">
-          <div 
-            class="payment-item" 
-            v-for="payment in paymentOptions" 
-            :key="payment.id"
-            :class="{ active: selectedPayment === payment.id }"
-            @click="selectPayment(payment.id)"
-          >
-            <img :src="payment.icon" alt="支付方式" class="payment-icon" />
-            <span class="payment-name">{{ payment.name }}</span>
-            <img v-if="selectedPayment === payment.id" src="@/assets/icons/check.svg" alt="选中" class="check-icon" />
-          </div>
-        </div>
-      </div>
-      
-      <div class="recharge-button">
-        <button @click="confirmRecharge">立即充值</button>
-      </div>
-    </div>
-  </div>
-</template>
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { userApi, handleApiError } from '../api/index.js'
+import { useToast } from '../composables/useToast.js'
 
-<script>
-export default {
-  name: 'Recharge',
-  data() {
-    return {
-      selectedAmount: 100,
-      selectedPayment: 'wechat',
-      amountOptions: [
-        { label: '100元', value: 100 },
-        { label: '200元', value: 200 },
-        { label: '500元', value: 500 },
-        { label: '1000元', value: 1000 },
-        { label: '2000元', value: 2000 },
-        { label: '5000元', value: 5000 }
-      ],
-      paymentOptions: [
-        {
-          id: 'wechat',
-          name: '微信支付',
-          icon: 'https://via.placeholder.com/40'
-        },
-        {
-          id: 'alipay',
-          name: '支付宝',
-          icon: 'https://via.placeholder.com/40'
-        },
-        {
-          id: 'bank',
-          name: '银行卡',
-          icon: 'https://via.placeholder.com/40'
-        }
-      ]
-    }
+const router = useRouter()
+const { showToast } = useToast()
+
+const selectedAmount = ref(100)
+const selectedPayment = ref('wechat')
+const loading = ref(false)
+
+const amountOptions = [
+  { label: '100元', value: 100 },
+  { label: '200元', value: 200 },
+  { label: '500元', value: 500 },
+  { label: '1000元', value: 1000 },
+  { label: '2000元', value: 2000 },
+  { label: '5000元', value: 5000 }
+]
+
+const paymentOptions = [
+  {
+    id: 'wechat',
+    name: '微信支付',
+    icon: 'chat'
   },
-  methods: {
-    goBack() {
-      this.$router.back()
-    },
-    selectAmount(amount) {
-      this.selectedAmount = amount
-    },
-    selectPayment(paymentId) {
-      this.selectedPayment = paymentId
-    },
-    confirmRecharge() {
-      // 这里应该调用支付接口
-      alert(`确认充值 ${this.selectedAmount} 元，使用 ${this.paymentOptions.find(p => p.id === this.selectedPayment).name}`)
-      // 支付成功后跳转到钱包页面
-      this.$router.push('/profile/wallet')
+  {
+    id: 'alipay',
+    name: '支付宝',
+    icon: 'account_balance_wallet'
+  },
+  {
+    id: 'bank',
+    name: '银行卡',
+    icon: 'credit_card'
+  }
+]
+
+const handleBack = () => {
+  router.back()
+}
+
+const selectAmount = (amount) => {
+  selectedAmount.value = amount
+}
+
+const selectPayment = (paymentId) => {
+  selectedPayment.value = paymentId
+}
+
+const confirmRecharge = async () => {
+  if (loading.value) return
+
+  loading.value = true
+  try {
+    const rechargeData = {
+      amount: selectedAmount.value,
+      paymentMethod: selectedPayment.value,
+      coins: selectedAmount.value
     }
+
+    const response = await userApi.recharge(rechargeData)
+
+    if (response.success || response.code === 0) {
+      showToast('充值成功', 'success')
+      router.push('/profile/wallet')
+    } else {
+      throw new Error(response.message || response.msg || '充值失败')
+    }
+  } catch (err) {
+    const result = handleApiError(err)
+    showToast(result.error || '充值失败，请稍后重试', 'error')
+    console.error('充值失败:', err)
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
+<template>
+  <div class="min-h-screen bg-surface text-on-surface pb-32">
+    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
+      <div class="flex items-center gap-4">
+        <span
+          @click="handleBack"
+          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+        >
+          arrow_back_ios
+        </span>
+        <h1 class="font-headline font-bold text-lg text-primary">立即充值</h1>
+      </div>
+      <div class="w-6"></div>
+    </header>
+
+    <main class="page-content pt-24 pb-32 space-y-6">
+      <!-- 充值金额 -->
+      <section class="bg-surface-container-lowest rounded-3xl p-5">
+        <h2 class="text-sm font-bold text-on-surface mb-4">充值金额</h2>
+        <div class="grid grid-cols-3 gap-3">
+          <button
+            v-for="amount in amountOptions"
+            :key="amount.value"
+            class="py-4 px-3 rounded-2xl text-sm font-semibold transition-all duration-200 active:scale-95"
+            :class="selectedAmount === amount.value
+              ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
+              : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'"
+            @click="selectAmount(amount.value)"
+          >
+            {{ amount.label }}
+          </button>
+        </div>
+      </section>
+
+      <!-- 支付方式 -->
+      <section class="bg-surface-container-lowest rounded-3xl p-5">
+        <h2 class="text-sm font-bold text-on-surface mb-4">支付方式</h2>
+        <div class="space-y-3">
+          <button
+            v-for="payment in paymentOptions"
+            :key="payment.id"
+            class="w-full flex items-center gap-4 p-4 rounded-2xl transition-all duration-200 active:scale-95"
+            :class="selectedPayment === payment.id
+              ? 'bg-primary-container/30 border-2 border-primary'
+              : 'bg-surface-container border-2 border-transparent hover:bg-surface-container-high'"
+            @click="selectPayment(payment.id)"
+          >
+            <div
+              class="w-10 h-10 rounded-full flex items-center justify-center"
+              :class="selectedPayment === payment.id ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface-variant'"
+            >
+              <span class="material-symbols-outlined">{{ payment.icon }}</span>
+            </div>
+            <span class="flex-1 font-semibold text-on-surface text-left">{{ payment.name }}</span>
+            <span
+              class="material-symbols-outlined text-2xl"
+              :class="selectedPayment === payment.id ? 'text-primary' : 'text-outline'"
+            >
+              {{ selectedPayment === payment.id ? 'check_circle' : 'radio_button_unchecked' }}
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <!-- 充值信息 -->
+      <section class="bg-gradient-to-br from-primary to-primary-dark rounded-3xl p-6 shadow-xl shadow-primary/20 text-white">
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined">add_card</span>
+            <span class="text-sm font-medium">充值信息</span>
+          </div>
+          <div class="flex items-baseline gap-1">
+            <span class="text-2xl font-bold">¥</span>
+            <span class="text-5xl font-extrabold font-headline tracking-tight">{{ selectedAmount }}</span>
+          </div>
+          <div class="flex items-center gap-2 text-white/70 text-sm">
+            <span class="material-symbols-outlined text-base">payments</span>
+            <span>{{ paymentOptions.find(p => p.id === selectedPayment)?.name }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 充值按钮 -->
+      <section class="px-1">
+        <button
+          @click="confirmRecharge"
+          :disabled="loading"
+          class="w-full py-4 rounded-2xl bg-primary text-on-primary font-bold text-base shadow-lg shadow-primary/25 active:scale-95 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          <span v-if="loading" class="w-5 h-5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
+          <span>{{ loading ? '充值中...' : `确认充值 ¥${selectedAmount}` }}</span>
+        </button>
+      </section>
+
+      <!-- 提示信息 -->
+      <section class="px-5">
+        <div class="flex items-start gap-2 text-xs text-on-surface-variant">
+          <span class="material-symbols-outlined text-base">info</span>
+          <p>充值后金额将实时到账，可在钱包中查看余额变动。如有问题请联系客服。</p>
+        </div>
+      </section>
+    </main>
+  </div>
+</template>
+
 <style scoped>
-.recharge {
-  min-height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  height: 44px;
-  background-color: #fff;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.back-button {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.back-button img {
-  width: 24px;
-  height: 24px;
-}
-
-.page-header h1 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-}
-
-.header-right {
-  width: 44px;
-}
-
-.recharge-content {
-  padding: 16px;
-}
-
-.section {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.section h2 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 0 0 16px 0;
-}
-
-.amount-options {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.amount-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.amount-item.active {
-  border-color: #1890ff;
-  background-color: rgba(24, 144, 255, 0.05);
-  color: #1890ff;
-}
-
-.payment-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.payment-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.payment-item.active {
-  border-color: #1890ff;
-  background-color: rgba(24, 144, 255, 0.05);
-}
-
-.payment-icon {
-  width: 32px;
-  height: 32px;
-  margin-right: 12px;
-}
-
-.payment-name {
-  flex: 1;
-  font-size: 14px;
-  color: #333;
-}
-
-.check-icon {
-  width: 20px;
-  height: 20px;
-  color: #1890ff;
-}
-
-.recharge-button {
-  margin-top: 32px;
-}
-
-.recharge-button button {
-  width: 100%;
-  padding: 14px;
-  background-color: #1890ff;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.recharge-button button:hover {
-  background-color: #40a9ff;
-}
-
-.recharge-button button:active {
-  background-color: #096dd9;
-}
+/* 组件样式 */
 </style>

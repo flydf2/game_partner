@@ -1772,6 +1772,53 @@ export const skillApi = {
   }
 }
 
+// 抢单相关API
+export const grabOrderApi = {
+  async getGrabOrderDetail(orderId) {
+    if (USE_MOCK) {
+      // 模拟抢单详情数据
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              id: orderId,
+              rewardId: orderId,
+              title: '王者荣耀：巅峰赛上分',
+              game: '王者荣耀',
+              category: 'MOBA 竞技',
+              reward: 188.00,
+              status: 'ongoing',
+              statusText: '进行中',
+              requirements: {
+                level: '最强王者 20星+',
+                duration: '约 3 小时',
+                startTime: '今日 20:00',
+                mode: '巅峰赛 5V5'
+              },
+              publisher: {
+                name: '晴天小浪君',
+                avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB4ASiRNiu3YUxy8nEvHaUTPT7n_2BC7yKj2CC_E8nCVFHNTaO8nF-1LzqUtFsIpj-wZJlV201KBarKLCdl1I_hpP7WqGTMO640YE0vbq25xrEc-Gf_9ftvls9JWm8Lcguag9GI12vT7IPUOIkDQOX2tiA7JeGgKSkR3b9XZdllevS-0KpQz8aYC-9BxAJLqF5m7XiQ6KusY3oMmKgQYw8UoRbkxgQ9pQ2k8PYfGpDZ4Ie3Nz7jhX29jNvAzZc90uIiOMxWTJbEaAI',
+                level: '极高 (S)',
+                isOwner: true
+              },
+              timeline: [
+                { step: 1, title: '已提交申请', time: '2023-10-24 14:30', status: 'completed' },
+                { step: 2, title: '房主查看中', time: '2023-10-24 15:12', status: 'completed' },
+                { step: 3, title: '待确认', time: '等待房主最终确认', status: 'current' }
+              ],
+              recommendation: '全能选手，擅长打野和对抗路。当前段位百星，可以高效带飞。时间充裕，随时可以开始，信誉保障！'
+            },
+            message: '获取成功'
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/grab-orders/${orderId}`))
+    }
+  }
+}
+
 // 文件上传API
 export const uploadApi = {
   async uploadFile(file, type = 'avatar') {

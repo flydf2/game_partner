@@ -408,6 +408,16 @@ const routes = [
       headerType: 'detail'
     }
   },
+  {
+    path: '/profile/recharge',
+    name: 'Recharge',
+    component: () => import('../views/Recharge.vue'),
+    meta: {
+      title: '立即充值',
+      requireAuth: true,
+      headerType: 'detail'
+    }
+  },
 
   {
     path: '/withdrawal',

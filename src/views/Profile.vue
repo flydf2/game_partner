@@ -65,6 +65,10 @@
             <div class="flex items-baseline gap-1">
               <span class="text-xs font-bold text-on-primary-container">¥</span>
               <span class="text-2xl font-black font-headline text-on-primary-container tracking-tight">{{ formatAmount(userInfo.balance) }}</span>
+              <span 
+                class="ml-2 text-xs font-medium text-on-primary-container/80 underline cursor-pointer hover:text-on-primary-container transition-colors"
+                @click.stop="handleRechargeClick"
+              >充值</span>
             </div>
           </div>
           <div class="bg-white rounded-3xl p-5 space-y-2 border border-surface-container transition-all duration-300 hover:shadow-md">
@@ -609,6 +613,10 @@ const handleMenuClick = (key) => {
 
 const handleWalletClick = () => {
   router.push('/profile/wallet')
+}
+
+const handleRechargeClick = () => {
+  router.push('/profile/recharge')
 }
 
 const handleLevelClick = () => {
