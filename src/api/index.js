@@ -488,17 +488,17 @@ export const userApi = {
     })()
   },
   
-  async refreshToken() {
+  async refreshToken(refreshToken) {
     return withLoading('user_refresh_token', async () => {
       if (USE_MOCK) {
-        const response = await mockRefreshToken()
+        const response = await mockRefreshToken(refreshToken)
         // 存储新token
         if (response.success && response.data.token) {
           localStorage.setItem('token', response.data.token)
         }
         return response
       } else {
-        const response = await withRetry(() => post('/auth/refresh'))
+        const response = await withRetry(() => post('/auth/refresh', { refreshToken }))
         // 存储新token
         if (response.success && response.data.token) {
           localStorage.setItem('token', response.data.token)

@@ -22,6 +22,8 @@
       :message="toast.message"
       :type="toast.type"
       :duration="toast.duration"
+      :button-text="toast.buttonText"
+      :button-action="toast.buttonAction"
     />
   </div>
 </template>
@@ -56,8 +58,8 @@ addResponseInterceptor(async ({ response, data }) => {
   if (!response.ok) {
     if (response.status === 401) {
       userStore.logout()
-      router.push('/login')
       showToast('登录已过期，请重新登录', 'error')
+      router.push('/login')
     }
     throw new Error(data.message || `请求失败: ${response.status}`)
   }

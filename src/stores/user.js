@@ -27,17 +27,42 @@ function saveUserToStorage(userInfo) {
   }
 }
 
+function saveRefreshTokenToStorage(refreshToken) {
+  try {
+    if (refreshToken) {
+      localStorage.setItem('refresh_token', refreshToken)
+    } else {
+      localStorage.removeItem('refresh_token')
+    }
+  } catch (error) {
+    console.error('Failed to save refresh token to storage:', error)
+  }
+}
+
+function loadRefreshTokenFromStorage() {
+  try {
+    return localStorage.getItem('refresh_token')
+  } catch (error) {
+    console.error('Failed to load refresh token from storage:', error)
+    return null
+  }
+}
+
 export const useUserStore = defineStore('user', {
   state: () => {
     const storedUser = loadUserFromStorage()
     const token = localStorage.getItem('token')
+    const refreshToken = loadRefreshTokenFromStorage()
     
     return {
       userInfo: storedUser,
       isLoading: false,
       error: null,
       isLoggedIn: !!(storedUser && token),
-      isSidebarOpen: false
+      isSidebarOpen: false,
+      tokenExpiry: localStorage.getItem('token_expiry'),
+      refreshToken: refreshToken,
+      isRefreshing: false
     }
   },
   
@@ -91,6 +116,15 @@ export const useUserStore = defineStore('user', {
           this.isLoggedIn = true
           if (response.data.token) {
             localStorage.setItem('token', response.data.token)
+            // 存储token过期时间（假设token有效期为2小时）
+            const expiry = Date.now() + 2 * 60 * 60 * 1000
+            this.tokenExpiry = expiry.toString()
+            localStorage.setItem('token_expiry', this.tokenExpiry)
+            // 存储刷新token
+            if (response.data.refreshToken) {
+              this.refreshToken = response.data.refreshToken
+              saveRefreshTokenToStorage(response.data.refreshToken)
+            }
           }
           saveUserToStorage(this.userInfo)
         }
@@ -115,6 +149,15 @@ export const useUserStore = defineStore('user', {
           this.isLoggedIn = true
           if (response.data.token) {
             localStorage.setItem('token', response.data.token)
+            // 存储token过期时间（假设token有效期为2小时）
+            const expiry = Date.now() + 2 * 60 * 60 * 1000
+            this.tokenExpiry = expiry.toString()
+            localStorage.setItem('token_expiry', this.tokenExpiry)
+            // 存储刷新token
+            if (response.data.refreshToken) {
+              this.refreshToken = response.data.refreshToken
+              saveRefreshTokenToStorage(response.data.refreshToken)
+            }
           }
           saveUserToStorage(this.userInfo)
         }
@@ -160,7 +203,11 @@ export const useUserStore = defineStore('user', {
       } finally {
         this.userInfo = null
         this.isLoggedIn = false
+        this.tokenExpiry = null
+        this.refreshToken = null
         localStorage.removeItem('token')
+        localStorage.removeItem('token_expiry')
+        saveRefreshTokenToStorage(null)
         saveUserToStorage(null)
       }
     },
@@ -196,6 +243,9 @@ export const useUserStore = defineStore('user', {
             this.isLoggedIn = false
           })
         }
+        
+        // 检查token是否即将过期
+        this.checkTokenExpiry()
       } else if (token && !this.isLoggedIn) {
         this.getProfile().catch(() => {
           this.isLoggedIn = false
@@ -203,6 +253,75 @@ export const useUserStore = defineStore('user', {
       }
       
       return !!(token && this.isLoggedIn)
+    },
+    
+    // 检查token是否即将过期
+    checkTokenExpiry() {
+      if (!this.tokenExpiry) return
+      
+      const expiry = parseInt(this.tokenExpiry)
+      const now = Date.now()
+      // 如果token在30分钟内过期，自动刷新
+      if (expiry - now < 30 * 60 * 1000) {
+        this.refreshTokenIfNeeded()
+      }
+    },
+    
+    // 刷新token
+    async refreshTokenIfNeeded() {
+      if (this.isRefreshing || !this.refreshToken) return
+      
+      try {
+        this.isRefreshing = true
+        const response = await userApi.refreshToken(this.refreshToken)
+        
+        if (response.success && response.data.token) {
+          // 验证新token格式
+          if (this.validateToken(response.data.token)) {
+            // 更新token
+            localStorage.setItem('token', response.data.token)
+            // 更新token过期时间
+            const expiry = Date.now() + 2 * 60 * 60 * 1000
+            this.tokenExpiry = expiry.toString()
+            localStorage.setItem('token_expiry', this.tokenExpiry)
+            // 更新刷新token
+            if (response.data.refreshToken) {
+              this.refreshToken = response.data.refreshToken
+              saveRefreshTokenToStorage(response.data.refreshToken)
+            }
+          } else {
+            // token格式错误，清除登录状态
+            this.logout()
+          }
+        }
+      } catch (error) {
+        console.error('Token refresh failed:', error)
+        // 刷新失败，清除登录状态
+        this.logout()
+      } finally {
+        this.isRefreshing = false
+      }
+    },
+    
+    // 验证token格式
+    validateToken(token) {
+      return typeof token === 'string' && /^[A-Za-z0-9-_\.]+$/.test(token)
+    },
+    
+    // 检查token是否有效
+    isTokenValid() {
+      const token = localStorage.getItem('token')
+      const expiry = localStorage.getItem('token_expiry')
+      
+      if (!token || !expiry) return false
+      
+      // 验证token格式
+      if (!this.validateToken(token)) return false
+      
+      // 检查token是否过期
+      const now = Date.now()
+      const tokenExpiry = parseInt(expiry)
+      return now < tokenExpiry
     }
   }
 })

@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import { rewardOrderApi } from '../api/index.js'
 
 const router = useRouter()
 
@@ -23,49 +24,23 @@ const loadOrders = async () => {
     loading.value = true
     error.value = null
     
-    // 模拟数据
-    orders.value = [
-      {
-        id: '1',
-        title: '王者荣耀：巅峰赛上分',
-        game: '王者荣耀',
-        reward: 188.00,
-        status: 'ongoing',
-        statusText: '正在进行',
-        publisher: {
-          name: '超级大魔王',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6pTTFu28KQVR6fyByWrZlbu8eiLyrmVqvfT5TjL6jt-5EVjYH9w_oF7bn456-s6oPpTPNYMIjM1YVQEBM5bAfDO6kKmeeKR3q0sauEGjm5oCf7uJ4UYddJcjcUc43mRmbW5badueZPvbhg0IbKK-W8PGkJbgNBPhCkcGV5uYhZEHN1J1rylcVZqw6hWls3zDwQRuLn00s_iPp_p1kLhM1eNCnGcDupmHT4O9yzRhJRpnxgwpsBqNZU6bDgVWXCMXTprBf16ENI4'
-        },
-        action: '进入语音房'
-      },
-      {
-        id: '2',
-        title: '原神：探索协助',
-        game: '原神',
-        reward: 88.00,
-        status: 'pending',
-        statusText: '等待房主选择',
-        publisher: {
-          name: '派蒙的厨师',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGdZG0j9ss-YwbObwdG58pijUcqoMgm0x4YfL6KyX5idPsqyVjaqg6KiRWLvtYudZvAAsT6T9ynvsOplUtghVkXEDm7jxLMwcOyjsKWrj9E0QY0DdGLuBwWcI6kXhhFQNygqhVbYqqhffgIPHUMP7mxJGk_bcvf47O8pgscDIAhi2iV2s7_ccqBTvYFe3eju0606f1jUhq7xaisDgpN8LBh56IFK8AX-hsKtLiltSvNQXAAhJEiHEyMvhrJbzGYSzO4mCZzVszbz4'
-        },
-        appliedTime: '14:20',
-        canWithdraw: true
-      },
-      {
-        id: '3',
-        title: '和平精英：双人组队',
-        game: '和平精英',
-        reward: 65.00,
-        status: 'completed',
-        statusText: '已结算',
-        publisher: {
-          name: '战神A',
-          avatar: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkehyRkbvvwe5wXbPMBlygTfY0697on6M1x0otvTqoQGir-tf5jx5_-NjeojTRAIwcovLGHIDqgxe29Buf-q4kqeT-U5vfQEb7PTLWtGC082QAAqC-jLASB36PTrHEznDzmbx0A4eRGsBBMgzSzddcEQvbsyJ8fN4u8V57h6lwKXwSQrlS_7Ai5Q01g8pc8jwELVAM2gxwT5QwQ8Dzt9THcP2kSbiNDPDfT_TQP-011cOx8vbbVhtbwBj56AM2afw0f37ueqAUD-s'
-        },
-        completed: true
+    // 调用真实API获取数据
+    console.log('开始调用API获取订单数据')
+    const response = await rewardOrderApi.getMyRewardOrders()
+    console.log('API响应:', response)
+    
+    // 检查响应结构
+    if (response) {
+      if (response.code === 0) {
+        // 处理真实API的响应结构
+        orders.value = response.data?.data || []
+        console.log('订单数据:', orders.value)
+      } else {
+        throw new Error(response.msg || '获取订单失败')
       }
-    ]
+    } else {
+      throw new Error('API响应为空')
+    }
   } catch (err) {
     error.value = err.message
     console.error('加载订单失败:', err)
@@ -82,9 +57,19 @@ const handleViewOrder = (orderId) => {
   router.push(`/grab-order/${orderId}/detail`)
 }
 
-const handleWithdraw = (orderId) => {
-  // TODO: 实现撤回申请功能
-  alert('撤回申请功能开发中')
+const handleWithdraw = async (orderId) => {
+  try {
+    const response = await rewardOrderApi.cancelRewardOrder(orderId)
+    if (response.success) {
+      // 重新加载订单列表
+      await loadOrders()
+    } else {
+      throw new Error(response.message || '撤回申请失败')
+    }
+  } catch (err) {
+    alert(err.message || '撤回申请失败')
+    console.error('撤回申请失败:', err)
+  }
 }
 
 const handleEnterVoiceRoom = (orderId) => {
@@ -164,36 +149,36 @@ onMounted(() => {
         <!-- 订单列表 -->
         <section class="space-y-6">
           <!-- 进行中订单 -->
-          <div v-if="activeTab === 'ongoing' || activeTab === 'all'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5 border-l-4 border-primary-container transition-transform active:scale-[0.99]">
+          <div v-for="order in orders.filter(o => o.status === 'ongoing')" :key="order.ID" v-if="(activeTab === 'ongoing' || activeTab === 'all') && order.status === 'ongoing'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-5 border-l-4 border-primary-container transition-transform active:scale-[0.99]">
             <div class="flex justify-between items-start">
               <div class="space-y-1">
                 <span class="text-[10px] font-bold tracking-wider text-primary uppercase bg-primary-container/20 px-2 py-0.5 rounded-sm">正在进行</span>
-                <h3 class="text-lg font-bold font-headline leading-tight">{{ orders.find(o => o.status === 'ongoing')?.title || '王者荣耀：巅峰赛上分' }}</h3>
+                <h3 class="text-lg font-bold font-headline leading-tight">{{ order.content }}</h3>
                 <div class="flex items-center gap-2 mt-2">
                   <div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container">
                     <img 
-                      :alt="orders.find(o => o.status === 'ongoing')?.publisher?.name || '超级大魔王'" 
+                      :alt="'用户' + order.userId" 
                       class="w-full h-full object-cover"
-                      :src="orders.find(o => o.status === 'ongoing')?.publisher?.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuDJ6pTTFu28KQVR6fyByWrZlbu8eiLyrmVqvfT5TjL6jt-5EVjYH9w_oF7bn456-s6oPpTPNYMIjM1YVQEBM5bAfDO6kKmeeKR3q0sauEGjm5oCf7uJ4UYddJcjcUc43mRmbW5badueZPvbhg0IbKK-W8PGkJbgNBPhCkcGV5uYhZEHN1J1rylcVZqw6hWls3zDwQRuLn00s_iPp_p1kLhM1eNCnGcDupmHT4O9yzRhJRpnxgwpsBqNZU6bDgVWXCMXTprBf16ENI4'"
+                      src="https://randomuser.me/api/portraits/men/32.jpg"
                     />
                   </div>
-                  <span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">{{ orders.find(o => o.status === 'ongoing')?.publisher?.name || '超级大魔王' }}</span></span>
+                  <span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">用户{{ order.userId }}</span></span>
                 </div>
               </div>
               <div class="text-right">
-                <span class="text-2xl font-extrabold font-headline text-primary">¥{{ orders.find(o => o.status === 'ongoing')?.reward || 188.00 }}</span>
+                <span class="text-2xl font-extrabold font-headline text-primary">¥{{ order.reward }}</span>
               </div>
             </div>
             <div class="flex gap-3 pt-2">
               <button 
-                @click="handleEnterVoiceRoom"
+                @click="handleEnterVoiceRoom(order.ID)"
                 class="flex-1 bg-primary-container text-primary font-bold py-3 rounded-full text-sm flex items-center justify-center gap-2 active:scale-95 transition-transform"
               >
                 <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">mic</span>
                 进入语音房
               </button>
               <button 
-                @click="handleViewOrder(orders.find(o => o.status === 'ongoing')?.id)"
+                @click="handleViewOrder(order.ID)"
                 class="flex-1 bg-surface-container-low text-on-surface font-semibold py-3 rounded-full text-sm hover:bg-surface-container-high active:scale-95 transition-transform"
               >
                 查看详情
@@ -202,23 +187,23 @@ onMounted(() => {
           </div>
 
           <!-- 待选中订单 -->
-          <div v-if="activeTab === 'pending' || activeTab === 'all'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 opacity-90">
+          <div v-for="order in orders.filter(o => o.status === 'available')" :key="order.ID" v-if="(activeTab === 'pending' || activeTab === 'all') && order.status === 'available'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 opacity-90">
             <div class="flex justify-between items-start">
               <div class="space-y-1">
                 <div class="flex items-center gap-2">
                   <span class="w-2 h-2 rounded-full bg-secondary"></span>
                   <span class="text-xs font-medium text-secondary">等待房主选择</span>
                 </div>
-                <h3 class="text-lg font-bold font-headline leading-tight">{{ orders.find(o => o.status === 'pending')?.title || '原神：探索协助' }}</h3>
+                <h3 class="text-lg font-bold font-headline leading-tight">{{ order.content }}</h3>
                 <div class="flex items-center gap-2 mt-2">
                   <div class="w-6 h-6 rounded-full overflow-hidden bg-surface-container">
                     <img 
-                      :alt="orders.find(o => o.status === 'pending')?.publisher?.name || '派蒙的厨师'" 
+                      :alt="'用户' + order.userId" 
                       class="w-full h-full object-cover"
-                      :src="orders.find(o => o.status === 'pending')?.publisher?.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCGdZG0j9ss-YwbObwdG58pijUcqoMgm0x4YfL6KyX5idPsqyVjaqg6KiRWLvtYudZvAAsT6T9ynvsOplUtghVkXEDm7jxLMwcOyjsKWrj9E0QY0DdGLuBwWcI6kXhhFQNygqhVbYqqhffgIPHUMP7mxJGk_bcvf47O8pgscDIAhi2iV2s7_ccqBTvYFe3eju0606f1jUhq7xaisDgpN8LBh56IFK8AX-hsKtLiltSvNQXAAhJEiHEyMvhrJbzGYSzO4mCZzVszbz4'"
+                      src="https://randomuser.me/api/portraits/women/44.jpg"
                     />
                   </div>
-                  <span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">{{ orders.find(o => o.status === 'pending')?.publisher?.name || '派蒙的厨师' }}</span></span>
+                  <span class="text-sm text-on-surface-variant">房主：<span class="text-on-surface font-medium">用户{{ order.userId }}</span></span>
                 </div>
               </div>
               <div class="bg-surface-container-low px-3 py-1.5 rounded-lg text-[10px] font-bold text-on-surface-variant font-headline uppercase">
@@ -226,10 +211,9 @@ onMounted(() => {
               </div>
             </div>
             <div class="bg-surface-container-low/50 rounded-xl px-4 py-3 flex items-center justify-between">
-              <span class="text-sm text-on-surface-variant">已于 {{ orders.find(o => o.status === 'pending')?.appliedTime || '14:20' }} 提交申请</span>
+              <span class="text-sm text-on-surface-variant">已于 {{ new Date(order.createdAt).toLocaleTimeString() }} 提交申请</span>
               <button 
-                v-if="orders.find(o => o.status === 'pending')?.canWithdraw"
-                @click="handleWithdraw"
+                @click="handleWithdraw(order.ID)"
                 class="text-secondary text-sm font-bold"
               >
                 撤回
@@ -238,27 +222,27 @@ onMounted(() => {
           </div>
 
           <!-- 已结束订单 -->
-          <div v-if="activeTab === 'completed' || activeTab === 'all'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
+          <div v-for="order in orders.filter(o => o.status === 'completed')" :key="order.ID" v-if="(activeTab === 'completed' || activeTab === 'all') && order.status === 'completed'" class="bg-surface-container-lowest rounded-xl p-6 shadow-sm flex flex-col gap-4 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-surface-container-high rotate-45 flex items-end justify-center pb-2">
               <span class="material-symbols-outlined text-on-surface-variant/30 text-3xl -rotate-45">task_alt</span>
             </div>
             <div class="flex justify-between items-start">
               <div class="space-y-1">
                 <span class="text-xs font-medium text-on-surface-variant/60">已结算</span>
-                <h3 class="text-lg font-bold font-headline leading-tight text-on-surface-variant">{{ orders.find(o => o.status === 'completed')?.title || '和平精英：双人组队' }}</h3>
+                <h3 class="text-lg font-bold font-headline leading-tight text-on-surface-variant">{{ order.content }}</h3>
                 <div class="flex items-center gap-2 mt-2">
                   <div class="w-6 h-6 rounded-full overflow-hidden grayscale">
                     <img 
-                      :alt="orders.find(o => o.status === 'completed')?.publisher?.name || '战神A'" 
+                      :alt="'用户' + order.userId" 
                       class="w-full h-full object-cover"
-                      :src="orders.find(o => o.status === 'completed')?.publisher?.avatar || 'https://lh3.googleusercontent.com/aida-public/AB6AXuCkehyRkbvvwe5wXbPMBlygTfY0697on6M1x0otvTqoQGir-tf5jx5_-NjeojTRAIwcovLGHIDqgxe29Buf-q4kqeT-U5vfQEb7PTLWtGC082QAAqC-jLASB36PTrHEznDzmbx0A4eRGsBBMgzSzddcEQvbsyJ8fN4u8V57h6lwKXwSQrlS_7Ai5Q01g8pc8jwELVAM2gxwT5QwQ8Dzt9THcP2kSbiNDPDfT_TQP-011cOx8vbbVhtbwBj56AM2afw0f37ueqAUD-s'"
+                      src="https://randomuser.me/api/portraits/men/55.jpg"
                     />
                   </div>
-                  <span class="text-sm text-on-surface-variant/60">房主：{{ orders.find(o => o.status === 'completed')?.publisher?.name || '战神A' }}</span>
+                  <span class="text-sm text-on-surface-variant/60">房主：用户{{ order.userId }}</span>
                 </div>
               </div>
               <div class="text-right">
-                <span class="text-xl font-bold font-headline text-on-surface-variant">¥{{ orders.find(o => o.status === 'completed')?.reward || 65.00 }}</span>
+                <span class="text-xl font-bold font-headline text-on-surface-variant">¥{{ order.reward }}</span>
               </div>
             </div>
           </div>

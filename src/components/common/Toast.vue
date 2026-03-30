@@ -18,6 +18,14 @@ const props = defineProps({
   duration: {
     type: Number,
     default: 3000
+  },
+  buttonText: {
+    type: String,
+    default: null
+  },
+  buttonAction: {
+    type: Function,
+    default: null
   }
 })
 
@@ -76,6 +84,9 @@ const getIcon = () => {
     <div v-if="visible" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[100] flex items-center px-4 py-3 rounded-lg shadow-lg" :class="getTypeClasses()">
       <span class="material-symbols-outlined mr-2">{{ getIcon() }}</span>
       <span class="text-sm font-medium">{{ message }}</span>
+      <button v-if="buttonText" @click="buttonAction && buttonAction()" class="ml-4 px-3 py-1 bg-white/20 hover:bg-white/30 rounded text-sm font-medium">
+        {{ buttonText }}
+      </button>
       <button @click="handleClose" class="ml-3 hover:opacity-80">
         <span class="material-symbols-outlined text-sm">close</span>
       </button>

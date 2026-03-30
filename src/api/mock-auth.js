@@ -6,6 +6,7 @@ export function mockLogin(username, password) {
           success: true,
           data: {
             token: 'mock_token_' + Date.now(),
+            refreshToken: 'mock_refresh_token_' + Date.now(),
             user: {
               id: '1000001',
               avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
@@ -32,6 +33,7 @@ export function mockRegister(userData) {
           success: true,
           data: {
             token: 'mock_token_' + Date.now(),
+            refreshToken: 'mock_refresh_token_' + Date.now(),
             user: {
               id: '1000002',
               avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
@@ -110,13 +112,14 @@ export function mockLogout() {
   })
 }
 
-export function mockRefreshToken() {
+export function mockRefreshToken(refreshToken) {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
         success: true,
         data: {
-          token: 'mock_token_refreshed_' + Date.now()
+          token: 'mock_token_refreshed_' + Date.now(),
+          refreshToken: 'mock_refresh_token_' + Date.now()
         }
       })
     }, 500)

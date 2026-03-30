@@ -1,6 +1,7 @@
 import { API_BASE_URL } from './config.js'
 import { globalToast } from '../composables/useToast.js'
 import { ErrorCodeMap } from '../utils/errorHandler.js'
+import router from '../router/index.js'
 
 // 拦截器配置
 const interceptors = {
@@ -10,9 +11,30 @@ const interceptors = {
 
 // 认证请求拦截器
 addRequestInterceptor(async (config) => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  // 检查是否有测试认证token
+  const testAuthToken = config.headers['x-test-auth-token']
+  if (testAuthToken) {
+    // 使用测试认证token
+    config.headers['x-test-auth-token'] = testAuthToken
+  } else {
+    // 使用常规token
+    const token = localStorage.getItem('token')
+    if (token) {
+      // 验证token格式
+      if (/^[A-Za-z0-9-_\.]+$/.test(token)) {
+        config.headers.Authorization = `Bearer ${token}`
+        config.headers['x-token'] = `${token}`
+      } else {
+        // token格式错误，清除本地存储
+        localStorage.removeItem('token')
+        localStorage.removeItem('gamepartner_user')
+        localStorage.removeItem('refresh_token')
+        localStorage.removeItem('token_expiry')
+        // 跳转到登录页面
+        router.push('/login')
+        globalToast.error('登录信息异常，请重新登录')
+      }
+    }
   }
   return config
 })
@@ -20,6 +42,7 @@ addRequestInterceptor(async (config) => {
 // 响应拦截器 - 统一处理后端响应格式
 addResponseInterceptor(async ({ response, data }) => {
   // 后端返回格式: { code: 0, data: {...}, msg: "获取成功" }
+  
   if (data.code === 0) {
     // 成功响应，返回标准化格式
     return {
@@ -35,8 +58,14 @@ addResponseInterceptor(async ({ response, data }) => {
     const errorCode = data.code
     const errorMessage = ErrorCodeMap[errorCode] || data.msg || data.message || `请求失败 (错误码: ${errorCode})`
     
-    // 显示错误提示
-    globalToast.error(errorMessage)
+    // 检查是否是登录过期或无效的错误
+    if (response.status === 401) {
+      // 执行重新登录流程
+      handleUnauthorizedError()
+    } else {
+      // 显示普通错误提示
+      globalToast.error(errorMessage)
+    }
     
     // 创建错误对象，包含错误码和错误信息
     const error = new Error(errorMessage)
@@ -84,6 +113,26 @@ export function cancelAllRequests() {
   pendingRequests.clear()
 }
 
+// 处理未授权错误（401）
+function handleUnauthorizedError() {
+  // 清除本地存储的token和用户信息
+  localStorage.removeItem('token')
+  localStorage.removeItem('gamepartner_user')
+  localStorage.removeItem('refresh_token')
+  localStorage.removeItem('token_expiry')
+  // 取消所有正在进行的请求
+  cancelAllRequests()
+  // 显示错误提示，添加去登录按钮和自动跳转
+  globalToast.error('您的登录已过期，即将跳转到登录页面', 3000, '立即登录', () => {
+    // 跳转到登录页面
+    router.push('/login')
+  })
+  // 3秒后自动跳转到登录页面
+  setTimeout(() => {
+    router.push('/login')
+  }, 3000)
+}
+
 async function request(url, options = {}) {
   const abortController = new AbortController()
   const requestId = generateRequestId(url, options)
@@ -125,6 +174,11 @@ async function request(url, options = {}) {
     }
 
     if (!response.ok) {
+      // 处理401未授权错误
+      if (response.status === 401) {
+        // 执行重新登录流程
+        handleUnauthorizedError()
+      }
       const error = new Error(responseData.message || `HTTP error! status: ${response.status}`)
       error.response = response
       error.data = responseData
