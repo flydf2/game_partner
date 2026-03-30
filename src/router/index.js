@@ -278,6 +278,16 @@ const routes = [
     }
   },
   {
+    path: '/order-settings',
+    name: 'OrderSettings',
+    component: () => import('../views/OrderSettings.vue'),
+    meta: {
+      title: '订单设置',
+      requireAuth: true,
+      headerType: 'detail'
+    }
+  },
+  {
     path: '/confirm-order',
     name: 'ConfirmOrder',
     component: () => import('../views/ConfirmOrder.vue'),

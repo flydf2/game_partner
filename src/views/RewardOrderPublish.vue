@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import AppHeader from '../components/AppHeader.vue'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
 
@@ -32,6 +31,8 @@ const paymentMethod = ref('prepay')
 const selectedTags = ref([])
 const requirements = ref([''])
 const loading = ref(false)
+const showPaymentWarning = ref(false)
+const showPrepayConfirm = ref(false)
 const timeLeft = ref('')
 const gameRank = ref('')
 const startTime = ref('')
@@ -127,9 +128,36 @@ const handlePublish = async () => {
       alert('请填写位置信息')
       return
     }
+    showPaymentWarning.value = true
     return
   }
   
+  showPaymentWarning.value = true
+}
+
+const handleCancel = () => {
+  router.back()
+}
+
+const confirmPaymentMethod = () => {
+  showPaymentWarning.value = false
+  if (paymentMethod.value === 'prepay') {
+    showPrepayConfirm.value = true
+  } else {
+    doPublish()
+  }
+}
+
+const cancelPrepayConfirm = () => {
+  showPrepayConfirm.value = false
+}
+
+const confirmPrepayAndPublish = () => {
+  showPrepayConfirm.value = false
+  doPublish()
+}
+
+const doPublish = async () => {
   loading.value = true
   try {
     const requestData = {
@@ -145,9 +173,9 @@ const handlePublish = async () => {
       duration: parseInt(duration.value),
       location: location.value
     }
-    
+
     const response = await api.rewardOrder.publishReward(requestData)
-    
+
     if (response.success) {
       router.push('/reward')
     }
@@ -157,10 +185,6 @@ const handlePublish = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const handleCancel = () => {
-  router.back()
 }
 </script>
 
@@ -407,6 +431,68 @@ const handleCancel = () => {
             <span class="material-symbols-outlined font-bold">rocket_launch</span>
           </template>
         </button>
+      </div>
+    </div>
+
+    <!-- Payment Warning Dialog -->
+    <div v-if="showPaymentWarning" class="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-5">
+      <div class="bg-surface rounded-3xl w-full max-w-sm p-6 space-y-5">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-warning text-3xl">info</span>
+          <h3 class="font-bold text-lg text-on-surface">支付方式提示</h3>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">
+          您选择的支付方式为 <span class="font-bold text-on-surface">{{ paymentMethod === 'prepay' ? '预付' : '现付' }}</span>。
+        </p>
+        <div class="bg-surface-container-high rounded-xl p-4 space-y-2 text-sm">
+          <p class="text-on-surface font-medium">预付说明：</p>
+          <p class="text-on-surface-variant">赏金将在服务完成前预先托管，安全性高，但资金占用时间较长。</p>
+          <p class="text-on-surface font-medium mt-3">现付说明：</p>
+          <p class="text-on-surface-variant">服务完成后再支付，资金灵活，但存在一定交易风险。</p>
+        </div>
+        <p class="text-on-surface-variant text-sm">不同支付方式会产生不同的扣款时点和金额，请确认您的选择。</p>
+        <div class="flex gap-3 pt-2">
+          <button
+            @click="showPaymentWarning = false"
+            class="flex-1 py-3 rounded-full bg-surface-container-high text-on-surface font-medium"
+          >
+            取消
+          </button>
+          <button
+            @click="confirmPaymentMethod"
+            class="flex-1 py-3 rounded-full bg-primary text-on-primary font-medium"
+          >
+            确认发布
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prepay Confirmation Dialog -->
+    <div v-if="showPrepayConfirm" class="fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-5">
+      <div class="bg-surface rounded-3xl w-full max-w-sm p-6 space-y-5">
+        <div class="flex items-center gap-3">
+          <span class="material-symbols-outlined text-error text-3xl">payments</span>
+          <h3 class="font-bold text-lg text-on-surface">确认预付</h3>
+        </div>
+        <p class="text-on-surface-variant text-sm leading-relaxed">
+          您选择的是预付方式，赏金 <span class="font-bold text-on-surface text-xl">¥{{ rewardAmount }}</span> 将立即从您的账户余额中扣除。
+        </p>
+        <p class="text-on-surface-variant text-sm">预付可以确保大神优先接单，但扣款后将无法主动撤回，请确认后再发布悬赏。</p>
+        <div class="flex gap-3 pt-2">
+          <button
+            @click="cancelPrepayConfirm"
+            class="flex-1 py-3 rounded-full bg-surface-container-high text-on-surface font-medium"
+          >
+            取消发布
+          </button>
+          <button
+            @click="confirmPrepayAndPublish"
+            class="flex-1 py-3 rounded-full bg-primary text-on-primary font-medium"
+          >
+            确认预付并发布
+          </button>
+        </div>
       </div>
     </div>
   </div>

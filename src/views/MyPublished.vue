@@ -48,30 +48,61 @@
 
           <!-- 订单列表 -->
           <div v-else-if="rewardOrders.length > 0" class="space-y-4">
-            <div 
-              v-for="order in rewardOrders" 
+            <div
+              v-for="order in rewardOrders"
               :key="order.id"
               class="bg-surface-container-lowest rounded-3xl p-5 transition-all duration-300 active:scale-[0.98] hover:bg-surface-container-low cursor-pointer"
               @click="handleRewardOrderDetail(order.id)"
             >
-              <div class="flex justify-between items-start mb-4">
-                <h4 class="font-bold text-sm">{{ order.title }}</h4>
-                <span :class="getOrderStatusClass(order.status)" class="text-xs font-bold px-2 py-1 rounded-full">
-                  {{ order.statusText }}
+              <div class="flex justify-between items-start mb-3">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded-full">
+                      {{ order.game }}
+                    </span>
+                    <span :class="getOrderStatusClass(order.status)" class="text-xs font-bold px-2 py-0.5 rounded-full">
+                      {{ order.statusText }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-on-surface-variant line-clamp-2">{{ order.content }}</p>
+                </div>
+                <span class="text-lg font-bold text-primary ml-3">¥{{ order.reward }}</span>
+              </div>
+
+              <div v-if="order.tags && order.tags.length > 0" class="flex flex-wrap gap-1.5 mb-3">
+                <span
+                  v-for="(tag, index) in order.tags"
+                  :key="index"
+                  class="px-2 py-0.5 bg-surface-container text-on-surface-variant text-xs rounded-full"
+                >
+                  {{ tag }}
                 </span>
               </div>
-              <div class="flex justify-between items-center mb-3">
-                <div class="flex items-center gap-2">
-                  <span class="text-xs text-on-surface-variant">游戏</span>
-                  <span class="text-sm font-medium">{{ order.game }}</span>
+
+              <div class="grid grid-cols-2 gap-2 text-xs text-on-surface-variant">
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">sports_esports</span>
+                  <span>{{ order.gameRank || '段位不限' }}</span>
                 </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-xs text-on-surface-variant">金额</span>
-                  <span class="text-sm font-bold text-primary">¥{{ order.amount }}</span>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">schedule</span>
+                  <span>{{ order.duration }}小时</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">location_on</span>
+                  <span>{{ order.location || '不限' }}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <span class="material-symbols-outlined text-sm">payments</span>
+                  <span>{{ order.paymentMethodText }}</span>
                 </div>
               </div>
-              <div class="text-xs text-on-surface-variant">
-                {{ order.createdAt }}
+
+              <div class="mt-3 pt-3 border-t border-surface-container flex items-center justify-between">
+                <span class="text-xs text-on-surface-variant">{{ order.createdAt }}</span>
+                <span v-if="order.startTime" class="text-xs text-on-surface-variant">
+                  开始时间: {{ order.startTime }}
+                </span>
               </div>
             </div>
           </div>
@@ -195,15 +226,39 @@ const loadRewardOrders = async () => {
   try {
     const response = await rewardApi.getMyRewardOrders()
     if (response.success || response.code === 0) {
-      rewardOrders.value = (response.data?.data || response.data || []).map(order => ({
-        id: order.id,
-        title: order.title || '未知标题',
-        game: order.game || '未知游戏',
-        amount: order.amount || 0,
-        status: order.status,
-        statusText: getStatusText(order.status),
-        createdAt: formatDate(order.createdAt)
-      }))
+      rewardOrders.value = (response.data?.data || response.data || []).map(order => {
+        let tags = []
+        try {
+          tags = typeof order.tags === 'string' ? JSON.parse(order.tags) : order.tags || []
+        } catch (e) {
+          tags = []
+        }
+
+        let requirements = []
+        try {
+          requirements = typeof order.requirements === 'string' ? JSON.parse(order.requirements) : order.requirements || []
+        } catch (e) {
+          requirements = []
+        }
+
+        return {
+          id: order.ID || order.id,
+          content: order.content || '暂无描述',
+          game: order.game || '未知游戏',
+          reward: order.reward || 0,
+          status: order.status || 'available',
+          statusText: getStatusText(order.status),
+          gameRank: order.gameRank || '',
+          startTime: order.startTime ? formatDate(order.startTime) : '',
+          duration: order.duration || 0,
+          location: order.location || '',
+          tags: tags,
+          requirements: requirements,
+          paymentMethod: order.paymentMethod || 'prepay',
+          paymentMethodText: getPaymentMethodText(order.paymentMethod),
+          createdAt: order.createdAt ? formatDate(order.createdAt) : ''
+        }
+      })
     } else {
       throw new Error(response.message || response.msg || '获取悬赏订单失败')
     }
@@ -249,9 +304,20 @@ const getStatusText = (status) => {
     pending: '待抢单',
     ongoing: '进行中',
     completed: '已完成',
-    cancelled: '已取消'
+    cancelled: '已取消',
+    available: '可接单',
+    taken: '已接单',
+    expired: '已过期'
   }
   return statusMap[status] || '未知状态'
+}
+
+const getPaymentMethodText = (method) => {
+  const methodMap = {
+    prepay: '预付',
+    postpay: '后付'
+  }
+  return methodMap[method] || '未知方式'
 }
 
 const getOrderStatusClass = (status) => {
@@ -263,6 +329,12 @@ const getOrderStatusClass = (status) => {
     case 'completed':
       return 'bg-green-100 text-green-600'
     case 'cancelled':
+      return 'bg-zinc-100 text-zinc-600'
+    case 'available':
+      return 'bg-green-100 text-green-600'
+    case 'taken':
+      return 'bg-blue-100 text-blue-600'
+    case 'expired':
       return 'bg-zinc-100 text-zinc-600'
     default:
       return 'bg-surface-container text-on-surface-variant'

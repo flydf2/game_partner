@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>检查登录状态</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .success { background-color: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; color: #0c5460; }
+        pre { background-color: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>登录状态检查</h1>
+        
+        <div class="section info">
+            <h2>1. 本地存储内容</h2>
+            <pre id="localStorageContent">检查中...</pre>
+        </div>
+        
+        <div class="section info">
+            <h2>2. Token 状态</h2>
+            <pre id="tokenStatus">检查中...</pre>
+        </div>
+        
+        <div class="section info">
+            <h2>3. 调用 getUserInfo API</h2>
+            <pre id="apiResponse">调用中...</pre>
+        </div>
+        
+        <div class="section info">
+            <h2>4. 模拟登录</h2>
+            <button onclick="mockLogin()">模拟登录</button>
+            <pre id="loginResult"></pre>
+        </div>
+    </div>
+    
+    <script>
+        // 检查本地存储
+        function checkLocalStorage() {
+            const content = document.getElementById('localStorageContent');
+            let html = '';
+            
+            html += 'token: ' + localStorage.getItem('token') + '\n';
+            html += 'gamepartner_user: ' + localStorage.getItem('gamepartner_user') + '\n';
+            html += 'refresh_token: ' + localStorage.getItem('refresh_token') + '\n';
+            html += 'token_expiry: ' + localStorage.getItem('token_expiry') + '\n';
+            
+            content.textContent = html;
+        }
+        
+        // 检查 token 状态
+        function checkTokenStatus() {
+            const content = document.getElementById('tokenStatus');
+            let html = '';
+            
+            const token = localStorage.getItem('token');
+            const tokenExpiry = localStorage.getItem('token_expiry');
+            
+            html += 'Token 存在: ' + (token ? '是' : '否') + '\n';
+            
+            if (tokenExpiry) {
+                const expiryTime = parseInt(tokenExpiry);
+                const now = Date.now();
+                html += 'Token 过期时间: ' + new Date(expiryTime).toLocaleString() + '\n';
+                html += '当前时间: ' + new Date(now).toLocaleString() + '\n';
+                html += 'Token 是否过期: ' + (now > expiryTime ? '是' : '否') + '\n';
+            } else {
+                html += 'Token 过期时间: 未设置\n';
+            }
+            
+            content.textContent = html;
+        }
+        
+        // 调用 getUserInfo API
+        async function callGetUserInfo() {
+            const content = document.getElementById('apiResponse');
+            content.textContent = '调用中...';
+            
+            try {
+                const response = await fetch('/api/playmate/user/info', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                
+                const data = await response.json();
+                content.textContent = '状态码: ' + response.status + '\n' + JSON.stringify(data, null, 2);
+            } catch (error) {
+                content.textContent = '错误: ' + error.message;
+            }
+        }
+        
+        // 模拟登录
+        function mockLogin() {
+            const content = document.getElementById('loginResult');
+            
+            // 生成模拟 token
+            const mockToken = 'mock_token_' + Date.now();
+            const mockUser = {
+                id: '1000001',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                nickname: '游戏达人',
+                vipLevel: 3
+            };
+            
+            // 存储到本地存储
+            localStorage.setItem('token', mockToken);
+            localStorage.setItem('gamepartner_user', JSON.stringify(mockUser));
+            localStorage.setItem('token_expiry', (Date.now() + 2 * 60 * 60 * 1000).toString());
+            
+            content.textContent = '模拟登录成功！\nToken: ' + mockToken + '\n用户信息: ' + JSON.stringify(mockUser, null, 2);
+            
+            // 重新检查本地存储和 token 状态
+            checkLocalStorage();
+            checkTokenStatus();
+        }
+        
+        // 页面加载时检查
+        window.onload = function() {
+            checkLocalStorage();
+            checkTokenStatus();
+            callGetUserInfo();
+        };
+    </script>
+</body>
+</html>

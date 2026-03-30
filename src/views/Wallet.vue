@@ -18,33 +18,40 @@ const loading = ref(false)
 const loadWallet = async () => {
   loading.value = true
   try {
-    const response = await userApi.getWallet()
-    if (response.success || response.code === 0) {
-      const data = response.data || {}
+    const [walletResponse, transactionsResponse] = await Promise.all([
+      userApi.getWallet(),
+      userApi.getTransactions()
+    ])
+    
+    if (walletResponse.success || walletResponse.code === 0) {
+      const data = walletResponse.data || {}
       walletInfo.value = {
         balance: data.balance || 0,
         frozen: data.frozen || 0,
         totalIncome: data.totalIncome || 0,
         totalWithdraw: data.totalExpense || 0
       }
-      
-      // 转换交易记录格式
-      transactions.value = (data.transactions || []).map(transaction => ({
+    } else {
+      throw new Error(walletResponse.message || walletResponse.msg || '获取钱包信息失败')
+    }
+    
+    if (transactionsResponse.success || transactionsResponse.code === 0) {
+      const txData = transactionsResponse.data || {}
+      const txList = txData.data || txData.transactions || []
+      transactions.value = txList.map(transaction => ({
         id: transaction.id,
         type: transaction.type === 'expense' ? 'withdraw' : transaction.type,
         title: transaction.description,
-        amount: transaction.type === 'income' ? transaction.amount : -transaction.amount,
-        time: new Date(transaction.time).toLocaleString('zh-CN', { 
-          year: 'numeric', 
-          month: '2-digit', 
+        amount: transaction.type === 'income' || transaction.type === 'income_pending' ? transaction.amount : -transaction.amount,
+        time: new Date(transaction.time).toLocaleString('zh-CN', {
+          year: 'numeric',
+          month: '2-digit',
           day: '2-digit',
           hour: '2-digit',
           minute: '2-digit'
         }),
-        status: 'completed'
+        status: transaction.status || (transaction.type.includes('pending') ? 'pending' : 'completed')
       }))
-    } else {
-      throw new Error(response.message || response.msg || '获取钱包信息失败')
     }
   } catch (err) {
     console.error('获取钱包信息失败:', err)

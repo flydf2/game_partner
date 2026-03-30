@@ -10,6 +10,8 @@ const router = useRouter()
 const balance = ref('0.00')
 const withdrawalAmount = ref('')
 const selectedPaymentMethod = ref('wechat')
+const accountInfo = ref('')
+const description = ref('')
 const submitting = ref(false)
 const loading = ref(true)
 const errorMessage = ref('')
@@ -54,7 +56,7 @@ const paymentMethods = [
 ]
 
 const isSubmitDisabled = computed(() => {
-  return !withdrawalAmount.value || submitting.value
+  return !withdrawalAmount.value || !accountInfo.value || submitting.value
 })
 
 const handleBack = () => {
@@ -109,8 +111,16 @@ const validateWithdrawalAmount = () => {
   return true
 }
 
+const validateAccountInfo = () => {
+  if (!accountInfo.value || accountInfo.value.trim() === '') {
+    errorMessage.value = '请填写账户信息'
+    return false
+  }
+  return true
+}
+
 const handleConfirmWithdrawal = async () => {
-  if (!validateWithdrawalAmount()) {
+  if (!validateWithdrawalAmount() || !validateAccountInfo()) {
     return
   }
   
@@ -120,7 +130,9 @@ const handleConfirmWithdrawal = async () => {
     
     const withdrawalData = {
       amount: withdrawalAmount.value,
-      method: selectedPaymentMethod.value
+      method: selectedPaymentMethod.value,
+      accountInfo: accountInfo.value,
+      description: description.value
     }
     
     const response = await withdrawalApi.submitWithdrawal(withdrawalData)
@@ -194,6 +206,27 @@ const handleConfirmWithdrawal = async () => {
         <div v-if="errorMessage" class="flex items-center gap-2 text-error text-sm px-1">
           <span class="material-symbols-outlined text-base">error</span>
           {{ errorMessage }}
+        </div>
+      </section>
+
+      <!-- Account Info Input -->
+      <section class="space-y-4">
+        <h2 class="text-sm font-bold text-on-surface-variant px-1">账户信息</h2>
+        <div class="bg-surface-container-lowest rounded-2xl p-4">
+          <input
+            v-model="accountInfo"
+            class="w-full bg-transparent border-none p-0 text-base text-on-surface placeholder:text-surface-container-high focus:ring-0"
+            :placeholder="selectedPaymentMethod === 'alipay' ? '请输入支付宝账号' : selectedPaymentMethod === 'wechat' ? '请输入微信账号' : '请输入银行卡号'"
+            type="text"
+          />
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-4">
+          <input
+            v-model="description"
+            class="w-full bg-transparent border-none p-0 text-base text-on-surface placeholder:text-surface-container-high focus:ring-0"
+            placeholder="提现描述（选填）"
+            type="text"
+          />
         </div>
       </section>
 

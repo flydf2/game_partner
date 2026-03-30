@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>检查本地存储</title>
+</head>
+<body>
+    <h1>本地存储内容检查</h1>
+    <pre id="localStorageContent"></pre>
+    
+    <script>
+        function checkLocalStorage() {
+            const content = document.getElementById('localStorageContent');
+            let html = '';
+            
+            html += '<strong>token:</strong> ' + localStorage.getItem('token') + '<br>';
+            html += '<strong>gamepartner_user:</strong> ' + localStorage.getItem('gamepartner_user') + '<br>';
+            html += '<strong>refresh_token:</strong> ' + localStorage.getItem('refresh_token') + '<br>';
+            html += '<strong>token_expiry:</strong> ' + localStorage.getItem('token_expiry') + '<br>';
+            
+            content.innerHTML = html;
+        }
+        
+        checkLocalStorage();
+    </script>
+</body>
+</html>

@@ -304,12 +304,14 @@ export const withdrawalApi = {
       return await withRetry(() => post('/withdrawals', withdrawalData))
     }
   },
-  
-  async getWithdrawalRecords() {
+
+  async getWithdrawalRecords(page = 1, pageSize = 10) {
     if (USE_MOCK) {
       return await mockGetWithdrawalRecords()
     } else {
-      return await withRetry(() => get('/withdrawals'))
+      return await withRetry(() => get('/withdrawals', {
+        params: { page, pageSize }
+      }))
     }
   }
 }
@@ -615,14 +617,57 @@ export const userApi = {
             message: '充值成功',
             data: {
               transactionId: Date.now(),
-              coinsAdded: rechargeData.coins,
-              balance: 1280 + rechargeData.coins
+              orderId: rechargeData.orderId || `ORD${Date.now()}`,
+              amount: rechargeData.amount,
+              method: rechargeData.method,
+              balance: 1280 + rechargeData.amount
             }
           })
         }, 1000)
       })
     } else {
       return await withRetry(() => post('/user/recharge', rechargeData))
+    }
+  },
+
+  async getTransactions(page = 1, pageSize = 10) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              transactions: [
+                {
+                  id: 1,
+                  type: 'income',
+                  amount: 100.00,
+                  description: '充值',
+                  time: '2026-03-29 10:00:00',
+                  status: 'completed'
+                },
+                {
+                  id: 2,
+                  type: 'expense',
+                  amount: 50.00,
+                  description: '提现',
+                  time: '2026-03-28 15:30:00',
+                  status: 'completed'
+                }
+              ],
+              pagination: {
+                currentPage: page,
+                totalPages: 1,
+                totalCount: 2
+              }
+            }
+          })
+        }, 500)
+      })
+    } else {
+      return await withRetry(() => get('/user/transactions', {
+        params: { page, pageSize }
+      }))
     }
   },
   
@@ -1095,6 +1140,79 @@ export const communityApi = {
       })
     } else {
       return await withRetry(() => post(`/community/posts/${postId}/comments`, { content }))
+    }
+  },
+  
+  async getComments(postId, page = 1, pageSize = 20) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              data: [
+                {
+                  id: 1,
+                  user: {
+                    id: 101,
+                    name: '小玩家',
+                    avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+                  },
+                  content: '我也在艾欧尼亚，一起玩吧！',
+                  time: '1小时前',
+                  likes: 23,
+                  createdAt: new Date(Date.now() - 3600000).toISOString()
+                },
+                {
+                  id: 2,
+                  user: {
+                    id: 102,
+                    name: '辅助玩家',
+                    avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+                  },
+                  content: '我可以辅助你，加个好友',
+                  time: '45分钟前',
+                  likes: 15,
+                  createdAt: new Date(Date.now() - 2700000).toISOString()
+                },
+                {
+                  id: 3,
+                  user: {
+                    id: 103,
+                    name: '王者大神',
+                    avatar: 'https://randomuser.me/api/portraits/men/45.jpg'
+                  },
+                  content: '技术不错，求带！',
+                  time: '30分钟前',
+                  likes: 8,
+                  createdAt: new Date(Date.now() - 1800000).toISOString()
+                },
+                {
+                  id: 4,
+                  user: {
+                    id: 104,
+                    name: '萌新玩家',
+                    avatar: 'https://randomuser.me/api/portraits/women/55.jpg'
+                  },
+                  content: '组队缺人吗？',
+                  time: '15分钟前',
+                  likes: 5,
+                  createdAt: new Date(Date.now() - 900000).toISOString()
+                }
+              ],
+              pagination: {
+                currentPage: page,
+                totalPages: 1,
+                totalCount: 4
+              }
+            }
+          })
+        }, 300)
+      })
+    } else {
+      return await withRetry(() => get(`/community/posts/${postId}/comments`, {
+        params: { page, pageSize }
+      }))
     }
   },
   

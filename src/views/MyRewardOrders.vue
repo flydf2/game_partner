@@ -155,10 +155,13 @@ const orders = ref([])
 
 const orderStatuses = [
   { key: 'all', label: '全部' },
+  { key: 'available', label: '可抢单' },
   { key: 'pending', label: '待抢单' },
   { key: 'ongoing', label: '进行中' },
   { key: 'completed', label: '已完成' },
-  { key: 'cancelled', label: '已取消' }
+  { key: 'draft', label: '草稿' },
+  { key: 'cancelled', label: '已取消' },
+  { key: 'expired', label: '已过期' }
 ]
 
 const filteredOrders = computed(() => {
@@ -175,7 +178,7 @@ const loadOrders = async () => {
     const response = await rewardApi.getMyRewardOrders()
     if (response.success || response.code === 0) {
       orders.value = (response.data?.data || response.data || []).map(order => ({
-        id: order.id,
+        id: order.id || order.ID,
         title: order.title || '未知标题',
         game: order.game || '未知游戏',
         amount: order.amount || 0,
@@ -203,24 +206,33 @@ const loadOrders = async () => {
 
 const getStatusText = (status) => {
   const statusMap = {
+    available: '可抢单',
     pending: '待抢单',
     ongoing: '进行中',
     completed: '已完成',
-    cancelled: '已取消'
+    draft: '草稿',
+    cancelled: '已取消',
+    expired: '已过期'
   }
   return statusMap[status] || '未知状态'
 }
 
 const getOrderStatusClass = (status) => {
   switch (status) {
+    case 'available':
+      return 'bg-green-100 text-green-600'
     case 'pending':
       return 'bg-primary/10 text-primary'
     case 'ongoing':
       return 'bg-blue-100 text-blue-600'
     case 'completed':
       return 'bg-green-100 text-green-600'
+    case 'draft':
+      return 'bg-zinc-100 text-zinc-600'
     case 'cancelled':
       return 'bg-zinc-100 text-zinc-600'
+    case 'expired':
+      return 'bg-zinc-100 text-zinc-400'
     default:
       return 'bg-surface-container text-on-surface-variant'
   }

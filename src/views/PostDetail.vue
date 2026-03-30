@@ -17,15 +17,12 @@ const loadPostDetail = async () => {
   try {
     loading.value = true
     error.value = null
-    
-    // 使用真实 API 获取帖子详情
+
     const response = await communityApi.getPostDetail(postId.value)
-    
+
     if (response.success || response.code === 0) {
-      // 处理 API 返回的数据格式
       const postData = response.data?.data || response.data
-      
-      // 转换 images 字符串为数组
+
       let imagesArray = []
       if (postData.images) {
         if (Array.isArray(postData.images)) {
@@ -34,8 +31,7 @@ const loadPostDetail = async () => {
           imagesArray = postData.images.split(',')
         }
       }
-      
-      // 构建完整的帖子数据结构
+
       let rewardInfo = null
       if (postData.extJson) {
         try {
@@ -44,7 +40,7 @@ const loadPostDetail = async () => {
           console.error('解析 extJson 失败:', e)
         }
       }
-      
+
       post.value = {
         ...postData,
         type: postData.type || 'normal',
@@ -60,17 +56,18 @@ const loadPostDetail = async () => {
         isLiked: postData.isLiked || false,
         isFollowing: postData.isFollowing || false
       }
-      
-      // 处理评论
-      comments.value = (postData.commentsList || []).map(comment => ({
-        ...comment,
-        user: comment.user || {
-          id: comment.userId || comment.user_id || '1',
-          name: comment.user?.name || `用户${comment.userId || comment.user_id || '1'}`,
-          avatar: comment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.userId || comment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.userId || comment.user_id || 1) % 70 + 1}.jpg`
-        },
-        time: comment.time || formatTime(comment.createdAt)
-      }))
+
+      if (postData.commentsList && postData.commentsList.length > 0) {
+        comments.value = postData.commentsList.map(comment => ({
+          ...comment,
+          user: comment.user || {
+            id: comment.userId || comment.user_id || '1',
+            name: comment.user?.name || `用户${comment.userId || comment.user_id || '1'}`,
+            avatar: comment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.userId || comment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.userId || comment.user_id || 1) % 70 + 1}.jpg`
+          },
+          time: comment.time || formatTime(comment.createdAt)
+        }))
+      }
     } else {
       error.value = response.message || response.msg || '加载失败'
     }
@@ -79,6 +76,28 @@ const loadPostDetail = async () => {
     error.value = '网络错误，请稍后重试'
   } finally {
     loading.value = false
+  }
+}
+
+const loadComments = async () => {
+  try {
+    const response = await communityApi.getComments(postId.value)
+
+    if (response.success || response.code === 0) {
+      const commentsData = response.data?.data || response.data || []
+
+      comments.value = commentsData.map(comment => ({
+        ...comment,
+        user: comment.user || {
+          id: comment.userId || comment.user_id || '1',
+          name: comment.user?.name || `用户${comment.userId || comment.user_id || '1'}`,
+          avatar: comment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.userId || comment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.userId || comment.user_id || 1) % 70 + 1}.jpg`
+        },
+        time: comment.time || formatTime(comment.createdAt)
+      }))
+    }
+  } catch (err) {
+    console.error('加载评论失败:', err)
   }
 }
 
@@ -272,6 +291,7 @@ onMounted(() => {
       loadBids()
     }
   })
+  loadComments()
 })
 </script>
 

@@ -9,15 +9,16 @@ const { showToast } = useToast()
 
 const selectedAmount = ref(100)
 const selectedPayment = ref('wechat')
+const customAmount = ref('')
 const loading = ref(false)
 
 const amountOptions = [
+  { label: '10元', value: 10 },
+  { label: '50元', value: 50 },
   { label: '100元', value: 100 },
   { label: '200元', value: 200 },
   { label: '500元', value: 500 },
-  { label: '1000元', value: 1000 },
-  { label: '2000元', value: 2000 },
-  { label: '5000元', value: 5000 }
+  { label: '1000元', value: 1000 }
 ]
 
 const paymentOptions = [
@@ -32,9 +33,9 @@ const paymentOptions = [
     icon: 'account_balance_wallet'
   },
   {
-    id: 'bank',
-    name: '银行卡',
-    icon: 'credit_card'
+    id: 'balance',
+    name: '余额支付',
+    icon: 'savings'
   }
 ]
 
@@ -50,22 +51,44 @@ const selectPayment = (paymentId) => {
   selectedPayment.value = paymentId
 }
 
+const handleCustomAmountInput = () => {
+  if (customAmount.value) {
+    selectedAmount.value = 0
+  }
+}
+
 const confirmRecharge = async () => {
   if (loading.value) return
+
+  const amount = customAmount.value || selectedAmount.value
+  if (!amount || amount <= 0) {
+    showToast('请选择或输入充值金额', 'error')
+    return
+  }
 
   loading.value = true
   try {
     const rechargeData = {
-      amount: selectedAmount.value,
-      paymentMethod: selectedPayment.value,
-      coins: selectedAmount.value
+      amount: amount,
+      method: selectedPayment.value,
+      returnUrl: `${window.location.origin}/profile/wallet`,
+      notifyUrl: `${window.location.origin}/api/pay/callback`
     }
 
     const response = await userApi.recharge(rechargeData)
 
     if (response.success || response.code === 0) {
-      showToast('充值成功', 'success')
-      router.push('/profile/wallet')
+      if (selectedPayment.value === 'balance') {
+        showToast('充值成功', 'success')
+        router.push('/profile/wallet')
+      } else {
+        showToast('充值成功，跳转支付页面', 'success')
+        if (response.data && response.data.payUrl) {
+          window.location.href = response.data.payUrl
+        } else {
+          router.push('/profile/wallet')
+        }
+      }
     } else {
       throw new Error(response.message || response.msg || '充值失败')
     }
@@ -103,13 +126,25 @@ const confirmRecharge = async () => {
             v-for="amount in amountOptions"
             :key="amount.value"
             class="py-4 px-3 rounded-2xl text-sm font-semibold transition-all duration-200 active:scale-95"
-            :class="selectedAmount === amount.value
+            :class="selectedAmount === amount.value && !customAmount
               ? 'bg-primary text-on-primary shadow-lg shadow-primary/25'
               : 'bg-surface-container text-on-surface-variant hover:bg-surface-container-high'"
-            @click="selectAmount(amount.value)"
+            @click="selectAmount(amount.value); customAmount = ''"
           >
             {{ amount.label }}
           </button>
+        </div>
+        <div class="mt-4 pt-4 border-t border-surface-container">
+          <div class="flex items-center gap-3">
+            <span class="text-lg font-bold text-on-surface">¥</span>
+            <input
+              v-model="customAmount"
+              class="w-full bg-transparent border-none p-0 text-lg font-semibold text-on-surface placeholder:text-surface-container-high focus:ring-0"
+              placeholder="自定义金额"
+              type="number"
+              @input="handleCustomAmountInput"
+            />
+          </div>
         </div>
       </section>
 
@@ -152,7 +187,7 @@ const confirmRecharge = async () => {
           </div>
           <div class="flex items-baseline gap-1">
             <span class="text-2xl font-bold">¥</span>
-            <span class="text-5xl font-extrabold font-headline tracking-tight">{{ selectedAmount }}</span>
+            <span class="text-5xl font-extrabold font-headline tracking-tight">{{ customAmount || selectedAmount }}</span>
           </div>
           <div class="flex items-center gap-2 text-white/70 text-sm">
             <span class="material-symbols-outlined text-base">payments</span>
@@ -169,7 +204,7 @@ const confirmRecharge = async () => {
           class="w-full py-4 rounded-2xl bg-primary text-on-primary font-bold text-base shadow-lg shadow-primary/25 active:scale-95 transition-all duration-200 hover:shadow-xl hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           <span v-if="loading" class="w-5 h-5 border-2 border-on-primary border-t-transparent rounded-full animate-spin"></span>
-          <span>{{ loading ? '充值中...' : `确认充值 ¥${selectedAmount}` }}</span>
+          <span>{{ loading ? '充值中...' : `确认充值 ¥${customAmount || selectedAmount}` }}</span>
         </button>
       </section>
 
