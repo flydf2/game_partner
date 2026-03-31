@@ -2,8 +2,10 @@
 import { ref, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { communityApi } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { warning: showWarning, success: showSuccess, error: showError } = useModal()
 
 const DateTimePicker = defineAsyncComponent(() => import('../components/DateTimePicker.vue'))
 
@@ -41,25 +43,25 @@ const removeImage = (index) => {
 
 const handleSubmit = async () => {
   if (!postContent.value.trim()) {
-    alert('请输入动态内容')
+    showWarning('请输入动态内容')
     return
   }
 
   if (isRewardPost.value) {
     if (!rewardAmount.value || parseFloat(rewardAmount.value) <= 0) {
-      alert('请输入有效的悬赏金额')
+      showWarning('请输入有效的悬赏金额')
       return
     }
     if (!rewardGame.value.trim()) {
-      alert('请选择游戏')
+      showWarning('请选择游戏')
       return
     }
     if (!rewardDeadline.value) {
-      alert('请选择截止时间')
+      showWarning('请选择截止时间')
       return
     }
     if (!rewardRequirements.value.trim()) {
-      alert('请输入需求要求')
+      showWarning('请输入需求要求')
       return
     }
   }
@@ -90,18 +92,18 @@ const handleSubmit = async () => {
     
     if (isRewardPost.value) {
       if (paymentMethod.value === 'prepay') {
-        alert('发布成功，即将跳转到支付页面')
+        showSuccess('发布成功，即将跳转到支付页面')
       } else {
-        alert('发布成功')
+        showSuccess('发布成功')
       }
     } else {
-      alert('发布成功')
+      showSuccess('发布成功')
     }
     
     router.push('/community')
   } catch (error) {
     console.error('发布失败:', error)
-    alert('发布失败，请重试')
+    showError('发布失败，请重试')
   } finally {
     isSubmitting.value = false
   }

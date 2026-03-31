@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import api from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { confirm: showConfirm, error: showError, success } = useModal()
 
 const applications = ref([])
 const loading = ref(true)
@@ -126,18 +128,19 @@ const playVoice = (url) => {
 }
 
 const cancelApplication = async (app) => {
-  if (!confirm('确定要撤销该申请吗？')) return
+  const confirmed = await showConfirm('确定要撤销该申请吗？')
+  if (!confirmed) return
   
   try {
     const response = await api.expertVerification.cancelApplication(app.id)
     if (response.success) {
       await loadApplications()
     } else {
-      alert(response.message || '撤销失败')
+      showError(response.message || '撤销失败')
     }
   } catch (err) {
     console.error('撤销申请失败:', err)
-    alert('撤销失败，请稍后重试')
+    showError('撤销失败，请稍后重试')
   }
 }
 

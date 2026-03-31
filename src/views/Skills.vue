@@ -200,8 +200,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { skillApi, handleApiError } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { warning: showWarning } = useModal()
 
 const activeCategory = ref('all')
 const loading = ref(false)
@@ -322,7 +324,7 @@ const handleEditSkill = (skillId) => {
 
 const handleSubmitSkill = async () => {
   if (!newSkill.value.game || !newSkill.value.skill || !newSkill.value.level) {
-    alert('请填写完整技能信息')
+    showWarning('请填写完整技能信息')
     return
   }
   

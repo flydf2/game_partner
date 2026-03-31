@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import api from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { warning, error, success } = useModal()
 
 const currentStep = ref(1)
 const games = ref([])
@@ -84,12 +86,12 @@ const handleFileSelect = async (event) => {
   if (!file) return
 
   if (!file.type.startsWith('image/')) {
-    alert('请选择图片文件')
+    warning('请选择图片文件')
     return
   }
 
   if (file.size > 10 * 1024 * 1024) {
-    alert('图片大小不能超过10MB')
+    warning('图片大小不能超过10MB')
     return
   }
 
@@ -110,12 +112,12 @@ const handleFileSelect = async (event) => {
       }
     } else {
       screenshots.value.splice(uploadIndex, 1)
-      alert('上传失败：' + (response.message || '未知错误'))
+      error('上传失败：' + (response.message || '未知错误'))
     }
   } catch (err) {
     screenshots.value.splice(uploadIndex, 1)
     console.error('上传截图失败:', err)
-    alert('上传失败，请稍后重试')
+    error('上传失败，请稍后重试')
   }
 }
 
@@ -168,7 +170,7 @@ const startRecording = async () => {
     }, 1000)
   } catch (err) {
     console.error('无法访问麦克风:', err)
-    alert('无法访问麦克风，请检查权限设置')
+    error('无法访问麦克风，请检查权限设置')
   }
 }
 
@@ -214,11 +216,11 @@ const uploadVoice = async () => {
       voiceRecording.value.uploaded = true
       voiceRecording.value.serverUrl = response.data.url
     } else {
-      alert('语音上传失败：' + (response.message || '未知错误'))
+      error('语音上传失败：' + (response.message || '未知错误'))
     }
   } catch (err) {
     console.error('上传语音失败:', err)
-    alert('语音上传失败，请稍后重试')
+    error('语音上传失败，请稍后重试')
   } finally {
     voiceUploading.value = false
   }
@@ -232,17 +234,17 @@ const formatTime = (seconds) => {
 
 const handleSubmit = async () => {
   if (!selectedGame.value || !rank.value) {
-    alert('请填写完整信息')
+    warning('请填写完整信息')
     return
   }
   
   if (screenshots.value.length === 0) {
-    alert('请至少上传一张段位截图')
+    warning('请至少上传一张段位截图')
     return
   }
   
   if (!voiceRecording.value) {
-    alert('请录制语音介绍')
+    warning('请录制语音介绍')
     return
   }
   
@@ -263,14 +265,14 @@ const handleSubmit = async () => {
     
     const response = await api.expertVerification.submitApplication(applicationData)
     if (response.success) {
-      alert('申请提交成功！')
+      success('申请提交成功！')
       router.push('/expert-verification/list')
     } else {
-      alert(response.message || '提交失败，请稍后重试')
+      error(response.message || '提交失败，请稍后重试')
     }
   } catch (err) {
     console.error('提交申请失败:', err)
-    alert('提交失败，请稍后重试')
+    error('提交失败，请稍后重试')
   } finally {
     loading.value = false
   }

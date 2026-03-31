@@ -182,8 +182,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { warning: showWarning, success: showSuccess, error: showError } = useModal()
 
 const expandedFaq = ref(null)
 const showContactDialog = ref(false)
@@ -232,7 +234,7 @@ const handleContactSupport = () => {
 
 const handleSubmitProblem = async () => {
   if (!problemType.value || !problemDescription.value) {
-    alert('请填写完整问题信息')
+    showWarning('请填写完整问题信息')
     return
   }
   
@@ -243,11 +245,11 @@ const handleSubmitProblem = async () => {
       description: problemDescription.value
     })
     
-    alert('问题提交成功，我们会尽快处理')
+    showSuccess('问题提交成功，我们会尽快处理')
     problemType.value = ''
     problemDescription.value = ''
   } catch (err) {
-    alert('提交失败，请重试')
+    showError('提交失败，请重试')
   }
 }
 

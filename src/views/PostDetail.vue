@@ -2,9 +2,11 @@
 import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { communityApi, userApi } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const route = useRoute()
 const router = useRouter()
+const { success: showSuccess, error: showError, info: showInfo } = useModal()
 
 const postId = ref(route.params.id || '1')
 const post = ref(null)
@@ -157,7 +159,7 @@ const handleShare = () => {
     } else {
       // 复制链接
       navigator.clipboard.writeText(window.location.href)
-      alert('链接已复制到剪贴板')
+      showSuccess('链接已复制到剪贴板')
     }
   }
 }
@@ -232,7 +234,7 @@ const handleBid = async () => {
     }
   } catch (error) {
     console.error('抢单失败:', error)
-    alert('抢单失败，请稍后重试')
+    showError('抢单失败，请稍后重试')
   }
 }
 
@@ -251,7 +253,7 @@ const cancelBid = async () => {
     }
   } catch (error) {
     console.error('取消抢单失败:', error)
-    alert('取消失败，请稍后重试')
+    showError('取消失败，请稍后重试')
   }
 }
 
@@ -262,11 +264,11 @@ const acceptBid = async (bid) => {
     if (response.success) {
       bid.status = 'accepted'
       post.value.rewardInfo.status = 'completed'
-      alert('接单成功，已通知用户')
+      showSuccess('接单成功，已通知用户')
     }
   } catch (error) {
     console.error('接单失败:', error)
-    alert('接单失败，请稍后重试')
+    showError('接单失败，请稍后重试')
   }
 }
 
@@ -276,11 +278,11 @@ const rejectBid = async (bid) => {
     
     if (response.success) {
       bid.status = 'rejected'
-      alert('已拒绝该抢单申请')
+      showSuccess('已拒绝该抢单申请')
     }
   } catch (error) {
     console.error('拒绝失败:', error)
-    alert('拒绝失败，请稍后重试')
+    showError('拒绝失败，请稍后重试')
   }
 }
 

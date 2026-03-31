@@ -3,8 +3,10 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import { orderApi, handleApiError } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { success: showSuccess, error: showError, info: showInfo } = useModal()
 
 const handleBack = () => {
   router.back()
@@ -130,7 +132,7 @@ const handleChat = (orderId) => {
 
 const handleEnterRoom = (orderId) => {
   console.log('进入房间:', orderId)
-  alert('进入房间功能已开发')
+  showInfo('进入房间功能已开发')
 }
 
 const handleOrderAgain = (orderId) => {
@@ -159,14 +161,14 @@ const handleCancelOrder = async (orderId) => {
   try {
     const response = await orderApi.cancelOrder(orderId)
     if (response.success || response.code === 0) {
-      alert('订单已取消')
+      showSuccess('订单已取消')
       await loadOrders()
     } else {
-      alert(response.message || response.msg || '取消订单失败')
+      showError(response.message || response.msg || '取消订单失败')
     }
   } catch (err) {
     const result = handleApiError(err)
-    alert(result.error || '取消订单失败，请重试')
+    showError(result.error || '取消订单失败，请重试')
     console.error('取消订单失败:', err)
   }
 }
@@ -175,14 +177,14 @@ const handleConfirmOrder = async (orderId) => {
   try {
     const response = await orderApi.confirmOrder(orderId)
     if (response.success || response.code === 0) {
-      alert('订单已确认')
+      showSuccess('订单已确认')
       await loadOrders()
     } else {
-      alert(response.message || response.msg || '确认订单失败')
+      showError(response.message || response.msg || '确认订单失败')
     }
   } catch (err) {
     const result = handleApiError(err)
-    alert(result.error || '确认订单失败，请重试')
+    showError(result.error || '确认订单失败，请重试')
     console.error('确认订单失败:', err)
   }
 }
@@ -191,14 +193,14 @@ const handleAcceptOrder = async (orderId) => {
   try {
     const response = await orderApi.acceptOrder(orderId)
     if (response.success || response.code === 0) {
-      alert('订单已接单')
+      showSuccess('订单已接单')
       await loadOrders()
     } else {
-      alert(response.message || response.msg || '接单失败')
+      showError(response.message || response.msg || '接单失败')
     }
   } catch (err) {
     const result = handleApiError(err)
-    alert(result.error || '接单失败，请重试')
+    showError(result.error || '接单失败，请重试')
     console.error('接单失败:', err)
   }
 }
@@ -207,14 +209,14 @@ const handleRejectOrder = async (orderId) => {
   try {
     const response = await orderApi.rejectOrder(orderId)
     if (response.success || response.code === 0) {
-      alert('订单已拒绝')
+      showSuccess('订单已拒绝')
       await loadOrders()
     } else {
-      alert(response.message || response.msg || '拒绝订单失败')
+      showError(response.message || response.msg || '拒绝订单失败')
     }
   } catch (err) {
     const result = handleApiError(err)
-    alert(result.error || '拒绝订单失败，请重试')
+    showError(result.error || '拒绝订单失败，请重试')
     console.error('拒绝订单失败:', err)
   }
 }

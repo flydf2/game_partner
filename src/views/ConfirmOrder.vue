@@ -3,9 +3,11 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { expertApi, orderApi, handleApiError } from '../api'
 import DateTimePicker from '../components/DateTimePicker.vue'
+import { useModal } from '../composables/useModal.js'
 
 const route = useRoute()
 const router = useRouter()
+const { warning: showWarning, error: showError } = useModal()
 
 const userId = ref(route.query.userId || '1')
 const skillId = ref(route.query.skillId)
@@ -39,11 +41,11 @@ const loadExpertDetail = async () => {
 
 const handlePay = async () => {
   if (!serviceTime.value) {
-    alert('请选择预约时间')
+    showWarning('请选择预约时间')
     return
   }
   if (quantity.value < 1) {
-    alert('数量至少为1')
+    showWarning('数量至少为1')
     return
   }
   
@@ -76,7 +78,7 @@ const handlePay = async () => {
     }
   } catch (err) {
     const result = handleApiError(err)
-    alert(result.error || '创建订单失败，请重试')
+    showError(result.error || '创建订单失败，请重试')
     console.error('创建订单失败:', err)
     isSubmitting.value = false
   }

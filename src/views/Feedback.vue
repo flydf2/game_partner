@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { warning: showWarning, error: showError } = useModal()
 
 const feedbackForm = ref({
   type: 'suggestion',
@@ -22,7 +24,7 @@ const submitSuccess = ref(false)
 
 const handleSubmit = async () => {
   if (!feedbackForm.value.content.trim()) {
-    alert('请输入反馈内容')
+    showWarning('请输入反馈内容')
     return
   }
 
@@ -38,7 +40,7 @@ const handleSubmit = async () => {
     }, 3000)
   } catch (error) {
     console.error('提交反馈失败:', error)
-    alert('提交失败，请稍后重试')
+    showError('提交失败，请稍后重试')
   } finally {
     isSubmitting.value = false
   }

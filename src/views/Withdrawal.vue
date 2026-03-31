@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import { withdrawalApi, userApi } from '../api'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { success: showSuccess } = useModal()
 
 const balance = ref('0.00')
 const withdrawalAmount = ref('')
@@ -138,7 +140,7 @@ const handleConfirmWithdrawal = async () => {
     const response = await withdrawalApi.submitWithdrawal(withdrawalData)
     
     if (response.success) {
-      alert('提现申请已提交，请等待审核')
+      showSuccess('提现申请已提交，请等待审核')
       router.push('/orders')
     } else {
       errorMessage.value = response.message || '提现申请失败，请重试'

@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { info: showInfo } = useModal()
 
 const securityItems = ref([
   {
@@ -61,11 +63,11 @@ const handleItemClick = (key) => {
       break
     case 'devices':
       console.log('登录设备管理功能开发中')
-      alert('登录设备管理功能开发中')
+      showInfo('登录设备管理功能开发中')
       break
     case 'two-factor':
       console.log('两步验证功能开发中')
-      alert('两步验证功能开发中')
+      showInfo('两步验证功能开发中')
       break
   }
 }

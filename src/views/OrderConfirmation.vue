@@ -1,9 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
 const route = useRoute()
+const { success: showSuccess } = useModal()
 
 const selectedDuration = ref(1)
 const selectedPaymentMethod = ref('wechat')
@@ -63,7 +65,7 @@ const handleCouponSelect = () => {
 
 const handlePayment = () => {
   console.log('立即支付')
-  alert(`支付成功！订单金额：¥${totalPrice.value.toFixed(2)}`)
+  showSuccess(`支付成功！订单金额：¥${totalPrice.value.toFixed(2)}`)
   router.push('/orders')
 }
 </script>

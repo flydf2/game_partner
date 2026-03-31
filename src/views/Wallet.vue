@@ -2,8 +2,10 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { info: showInfo } = useModal()
 
 const walletInfo = ref({
   balance: 0,
@@ -81,7 +83,7 @@ const handleBack = () => {
 }
 
 const handleBill = () => {
-  alert('账单功能开发中')
+  showInfo('账单功能开发中')
 }
 
 const getTransactionIcon = (type) => {

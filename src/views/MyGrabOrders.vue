@@ -4,8 +4,10 @@ import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import { rewardOrderApi } from '../api/index.js'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
+const { error: showError, info: showInfo } = useModal()
 
 const orders = ref([])
 const loading = ref(true)
@@ -67,14 +69,14 @@ const handleWithdraw = async (orderId) => {
       throw new Error(response.message || '撤回申请失败')
     }
   } catch (err) {
-    alert(err.message || '撤回申请失败')
+    showError(err.message || '撤回申请失败')
     console.error('撤回申请失败:', err)
   }
 }
 
 const handleEnterVoiceRoom = (orderId) => {
   // TODO: 实现进入语音房功能
-  alert('进入语音房功能开发中')
+  showInfo('进入语音房功能开发中')
 }
 
 const handleMenu = () => {

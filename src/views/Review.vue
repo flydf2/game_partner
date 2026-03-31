@@ -2,9 +2,11 @@
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { reviewApi } from '../api'
+import { useModal } from '../composables/useModal.js'
 
 const router = useRouter()
 const route = useRoute()
+const { warning: showWarning, success: showSuccess, error: showError } = useModal()
 
 const routeParams = route.params
 const playmateId = ref(routeParams.playmateId ? parseInt(routeParams.playmateId) : 41)
@@ -58,7 +60,7 @@ const handleTagToggle = (tagId) => {
 
 const handleSubmit = async () => {
   if (rating.value === 0) {
-    alert('请选择评分')
+    showWarning('请选择评分')
     return
   }
   
@@ -76,14 +78,14 @@ const handleSubmit = async () => {
     const response = await reviewApi.submitReview(reviewData)
     
     if (response.success) {
-      alert('评价提交成功！')
+      showSuccess('评价提交成功！')
       router.push('/orders')
     } else {
-      alert('评价提交失败，请重试')
+      showError('评价提交失败，请重试')
     }
   } catch (error) {
     console.error('提交评价失败:', error)
-    alert('评价提交失败，请重试')
+    showError('评价提交失败，请重试')
   } finally {
     submitting.value = false
   }

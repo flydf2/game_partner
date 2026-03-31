@@ -2,9 +2,11 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { expertApi, reviewApi } from '../api'
+import { useModal } from '../composables/useModal.js'
 
 const route = useRoute()
 const router = useRouter()
+const { success: showSuccess, error: showError } = useModal()
 
 const expertId = ref(route.query.expertId || '1')
 const orderId = ref(route.query.orderId || '1')
@@ -67,14 +69,14 @@ const handleSubmit = async () => {
     const response = await reviewApi.submitReview(reviewData)
     
     if (response.success) {
-      alert('评价提交成功！')
+      showSuccess('评价提交成功！')
       router.push('/orders')
     } else {
-      alert('评价提交失败，请重试')
+      showError('评价提交失败，请重试')
     }
   } catch (error) {
     console.error('提交评价失败:', error)
-    alert('评价提交失败，请重试')
+    showError('评价提交失败，请重试')
   } finally {
     submitting.value = false
   }
