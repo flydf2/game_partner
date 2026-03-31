@@ -32,6 +32,18 @@ const routes = [
     }
   },
   {
+    path: '/match-history',
+    name: 'MatchHistory',
+    component: () => import('../views/MatchHistory.vue'),
+    meta: {
+      title: '匹配历史',
+      requireAuth: true,
+      keepAlive: true,
+      headerType: 'list'
+    }
+  },
+
+  {
     path: '/leaderboard',
     name: 'Leaderboard',
     component: () => import('../views/Leaderboard.vue'),
@@ -586,6 +598,16 @@ const routes = [
       title: '我的申诉',
       requireAuth: true,
       keepAlive: true,
+      headerType: 'detail'
+    }
+  },
+  {
+    path: '/appeal/:id',
+    name: 'AppealDetail',
+    component: () => import('../views/AppealDetail.vue'),
+    meta: {
+      title: '申诉详情',
+      requireAuth: true,
       headerType: 'detail'
     }
   },

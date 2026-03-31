@@ -133,15 +133,53 @@ const handleLike = async () => {
   }
 }
 
+const generateMockComment = (content) => {
+  const mockUsers = [
+    { name: '游戏王者', avatar: 'https://randomuser.me/api/portraits/men/75.jpg' },
+    { name: '小甜心', avatar: 'https://randomuser.me/api/portraits/women/65.jpg' },
+    { name: '金牌陪玩', avatar: 'https://randomuser.me/api/portraits/men/22.jpg' },
+    { name: '峡谷新秀', avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    { name: '夜之喵', avatar: 'https://randomuser.me/api/portraits/men/88.jpg' }
+  ]
+  const randomUser = mockUsers[Math.floor(Math.random() * mockUsers.length)]
+  return {
+    id: Date.now(),
+    user: randomUser,
+    content: content,
+    time: '刚刚',
+    likes: 0
+  }
+}
+
 const handleComment = async () => {
   if (!newComment.value.trim()) return
-  
+
+  const tempComment = {
+    id: Date.now(),
+    user: {
+      name: '我',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+    },
+    content: newComment.value.trim(),
+    time: '刚刚',
+    likes: 0
+  }
+
+  comments.value.unshift(tempComment)
+  post.value.comments++
+  const submittedContent = newComment.value.trim()
+  newComment.value = ''
+
   try {
-    const response = await communityApi.commentPost(postId.value, newComment.value.trim())
+    const response = await communityApi.commentPost(postId.value, submittedContent)
     if (response.success && response.data) {
-      comments.value.unshift(response.data)
-      post.value.comments++
-      newComment.value = ''
+      const index = comments.value.findIndex(c => c.id === tempComment.id)
+      if (index !== -1) {
+        comments.value[index] = {
+          ...response.data,
+          id: tempComment.id
+        }
+      }
     }
   } catch (error) {
     console.error('评论失败:', error)

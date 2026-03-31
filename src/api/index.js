@@ -2177,7 +2177,7 @@ export const expertVerificationApi = {
         }, 500)
       })
     } else {
-      const response = await post(`/playmate/expert-verification/${applicationId}/cancel`)
+      const response = await post(`/expert-verification/${applicationId}/cancel`)
       if (response.code === 0 || response.success) {
         return {
           success: true,

@@ -167,6 +167,23 @@ const handleDelete = async () => {
   }
 }
 
+const handleCancelOrder = async () => {
+  if (confirm('确定要取消这个悬赏单吗？取消后无法恢复。')) {
+    try {
+      const response = await api.rewardOrder.cancelRewardOrder(orderId.value)
+      if (response.success || response.code === 0) {
+        order.value = { ...order.value, status: 'cancelled' }
+        status.value = 'cancelled'
+        success('订单已取消')
+        loadOrderDetail()
+      }
+    } catch (err) {
+      console.error('取消悬赏失败:', err)
+      error(err.response?.data?.msg || err.message || '取消失败，请稍后重试')
+    }
+  }
+}
+
 const handlePay = () => {
   router.push(`/reward/${orderId.value}/payment`)
 }
@@ -574,29 +591,38 @@ onMounted(() => {
               <span class="material-symbols-outlined font-bold">rocket_launch</span>
             </button>
             <div v-else-if="order.status === 'available'" class="flex gap-4">
-              <button 
-                v-if="isPublisher"
-                class="flex-1 bg-surface-container text-on-surface-variant font-headline font-bold py-4 rounded-full shadow-md active:scale-[0.98] transition-all"
-                disabled
-              >
-                等待抢单
-              </button>
-              <button 
-                v-else-if="currentUserApplication"
-                @click="router.push(`/grab-order/${currentUserGrabOrderId}/detail`)"
-                class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary-container/30"
-              >
-                <span class="material-symbols-outlined">visibility</span>
-                查看我的抢单
-              </button>
-              <button 
-                v-else
-                @click="() => router.push(`/grab-order/${orderId}`)"
-                class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary/30"
-              >
-                <span class="material-symbols-outlined">campaign</span>
-                立即抢单
-              </button>
+              <template v-if="isPublisher">
+                <button
+                  class="flex-1 bg-surface-container text-on-surface-variant font-headline font-bold py-4 rounded-full shadow-md"
+                  disabled
+                >
+                  等待抢单
+                </button>
+                <button
+                  @click="handleCancelOrder"
+                  class="flex-1 bg-error-container text-on-error-container font-headline font-bold py-4 rounded-full shadow-md active:scale-[0.98] transition-all hover:bg-error-container/80"
+                >
+                  取消订单
+                </button>
+              </template>
+              <template v-else-if="currentUserApplication">
+                <button
+                  @click="router.push(`/grab-order/${currentUserGrabOrderId}/detail`)"
+                  class="w-full bg-primary-container text-on-primary-container font-headline font-bold py-4 rounded-full shadow-lg shadow-primary-container/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary-container/30"
+                >
+                  <span class="material-symbols-outlined">visibility</span>
+                  查看我的抢单
+                </button>
+              </template>
+              <template v-else>
+                <button
+                  @click="() => router.push(`/grab-order/${orderId}`)"
+                  class="w-full bg-primary text-on-primary font-headline font-bold py-4 rounded-full shadow-lg shadow-primary/20 flex items-center justify-center gap-2 active:scale-[0.98] transition-all hover:shadow-xl hover:shadow-primary/30"
+                >
+                  <span class="material-symbols-outlined">campaign</span>
+                  立即抢单
+                </button>
+              </template>
             </div>
             <button 
               v-else-if="order.status === 'completed'"
