@@ -264,15 +264,15 @@ const handleSubmit = async () => {
     }
     
     const response = await api.expertVerification.submitApplication(applicationData)
-    if (response.success) {
+    if (response.success || response.code === 0 || response.code === 200) {
       success('申请提交成功！')
       router.push('/expert-verification/list')
     } else {
-      error(response.message || '提交失败，请稍后重试')
+      error(response.msg || response.message || '提交失败，请稍后重试')
     }
   } catch (err) {
     console.error('提交申请失败:', err)
-    error('提交失败，请稍后重试')
+    error(err.response?.data?.msg || err.message || '提交失败，请稍后重试')
   } finally {
     loading.value = false
   }
