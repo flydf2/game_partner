@@ -1,10 +1,49 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { defineAsyncComponent } from 'vue'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import Toast from '../components/common/Toast.vue'
+
+const DateTimePicker = defineAsyncComponent(() => import('../components/DateTimePicker.vue'))
 
 const router = useRouter()
+
+const toastShow = ref(false)
+const toastMessage = ref('')
+const toastType = ref('error')
+
+const showToast = (message, type = 'error') => {
+  toastMessage.value = message
+  toastType.value = type
+  toastShow.value = true
+}
+
+const hideToast = () => {
+  toastShow.value = false
+}
+
+const formatDate = (date) => {
+  const y = date.getFullYear()
+  const m = String(date.getMonth() + 1).padStart(2, '0')
+  const d = String(date.getDate()).padStart(2, '0')
+  const h = String(date.getHours()).padStart(2, '0')
+  const min = String(date.getMinutes()).padStart(2, '0')
+  return `${y}-${m}-${d} ${h}:${min}`
+}
+
+const getDefaultStartTime = () => {
+  const now = new Date()
+  now.setMinutes(now.getMinutes() + 15)
+  return formatDate(now)
+}
+
+const getDefaultEndTime = () => {
+  const now = new Date()
+  now.setDate(now.getDate() + 7)
+  return formatDate(now)
+}
 
 const games = [
   { id: 1, name: '英雄联盟', image: 'https://via.placeholder.com/96x128', active: true },
@@ -31,13 +70,66 @@ const paymentMethod = ref('prepay')
 const selectedTags = ref([])
 const requirements = ref([''])
 const loading = ref(false)
-const showPaymentWarning = ref(false)
 const showPrepayConfirm = ref(false)
-const timeLeft = ref('')
+const showPaymentWarning = ref(false)
+const startTime = ref(getDefaultStartTime())
+const timeLeft = ref(getDefaultEndTime())
 const gameRank = ref('')
-const startTime = ref('')
 const duration = ref('')
 const location = ref('')
+
+const touched = ref({
+  selectedGame: false,
+  content: false,
+  rewardAmount: false,
+  selectedTags: false,
+  requirements: false,
+  timeLeft: false,
+  gameRank: false,
+  startTime: false,
+  duration: false,
+  location: false
+})
+
+const markAllTouched = () => {
+  Object.keys(touched.value).forEach(key => {
+    touched.value[key] = true
+  })
+}
+
+const fieldHasError = (field) => {
+  if (!touched.value[field]) return false
+  switch (field) {
+    case 'selectedGame': return !selectedGame.value
+    case 'content': return !content.value.trim()
+    case 'rewardAmount': return !rewardAmount.value || parseFloat(rewardAmount.value) <= 0
+    case 'selectedTags': return selectedTags.value.length === 0
+    case 'requirements': return !requirements.value.some(r => r.trim())
+    case 'timeLeft': return !timeLeft.value
+    case 'gameRank': return !gameRank.value
+    case 'startTime': return !startTime.value
+    case 'duration': return !duration.value || parseInt(duration.value) <= 0
+    case 'location': return !location.value
+    default: return false
+  }
+}
+
+const getFieldError = (field) => {
+  if (!fieldHasError(field)) return ''
+  switch (field) {
+    case 'selectedGame': return '请选择游戏'
+    case 'content': return '请填写悬赏内容'
+    case 'rewardAmount': return '请输入有效的赏金金额'
+    case 'selectedTags': return '请至少选择一个标签'
+    case 'requirements': return '请至少填写一个要求'
+    case 'timeLeft': return '请选择截止时间'
+    case 'gameRank': return '请选择游戏段位'
+    case 'startTime': return '请选择开始时间'
+    case 'duration': return '请输入有效的时长'
+    case 'location': return '请填写位置信息'
+    default: return ''
+  }
+}
 
 const paymentMethods = [
   { value: 'prepay', label: '预付', description: '先付款后服务' },
@@ -87,51 +179,12 @@ const isValid = computed(() => {
 })
 
 const handlePublish = async () => {
+  markAllTouched()
   if (!isValid.value) {
-    if (!selectedGame.value) {
-      alert('请选择游戏')
-      return
-    }
-    if (!content.value.trim()) {
-      alert('请填写悬赏内容')
-      return
-    }
-    if (!rewardAmount.value || parseFloat(rewardAmount.value) <= 0) {
-      alert('请输入有效的赏金金额')
-      return
-    }
-    if (selectedTags.value.length === 0) {
-      alert('请至少选择一个标签')
-      return
-    }
-    if (!requirements.value.some(r => r.trim())) {
-      alert('请至少填写一个要求')
-      return
-    }
-    if (!timeLeft.value) {
-      alert('请选择截止时间')
-      return
-    }
-    if (!gameRank.value) {
-      alert('请选择游戏段位')
-      return
-    }
-    if (!startTime.value) {
-      alert('请选择开始时间')
-      return
-    }
-    if (!duration.value || parseInt(duration.value) <= 0) {
-      alert('请输入有效的时长')
-      return
-    }
-    if (!location.value) {
-      alert('请填写位置信息')
-      return
-    }
-    showPaymentWarning.value = true
+    showToast('请检查表单中的红色提示项')
     return
   }
-  
+
   showPaymentWarning.value = true
 }
 
@@ -181,7 +234,7 @@ const doPublish = async () => {
     }
   } catch (err) {
     console.error('发布悬赏失败:', err)
-    alert(err.message || '发布失败，请稍后重试')
+    showToast(err.message || '发布失败，请稍后重试')
   } finally {
     loading.value = false
   }
@@ -215,10 +268,10 @@ const doPublish = async () => {
           <div
             v-for="game in games"
             :key="game.id"
-            @click="handleGameSelect(game)"
+            @click="handleGameSelect(game); touched.selectedGame = true"
             :class="[
               'flex-shrink-0 w-24 aspect-[3/4] rounded-xl p-0.5 relative overflow-hidden transition-all',
-              selectedGame && selectedGame.id === game.id ? 'bg-primary-container ring-2 ring-primary' : 'bg-surface-container-highest'
+              selectedGame && selectedGame.id === game.id ? 'bg-primary-container ring-2 ring-primary' : fieldHasError('selectedGame') ? 'ring-2 ring-error' : 'bg-surface-container-highest'
             ]"
           >
             <img :alt="game.name" class="w-full h-full object-cover rounded-[0.6rem]" :src="game.image" />
@@ -230,6 +283,10 @@ const doPublish = async () => {
             </div>
           </div>
         </div>
+        <p v-if="fieldHasError('selectedGame')" class="text-error text-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          {{ getFieldError('selectedGame') }}
+        </p>
       </section>
 
       <!-- Section: Content -->
@@ -237,19 +294,28 @@ const doPublish = async () => {
         <label class="block text-on-surface font-headline font-bold text-lg">悬赏内容</label>
         <textarea
           v-model="content"
-          class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50 resize-none"
+          @blur="touched.content = true"
+          :class="[
+            'w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50 resize-none',
+            fieldHasError('content') ? 'ring-2 ring-error' : ''
+          ]"
           placeholder="描述你的需求，例如：寻找荣耀王者陪玩，教我玩貂蝉..."
           rows="3"
         ></textarea>
+        <p v-if="fieldHasError('content')" class="text-error text-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          {{ getFieldError('content') }}
+        </p>
       </section>
 
       <!-- Section: Reward Amount -->
       <section class="space-y-3">
         <label class="block text-on-surface font-headline font-bold text-lg">赏金金额</label>
-        <div class="bg-surface-container-high rounded-2xl p-4 flex items-center gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300">
+        <div :class="['bg-surface-container-high rounded-2xl p-4 flex items-center gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary/20 transition-all duration-300', fieldHasError('rewardAmount') ? 'ring-2 ring-error' : '']">
           <span class="text-primary font-bold text-2xl">¥</span>
           <input
             v-model="rewardAmount"
+            @blur="touched.rewardAmount = true"
             class="bg-transparent border-none focus:ring-0 text-xl font-bold w-full placeholder:text-outline/50"
             placeholder="0.00"
             type="number"
@@ -257,6 +323,10 @@ const doPublish = async () => {
             min="0"
           />
         </div>
+        <p v-if="fieldHasError('rewardAmount')" class="text-error text-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          {{ getFieldError('rewardAmount') }}
+        </p>
       </section>
 
       <!-- Section: Payment Method -->
@@ -293,17 +363,21 @@ const doPublish = async () => {
           <button
             v-for="tag in predefinedTags"
             :key="tag"
-            @click="handleTagToggle(tag)"
+            @click="handleTagToggle(tag); touched.selectedTags = true"
             :class="[
               'px-4 py-2 rounded-full text-sm font-medium transition-all',
               selectedTags.includes(tag)
                 ? 'bg-primary-container text-on-primary-container ring-1 ring-primary'
-                : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
+                : fieldHasError('selectedTags') ? 'bg-error-container text-error ring-1 ring-error' : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest'
             ]"
           >
             {{ tag }}
           </button>
         </div>
+        <p v-if="fieldHasError('selectedTags')" class="text-error text-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          {{ getFieldError('selectedTags') }}
+        </p>
       </section>
 
       <!-- Section: Requirements -->
@@ -326,8 +400,12 @@ const doPublish = async () => {
           >
             <input
               :value="requirement"
-              @input="updateRequirement(index, $event.target.value)"
-              class="flex-1 bg-surface-container-high rounded-xl border-none px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50"
+              @input="updateRequirement(index, $event.target.value); touched.requirements = true"
+              @blur="touched.requirements = true"
+              :class="[
+                'flex-1 bg-surface-container-high rounded-xl border-none px-4 py-3 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm placeholder:text-outline/50',
+                fieldHasError('requirements') && index === 0 ? 'ring-2 ring-error' : ''
+              ]"
               :placeholder="`要求 ${index + 1}`"
             />
             <button
@@ -339,6 +417,10 @@ const doPublish = async () => {
             </button>
           </div>
         </div>
+        <p v-if="fieldHasError('requirements')" class="text-error text-sm flex items-center gap-1">
+          <span class="material-symbols-outlined text-sm">error</span>
+          {{ getFieldError('requirements') }}
+        </p>
       </section>
 
       <!-- Section: Time and Rank -->
@@ -346,62 +428,85 @@ const doPublish = async () => {
         <div class="flex items-center justify-between">
           <h2 class="text-on-surface font-headline font-bold text-lg">时间与段位</h2>
         </div>
-        
+
         <!-- Start Time -->
         <div class="space-y-2">
           <label class="block text-on-surface font-medium text-sm">开始时间</label>
-          <input
+          <DateTimePicker
             v-model="startTime"
-            type="datetime-local"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            @change="touched.startTime = true"
+            :class="['w-full bg-surface-container-high rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm', fieldHasError('startTime') ? 'ring-2 ring-error' : '']"
           />
+          <p v-if="fieldHasError('startTime')" class="text-error text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">error</span>
+            {{ getFieldError('startTime') }}
+          </p>
         </div>
-        
+
         <!-- End Time -->
         <div class="space-y-2">
           <label class="block text-on-surface font-medium text-sm">截止时间</label>
-          <input
+          <DateTimePicker
             v-model="timeLeft"
-            type="datetime-local"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            @change="touched.timeLeft = true"
+            :class="['w-full bg-surface-container-high rounded-2xl p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm', fieldHasError('timeLeft') ? 'ring-2 ring-error' : '']"
           />
+          <p v-if="fieldHasError('timeLeft')" class="text-error text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">error</span>
+            {{ getFieldError('timeLeft') }}
+          </p>
         </div>
-        
+
         <!-- Duration -->
         <div class="space-y-2">
           <label class="block text-on-surface font-medium text-sm">时长 (小时)</label>
           <input
             v-model="duration"
+            @blur="touched.duration = true"
+            :class="['w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm', fieldHasError('duration') ? 'ring-2 ring-error' : '']"
+            placeholder="输入时长"
             type="number"
             min="1"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
-            placeholder="输入时长"
           />
+          <p v-if="fieldHasError('duration')" class="text-error text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">error</span>
+            {{ getFieldError('duration') }}
+          </p>
         </div>
-        
+
         <!-- Game Rank -->
         <div class="space-y-2">
           <label class="block text-on-surface font-medium text-sm">游戏段位</label>
           <select
             v-model="gameRank"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            @change="touched.gameRank = true"
+            :class="['w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm', fieldHasError('gameRank') ? 'ring-2 ring-error' : '']"
           >
             <option value="">请选择段位</option>
             <option v-for="rank in gameRanks" :key="rank" :value="rank">
               {{ rank }}
             </option>
           </select>
+          <p v-if="fieldHasError('gameRank')" class="text-error text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">error</span>
+            {{ getFieldError('gameRank') }}
+          </p>
         </div>
-        
+
         <!-- Location -->
         <div class="space-y-2">
           <label class="block text-on-surface font-medium text-sm">位置信息</label>
           <input
             v-model="location"
-            type="text"
-            class="w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm"
+            @blur="touched.location = true"
+            :class="['w-full bg-surface-container-high rounded-2xl border-none p-4 focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all duration-300 text-sm', fieldHasError('location') ? 'ring-2 ring-error' : '']"
             placeholder="输入位置信息"
+            type="text"
           />
+          <p v-if="fieldHasError('location')" class="text-error text-sm flex items-center gap-1">
+            <span class="material-symbols-outlined text-sm">error</span>
+            {{ getFieldError('location') }}
+          </p>
         </div>
       </section>
 
@@ -415,6 +520,14 @@ const doPublish = async () => {
     </main>
 
     <BottomNavBar />
+
+    <!-- Toast -->
+    <Toast
+      :show="toastShow"
+      :message="toastMessage"
+      :type="toastType"
+      @close="hideToast"
+    />
 
     <!-- Bottom Action Area -->
     <div class="fixed bottom-0 left-0 right-0 bg-surface/80 backdrop-blur-xl p-6 shadow-[0_-8px_30px_rgba(0,0,0,0.04)] z-50">

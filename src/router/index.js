@@ -288,6 +288,15 @@ const routes = [
     }
   },
   {
+    path: '/tournament/:id',
+    name: 'Tournament',
+    component: () => import('../views/Tournament.vue'),
+    meta: {
+      title: '赛事详情',
+      headerType: 'detail'
+    }
+  },
+  {
     path: '/confirm-order',
     name: 'ConfirmOrder',
     component: () => import('../views/ConfirmOrder.vue'),
@@ -328,41 +337,21 @@ const routes = [
     }
   },
   {
-    path: '/expert-certification',
-    name: 'ExpertCertification',
-    component: () => import('../views/ExpertCertification.vue'),
-    meta: {
-      title: '大神认证',
-      requireAuth: true,
-      headerType: 'detail'
-    }
-  },
-  {
-    path: '/expert-certification/upload',
-    name: 'ExpertCertificationUpload',
-    component: () => import('../views/ExpertCertificationUpload.vue'),
-    meta: {
-      title: '上传截图',
-      requireAuth: true,
-      headerType: 'detail'
-    }
-  },
-  {
-    path: '/expert-certification/voice',
-    name: 'ExpertCertificationVoice',
-    component: () => import('../views/ExpertCertificationVoice.vue'),
-    meta: {
-      title: '录制语音',
-      requireAuth: true,
-      headerType: 'detail'
-    }
-  },
-  {
     path: '/expert-verification',
     name: 'ExpertVerification',
     component: () => import('../views/ExpertVerification.vue'),
     meta: {
       title: '大神认证',
+      requireAuth: true,
+      headerType: 'detail'
+    }
+  },
+  {
+    path: '/expert-verification/list',
+    name: 'ExpertVerificationList',
+    component: () => import('../views/ExpertVerificationList.vue'),
+    meta: {
+      title: '我的专家认证申请',
       requireAuth: true,
       headerType: 'detail'
     }

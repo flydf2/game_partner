@@ -57,7 +57,8 @@ addResponseInterceptor(async ({ response, data }) => {
     // 错误响应 - 显示 Toast 消息提示
     const errorCode = data.code
     const errorMessage = ErrorCodeMap[errorCode] || data.msg || data.message || `请求失败 (错误码: ${errorCode})`
-    
+    console.info('response', response)
+    console.info('data', data)
     // 检查是否是登录过期或无效的错误
     if (response.status === 401) {
       // 执行重新登录流程

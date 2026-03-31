@@ -385,13 +385,13 @@ const menuItems = ref([
     iconColor: 'text-indigo-600',
     badge: null 
   },
-  { 
-    key: 'expert-certification', 
-    label: '大神认证', 
-    icon: 'verified_user', 
-    iconBg: 'bg-teal-50', 
+  {
+    key: 'expert-verification',
+    label: '大神认证',
+    icon: 'verified_user',
+    iconBg: 'bg-teal-50',
     iconColor: 'text-teal-600',
-    badge: null 
+    badge: null
   },
   { 
     key: 'withdrawal', 
@@ -587,8 +587,8 @@ const handleMenuClick = (key) => {
     case 'privacy':
       router.push('/profile/privacy')
       break
-    case 'expert-certification':
-      router.push('/expert-certification')
+    case 'expert-verification':
+      router.push('/expert-verification/list')
       break
     case 'withdrawal':
       router.push('/withdrawal')

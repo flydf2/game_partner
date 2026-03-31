@@ -271,7 +271,20 @@ export function mockGetSearchSuggestions(keyword) {
 export function mockGetLeaderboard(params = {}) {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const sortedPlaymates = [...mockPlaymates].sort((a, b) => b.rating - a.rating)
+      let filteredPlaymates = [...mockPlaymates]
+
+      if (params.game && params.game !== 'all') {
+        filteredPlaymates = filteredPlaymates.filter(p => p.game === params.game)
+      }
+
+      const periodMultiplier = params.period === 'monthly' ? 4 : 1
+      const sortedPlaymates = filteredPlaymates
+        .map(p => ({
+          ...p,
+          score: Math.floor((p.rating || 4.5) * 100 * periodMultiplier + Math.random() * 50 * periodMultiplier)
+        }))
+        .sort((a, b) => b.score - a.score)
+
       const page = params.page || 1
       const pageSize = params.pageSize || 20
       const startIndex = (page - 1) * pageSize
@@ -283,8 +296,8 @@ export function mockGetLeaderboard(params = {}) {
         data: paginatedData,
         pagination: {
           currentPage: page,
-          totalPages: Math.ceil(mockPlaymates.length / pageSize),
-          totalCount: mockPlaymates.length
+          totalPages: Math.ceil(sortedPlaymates.length / pageSize) || 1,
+          totalCount: sortedPlaymates.length
         }
       })
     }, 300)

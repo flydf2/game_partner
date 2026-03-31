@@ -3,6 +3,7 @@ import { useApiStore, withLoading } from '../stores/api.js'
 import { cache } from '../utils/cache.js'
 import { API_BASE_URL } from './config.js'
 import { get, post, put, del, addRequestInterceptor, addResponseInterceptor } from './request.js'
+import { tournamentApi } from './tournament.js'
 import { 
   mockGetPlaymates, 
   mockGetSearchSuggestions,
@@ -1351,7 +1352,17 @@ export const communityApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => get(`/community/topics/${topicId}`))
+      const response = await get(`/community/topics/${topicId}`)
+      if (response.code === 0 && response.data?.topic) {
+        return {
+          success: true,
+          data: {
+            topic: response.data.topic
+          },
+          msg: response.msg
+        }
+      }
+      return response
     }
   },
   
@@ -1422,7 +1433,14 @@ export const communityApi = {
         }, 300)
       })
     } else {
-      return await withRetry(() => get(`/community/topics/${topicId}/posts`, { params }))
+      const response = await get(`/community/topics/${topicId}/posts`, { params })
+      if (response.code === 0) {
+        return {
+          success: true,
+          data: response.data?.data || response.data || []
+        }
+      }
+      return response
     }
   },
   
@@ -1894,7 +1912,6 @@ export const skillApi = {
 export const grabOrderApi = {
   async getGrabOrderDetail(orderId) {
     if (USE_MOCK) {
-      // 模拟抢单详情数据
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve({
@@ -1933,6 +1950,241 @@ export const grabOrderApi = {
       })
     } else {
       return await withRetry(() => get(`/grab-orders/${orderId}`))
+    }
+  }
+}
+
+// 大神认证相关API
+export const expertVerificationApi = {
+  async getGames() {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              { id: 1, name: '英雄联盟 (LOL)', icon: 'https://via.placeholder.com/96x96/6c5a00/ffffff?text=LOL' },
+              { id: 2, name: '王者荣耀', icon: 'https://via.placeholder.com/96x96/8c4a00/ffffff?text=王者' },
+              { id: 3, name: '和平精英', icon: 'https://via.placeholder.com/96x96/4a6c00/ffffff?text=和平' },
+              { id: 4, name: 'Dota 2', icon: 'https://via.placeholder.com/96x96/6c5a00/ffffff?text=Dota2' },
+              { id: 5, name: '原神', icon: 'https://via.placeholder.com/96x96/805100/ffffff?text=原神' },
+              { id: 6, name: '永劫无间', icon: 'https://via.placeholder.com/96x96/704700/ffffff?text=永劫' },
+              { id: 7, name: '无畏契约', icon: 'https://via.placeholder.com/96x96/5a6c00/ffffff?text=无畏' },
+              { id: 8, name: '反恐精英2', icon: 'https://via.placeholder.com/96x96/6c4a00/ffffff?text=CS2' },
+              { id: 9, name: '英雄联盟手游', icon: 'https://via.placeholder.com/96x96/6c5a00/ffffff?text=LOLM' }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      const response = await withRetry(() => get('/games'))
+      // 处理真实API返回格式: {code: 0, data: {data: [...], pagination: {...}}, msg: '...'}
+      if (response.code === 0 || response.success && response.data?.data) {
+        const games = response.data.data.map(game => ({
+          id: game.id,
+          name: game.name,
+          icon: game.icon,
+          category: game.category,
+          image: game.image
+        }))
+        return {
+          success: true,
+          data: games,
+          pagination: response.data.pagination
+        }
+      }
+      return {
+        success: false,
+        data: [],
+        message: response.msg || '获取游戏列表失败'
+      }
+    }
+  },
+
+  async uploadScreenshot(file) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              url: `https://via.placeholder.com/400x300/6c5a00/ffffff?text=Screenshot+${Date.now()}`,
+              filename: file.name,
+              type: file.type,
+              size: file.size
+            }
+          })
+        }, 1500)
+      })
+    } else {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('type', 'image')
+      const response = await post('/upload', formData)
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          data: {
+            url: response.data?.url || response.url,
+            filename: file.name,
+            type: file.type,
+            size: file.size
+          }
+        }
+      }
+      return { success: false, message: response.msg || '上传失败' }
+    }
+  },
+
+  async uploadVoice(audioBlob) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              url: `https://example.com/voice/${Date.now()}.mp3`,
+              duration: 30,
+              type: 'audio/mp3',
+              size: audioBlob.size
+            }
+          })
+        }, 2000)
+      })
+    } else {
+      const formData = new FormData()
+      formData.append('file', audioBlob, 'voice.mp3')
+      formData.append('type', 'voice')
+      const response = await post('/upload', formData)
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          data: {
+            url: response.data?.url || response.url,
+            duration: 30,
+            type: 'audio/mp3',
+            size: audioBlob.size
+          }
+        }
+      }
+      return { success: false, message: response.msg || '上传失败' }
+    }
+  },
+
+  async submitApplication(applicationData) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '申请提交成功',
+            data: {
+              applicationId: Date.now()
+            }
+          })
+        }, 500)
+      })
+    } else {
+      const response = await post('/expert-verification/apply', applicationData)
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          message: response.msg || '申请提交成功',
+          data: response.data
+        }
+      }
+      return { success: false, message: response.msg || '提交失败' }
+    }
+  },
+
+  async getMyApplications() {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: [
+              {
+                id: 1,
+                game: { id: 1, name: '王者荣耀', icon: 'https://via.placeholder.com/96x96/8c4a00/ffffff?text=王者' },
+                rank: '最强王者',
+                status: 'pending',
+                statusText: '审核中',
+                appliedAt: '2026-03-25T10:30:00+08:00',
+                reviewedAt: null
+              },
+              {
+                id: 2,
+                game: { id: 2, name: '英雄联盟', icon: 'https://via.placeholder.com/96x96/6c5a00/ffffff?text=LOL' },
+                rank: '超凡大师',
+                status: 'approved',
+                statusText: '已认证',
+                appliedAt: '2026-03-20T14:20:00+08:00',
+                reviewedAt: '2026-03-21T09:15:00+08:00'
+              }
+            ]
+          })
+        }, 300)
+      })
+    } else {
+      const response = await get('/expert-verification/my')
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          data: response.data?.data || response.data || []
+        }
+      }
+      return { success: false, data: [], message: response.msg || '获取失败' }
+    }
+  },
+
+  async getVerificationStatus() {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            data: {
+              isVerified: false,
+              verificationLevel: null,
+              totalApplications: 2,
+              approvedApplications: 1,
+              pendingApplications: 1
+            }
+          })
+        }, 300)
+      })
+    } else {
+      const response = await get('/expert-verification/status')
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          data: response.data
+        }
+      }
+      return { success: false, message: response.msg || '获取失败' }
+    }
+  },
+
+  async cancelApplication(applicationId) {
+    if (USE_MOCK) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            success: true,
+            message: '撤销成功'
+          })
+        }, 500)
+      })
+    } else {
+      const response = await post(`/playmate/expert-verification/${applicationId}/cancel`)
+      if (response.code === 0 || response.success) {
+        return {
+          success: true,
+          message: response.msg || '撤销成功'
+        }
+      }
+      return { success: false, message: response.msg || '撤销失败' }
     }
   }
 }
@@ -2335,6 +2587,8 @@ export default {
   skill: skillApi,
   upload: uploadApi,
   security: securityApi,
+  expertVerification: expertVerificationApi,
+  tournament: tournamentApi,
   fetchPlaymates,
   fetchLeaderboard,
   searchPlaymates,
@@ -2343,3 +2597,6 @@ export default {
   addRequestInterceptor,
   addResponseInterceptor
 }
+
+// 导出赛事 API
+export { tournamentApi }
