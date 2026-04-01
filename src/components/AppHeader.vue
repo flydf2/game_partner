@@ -1,10 +1,10 @@
 <template>
   <div>
     <header
-      class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-6 py-4 transition-all duration-300 h-24 bg-white dark:bg-zinc-900 shadow-sm"
+      class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 transition-all duration-300 h-16 sm:h-24 bg-white dark:bg-zinc-900 shadow-sm"
       :class="headerClass"
     >
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-2 sm:gap-4">
         <span
           v-if="showMenu"
           class="material-symbols-outlined active:scale-95 duration-200 ease-out cursor-pointer transition-transform"
@@ -22,13 +22,13 @@
           arrow_back_ios
         </span>
         <h1
-          class="font-bold text-lg tracking-tight transition-colors duration-300"
+          class="font-bold text-base sm:text-lg tracking-tight transition-colors duration-300"
           :class="titleClass"
         >
           {{ title }}
         </h1>
       </div>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 sm:gap-3">
         <slot name="left-actions" />
         <button
           v-if="showNotifications"
@@ -38,7 +38,7 @@
           <span class="material-symbols-outlined">notifications</span>
           <span
             v-if="unreadCount > 0"
-            class="absolute -top-1 -right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] font-bold"
+            class="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[7px] sm:text-[8px] font-bold"
           >
             {{ unreadCount }}
           </span>
@@ -53,7 +53,7 @@
         </span>
         <div
           v-if="showAvatar"
-          class="w-9 h-9 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform"
+          class="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-surface-container-high overflow-hidden cursor-pointer active:scale-95 transition-transform"
           @click="handleProfileClick"
         >
           <img alt="User Avatar" class="w-full h-full object-cover" :src="avatarUrl" />

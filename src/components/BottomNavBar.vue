@@ -3,29 +3,29 @@
     <!-- 收缩状态 - 左下角浮动按钮 -->
     <div
       v-if="!isPrimaryPage && !isExpanded"
-      class="fixed bottom-6 left-6"
+      class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6"
     >
       <button
         @click="toggleExpand"
-        class="w-14 h-14 bg-yellow-400 rounded-2xl shadow-2xl flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
+        class="w-12 h-12 sm:w-14 sm:h-14 bg-yellow-400 rounded-xl sm:rounded-2xl shadow-2xl flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
-        <span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">menu</span>
+        <span class="material-symbols-outlined text-xl sm:text-2xl" style="font-variation-settings: 'FILL' 1;">menu</span>
       </button>
     </div>
 
     <!-- 展开状态 - 完整导航栏 -->
     <nav
       v-if="isPrimaryPage || isExpanded"
-      class="w-full flex justify-around items-center px-4 pb-6 pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[24px] transition-all duration-300"
+      class="w-full flex justify-around items-center px-2 sm:px-4 pb-4 sm:pb-6 pt-2 sm:pt-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl shadow-[0_-4px_20px_rgba(255,215,0,0.08)] rounded-t-[18px] sm:rounded-t-[24px] transition-all duration-300"
       :class="{ 'fixed bottom-0 left-0': isPrimaryPage || isExpanded }"
     >
       <!-- 收起按钮 - 在一级页面和非一级页面展开时都显示 -->
       <button
         @click="toggleExpand"
-        class="absolute -top-3 left-4 w-10 h-10 bg-yellow-400 rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
+        class="absolute -top-2.5 sm:-top-3 left-3 sm:left-4 w-8 h-8 sm:w-10 sm:h-10 bg-yellow-400 rounded-xl sm:rounded-2xl shadow-lg flex items-center justify-center text-zinc-900 active:scale-90 transition-transform hover:scale-105"
       >
         <span
-          class="material-symbols-outlined text-lg transition-transform duration-300"
+          class="material-symbols-outlined text-base sm:text-lg transition-transform duration-300"
           :class="{ 'rotate-180': !isExpanded }"
         >
           expand_more
@@ -33,126 +33,126 @@
       </button>
 
       <!-- 导航项容器 -->
-      <div class="flex justify-around items-center w-full" :class="{ 'pt-2': isPrimaryPage }">
+      <div class="flex justify-around items-center w-full" :class="{ 'pt-1.5 sm:pt-2': isPrimaryPage }">
         <!-- 首页 -->
         <router-link
           to="/"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
           :class="getNavItemClass('/')"
           @click="handleNavClick"
         >
           <span
-            class="material-symbols-outlined"
+            class="material-symbols-outlined text-lg sm:text-xl"
             :style="currentRoute === '/' ? { fontVariationSettings: 'FILL 1' } : {}"
           >
             home_filled
           </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">首页</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">首页</span>
         </router-link>
 
         <!-- 发现 -->
         <router-link
           to="/discover"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
           :class="getNavItemClass('/discover')"
           @click="handleNavClick"
         >
           <span
-            class="material-symbols-outlined"
+            class="material-symbols-outlined text-lg sm:text-xl"
             :style="currentRoute === '/discover' ? { fontVariationSettings: 'FILL 1' } : {}"
           >
             explore
           </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">发现</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">发现</span>
         </router-link>
 
         <!-- 聊天 -->
         <router-link
           to="/messages"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
           :class="getNavItemClass('/messages')"
           @click="handleNavClick"
         >
           <span
-            class="material-symbols-outlined"
+            class="material-symbols-outlined text-lg sm:text-xl"
             :style="currentRoute === '/messages' ? { fontVariationSettings: 'FILL 1' } : {}"
           >
             chat_bubble
           </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">聊天</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">聊天</span>
         </router-link>
 
         <!-- 社区 -->
         <router-link
           to="/community"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
           :class="getNavItemClass('/community')"
         >
           <span
-            class="material-symbols-outlined"
+            class="material-symbols-outlined text-lg sm:text-xl"
             :style="currentRoute === '/community' ? { fontVariationSettings: 'FILL 1' } : {}"
           >
             forum
           </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">社区</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">社区</span>
         </router-link>
 
         <!-- 订单 -->
         <div class="relative" @click.stop>
           <router-link
             to="/orders"
-            class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+            class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
             :class="getNavItemClass('/orders')"
             @click="handleOrderClick"
           >
             <span
-              class="material-symbols-outlined"
+              class="material-symbols-outlined text-lg sm:text-xl"
               :style="currentRoute === '/orders' ? { fontVariationSettings: 'FILL 1' } : {}"
             >
               receipt_long
             </span>
-            <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">订单</span>
+            <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">订单</span>
           </router-link>
           
           <!-- 订单子菜单 -->
           <div 
             v-if="isOrderMenuOpen"
-            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 flex flex-col gap-2 bg-white dark:bg-zinc-800 rounded-2xl shadow-xl p-2 min-w-[160px] animate-in fade-in slide-in-from-bottom-4 duration-200"
+            class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 sm:mb-2 flex flex-col gap-1.5 sm:gap-2 bg-white dark:bg-zinc-800 rounded-xl sm:rounded-2xl shadow-xl p-1.5 sm:p-2 min-w-[140px] sm:min-w-[160px] animate-in fade-in slide-in-from-bottom-4 duration-200"
           >
             <button
               @click="handleOrderClick('all')"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+              class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
             >
-              <span class="material-symbols-outlined text-primary text-lg">receipt_long</span>
-              <span class="font-medium text-on-surface">全部订单</span>
+              <span class="material-symbols-outlined text-primary text-base sm:text-lg">receipt_long</span>
+              <span class="font-medium text-on-surface text-xs sm:text-sm">全部订单</span>
             </button>
             <button
               @click="handleOrderClick('pending')"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+              class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
             >
-              <span class="material-symbols-outlined text-amber-500 text-lg">schedule</span>
-              <span class="font-medium text-on-surface">待确认</span>
+              <span class="material-symbols-outlined text-amber-500 text-base sm:text-lg">schedule</span>
+              <span class="font-medium text-on-surface text-xs sm:text-sm">待确认</span>
             </button>
             <button
               @click="handleOrderClick('ongoing')"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+              class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
             >
-              <span class="material-symbols-outlined text-primary text-lg">play_circle</span>
-              <span class="font-medium text-on-surface">进行中</span>
+              <span class="material-symbols-outlined text-primary text-base sm:text-lg">play_circle</span>
+              <span class="font-medium text-on-surface text-xs sm:text-sm">进行中</span>
             </button>
             <button
               @click="handleOrderClick('completed')"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+              class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
             >
-              <span class="material-symbols-outlined text-success text-lg">check_circle</span>
-              <span class="font-medium text-on-surface">已完成</span>
+              <span class="material-symbols-outlined text-success text-base sm:text-lg">check_circle</span>
+              <span class="font-medium text-on-surface text-xs sm:text-sm">已完成</span>
             </button>
             <button
               @click="handleOrderClick('cancelled')"
-              class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
+              class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-3 rounded-lg sm:rounded-xl hover:bg-surface-container-low active:scale-95 transition-all text-left"
             >
-              <span class="material-symbols-outlined text-error text-lg">cancel</span>
-              <span class="font-medium text-on-surface">已取消</span>
+              <span class="material-symbols-outlined text-error text-base sm:text-lg">cancel</span>
+              <span class="font-medium text-on-surface text-xs sm:text-sm">已取消</span>
             </button>
           </div>
         </div>
@@ -160,17 +160,17 @@
         <!-- 我的 -->
         <router-link
           to="/profile"
-          class="flex flex-col items-center justify-center px-4 py-2 transition-all active:scale-90 duration-300"
+          class="flex flex-col items-center justify-center px-2 sm:px-4 py-1.5 sm:py-2 transition-all active:scale-90 duration-300"
           :class="getNavItemClass('/profile')"
           @click="handleNavClick"
         >
           <span
-            class="material-symbols-outlined"
+            class="material-symbols-outlined text-lg sm:text-xl"
             :style="currentRoute === '/profile' ? { fontVariationSettings: 'FILL 1' } : {}"
           >
             person
           </span>
-          <span class="font-['Plus_Jakarta_Sans'] text-[10px] font-semibold tracking-wide mt-0.5">我的</span>
+          <span class="font-['Plus_Jakarta_Sans'] text-[9px] sm:text-[10px] font-semibold tracking-wide mt-0.5">我的</span>
         </router-link>
       </div>
     </nav>

@@ -228,14 +228,39 @@
     </section>
     
     <!-- Reward Orders -->
-    <section 
-      ref="rewardOrdersRef" 
+    <section
+      ref="rewardOrdersRef"
       class="space-y-4 transition-all duration-1000 transform"
       :class="{ 'opacity-100 translate-y-0': rewardOrdersVisible, 'opacity-0 translate-y-10': !rewardOrdersVisible }"
     >
-      <div class="flex justify-between items-end cursor-pointer" @click="goToRewardOrders">
+      <div class="sticky top-[88px] z-10 flex justify-between items-end cursor-pointer bg-surface py-2" @click="goToRewardOrders">
         <h3 class="text-xl font-headline font-bold text-on-surface tracking-tight">悬赏订单</h3>
-        <span class="text-xs font-semibold text-primary underline decoration-2 underline-offset-4">查看全部</span>
+        <div class="flex items-center gap-2">
+          <div class="flex bg-gray-100 rounded-full p-1">
+            <button
+              @click.stop="rewardOrdersLayout = '1'"
+              class="px-2 py-1 rounded-full text-[10px] font-bold transition-colors"
+              :class="rewardOrdersLayout === '1' ? 'bg-primary text-white' : 'text-gray-500'"
+            >1列</button>
+            <button
+              @click.stop="rewardOrdersLayout = '2'"
+              class="px-2 py-1 rounded-full text-[10px] font-bold transition-colors"
+              :class="rewardOrdersLayout === '2' ? 'bg-primary text-white' : 'text-gray-500'"
+            >2列</button>
+          </div>
+          <div class="flex bg-gray-100 rounded-full p-1">
+            <button
+              @click.stop="rewardOrdersDisplayMode = 'avatar'"
+              class="px-2 py-1 rounded-full text-[10px] font-bold transition-colors"
+              :class="rewardOrdersDisplayMode === 'avatar' ? 'bg-primary text-white' : 'text-gray-500'"
+            >头像</button>
+            <button
+              @click.stop="rewardOrdersDisplayMode = 'gameName'"
+              class="px-2 py-1 rounded-full text-[10px] font-bold transition-colors"
+              :class="rewardOrdersDisplayMode === 'gameName' ? 'bg-primary text-white' : 'text-gray-500'"
+            >游戏</button>
+          </div>
+        </div>
       </div>
       <div v-if="loading.rewardOrders" class="flex justify-center py-8">
         <div class="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -244,32 +269,42 @@
         {{ error.rewardOrders }}
         <button @click="loadRewardOrders" class="mt-2 text-primary underline hover:text-primary/80 transition-colors">重试</button>
       </div>
-      <div v-else class="space-y-4">
-        <div 
-          v-for="order in rewardOrders" 
+      <div v-else :class="rewardOrdersLayout === '2' ? 'grid grid-cols-2 gap-3' : 'space-y-4'">
+        <div
+          v-for="order in rewardOrders"
           :key="order.id"
-          class="bg-surface-container-lowest rounded-[2rem] p-5 shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
+          class="bg-surface-container-lowest rounded-[2rem] p-4 shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
           @click="goToOrderDetail(order.id)"
         >
           <div class="flex items-center gap-3 mb-3">
-            <img 
-              :src="order.userAvatar" 
-              :alt="order.userName" 
-              class="w-10 h-10 rounded-full object-cover"
-            />
-            <div class="flex-grow">
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-sm">{{ order.userName }}</span>
-                <span class="text-[10px] text-zinc-500">{{ order.game }}</span>
+            <template v-if="rewardOrdersDisplayMode === 'avatar'">
+              <img
+                :src="order.userAvatar"
+                :alt="order.userName"
+                class="w-10 h-10 rounded-full object-cover"
+              />
+              <div class="flex-grow">
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-sm">{{ order.userName }}</span>
+                  <span class="text-[10px] text-zinc-500">{{ order.game }}</span>
+                </div>
+                <span class="text-[10px] text-zinc-400">{{ order.createdAt }}</span>
               </div>
-              <span class="text-[10px] text-zinc-400">{{ order.createdAt }}</span>
-            </div>
-            <span class="bg-primary text-white px-3 py-1 rounded-full text-[10px] font-bold">¥{{ order.reward }}</span>
+            </template>
+            <template v-else>
+              <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <span class="text-primary font-bold text-xs">{{ order.game?.charAt(0) || '游' }}</span>
+              </div>
+              <div class="flex-grow">
+                <span class="font-bold text-sm">{{ order.game }}</span>
+              </div>
+            </template>
+            <span class="bg-primary text-white px-2 py-1 rounded-full text-[10px] font-bold">¥{{ order.reward }}</span>
           </div>
           <p class="text-sm mb-3 line-clamp-2">{{ order.content }}</p>
           <div v-if="order.tags && order.tags.length > 0" class="flex flex-wrap gap-2 mb-3">
-            <span 
-              v-for="(tag, index) in order.tags" 
+            <span
+              v-for="(tag, index) in order.tags"
               :key="index"
               class="px-2 py-0.5 bg-gray-100 text-gray-700 text-[9px] font-bold rounded-lg"
             >
@@ -377,6 +412,8 @@ const communityPosts = ref([])
 const rewardOrders = ref([])
 const loading = ref({ games: false, playmates: false, community: false, rewardOrders: false })
 const error = ref({ games: '', playmates: '', community: '', rewardOrders: '' })
+const rewardOrdersLayout = ref('1') // '1' = 1列, '2' = 2列
+const rewardOrdersDisplayMode = ref('avatar') // 'avatar' = 显示头像, 'gameName' = 显示游戏名称
 
 // 滚动动画
 const gamesRef = ref(null)
@@ -478,19 +515,67 @@ const loadCommunityPosts = async () => {
   loading.value.community = false
 }
 
+// 解析 tags 字段（支持 JSON 字符串数组或逗号分隔字符串）
+const parseTags = (tags) => {
+  if (!tags) return []
+  if (Array.isArray(tags)) return tags
+  if (typeof tags === 'string') {
+    // 尝试解析 JSON 数组字符串
+    try {
+      const parsed = JSON.parse(tags)
+      if (Array.isArray(parsed)) return parsed
+    } catch (e) {
+      // 不是 JSON，按逗号分隔处理
+    }
+    // 按逗号分隔
+    return tags.split(',').map(tag => tag.trim()).filter(Boolean)
+  }
+  return []
+}
+
+// 清理 avatar URL（去除多余空格和反引号）
+const cleanAvatarUrl = (avatar) => {
+  if (!avatar) return ''
+  return avatar.replace(/[`\s]/g, '').trim()
+}
+
 // 加载悬赏订单
 const loadRewardOrders = async () => {
   loading.value.rewardOrders = true
   error.value.rewardOrders = ''
-  
+
   const rewardOrdersResponse = await api.getRewardOrders()
-  
+
   if (rewardOrdersResponse.success) {
-    rewardOrders.value = rewardOrdersResponse.data
+    // 正确处理嵌套的 data 结构
+    const rawData = rewardOrdersResponse.data?.data || rewardOrdersResponse.data || []
+    rewardOrders.value = rawData.map(order => {
+      // 处理 user 对象字段映射
+      const user = order.user || {}
+      const userAvatar = cleanAvatarUrl(user.avatar) || '/public/avatar/default.png'
+      const userName = user.nickname || user.name || `用户${user.id || order.userId || '未知'}`
+
+      return {
+        id: order.id,
+        userId: order.userId || user.id,
+        userAvatar: userAvatar,
+        userName: userName,
+        userLevel: user.level || 0,
+        game: order.game || '未知游戏',
+        content: order.content || '',
+        reward: order.reward || 0,
+        paymentMethod: order.paymentMethod || 'prepay',
+        status: order.status || 'available',
+        timeLeft: order.timeLeft || '',
+        tags: parseTags(order.tags),
+        requirements: parseTags(order.requirements),
+        createdAt: formatTime(order.createdAt)
+      }
+    })
   } else {
     error.value.rewardOrders = rewardOrdersResponse.error || '加载悬赏订单失败'
   }
-  
+
   loading.value.rewardOrders = false
 }
 
