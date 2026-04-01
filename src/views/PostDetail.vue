@@ -14,6 +14,38 @@ const comments = ref([])
 const newComment = ref('')
 const loading = ref(true)
 const error = ref(null)
+const replyingTo = ref(null)
+const replyInputRef = ref(null)
+
+const imagePreview = ref({
+  show: false,
+  images: [],
+  currentIndex: 0
+})
+
+const openImagePreview = (images, index) => {
+  imagePreview.value = {
+    show: true,
+    images,
+    currentIndex: index
+  }
+}
+
+const closeImagePreview = () => {
+  imagePreview.value.show = false
+}
+
+const nextImage = () => {
+  if (imagePreview.value.currentIndex < imagePreview.value.images.length - 1) {
+    imagePreview.value.currentIndex++
+  }
+}
+
+const prevImage = () => {
+  if (imagePreview.value.currentIndex > 0) {
+    imagePreview.value.currentIndex--
+  }
+}
 
 const loadPostDetail = async () => {
   try {
@@ -95,7 +127,15 @@ const loadComments = async () => {
           name: comment.user?.name || `用户${comment.userId || comment.user_id || '1'}`,
           avatar: comment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.userId || comment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.userId || comment.user_id || 1) % 70 + 1}.jpg`
         },
-        time: comment.time || formatTime(comment.createdAt)
+        time: comment.time || formatTime(comment.createdAt),
+        parentComment: comment.parentComment ? {
+          ...comment.parentComment,
+          user: comment.parentComment.user || {
+            id: comment.parentComment.userId || comment.parentComment.user_id || '1',
+            name: comment.parentComment.user?.name || `用户${comment.parentComment.userId || comment.parentComment.user_id || '1'}`,
+            avatar: comment.parentComment.user?.avatar || `https://randomuser.me/api/portraits/${(comment.parentComment.userId || comment.parentComment.user_id || 1) % 2 === 0 ? 'women' : 'men'}/${(comment.parentComment.userId || comment.parentComment.user_id || 1) % 70 + 1}.jpg`
+          }
+        } : null
       }))
     }
   } catch (err) {
@@ -162,16 +202,24 @@ const handleComment = async () => {
     },
     content: newComment.value.trim(),
     time: '刚刚',
-    likes: 0
+    likes: 0,
+    parentId: replyingTo.value?.id || null,
+    parentComment: replyingTo.value ? {
+      id: replyingTo.value.id,
+      user: replyingTo.value.user,
+      content: replyingTo.value.content
+    } : null
   }
 
   comments.value.unshift(tempComment)
   post.value.comments++
   const submittedContent = newComment.value.trim()
   newComment.value = ''
+  const parentId = replyingTo.value?.id
+  replyingTo.value = null
 
   try {
-    const response = await communityApi.commentPost(postId.value, submittedContent)
+    const response = await communityApi.commentPost(postId.value, submittedContent, parentId)
     if (response.success && response.data) {
       const index = comments.value.findIndex(c => c.id === tempComment.id)
       if (index !== -1) {
@@ -184,6 +232,17 @@ const handleComment = async () => {
   } catch (error) {
     console.error('评论失败:', error)
   }
+}
+
+const startReply = (comment) => {
+  replyingTo.value = comment
+  if (replyInputRef.value) {
+    replyInputRef.value.focus()
+  }
+}
+
+const cancelReply = () => {
+  replyingTo.value = null
 }
 
 const handleShare = () => {
@@ -397,9 +456,10 @@ onMounted(() => {
           <div
             v-for="(image, index) in post.images"
             :key="index"
-            class="aspect-video bg-surface-container overflow-hidden relative"
+            class="aspect-video bg-surface-container overflow-hidden relative cursor-pointer"
+            @click="openImagePreview(post.images, index)"
           >
-            <img :alt="`Post image ${index + 1}`" class="w-full h-full object-cover" :src="image" />
+            <img :alt="`Post image ${index + 1}`" class="w-full h-full object-cover" :src="image" loading="lazy" />
           </div>
         </div>
 
@@ -554,13 +614,39 @@ onMounted(() => {
             <div class="flex-1">
               <div class="flex items-center justify-between mb-1">
                 <h4 class="font-bold text-sm">{{ comment.user.name }}</h4>
-                <span class="text-xs text-on-surface-variant">{{ comment.time }}</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs text-on-surface-variant">{{ comment.time }}</span>
+                  <button
+                    @click="startReply(comment)"
+                    class="text-xs text-primary hover:opacity-80 transition-opacity"
+                  >
+                    回复
+                  </button>
+                </div>
+              </div>
+              <div v-if="comment.parentComment" class="mb-2 pl-3 border-l-2 border-primary/30 bg-surface-container/50 rounded-r-lg py-2 pr-2">
+                <div class="text-xs text-primary mb-1">{{ comment.parentComment.user?.name }}：{{ comment.parentComment.content }}</div>
               </div>
               <p class="text-sm text-on-surface">{{ comment.content }}</p>
             </div>
           </div>
         </div>
         
+        <!-- 回复状态显示 -->
+        <div v-if="replyingTo" class="mb-3 flex items-center justify-between bg-surface-container/50 rounded-xl p-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-on-surface-variant">回复</span>
+            <span class="text-xs text-primary font-medium">{{ replyingTo.user?.name }}</span>
+            <span class="text-xs text-on-surface-variant">：{{ replyingTo.content?.substring(0, 20) }}{{ replyingTo.content?.length > 20 ? '...' : '' }}</span>
+          </div>
+          <button
+            @click="cancelReply"
+            class="text-on-surface-variant hover:text-error transition-colors"
+          >
+            <span class="material-symbols-outlined text-sm">close</span>
+          </button>
+        </div>
+
         <!-- 评论输入 -->
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container flex-shrink-0">
@@ -568,10 +654,11 @@ onMounted(() => {
           </div>
           <div class="flex-1 relative">
             <input
+              ref="replyInputRef"
               v-model="newComment"
               type="text"
               class="w-full bg-surface-container p-3 rounded-full text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary-container/50 transition-all"
-              placeholder="写下你的评论..."
+              :placeholder="replyingTo ? '写下你的回复...' : '写下你的评论...'"
               @keyup.enter="handleComment"
             />
           </div>
@@ -584,6 +671,39 @@ onMounted(() => {
         </div>
       </section>
     </main>
+
+    <!-- 图片预览 -->
+    <Transition name="modal">
+      <div v-if="imagePreview.show" class="fixed inset-0 z-[200] bg-black/90 flex items-center justify-center" @click="closeImagePreview">
+        <div class="relative w-full h-full flex items-center justify-center" @click.stop>
+          <button @click="closeImagePreview" class="absolute top-4 right-4 text-white hover:opacity-80 active:scale-95 transition-all">
+            <span class="material-symbols-outlined text-4xl">close</span>
+          </button>
+          <button
+            v-if="imagePreview.currentIndex > 0"
+            @click="prevImage"
+            class="absolute left-4 text-white hover:opacity-80 active:scale-95 transition-all"
+          >
+            <span class="material-symbols-outlined text-4xl">chevron_left</span>
+          </button>
+          <img
+            :src="imagePreview.images[imagePreview.currentIndex]"
+            alt="预览图片"
+            class="max-w-full max-h-full object-contain"
+          />
+          <button
+            v-if="imagePreview.currentIndex < imagePreview.images.length - 1"
+            @click="nextImage"
+            class="absolute right-4 text-white hover:opacity-80 active:scale-95 transition-all"
+          >
+            <span class="material-symbols-outlined text-4xl">chevron_right</span>
+          </button>
+          <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
+            {{ imagePreview.currentIndex + 1 }} / {{ imagePreview.images.length }}
+          </div>
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 

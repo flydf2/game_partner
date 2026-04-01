@@ -48,20 +48,19 @@ const handlePay = async () => {
     showWarning('数量至少为1')
     return
   }
-  
+
   isSubmitting.value = true
   try {
     const response = await orderApi.createOrder({
       playmateId: expert.value.id,
       skillId: selectedSkill.value?.id,
-      game: expert.value.game,
+      game: expert.value.game || expert.value.title?.split('·')[0] || '',
       skill: selectedSkill.value?.name || '技术陪练',
       serviceTime: serviceTime.value,
       amount: totalPrice.value,
       quantity: quantity.value
     })
-    // 清理用户缓存
-    
+
     if (response.success || response.code === 0) {
       router.push({
         path: '/payment-success',
@@ -119,13 +118,13 @@ onMounted(() => {
         <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
         <div class="flex items-center gap-4 relative z-10">
           <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-primary-container">
-            <img :alt="expert.nickname" class="w-full h-full object-cover" :src="expert.avatar" />
+            <img :alt="expert.nickname || expert.name" class="w-full h-full object-cover" :src="expert.avatar" />
           </div>
           <div class="flex-1">
-            <h2 class="text-xl font-bold font-headline text-on-surface">{{ expert.nickname }}</h2>
+            <h2 class="text-xl font-bold font-headline text-on-surface">{{ expert.nickname || expert.name }}</h2>
             <div class="flex gap-2 mt-1">
               <span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
-                {{ expert.game }}
+                {{ expert.game || expert.title?.split('·')[0] || '' }}
               </span>
               <span class="bg-secondary-container text-on-secondary-container text-[10px] px-2 py-0.5 rounded-full font-medium">
                 {{ selectedSkill?.name || '技术陪练' }}

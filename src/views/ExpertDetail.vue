@@ -828,25 +828,24 @@ const handleOrder = async () => {
     showToast('大神ID不存在', 'error')
     return
   }
-  
+
   if (!selectedSkill.value) {
     showToast('请选择技能', 'error')
     return
   }
-  
+
   if (!selectedSkill.value.price || selectedSkill.value.price <= 0) {
     showToast('技能价格无效', 'error')
     return
   }
-  
+
   const userInfo = localStorage.getItem('userInfo')
   if (!userInfo) {
     showToast('请先登录', 'error')
     router.push('/login')
     return
   }
-  
-  isLoading.value = true
+
   router.push({
     path: '/confirm-order',
     query: {

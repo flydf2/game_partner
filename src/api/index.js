@@ -1119,7 +1119,7 @@ export const communityApi = {
     }
   },
   
-  async commentPost(postId, content) {
+  async commentPost(postId, content, parentId = null) {
     if (USE_MOCK) {
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -1133,14 +1133,27 @@ export const communityApi = {
               },
               content: content,
               time: new Date().toLocaleString(),
-              likes: 0
+              likes: 0,
+              parentId: parentId,
+              parentComment: parentId ? {
+                id: parentId,
+                user: {
+                  name: '被引用用户',
+                  avatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+                },
+                content: '这是被引用的评论内容'
+              } : null
             },
             message: '评论成功'
           })
         }, 300)
       })
     } else {
-      return await withRetry(() => post(`/community/posts/${postId}/comments`, { content }))
+      const requestData = { content }
+      if (parentId) {
+        requestData.parentId = parentId
+      }
+      return await withRetry(() => post(`/community/posts/${postId}/comments`, requestData))
     }
   },
   
@@ -1199,12 +1212,56 @@ export const communityApi = {
                   time: '15分钟前',
                   likes: 5,
                   createdAt: new Date(Date.now() - 900000).toISOString()
+                },
+                {
+                  id: 5,
+                  user: {
+                    id: 105,
+                    name: '峡谷新秀',
+                    avatar: 'https://randomuser.me/api/portraits/men/22.jpg'
+                  },
+                  content: '回复王者的：求带加我微信',
+                  time: '10分钟前',
+                  likes: 2,
+                  createdAt: new Date(Date.now() - 600000).toISOString(),
+                  parentId: 3,
+                  parentComment: {
+                    id: 3,
+                    user: {
+                      id: 103,
+                      name: '王者大神',
+                      avatar: 'https://randomuser.me/api/portraits/men/45.jpg'
+                    },
+                    content: '技术不错，求带！'
+                  }
+                },
+                {
+                  id: 6,
+                  user: {
+                    id: 106,
+                    name: '夜之喵',
+                    avatar: 'https://randomuser.me/api/portraits/women/66.jpg'
+                  },
+                  content: '回复小玩家：好的呀，一起开黑',
+                  time: '5分钟前',
+                  likes: 1,
+                  createdAt: new Date(Date.now() - 300000).toISOString(),
+                  parentId: 1,
+                  parentComment: {
+                    id: 1,
+                    user: {
+                      id: 101,
+                      name: '小玩家',
+                      avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+                    },
+                    content: '我也在艾欧尼亚，一起玩吧！'
+                  }
                 }
               ],
               pagination: {
                 currentPage: page,
                 totalPages: 1,
-                totalCount: 4
+                totalCount: 6
               }
             }
           })
