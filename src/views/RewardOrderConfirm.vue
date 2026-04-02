@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../api/index.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -34,6 +35,18 @@ const handleCancel = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadOrderDetail()
 })
@@ -41,20 +54,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleCancel"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">悬赏订单</h1>
-      </div>
-      <div class="w-6"></div>
-    </header>
+    <AppHeader
+      title="悬赏订单"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleCancel"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

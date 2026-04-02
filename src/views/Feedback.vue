@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const { warning: showWarning, error: showError } = useModal()
@@ -49,24 +50,35 @@ const handleSubmit = async () => {
 const handleBack = () => {
   router.back()
 }
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <nav data-v-3b8a03f8="" class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">意见反馈</h1>
-      </div>
-      <div class="w-6"></div>
-    </nav>
+    <AppHeader
+      title="意见反馈"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 提交成功提示 -->
       <div v-if="submitSuccess" class="bg-success-container rounded-3xl p-6 text-center">
         <div class="w-16 h-16 bg-success/20 rounded-full flex items-center justify-center mx-auto mb-4">

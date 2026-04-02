@@ -1,20 +1,19 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <!-- 顶部导航栏 -->
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900 flex justify-between items-center px-6 py-4">
-      <div class="flex items-center gap-4">
-        <button @click="handleBack" class="active:scale-95 duration-200 hover:opacity-80 transition-opacity">
-          <span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] text-2xl" data-icon="arrow_back">arrow_back</span>
-        </button>
-        <h1 class="font-['Plus_Jakarta_Sans'] font-bold text-lg text-[#6c5a00] dark:text-[#FFD700]">Rank Details</h1>
-      </div>
-      <button @click="handleShare" class="active:scale-95 duration-200 hover:opacity-80 transition-opacity">
-        <span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] text-2xl" data-icon="share">share</span>
-      </button>
-    </header>
+    <AppHeader
+      title="Rank Details"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
     <!-- 主内容区域 -->
-    <main class="page-content pt-20 space-y-8">
+    <main class="page-content space-y-8">
       <!-- 大神荣誉墙 -->
       <section class="relative mt-4">
         <div class="flex flex-col items-center">
@@ -204,6 +203,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -272,6 +272,18 @@ const handleChat = () => {
 
 const handleOrder = () => {
   console.log('下单功能')
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const loadExpertData = async () => {

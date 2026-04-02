@@ -85,13 +85,13 @@ onMounted(() => {
       @profile="handleProfile"
     />
 
-    <main v-if="loading" class="pt-16 px-5 max-w-2xl mx-auto">
+    <main v-if="loading" class="page-content">
       <div class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     </main>
 
-    <main v-else-if="order" class="pt-20 pb-32 px-5 max-w-2xl mx-auto px-5 pt-24 pb-32 space-y-6">
+    <main v-else-if="order" class="page-content space-y-6">
       <!-- 订单状态 -->
       <section class="bg-surface-container-lowest rounded-xl p-5 shadow-sm overflow-hidden relative">
         <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>

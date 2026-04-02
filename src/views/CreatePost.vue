@@ -3,6 +3,7 @@ import { ref, defineAsyncComponent } from 'vue'
 import { useRouter } from 'vue-router'
 import { communityApi } from '../api/index.js'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const { warning: showWarning, success: showSuccess, error: showError } = useModal()
@@ -112,20 +113,35 @@ const handleSubmit = async () => {
 const handleCancel = () => {
   router.back()
 }
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-surface-container-low/50">
-      <div class="flex items-center gap-4">
-        <button
-          @click="handleCancel"
-          class="transition-all duration-200 active:scale-95 text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full"
-        >
-          <span class="material-symbols-outlined">arrow_back</span>
-        </button>
-        <h1 class="font-headline font-bold text-lg text-on-surface">发布动态</h1>
-      </div>
+    <AppHeader
+      title="发布动态"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleCancel"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    >
+
+    <template #right-actions>
       <button
         @click="handleSubmit"
         :disabled="isSubmitting || !postContent.trim()"
@@ -136,11 +152,11 @@ const handleCancel = () => {
       >
         <span v-if="isSubmitting" class="material-symbols-outlined animate-spin">sync</span>
         <span v-else class="material-symbols-outlined">publish</span>
-        {{ isSubmitting ? '发布中...' : '发布' }}
       </button>
-    </header>
+    </template>
+    </AppHeader>
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 内容输入 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <textarea

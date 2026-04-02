@@ -227,7 +227,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import AppHeader from '../components/AppHeader.vue'
 import { useUserStore } from '../stores/user.js'
@@ -238,16 +238,6 @@ const router = useRouter()
 const userStore = useUserStore()
 const { showToast } = useToast()
 const contentRef = ref(null)
-
-// 动态设置内容区域的 padding-top，确保不被导航栏遮挡
-const setContentPadding = async () => {
-  await nextTick()
-  const header = document.querySelector('header')
-  if (header && contentRef.value) {
-    const headerHeight = header.offsetHeight
-    contentRef.value.style.paddingTop = `${headerHeight + 20}px`
-  }
-}
 
 const userInfo = ref({
   avatar: '',
@@ -652,14 +642,12 @@ const handleProfile = () => {
 }
 
 onMounted(() => {
-  // 检查登录状态
   if (!userStore.getIsLoggedIn) {
     router.push('/login')
     return
   }
   loadData()
   loadOrders()
-  setContentPadding()
 })
 </script>
 

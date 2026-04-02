@@ -172,7 +172,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
     
-    <main class="page-content pt-20 sm:pt-24 space-y-6 sm:space-y-8">
+    <main class="page-content pt-20 space-y-6 sm:space-y-8">
       <!-- Hero Section -->
       <section class="space-y-3 sm:space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

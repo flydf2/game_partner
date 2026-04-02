@@ -1,13 +1,13 @@
 <template>
   <div>
     <header
-      class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 transition-all duration-300 h-16 sm:h-24 bg-white dark:bg-zinc-900 shadow-sm"
+      class="fixed top-0 left-0 right-0 z-100 flex items-center justify-between px-4 sm:px-6 transition-all duration-300 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-sm"
       :class="headerClass"
     >
       <div class="flex items-center gap-2 sm:gap-4">
         <span
           v-if="showMenu"
-          class="material-symbols-outlined active:scale-95 duration-200 ease-out cursor-pointer transition-transform"
+          class="material-symbols-outlined active:scale-95 duration-200 ease-out cursor-pointer transition-transform p-1"
           :class="iconClass"
           @click="handleMenuClick"
         >
@@ -16,7 +16,7 @@
         <span
           v-if="showBack && !showMenu"
           @click="handleBackClick"
-          class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+          class="material-symbols-outlined cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform p-1"
           :class="iconClass"
         >
           arrow_back_ios
@@ -28,24 +28,24 @@
           {{ title }}
         </h1>
       </div>
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1 sm:gap-3">
         <slot name="left-actions" />
         <button
           v-if="showNotifications"
-          class="relative text-zinc-500 dark:text-zinc-400 hover:opacity-80 active:scale-95 transition-all"
+          class="relative text-zinc-500 dark:text-zinc-400 hover:opacity-80 active:scale-95 transition-all p-2"
           @click="handleNotificationsClick"
         >
           <span class="material-symbols-outlined">notifications</span>
           <span
             v-if="unreadCount > 0"
-            class="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[7px] sm:text-[8px] font-bold"
+            class="absolute top-1 right-1 w-4 h-4 bg-primary text-on-primary rounded-full flex items-center justify-center text-[8px] sm:text-[9px] font-bold"
           >
-            {{ unreadCount }}
+            {{ unreadCount > 9 ? '9+' : unreadCount }}
           </span>
         </button>
         <span
           v-if="showSearch"
-          class="material-symbols-outlined cursor-pointer hover:opacity-80 active:scale-95 transition-all"
+          class="material-symbols-outlined cursor-pointer hover:opacity-80 active:scale-95 transition-all p-1"
           :class="iconClass"
           @click="handleSearchClick"
         >
@@ -110,8 +110,8 @@ const emit = defineEmits(['back', 'menu', 'notifications', 'search', 'profile'])
 
 const headerClass = computed(() => {
   return props.isPrimaryPage
-    ? 'bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5'
-    : 'bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20'
+    ? 'h-16 sm:h-20 shadow-sm shadow-yellow-500/5'
+    : 'h-14 sm:h-16 border-b border-outline-variant/10'
 })
 
 const iconClass = computed(() => {
@@ -148,10 +148,6 @@ const handleProfileClick = () => {
 </script>
 
 <style scoped>
-:root {
-  --header-height: 96px; /* 对应 Tailwind 的 h-24 */
-}
-
 header {
   position: fixed;
   top: 0;

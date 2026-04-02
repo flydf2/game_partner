@@ -140,7 +140,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
 
-    <main class="page-content pt-4 pb-24">
+    <main class="page-content pb-24">
       <section class="mb-6 px-4">
         <div class="flex items-center justify-between mb-4">
           <h2 class="text-lg font-bold text-on-surface">筛选通知</h2>

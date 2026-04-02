@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi, handleApiError } from '../api/index.js'
 import { useToast } from '../composables/useToast.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const { showToast } = useToast()
@@ -41,6 +42,18 @@ const paymentOptions = [
 
 const handleBack = () => {
   router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const selectAmount = (amount) => {
@@ -104,20 +117,19 @@ const confirmRecharge = async () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">立即充值</h1>
-      </div>
-      <div class="w-6"></div>
-    </header>
+    <AppHeader
+      title="立即充值"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-24 pb-32 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 充值金额 -->
       <section class="bg-surface-container-lowest rounded-3xl p-5">
         <h2 class="text-sm font-bold text-on-surface mb-4">充值金额</h2>

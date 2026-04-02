@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -47,6 +48,18 @@ const handleBack = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const handleDurationSelect = (duration) => {
   selectedDuration.value = duration
 }
@@ -72,21 +85,19 @@ const handlePayment = () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-background">
-    <!-- Top Navigation (Fixed) -->
-    <header class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-sm shadow-yellow-500/5 flex justify-between items-center px-6 py-4">
-      <div class="flex items-center gap-4">
-        <button @click="handleBack" class="p-2 -ml-2 hover:bg-yellow-50 rounded-full transition-colors active:scale-95 duration-200">
-          <span class="material-symbols-outlined text-on-surface">arrow_back_ios_new</span>
-        </button>
-        <h1 class="font-headline font-bold text-lg tracking-tight text-on-surface">确认订单</h1>
-      </div>
-      <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
-        <img alt="用户头像" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAuTSebVMYkB1HEV4zDNoHPN6NMXRtdFZ-I5JNQG4cYVe_lgJ7hHl9pry8X1FO-n0dPHgJGYBuBlC4q75LCGIWDaH_y2xkDOHy3O_8k6KW4g7ESyAIh97s2VaftOPKau3NG1FTAVfxBucQ4jkP-yzP9DivfWOMB1Jo6rbHUs0vIFLn7wevSviwe1O5uyg9OWtIHz0LD8ulqyxB-TU5B5oSkEM0mfJfIM6pLVdY-xVaez3_WrdP_EUwCMs-yA2myCQ0jJsbNEDwGDUc" />
-      </div>
-      <div class="absolute bottom-0 left-0 bg-zinc-100 h-[1px] w-full"></div>
-    </header>
+    <AppHeader
+      title="确认订单"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-24 pb-32 space-y-6">
+    <main class="page-content space-y-6">
       <!-- Service Summary Section (Asymmetric Editorial Style) -->
       <section class="bg-surface-container-lowest rounded-3xl p-6 relative overflow-hidden">
         <div class="flex gap-5 items-start relative z-10">

@@ -2,6 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi, handleApiError } from '../api/index.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 
@@ -80,6 +81,18 @@ const handleBack = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 // 格式化标签为数组
 const formatTags = (tags) => {
   if (!tags) return []
@@ -93,20 +106,23 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">我的关注</h1>
-      </div>
-      <div class="text-sm text-on-surface-variant">{{ following.length }}人</div>
-    </header>
+    <AppHeader
+      title="我的关注"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    >
+      <template #right-actions>
+        <span class="text-sm text-on-surface-variant">{{ following.length }}人</span>
+      </template>
+    </AppHeader>
 
-    <main class="page-content pt-20 pb-32 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

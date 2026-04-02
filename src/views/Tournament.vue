@@ -1,24 +1,18 @@
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
-      <div class="flex items-center justify-between px-5 h-16 w-full">
-        <div class="flex items-center gap-3">
-          <span
-            @click="handleBack"
-            class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700] cursor-pointer hover:bg-[#FFD700]/10 rounded-full p-2 transition-colors active:scale-95 duration-200"
-          >
-            arrow_back_ios
-          </span>
-          <h1 class="text-[#6c5a00] dark:text-[#FFD700] font-headline font-black tracking-tighter text-lg">赛事详情</h1>
-        </div>
-        <button @click="handleShare" class="p-2 rounded-full hover:bg-[#FFD700]/10 transition-colors active:scale-95 duration-200">
-          <span class="material-symbols-outlined text-[#6c5a00] dark:text-[#FFD700]">share</span>
-        </button>
-      </div>
-      <div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
-    </header>
+    <AppHeader
+      title="赛事详情"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <section v-if="loading" class="flex flex-col items-center justify-center py-20">
         <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         <p class="mt-4 text-on-surface-variant">加载中...</p>
@@ -220,6 +214,7 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { tournamentApi } from '@/api/tournament'
+import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -279,6 +274,18 @@ const handleShare = () => {
     navigator.clipboard.writeText(window.location.href)
     showToast('链接已复制到剪贴板')
   }
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
 }
 
 const handleJoin = async () => {

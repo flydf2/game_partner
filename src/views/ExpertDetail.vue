@@ -11,7 +11,7 @@
     />
 
     <!-- 主内容区域 -->
-    <main class="page-content pt-16 pb-24">
+    <main class="page-content pb-24">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex flex-col items-center justify-center min-h-screen">
         <!-- 骨架屏 -->

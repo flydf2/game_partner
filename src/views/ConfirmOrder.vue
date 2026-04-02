@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { expertApi, orderApi, handleApiError } from '../api'
 import DateTimePicker from '../components/DateTimePicker.vue'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -90,30 +91,45 @@ const handleTimeSelect = (time) => {
 onMounted(() => {
   loadExpertDetail()
 })
+
+const handleBack = () => {
+  router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface">
-    <nav data-v-3b8a03f8="" class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center gap-4">
-        <span
-          @click="router.back()"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">确认订单</h1>
-      </div>
-      <div class="w-6"></div>
-    </nav>
+    <AppHeader
+      title="确认订单"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main v-if="loading" class="pt-20 px-5 max-w-2xl mx-auto">
+    <main v-if="loading" class="page-content">
       <div class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     </main>
 
-    <main v-else-if="expert" class="pt-20 px-5 max-w-2xl mx-auto space-y-6">
+    <main v-else-if="expert" class="page-content space-y-6">
       <section class="bg-surface-container-lowest rounded-xl p-5 shadow-sm overflow-hidden relative">
         <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container/20 rounded-full -mr-16 -mt-16 blur-2xl"></div>
         <div class="flex items-center gap-4 relative z-10">

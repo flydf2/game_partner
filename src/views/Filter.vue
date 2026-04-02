@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 
@@ -96,26 +97,44 @@ const handleApply = () => {
 const handleBack = () => {
   router.back()
 }
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface">
-    <header class="flex justify-between items-center px-5 h-16 w-full fixed top-0 z-50 bg-surface-container-highest/50 backdrop-blur-xl">
-      <div class="flex items-center gap-4">
-        <span @click="handleBack" class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity">
-          arrow_back
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">筛选</h1>
-      </div>
-      <button
-        @click="handleReset"
-        class="text-on-surface-variant text-sm font-medium hover:text-primary transition-colors"
-      >
-        重置
-      </button>
-    </header>
+    <AppHeader
+      title="筛选"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    >
+      <template #right-actions>
+        <button
+          @click="handleReset"
+          class="text-on-surface-variant text-sm font-medium hover:text-primary transition-colors"
+        >
+          重置
+        </button>
+      </template>
+    </AppHeader>
 
-    <main class="page-content pt-24 pb-32 min-h-screen">
+    <main class="page-content pb-32 min-h-screen">
       <section class="space-y-8">
         <div class="space-y-4">
           <h3 class="font-headline font-bold text-lg text-on-surface">游戏类型</h3>

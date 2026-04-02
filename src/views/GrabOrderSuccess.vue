@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 
@@ -42,6 +43,18 @@ const handleBackToBounty = () => {
   router.push('/reward')
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   const routeParams = router.currentRoute.value.params
   if (routeParams.id) {
@@ -53,22 +66,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-background text-on-background pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 py-3 border-b border-outline-variant/20">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBackToBounty"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">SunnyPlay 任务中心</h1>
-      </div>
-      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden border-2 border-primary">
-        <img alt="User Profile" class="w-full h-full object-cover" src="https://via.placeholder.com/32" />
-      </div>
-    </header>
+    <AppHeader
+      title="SunnyPlay 任务中心"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBackToBounty"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 成功反馈 -->
       <div class="flex flex-col items-center mb-10">
         <div class="relative mb-6">

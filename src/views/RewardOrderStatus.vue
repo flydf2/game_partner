@@ -2,8 +2,25 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api/index.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
+
+const handleBack = () => {
+  router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 
 const rewardOrders = ref([])
 const loading = ref(true)
@@ -85,19 +102,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 max-w-md mx-auto border-b border-outline-variant/20">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
-          <img alt="User Avatar" class="w-full h-full object-cover" src="https://via.placeholder.com/40" />
-        </div>
-        <h1 class="font-headline font-bold text-lg text-primary tracking-tight">SunnyPlay</h1>
-      </div>
-      <button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-all active:scale-95">
-        <span class="material-symbols-outlined text-primary">notifications</span>
-      </button>
-    </header>
+    <AppHeader
+      title="SunnyPlay"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-24 space-y-8">
+    <main class="page-content space-y-8">
       <header class="space-y-2">
         <h1 class="font-headline font-extrabold text-2xl leading-tight text-on-surface tracking-tight">抢单状态</h1>
         <p class="text-on-surface-variant font-medium text-sm">管理您的实时赏金任务与服务进度</p>

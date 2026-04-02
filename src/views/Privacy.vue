@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '../stores/user.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -90,24 +91,35 @@ const handleItemClick = (key) => {
 const handleBack = () => {
   router.back()
 }
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">隐私设置</h1>
-      </div>
-      <div class="w-6"></div>
-    </header>
+    <AppHeader
+      title="隐私设置"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-24 pb-32 space-y-6 space-y-4">
+    <main class="page-content space-y-6">
       <div class="bg-surface-container-lowest rounded-3xl overflow-hidden">
         <div
           v-for="item in privacyItems"

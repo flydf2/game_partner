@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { communityApi, rewardOrderApi } from '../api/index.js'
 import LazyImage from '../components/common/LazyImage.vue'
 import { mockGames } from '../api/mock-category.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -302,6 +303,18 @@ const handleBack = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const handleClaimExpert = () => {
   router.push('/expert-verification')
 }
@@ -314,38 +327,19 @@ onMounted(async () => {
 
 <template>
   <div class="min-h-screen bg-background text-on-surface pb-32">
-    <nav class="fixed top-0 w-full z-50 bg-[#f6f6f6] dark:bg-neutral-900">
-      <div class="flex items-center justify-between px-5 h-16 w-full">
-        <div class="flex items-center gap-3">
-          <span
-            @click="handleBack"
-            class="material-symbols-outlined cursor-pointer hover:bg-neutral-200 dark:hover:bg-neutral-800 rounded-full p-2 transition-colors active:scale-95 duration-200"
-            :style="{ color: gameTheme?.primary || '#6c5a00' }"
-          >
-            arrow_back_ios
-          </span>
-          <h1
-            class="font-headline font-black tracking-tighter text-lg"
-            :style="{ color: gameTheme?.primary || '#6c5a00' }"
-          >
-            {{ topic?.title || '话题详情' }}
-          </h1>
-        </div>
-        <div class="flex items-center gap-4">
-          <button class="p-2 rounded-full hover:bg-neutral-200 dark:hover:bg-neutral-800 transition-colors active:scale-95 duration-200">
-            <span
-              class="material-symbols-outlined"
-              :style="{ color: gameTheme?.primary || '#6c5a00' }"
-            >
-              notifications
-            </span>
-          </button>
-        </div>
-      </div>
-      <div class="bg-neutral-200/50 dark:bg-neutral-800/50 h-[1px] w-full"></div>
-    </nav>
+    <AppHeader
+      :title="topic?.title || '话题详情'"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-24 space-y-8">
+    <main class="page-content space-y-8">
       <section class="relative">
         <div
           v-if="gameTheme"

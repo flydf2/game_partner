@@ -2,9 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --header-height: 80px;
-  --header-padding-top: calc(var(--header-height) + 20px);
+.page-content {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 72px 16px 100px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .page-content {
+    padding: 88px 20px 120px;
+  }
 }
 
 .material-symbols-outlined {

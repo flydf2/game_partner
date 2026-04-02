@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { communityApi, userApi } from '../api/index.js'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -16,6 +17,37 @@ const loading = ref(true)
 const error = ref(null)
 const replyingTo = ref(null)
 const replyInputRef = ref(null)
+
+const handleBack = () => {
+  router.back()
+}
+
+const handleShare = () => {
+  if (post.value && post.value.user) {
+    if (navigator.share) {
+      navigator.share({
+        title: post.value.user.name + '的动态',
+        text: post.value.content,
+        url: window.location.href
+      })
+    } else {
+      navigator.clipboard.writeText(window.location.href)
+      showSuccess('链接已复制到剪贴板')
+    }
+  }
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 
 const imagePreview = ref({
   show: false,
@@ -245,22 +277,6 @@ const cancelReply = () => {
   replyingTo.value = null
 }
 
-const handleShare = () => {
-  if (post.value && post.value.user) {
-    if (navigator.share) {
-      navigator.share({
-        title: post.value.user.name + '的动态',
-        text: post.value.content,
-        url: window.location.href
-      })
-    } else {
-      // 复制链接
-      navigator.clipboard.writeText(window.location.href)
-      showSuccess('链接已复制到剪贴板')
-    }
-  }
-}
-
 const handleFollow = async () => {
   if (post.value && post.value.user) {
     try {
@@ -283,10 +299,6 @@ const handleFollow = async () => {
       console.error('关注失败:', error)
     }
   }
-}
-
-const handleBack = () => {
-  router.back()
 }
 
 const isAuthor = ref(false)
@@ -396,30 +408,29 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <nav data-v-3b8a03f8="" class="bg-surface w-full top-0 sticky z-50">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">帖子详情</h1>
-      </div>
-      <div class="w-6"></div>
-    </nav>
+    <AppHeader
+      title="帖子详情"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main v-if="loading" class="page-content pt-20 py-12">
+    <main v-if="loading" class="page-content">
       <div class="flex items-center justify-center">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     </main>
 
-    <main v-else-if="error" class="page-content pt-20 py-12">
+    <main v-else-if="error" class="page-content">
       <div class="flex flex-col items-center justify-center space-y-4">
         <span class="material-symbols-outlined text-4xl text-error">error_outline</span>
         <p class="text-error text-center">{{ error }}</p>
-        <button 
+        <button
           @click="loadPostDetail"
           class="px-6 py-2 bg-primary text-primary-container rounded-full font-medium hover:opacity-80 transition-opacity"
         >
@@ -428,7 +439,7 @@ onMounted(() => {
       </div>
     </main>
 
-    <main v-else-if="post" class="page-content pt-24 pb-32 space-y-6">
+    <main v-else-if="post" class="page-content space-y-6">
       <!-- 帖子内容 -->
       <article class="bg-surface-container-lowest rounded-3xl p-5">
         <div class="flex items-center justify-between mb-4">
@@ -701,6 +712,12 @@ onMounted(() => {
           <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm">
             {{ imagePreview.currentIndex + 1 }} / {{ imagePreview.images.length }}
           </div>
+          <button
+            @click="closeImagePreview"
+            class="absolute bottom-16 left-1/2 transform -translate-x-1/2 px-8 py-3 bg-white/20 backdrop-blur-md text-white rounded-full font-bold text-sm hover:bg-white/30 active:scale-95 transition-all"
+          >
+            关闭预览
+          </button>
         </div>
       </div>
     </Transition>

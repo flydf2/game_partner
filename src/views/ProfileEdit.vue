@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi, uploadApi } from '../api/index.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 
@@ -108,30 +109,45 @@ const handleAvatarChange = async (event) => {
 const handleBack = () => {
   router.back()
 }
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleBack"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
+    <AppHeader
+      title="编辑资料"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    >
+      <template #right-actions>
+        <button
+          @click="handleSave"
+          :disabled="saving"
+          class="text-primary font-bold text-sm px-4 py-2 rounded-full bg-primary-container/10 active:scale-95 transition-all disabled:opacity-50"
         >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">编辑资料</h1>
-      </div>
-      <button
-        @click="handleSave"
-        :disabled="saving"
-        class="text-primary font-bold text-sm px-4 py-2 rounded-full bg-primary-container/10 active:scale-95 transition-all disabled:opacity-50"
-      >
-        {{ saving ? '保存中...' : '保存' }}
-      </button>
-    </header>
+          {{ saving ? '保存中...' : '保存' }}
+        </button>
+      </template>
+    </AppHeader>
 
-    <main class="page-content pt-20 pb-32 space-y-6 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 加载状态 -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>

@@ -217,7 +217,7 @@ onMounted(() => {
       @profile="handleProfile"
     />
     
-    <main class="page-content pt-24 pb-24 space-y-6">
+    <main class="page-content pt-20 pb-24 space-y-6">
       <!-- Search Section -->
       <section class="w-full">
         <div class="bg-surface-container-high rounded-3xl flex items-center px-4 py-3 gap-3 focus-within:bg-surface-container-lowest focus-within:ring-2 focus-within:ring-primary-container/30 transition-all">

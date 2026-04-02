@@ -5,6 +5,7 @@ import { defineAsyncComponent } from 'vue'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
 import Toast from '../components/common/Toast.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const DateTimePicker = defineAsyncComponent(() => import('../components/DateTimePicker.vue'))
 
@@ -192,6 +193,18 @@ const handleCancel = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const confirmPaymentMethod = () => {
   showPaymentWarning.value = false
   if (paymentMethod.value === 'prepay') {
@@ -243,22 +256,19 @@ const doPublish = async () => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-24">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 h-16 border-b border-outline-variant/20">
-      <div class="flex items-center gap-4">
-        <button
-          @click="handleCancel"
-          class="active:scale-95 duration-200 transition-opacity hover:opacity-80"
-        >
-          <span class="material-symbols-outlined text-primary">close</span>
-        </button>
-        <h1 class="font-headline font-bold text-lg tracking-tight text-primary">发布悬赏</h1>
-      </div>
-      <div class="w-8 h-8 rounded-full overflow-hidden">
-        <img alt="User Avatar" class="w-full h-full object-cover" src="https://via.placeholder.com/32" />
-      </div>
-    </header>
+    <AppHeader
+      title="发布悬赏"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleCancel"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 px-5 space-y-6">
+    <main class="page-content space-y-6">
       <!-- Section: Game Selection -->
       <section class="space-y-4">
         <div class="flex items-center justify-between">

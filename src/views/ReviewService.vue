@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { expertApi, reviewApi } from '../api'
 import { useModal } from '../composables/useModal.js'
+import AppHeader from '../components/AppHeader.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -82,6 +83,22 @@ const handleSubmit = async () => {
   }
 }
 
+const handleBack = () => {
+  router.back()
+}
+
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 onMounted(() => {
   loadExpertDetail()
 })
@@ -89,18 +106,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface flex flex-col">
-    <header class="bg-surface-container-highest/10 flex justify-between items-center px-5 h-16 w-full fixed top-0 z-50">
-      <button
-        @click="router.back()"
-        class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors active:scale-95"
-      >
-        <span class="material-symbols-outlined text-on-surface">arrow_back</span>
-      </button>
-      <h1 class="font-headline font-bold text-lg text-primary">评价服务</h1>
-      <div class="w-10"></div>
-    </header>
+    <AppHeader
+      title="评价服务"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleBack"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content flex-grow flex flex-col items-center pt-24 pb-32">
+    <main class="page-content flex-grow flex flex-col items-center">
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>

@@ -11,7 +11,7 @@
       @profile="goToProfile"
     />
     
-    <main class="page-content pt-24 pb-32 space-y-8">
+    <main class="page-content pt-20 pb-32 space-y-8">
     <!-- Hero Banner: Honor of Kings Tournament -->
     <section class="relative w-full h-48 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/10 bg-black cursor-pointer active:scale-[0.98] transition-transform" @click="goToTournament">
       <img alt="Honor of Kings Tournament" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60" data-alt="Epic cinematic background of a competitive gaming arena" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChoKqMjV8Zopn6t52b1X_D1IHpomYuX0uMCtUOdsEjdUbzmVSeBr-5ZKxEhOUlx1mPSxANNKH4sghnW_76nSPFe5RQDcs0D0146L6oIlgGmuRs6DcX59vrx67krFal1DduP8vpSj5o2giMgdNHYP2pIzqcKEuJfnSxyvoN_fgqJahQCNwzPm37cGoeZUvBWw_zifeh-pvUxLyRR7_8puuGkKr-5w05-1orNhrAYXS-S8PDY6s1vdzatJ05jaJSvNTo7dS88EwkP2M"/>

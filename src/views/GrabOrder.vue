@@ -3,6 +3,7 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import api from '../api/index.js'
 import BottomNavBar from '../components/BottomNavBar.vue'
+import AppHeader from '../components/AppHeader.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -83,6 +84,18 @@ const handleCancel = () => {
   router.back()
 }
 
+const handleNotifications = () => {
+  router.push('/notifications')
+}
+
+const handleSearch = () => {
+  router.push('/search')
+}
+
+const handleProfile = () => {
+  router.push('/profile')
+}
+
 const handleFileSelect = (type) => {
   if (type === 'voice') {
     selectedFiles.value.voice = true
@@ -102,22 +115,19 @@ onMounted(() => {
 
 <template>
   <div class="min-h-screen bg-surface text-on-surface pb-32">
-    <header class="fixed top-0 w-full z-50 bg-surface flex items-center justify-between px-5 py-3 border-b border-outline-variant/20">
-      <div class="flex items-center gap-4">
-        <span
-          @click="handleCancel"
-          class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity active:scale-95 transition-transform"
-        >
-          arrow_back_ios
-        </span>
-        <h1 class="font-headline font-bold text-lg text-primary">{{ hasGrabbed ? '抢单详情' : '立即抢单' }}</h1>
-      </div>
-      <div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center">
-        <span class="material-symbols-outlined text-on-primary-container text-sm">help</span>
-      </div>
-    </header>
+    <AppHeader
+      :title="hasGrabbed ? '抢单详情' : '立即抢单'"
+      :show-back="true"
+      :show-notifications="true"
+      :show-search="true"
+      :show-avatar="true"
+      @back="handleCancel"
+      @notifications="handleNotifications"
+      @search="handleSearch"
+      @profile="handleProfile"
+    />
 
-    <main class="page-content pt-20 space-y-6">
+    <main class="page-content space-y-6">
       <!-- 悬赏任务简述 -->
       <section class="space-y-3">
         <h2 class="font-headline font-bold text-xl px-1">悬赏任务简述</h2>
